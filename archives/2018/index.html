@@ -193,6 +193,71 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title">
                     
+                        <a class="link-unstyled" href="/inoki-blog/2018/10/21/Uninstall-docker-in-WSL-Ubuntu/">
+                            Uninstall docker in WSL Ubuntu
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2018-10-21T18:48:15+02:00">
+	
+		    Oct 21, 2018
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/inoki-blog/categories/Bug/">Bug</a>, <a class="category-link" href="/inoki-blog/categories/Bug/Docker/">Docker</a>, <a class="category-link" href="/inoki-blog/categories/Bug/WSL/">WSL</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>After my installation of docker in Windows Sous-System Linux by the command following:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install docker.io</span><br></pre></td></tr></table></figure></p>
+<p>I regret and I’d like to uninstall it immediately.</p>
+<p>The error occured !</p>
+<p><code>dpkg</code> told me that he can’t work well with the command <code>sudo apt-get remove --purge docker.io</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Removing docker.io (17.03.2-0ubuntu2~16.04.1) ...</span><br><span class="line">invoke-rc.d: could not determine current runlevel</span><br><span class="line"> * Stopping Docker: docker                                                                                              No process in pidfile &apos;/var/run/docker-ssd.pid&apos; found running; none killed.</span><br><span class="line">invoke-rc.d: initscript docker, action &quot;stop&quot; failed.</span><br><span class="line">dpkg: error processing package docker.io (--purge):</span><br><span class="line"> subprocess installed pre-removal script returned error exit status 1</span><br><span class="line">dmesg: read kernel buffer failed: Function not implemented</span><br><span class="line">                                                          dpkg: error while cleaning up:</span><br><span class="line"> subprocess installed post-installation script returned error exit status 1</span><br><span class="line">Errors were encountered while processing:</span><br><span class="line"> docker.io</span><br><span class="line">E: Sub-process /usr/bin/dpkg returned an error code (1)</span><br></pre></td></tr></table></figure>
+<p>Obviously, the error is from the process of stopping the docker itself.</p>
+<p>We can show the content of <code>docker-ssd.pid</code>. It told us the <code>pid</code> of docker daemon is <code>22391</code>.</p>
+<p>Normally, as the docker daemon hasn’t been booted, the docker daemon process will not be in the process table. So the error is that: <code>We cannot stop a process with a pid which has never been booted.</code></p>
+<p>So the uninstallation script stopped when it cannot stop the docker daemon.</p>
+<p>To avoid the error and then uninstall the docker, we can modify the <code>pid</code> in <code>docker-ssd.pid</code> with a <code>pid</code> of a process which is not so important.</p>
+<p>Okay, we can launch <code>sleep 200</code>.</p>
+<p>In 200 seconds, we can run <code>ps -ef | grep sleep</code> to obtain the pid of process of <code>sleep</code>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; ps -ef | grep sleep</span><br><span class="line">inoki    25219 21212  0 19:01 tty1     00:00:00 sleep 200</span><br><span class="line">inoki    25221 24653  0 19:01 tty2     00:00:00 grep --color=auto sleep</span><br></pre></td></tr></table></figure>
+<p>We fill <code>docker-ssd.pid</code> with such pid.</p>
+<p>Okay, we uninstall <code>docker.io</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&gt; sudo apt-get remove docker.io</span><br><span class="line">Reading package lists... Done</span><br><span class="line">Building dependency tree</span><br><span class="line">Reading state information... Done</span><br><span class="line">The following packages were automatically installed and are no longer required:</span><br><span class="line">  bridge-utils cgroupfs-mount ubuntu-fan</span><br><span class="line">Use &apos;sudo apt autoremove&apos; to remove them.</span><br><span class="line">The following packages will be REMOVED:</span><br><span class="line">  docker.io</span><br><span class="line">0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.</span><br><span class="line">1 not fully installed or removed.</span><br><span class="line">After this operation, 90.2 MB disk space will be freed.</span><br><span class="line">Do you want to continue? [Y/n]</span><br><span class="line">(Reading database ... 76380 files and directories currently installed.)</span><br><span class="line">Removing docker.io (17.03.2-0ubuntu2~16.04.1) ...</span><br><span class="line">&apos;/usr/share/docker.io/contrib/nuke-graph-directory.sh&apos; -&gt; &apos;/var/lib/docker/nuke-graph-directory.sh&apos;</span><br><span class="line">invoke-rc.d: could not determine current runlevel</span><br><span class="line"> * Stopping Docker: docker                                                                                       [ OK ]</span><br><span class="line">Processing triggers for man-db (2.7.5-1) ...</span><br></pre></td></tr></table></figure>
+<p>All goes well and tout va bien!</p>
+
+                    
+                        
+
+                    
+                    
+                        <p>
+                            <a href="/inoki-blog/2018/10/21/Uninstall-docker-in-WSL-Ubuntu/#post-footer" class="postShorten-excerpt_link link">
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
                         <a class="link-unstyled" href="/inoki-blog/2018/10/21/hello-world/">
                             Hello World
                         </a>
