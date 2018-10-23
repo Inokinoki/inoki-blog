@@ -16,6 +16,9 @@ branches:
 
 install:
   - npm install
+  - cd ./themes/tranquilpeak
+  - npm install
+  - cd ../..
 #  - npm install hexo-deployer-git --save
 
 script:
