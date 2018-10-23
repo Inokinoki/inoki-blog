@@ -38,8 +38,8 @@ baidu_analytics:
 google_analytics:
 # Disqus
 disqus:
-  enable: false
-  shortname: 
+  enable: true
+  shortname: inokinoki
   count: true
 # changyan
 changyan:
