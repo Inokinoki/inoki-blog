@@ -84,5 +84,5 @@ theme: tranquilpeak
 deploy:
   type: git
   #repo: https://github.com/Inokinoki/inoki-blog.git
-  repo: https://gh_toekn@github.com/Inokinoki/inoki-blog.git
+  repo: https://gh_token@github.com/Inokinoki/inoki-blog.git
   branch: master
