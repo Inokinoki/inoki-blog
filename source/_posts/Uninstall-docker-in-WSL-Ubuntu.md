@@ -1,6 +1,6 @@
 ---
 title: Uninstall docker in WSL Ubuntu
-date: 2018-09-03 16:47:00
+date: 2018-10-21 8:47:00
 updated: 2018-10-21 18:48:15
 tags:
 - Ubuntu
