@@ -1,6 +1,7 @@
 ---
 title: 【译】Quic-HTTP/3
 date: 2018-11-26 12:48:24
+update: 2019-03-24 09:55:03
 tags:
 - QUIC
 - HTTP
@@ -21,10 +22,10 @@ categories:
 
 Mark Bishop 在 IETF 103 举行的 QUIC 工作组会议上惊吓到了他们，可以看到这个幻灯片上已经放出了一个 Logo ......
 
-![QUIC naming slide](https://daniel.haxx.se/blog/wp-content/uploads/2018/10/Screenshot_2018-11-06-HTTP-QUIC-slides-103-httpbis-httpquic-00.png)
+{% asset_img Screenshot_2018-11-06-HTTP-QUIC-slides-103-httpbis-httpquic-00.png QUIC naming slide %}
 
 2018年1月7日，Litespeed 的 Dmitri 宣布他们和 Facebook 已经成功的实现了两个 HTTP/3 实现的互操作。紧接着 Mike Bishop 在 HTTPbis 的演讲的幻灯片如上。会议最后达成共识，新的名字为 HTTP/3 。
 
 那么，不再有任何争议。**HTTP/3 将会成为新的使用 QUIC 传输的 HTTP 版本！**
 
-![Logo QUIC](https://daniel.haxx.se/blog/wp-content/uploads/2017/06/QUIC.png)
+{% asset_img QUIC.png Logo QUIC %}
