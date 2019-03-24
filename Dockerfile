@@ -11,6 +11,4 @@ WORKDIR /usr/blog
 
 EXPOSE 4000
 
-CMD [ "cp", "-r", "/usr/blog-dependency/node_modules", "/usr/blog/node_modules" ]
-CMD [ "npm", "run", "generate" ]
-CMD [ "npm", "run", "serve" ]
+CMD [ "bash", "docker-bootstrap.sh" ]
