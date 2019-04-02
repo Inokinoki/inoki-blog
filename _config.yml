@@ -16,8 +16,8 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://inokinoki.github.io/inoki-blog/
-root: /inoki-blog/
+url: http://blog.inoki.cc/
+root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
