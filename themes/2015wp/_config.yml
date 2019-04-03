@@ -52,9 +52,9 @@ duoshuo:
   shortname:
 # Visitors
 leancloud_visitors:
-  enable: false
-  app_id: 
-  app_key:
+  enable: true
+  app_id: QC5aQ8pUah279L1skNerLRTU-gzGzoHsz
+  app_key: mhvEFRRIuPHtjNgOXAe9axsk
 
 # Search 
 # Note: please install hexo-generator-search plugin and config the root _config.yml (not theme's _config.yml) as below value search.json(https://www.npmjs.com/package/hexo-generator-search):
