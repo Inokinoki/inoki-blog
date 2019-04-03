@@ -1,6 +1,7 @@
 ---
 title: 【译】 从源代码构建 deb 包
 date: 2019-04-02 21:08:00
+update: 2019-04-03 12:33:00
 tags:
 - Pack
 - Debian
@@ -111,15 +112,16 @@ hithere (1.0-1) UNRELEASED; urgency=low
 
 这里有很多注意点：
 
-The hithere part MUST be the same as the source package name. 1.0-1 is the version. The 1.0 part is the upstream version. The -1 part is the Debian version: the first version of the Debian package of upstream version 1.0. If the Debian package has a bug, and it gets fixed, but the upstream version remains the same, then the next version of the package will be called 1.0-2. Then 1.0-3, and so on.
+`hithere` 部分必须与源代码包的名字相同。`1.0-1` 是版本号，`1.0` 部分是上游版本号。`-1` 部分是 Debian 的版本：它是第一个上游版本为 `1.0` 的 Debian 包。如果这个 Debian 包有错误，并且被修复了，那么上游版本号仍保持相同，下一个版本应当被叫做 `1.0-2`，接下来是 `1.0-3`，依此类推。
 
-UNRELEASED is called the upload target. It tells the upload tool where the binary package should be uploaded. UNRELEASED means the package is not yet ready to be uploaded. It's a good idea to keep the UNRELEASED there so you don't upload by mistake.
+UNRELEASED 被称作上传目标。它会告诉上传工具这个二进制包应当被上传到哪里。UNRELEASED 意味着这个包还没有做好上传的准备。保持 UNRELEASED 是一个好主意，以避免您错误上传它。
 
-Ignore urgency=low for now. Just keep it there.
+目前请先忽略 `urgency=low`。
 
-The (Closes: #XXXXXX) bit is for closing bugs when the package is uploaded. This is the usual way in which bugs are closed in Debian: when the package that fixes the bug is uploaded, the bug tracker notices this and marks the bug as closed. We can just remove the (Closes...) bit. Or not. It doesn't matter right now.
+`(Closes：#XXXXXX)` 作用在于上传包时关闭错误。这是在 Debian 中关闭错误的常用方法：当上传修复错误的包时，错误跟踪器会注意到这一点，并将错误标记为已关闭。我们可以删除 `(Closes...)` 位。或者不管它，现在它不重要。
 
-The final line in the changelog tells who made this version of the package, and when. The dch tool tries to guess the name and e-mail address, but you can configure it with the right details. See the dch(1) manual page for details.
+更改日志中的最后一行指出是谁在何时制作了这个版本的软件包。`dch` 工具会尝试猜测名称和电子邮件地址，但您应当使用正确的详细信息对其进行配置。详细信息，请参阅 `dch(1)` 手册页。
+
 ### debian/compat
 
 `debian/compat` 明确 `debhelper` 工具的兼容等级。我们目前不需要知道它意味着什么。
@@ -168,8 +170,9 @@ any
 
 all
 意味着相同的二进制包将适用于所有体系结构，而无需为每个体系结构单独构建。 例如，仅包含shell脚本的包将是“all”。 Shell脚本在任何地方都可以工作，不需要编译。
+
 #### Depends
-The list of packages that must be installed for the program in the binary package to work. Listing such dependencies manually is tedious, error-prone work. To make this work, the ${shlibs:Depends} magic bit needs to be in there. The other magic stuff is there for debhelper. The ${misc:Depends} bit. The shlibs magic is for shared library dependencies, the misc magic is for some stuff debhelper does. For other dependencies, you need to add them manually to Depends or Build-Depends and the ${...} magic bits only work in Depends
+为了让二进制包中程序能够正常运行，需要安装的包列表。手动列出这些依赖项是繁琐且容易出错的工作。为了能够让其工作，我们需要一个神奇的小东西 `${shlibs:Depends}`。另一个神奇的东西是给 `debhelper` 的，它是 `${misc:Depends}`。shlibs 是为了动态链接库，而 misc 是为了 `debherlper` 的一些工作。对于别的依赖，您可以将其手动加入到 `Depends` 或 `Build-Depends` 中。但请注意，`${...}` 仅在 `Depends` 中有效。
 
 #### Description
 二进制包的完整描述。它希望对用户有所帮助。第一行用作简要概要（摘要）描述，其余部分是包的更长的描述。
@@ -187,22 +190,19 @@ The list of packages that must be installed for the program in the binary packag
         dh $@
 ```
 
-<!> Note: The last line should be indented by one TAB character, not by spaces. The file is a makefile, and TAB is what the make command wants
+**注意： 最后一行应当使用一个 Tab 字符进行缩进，而不使用空格。这个文件是一个 Makefile，因此 Tab 字符是 make 所期望的。**
 
-debian/rules can actually be quite a complicated file. However, the dh command in debhelper version 7 has made it possible to keep it this simple in many cases.
+事实上 `debian/rules` 可能是一个相当复杂的文件。然而，在 `debhelper 7` 中的 `dh` 命令让它可以在大多数情况下变得更简单。
 
 ### debian/source/format
-The final file we need is debian/source/format, and it should contain the version number for the format of the source package, which is "3.0 (quilt)".
-
+最后一个我们需要的文件是 `debian/source/format`，它应当包含源代码包的版本号，这里为 `3.0 (quilt)`。
 ```
 3.0 (quilt)
 ```
 
-## Step 4: Build the package
-First try
-Now we can build the package.
-
-There are many commands we could use for this, but this is the one we'll use. If you run the command, you'll get output similar to this:
+## 第四步：构建这个包
+### 第一次尝试
+现在我们可以构建这个包了。有很多我们可以使用的命令，但是我们只使用其中一个，如果您运行以下命令，您会得到像下面的输出：
 
 ```bash
 $ debuild -us -uc
@@ -218,26 +218,18 @@ debuild: fatal error at line 1325:
 dpkg-buildpackage -rfakeroot -D -us -uc failed
 ```
 
-Something went wrong. This is what usually happens. You do your best creating debian/* files, but there's always something that you don't get right.
-
-So, the thing that went wrong is this bit:
-
-
+有些地方不太对劲。这经常发生：您已经尽力创建了符合规范的 `debian/*` 文件了，但是仍有一些东西不太对劲。可见，出错的地方在：
+```
 install hithere /home/liw/debian-packaging-tutorial/x/hithere-1.0/debian/hithere/usr/local/bin
+```
+上游代码中的 Makefile 尝试将程序安装到错误的地方。
 
-The upstream Makefile is trying to install the compiled program into the wrong location.
+这边有许多可以做的事情，来解决这个问题：第一件事是 Debian 打包系统如何工作。
 
-There are a couple of things going on here: first is a bit about how Debian packaging works.
+### 修正
+当程序被构建并被“安装”时，通常情况下，它还不会被安装到 `/usr` 或者 `/usr/local`，而是被安装到 `debian/` 子目录。
 
-Correction
-When the program has been built, and is "installed", it does not get installed into /usr or /usr/local, as usual, but somewhere under the debian/ subdirectory.
-
-We create a subset of the whole file system under debian/hithere, and then we put that into the binary package. So the .../debian/hithere/usr/local/bin bit is fine, except that it should not be installing it under usr/local, but directly under usr.
-
-We need to do something to make it install into the right location (debian/hithere/usr/bin).
-
-The right way to fix this is to change debian/rules so that it tells the Makefile where to install things.
-
+我们在 `debian/hithere` 目录下创建了一个整个文件系统的子集，并将其打包进二进制包中。因此 `.../debian/hithere/usr/local/bin` 是没问题的，除非它不应当被安装到 `usr/local` 而是 `usr` 目录。我们需要做一些事情来确保程序被安装到正确的位置 `debian/hithere/usr/bin`。正确的方法是修改 `debian/rules` 文件来告诉 Makefile 应当在哪里安装软件。
 ```
 #!/usr/bin/make -f
 %:
@@ -247,53 +239,40 @@ override_dh_auto_install:
         $(MAKE) DESTDIR=$$(pwd)/debian/hithere prefix=/usr install
 ```
 
-It's again a bit of magic, and to understand it you'll need to know how Makefiles work, and the various stages of a debhelper run.
+这个仍是一个小魔法，为了理解它，您应当知道 Makefile 如何工作，还应当知道 `debhelper` 的不同阶段。
 
-For now, I'll summarize by saying that there's a command debhelper runs that takes care of installing the upstream files, and this stage is called dh_auto_install.
+目前，我可以大概说明下：有一个名为 `debherlper` 的命令负责安装上游文件，这个阶段被称为 `dh_auto_install`。我们需要覆盖这个阶段，为此，我们在 `debian/rule` 中重写了 `override_dh_auto_install` 规则。这个文件的最后一行是一种1970年代的技术，为了从 `debian/rules` 中使用正确的参数调用上游中的 Makefile 文件。
 
-We need to override this stage, and we do that with a rule in debian/rules called override_dh_auto_install.
-
-The final line in the new debian/rules is a bit of 1970s technology to invoke the upstream Makefile from debian/rules with the right arguments.
-
-Let's try again
+让我们再试一下。
 
 ```bash
 $ debuild -us -uc
 ```
 
-It still fails!
-
-This time, this is the failing command:
-
+仍然失败了！但这次失败的命令是：
 ```
 install hithere /home/liw/debian-packaging-tutorial/x/hithere-1.0/debian/hithere/usr/bin
 ```
 
-We are now trying to install into the right place, but it does not exist. To fix this, we need to tell the packaging tools to create the directory first.
+我们正在尝试将软件安装至正确的地方，但是这个目录不存在。为了修正这个错误，我们应当告诉打包工具先创建这个目录。
 
-Ideally, the upstream Makefile would create the directory itself, but in this case the upstream developer was too lazy to do so.
+理想状况下，上游 Makefile 文件会自动创建目录，但这种情况下，是上游开发者太懒惰了，他没有创建这个目录。
 
-Another correction
-The packaging tools (specifically, debhelper) provide a way to do that.
-
-Create a file called debian/hithere.dirs, and make it look like this:
+### 另一个修正
+打包工具（特别是`debhelper`）提供了一种实现方式。创建一个名为 `debian/hithere.dirs` 的文件，里面的内容应当是：
 ```
 usr/bin
 usr/share/man/man1
 ```
 
-The second line creates the directory for the manual page. We will need it later. You should be careful to maintain such *.dirs files because it can lead to empty directories in future versions of your package if the items listed in those files aren't valid any more.
+第二行创建了一个给手册页面的目录。之后我们会需要它。您应当小心的维护这样的文件，因为它可能会导致您的包在未来版本产生空目录，当包中的项目不再有效时。
 
-Let's try once more
-
+让我们再试一下：
 ```bash
 $ debuild -us -uc
 ```
 
-Now the build succeeds, but there's still some small problems.
-
-debuild runs the lintian tool, which checks the package that has been built for some common errors. It reports several for this new package:
-
+现在构建成功了，但是仍有一些小问题。`debuild` 运行了 `lintian` 工具，这个工具可以检测构建的包的一些常见的错误，它给出了我们创建的包的一些错误：
 ```
 Now running lintian...
 W: hithere source: out-of-date-standards-version 3.9.0 (current is 3.9.1)
@@ -302,11 +281,7 @@ W: hithere: new-package-should-close-itp-bug
 W: hithere: wrong-bug-number-in-closes l3:#XXXXXX
 Finished running lintian.
 ```
-
-These should eventually be fixed, but none of them look like they'll be a problem for trying the package. So let's ignore them for now.
-
-Look in the parent directory to find the package that was built.
-
+这些错误应当被修正，但是对我们来说它们不会导致错误。现在我们先忽略他们。查看父目录，您可以找到构建好的包。
 ```bash
 $ ls ..
 hithere-1.0                  hithere_1.0-1_amd64.deb  hithere_1.0.orig.tar.gz
@@ -314,14 +289,10 @@ hithere_1.0-1_amd64.build    hithere_1.0-1.debian.tar.gz
 hithere_1.0-1_amd64.changes  hithere_1.0-1.dsc
 ```
 
-## Step 5: Install the package
-The following command will install the package that you've just built.
+## 第五步：安装构建好的包
+接下来的命令会安装您构建好的包。**不要**在计算机上直接运行它，除非您不介意损坏系统。
 
-Do NOT run it on a computer unless you don't mind breaking it.
-
-In general, it is best to do package development on a computer that is well backed up, and that you don't mind re-installing if everything goes really badly wrong.
-Virtual machines are a good place to do development.
-
+通常情况下，在备份好的计算机上进行包开发是最好的，这样，在所有事情变糟糕的情况下，您可以不用完全安装整个系统。虚拟机是一个不错的进行开发的地方。
 ```bash
 $ sudo dpkg -i ../hithere_1.0-1_amd64.deb
 
@@ -334,8 +305,7 @@ Processing triggers for man-db ...
 liw@havelock$
 ```
 
-How do we test the package? We can run the command.
-
+那么，如何测试打好的包呢？我们可以运行命令：
 ```bash
 $ hithere
 ```
