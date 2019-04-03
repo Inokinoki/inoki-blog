@@ -15,8 +15,8 @@ menu:
 
 # display widgets
 widgets:
-- archives
-# - search
+# - archives
+- search
 - social_links
 - recent_posts
 - tagcloud
