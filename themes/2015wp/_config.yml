@@ -35,7 +35,7 @@ favicon:
 # Baidu Analytics
 baidu_analytics:
 # Google Analytics
-google_analytics:
+google_analytics: true
 # Disqus
 disqus:
   enable: true
