@@ -1,5 +1,5 @@
 ---
-title: Build Go for Newifi 2 (D1) router
+title: 为 Newifi 2 (D1) 路由器构建 Go 语言
 date: 2019-04-30 13:41:40
 tags:
 - Cross Compile
@@ -12,6 +12,7 @@ categories:
 ---
 
 通过阅读这篇文章您应当可以为任何系统构建 Go 语言。
+[English Version](https://blog.inoki.cc/2019/04/30/Build-go-for-newifi2-d1-router/)
 
 # 先决条件
 1. 从 Go 1.5 开始，Go 语言所有的源代码都使用了 Go 或者汇编语言。因此在一个安装有 Go 语言的系统中使用 Go 语言构建另一个 Go 语言版本会十分简单。这个特性叫做语言的**自举**。

@@ -10,6 +10,7 @@ categories:
 ---
 
 This post will give you a guide to build Go on no matter which system.
+[Chinese Version](https://blog.inoki.cc/2019/04/30/Build-go-for-newifi2-d1-router-chinese/)
 
 # Prerequisite
 1. After Go 1.5, all the source codes are written in Go or Assembly. So in a system where there is a Go install, we can build another Go using Go itself. The feature is called **bootstrapping**.
