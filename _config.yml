@@ -77,8 +77,8 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 ## theme: landscape
-theme: tranquilpeak
-#theme: 2015wp
+#theme: tranquilpeak
+theme: 2015wp
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
