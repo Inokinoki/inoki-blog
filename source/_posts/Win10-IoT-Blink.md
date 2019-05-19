@@ -7,6 +7,7 @@ tags:
 - Raspberry PI
 categories:
 - [Embedded System, IoT, Win 10 IoT]
+- [Embedded System, Raspberry PI]
 ---
 
 Thanks to Microsoft and its UWP application, Win 10 IoT device can share the same framework of normal Win 10 application.

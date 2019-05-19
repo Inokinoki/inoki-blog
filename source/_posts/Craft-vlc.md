@@ -4,8 +4,9 @@ date: 2019-05-19 19:57:22
 update: 2019-05-19 19:57:22
 tags:
 - Craft
+- KDE
 categories:
-- [Craft, Blueprints]
+- [KDE, Craft, Blueprints]
 ---
 
 Lacking `VLC` and `libvlc` in `Craft`, `phonon-vlc` cannot be built successfully on macOS. It caused the failed building of `KDE Connect` in `Craft`.
