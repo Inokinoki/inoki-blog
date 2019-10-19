@@ -23,7 +23,7 @@ To achieve this, there are several frameworks proposed by different communities,
 2. ATI Stream
 3. OpenCL
 
-NVIDIA Cuda is proprietary and of course supported by NIVIDIA. OpenCL is an open standard maintained by the non-profit technology consortium Khronos Group. But in face, the implementations rely on hardware/software providers.
+NVIDIA Cuda is proprietary and of course supported by NVIDIA. OpenCL is an open standard maintained by the non-profit technology consortium Khronos Group. But in face, the implementations rely on hardware/software providers.
 
 The important stuff of the various implementations is OpenCL Runtime libraries, which are prerequisites of executing a program that uses OpenCL.
 
