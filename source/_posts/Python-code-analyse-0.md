@@ -1,5 +1,5 @@
 ---
-title: Python Source Code Analysis(0)
+title: Python Source Code Analysis (0)
 date: 2019-10-17 15:47:40
 tags:
 - Python
@@ -9,7 +9,7 @@ categories:
 - [Source Code, Python]
 ---
 
-In this blog, we will take a dissecion of source code of Python.
+In this post, we will take a dissecion of source code of Python.
 
 To benefit the simplicity and meanwhile follow the most recent functionnalities, I choose `Python 3.6.9` to do the analysis.
 
