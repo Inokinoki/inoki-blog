@@ -190,6 +190,6 @@ And then, return the result through `return res;`.
 
 In this post, we tried to compile Python with all default configurations, and we explicited the main entry function.
 
-In the next post, we'll get involve with `Py_Main` function, as well as some Python Objects or types.
+In the next post, we'll [get involve with `Py_Main` function](https://blog.inoki.cc/2019/10/17/Python-code-analyse-0/), as well as some Python Objects or types if possible.
 
 See you then!
