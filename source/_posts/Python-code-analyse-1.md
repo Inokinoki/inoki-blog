@@ -668,7 +668,7 @@ if (Py_InspectFlag && stdin_is_interactive &&
 }
 ```
 
-As we see above, we need `Py_InspectFlag`, `stdin_is_interactive` are both true, and set at least a file name, a command or a module to run interactive mode. Which means, probably there was one script which has been executed.
+As we see above, we need `Py_InspectFlag`, `stdin_is_interactive` are both true, and set at least a file name, a command or a module to run interactive mode. Which means, probably there was one script which has been executed, an the script imported the interactive mode.
 
 ```c
 /* Check this environment variable at the end, to give programs the
