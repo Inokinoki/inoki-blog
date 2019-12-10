@@ -12,6 +12,16 @@ FFmpeg is a complete, cross-platform solution to record, convert and stream audi
 
 This post will give you a guide, how to write a program with FFmpeg on Windows, with Visual Studio.
 
+# Download FFmpeg library and development files
+
+In general, for an Open Source library, we may usually need build one from source code. And on Windows, it could be kind of confusing.
+
+Luckily, there is a nice hacker, who has built FFmpeg on Windows for us.
+
+We can find them on [https://ffmpeg.zeranoe.com/builds/](https://ffmpeg.zeranoe.com/builds/).
+
+What we need is two linking type files on Windows. So, for "Architecture", Windows-32bits or Windows-64bits. And in linking, we need dev and shared. Shared library can proivde runtime for the compiled program, meanwhile, in dev, we will have header files and exported symbol information to use during development.
+
 # Create VS Project
 
 Create a new Visual C++ project, do not use precompiled header file.
