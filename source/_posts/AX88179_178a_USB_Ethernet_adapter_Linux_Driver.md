@@ -6,7 +6,7 @@ tags:
 - Linux Driver
 - ASIX
 categories:
-- [Source Code, Linux Driver]
+- [Source Code, Linux Driver, USB-Net]
 ---
 
 In this post, we'll analyze the Linux Driver of USB-Ethernet adapters, which are using `AX88179`/`AX88178a` chips.
@@ -430,42 +430,260 @@ In these two devices, we have Ethernet device feature and ASIX specific device f
 #define FLAG_FRAMING_AX 0x0040		/* AX88772/178 packets */
 ```
 
-### .bind
+### Lifecycle-related sequence
 
-init device
+System will call the function pointed by `.bind` to initialize device. The one pointed by `.unbind` will be called to do a cleanup in the system. To reset device, system will call `.reset`. To actively stop device, `.stop` will be invoked. Linux will also use `.status` to query the device satus. And `.link_reset` can be called for link reset handling purpose.
 
-### .unbind
-
-cleanup device
-
-### .reset
-
-reset device
-
-### .stop
-
-stop device
-
-### .status
-
-for status polling
-
-### .link_reset
-
-link reset handling, called from defer_kevent
+These functions are so long and so device-specific that we do not need to concentrate on them. The most important functionality is transmission of packets, which is implemented by `.rx_fixup`(for receiving), and `.tx_fixup`(for sending).
 
 ### .rx_fixup
 
-fixup rx packet (strip framing)
+The function pointed by `.rx_fixup` works on doing frame stripping.
+
+What's frame stripping? These are two screenshots of an ARP network packet in USB traffic(above) and in Ethernet traffic(below), captured by Wireshark.
+
+{% asset_img rx_usb_net_packet.png RX USB Ethernet Packet %}
+
+{% asset_img rx_net_packet.png RX Ethernet Pacquet %}
+
+We can see that the highlighted part, from 0042 to 0079 in USB traffic, is exactly the same thing. So, what has RX fixup done is clear: it tries to extract the Ethernet packet from a USB frame.
+
+#### Function Prototype
+
+```c
+static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb);
+```
+
+The function accepts two parameters, one is the deivce, the other is the data received.
+
+The type `struct sk_buff` is defined in `include/linux/skbuff.h`, and is widely used in the network modules. It's the abbreviation of socket buffer.
+
+#### Implementation on mainline
+
+In this chapter, we'll take a look at every lines of this function on Linux Kernel mainline.
+
+First, complying to C89, all of variables should be declared at the beginning of the scope block.
+
+```c
+struct sk_buff *ax_skb;
+int pkt_cnt;
+u32 rx_hdr;
+u16 hdr_off;
+u32 *pkt_hdr;
+```
+
+`ax_skb` is a pointer which can point to a new socket buffer instance. `pkt_cnt` is the counter of packet, which counts how many packets are there in the packet.
+
+`rx_hdr` can represent the header of the USB packet that we received, this variable is a 32 bits one, or 4 bytes or 4 octets. `pkt_hdr` is a pointer to unsigned 32 bits integer, literally it can point to the header of packet. `hdr_off` is an unsigned 16 bits integer, which records the offset of real header.
+
+```c
+/* This check is no longer done by usbnet */
+if (skb->len < dev->net->hard_header_len)
+	return 0;
+```
+
+In current version, the driver should check the length is compliable with the device or not. `return 0` means that the packet isn't handled correctly.
+
+And then, it uses `skb_trim` to cut the last 4 bytes, reduce the length and calculate other fields in the structure.
+
+```c
+skb_trim(skb, skb->len - 4);
+```
+
+To know better how it works, we can take the previous packet to make an example:
+
+{% asset_img rx_usb_net_packet.png RX USB Ethernet Packet %}
+
+With the trim function, the last `01 00 04 00` should be dropped.
+
+```c
+memcpy(&rx_hdr, skb_tail_pointer(skb), 4);
+le32_to_cpus(&rx_hdr);
+```
+
+But in fact, they are not totally dropper, the data is still their. The next step is rightly copying them into `rx_hdr`, with correspondant byte order. For example, my Linux is x86_64, so with little-endian. And the `01 00` is exactly 0x0001 in our brain. So, the number should be `00 40 00 01`.
+
+```c
+pkt_cnt = (u16)rx_hdr;
+hdr_off = (u16)(rx_hdr >> 16);
+```
+
+Then, with some magic, we can assign the packet counter `pkt_cnt` and the header offset `hdr_off`. With the humain readable representation `00 40 00 01`, we could see there is one packet and the offset is 64 bytes (`0x40` in decimal).
+
+```c
+pkt_hdr = (u32 *)(skb->data + hdr_off);
+```
+
+We'll have the header of the packet with `pkt_hdr` variable. In our case, it will point at a byte which has `0x40` offset from the beginning of the packet. We should notice that, the packet begins at `0x40`, so, with the offset, it should point at `0x80`, where there are `00 88 3e 00`. 
+
+Then, we'ill attemp to iterately get all network packets in this single USB packet.
+
+```c
+while (pkt_cnt--) {
+```
+
+As usual, do the initialization at first. We will extract the length of each packet to `pkt_len`.
+
+```c
+u16 pkt_len;
+le32_to_cpus(pkt_hdr);
+```
+
+Extract packet length.
+
+```c
+pkt_len = (*pkt_hdr >> 16) & 0x1fff;
+```
+
+Here, we should have `00 3e 00 88` as the human readable order. So, the packet length should be `0x3e` -> 62 bytes.
+
+If we look at the USB-Net packet capture, we could know it's correct!
+
+```c
+/* Check CRC or runt packet */
+if ((*pkt_hdr & AX_RXHDR_CRC_ERR) ||
+	(*pkt_hdr & AX_RXHDR_DROP_ERR)) {
+	skb_pull(skb, (pkt_len + 7) & 0xFFF8);
+	pkt_hdr++;
+	continue;
+}
+```
+
+If `AX_RXHDR_CRC_ERR` or `AX_RXHDR_DROP_ERR` is set, just drop this packet because it's not what we want. We only care the network packet.
+
+```c
+#define AX_RXHDR_CRC_ERR			((u32)BIT(29))
+#define AX_RXHDR_DROP_ERR			((u32)BIT(31))
+```
+
+The two flags are defined at the top of source code file. We can see in our packet, the 29th bit and the 31st bit are both 0. So, just ignore the code mentioned above. We continue.
+
+```c
+if (pkt_cnt == 0) {
+	/* Skip IP alignment psudo header */
+	skb_pull(skb, 2);
+	skb->len = pkt_len;
+	skb_set_tail_pointer(skb, pkt_len);
+	skb->truesize = pkt_len + sizeof(struct sk_buff);
+	ax88179_rx_checksum(skb, pkt_hdr);
+	return 1;
+}
+```
+
+If we are handling the last packet, firstly we remove the first two bytes. They are two `0xee` at the beginning. In this function, the length will also be reduced by 2. But it's not the `pkt_len`, it's the length field in the socket buffer instance which is reduced.
+
+Then, we update the length to the right length of Network Packet and do some cleanup work. Then the stripped frame will be used by the system, as a network packet. **Note: only the last packet will be "returned" by the origin socket buffer.**
+
+But if we take a look at the end of the network packet, there are serveral bytes which are not used by the protocol itself. This will lead an error, I'll talk about it in the next post.
+
+```c
+ax_skb = skb_clone(skb, GFP_ATOMIC);
+if (ax_skb) {
+	ax_skb->len = pkt_len;
+	ax_skb->data = skb->data + 2;
+	skb_set_tail_pointer(ax_skb, pkt_len);
+	ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
+	ax88179_rx_checksum(ax_skb, pkt_hdr);
+	usbnet_skb_return(dev, ax_skb);
+} else {
+	return 0;
+}
+
+skb_pull(skb, (pkt_len + 7) & 0xFFF8);
+pkt_hdr++;
+```
+
+Finally in the loop, we know that there are still several network packets in the USB packet.
+
+So we try to clone the raw packet, regulate the boundary, and return it by `usbnet_skb_return` function.
+
+If there are still packets to be handled, go on.
+
+```c
+}
+```
+
+Otherwise, the loop ends.
+
+```c
+return 1;
+```
+
+In the end, if we reach here, it means there are not any more the packets to be handled. So, it "reports" to the system that we've finished succefully.
 
 ### .tx_fixup
 
-fixup tx packet (add framing)
+After analysis of RX fixup, what TX fixup should do is obvious. It just wrapped the raw paquet into a USB frame, and send it to the device. The device will send it to the other side.
+
+#### Function Prototype
+
+```c
+static struct sk_buff *
+ax88179_tx_fixup(struct usbnet *dev, struct sk_buff *skb, gfp_t flags)
+```
+
+The two first parameters have the same type, and the same usage as the two in RX fixup. The last one is a set of flags, but it's not used in the implementation. So, we neglict it.
+
+#### Implementation on mainline
+
+```c
+u32 tx_hdr1, tx_hdr2;
+int frame_size = dev->maxpacket;
+int mss = skb_shinfo(skb)->gso_size;
+int headroom;
+tx_hdr1 = skb->len;
+tx_hdr2 = mss;
+```
+
+Declarations and initializations of variables.
+
+```c
+if (((skb->len + 8) % frame_size) == 0)
+	tx_hdr2 |= 0x80008000;	/* Enable padding */
+
+headroom = skb_headroom(skb) - 8;
+```
+
+`skb_headroom` returns the number of bytes of free space at the head of an sk_buff.
+
+So, this is a boundary check for adding more bytes.
+
+```c
+if ((skb_header_cloned(skb) || headroom < 0) &&
+	pskb_expand_head(skb, headroom < 0 ? 8 : 0, 0, GFP_ATOMIC)) {
+	dev_kfree_skb_any(skb);
+	return NULL;
+}
+```
+
+If our socket buffer is a clone or we have no more space to store stuff, we'll fail to send.
+
+```c
+skb_push(skb, 4);
+cpu_to_le32s(&tx_hdr2);
+skb_copy_to_linear_data(skb, &tx_hdr2, 4);
+```
+
+Append the flag to the current end of packet.
+
+```c
+skb_push(skb, 4);
+cpu_to_le32s(&tx_hdr1);
+skb_copy_to_linear_data(skb, &tx_hdr1, 4);
+```
+
+Copy the length to the end of packet.
+
+```c
+return skb;
+```
+
+Return the instance.
 
 # Conclusion
 
 By analyzing this codebase, we should be able to know how a USB network device works.
 
-In the next post, I'll talk about a serious bug which is found in this driver.
+In the next post, I'll talk about the serious bug which is found in this driver.
 
 See you!
