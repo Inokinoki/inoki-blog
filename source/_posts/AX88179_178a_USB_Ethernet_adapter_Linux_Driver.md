@@ -7,6 +7,7 @@ tags:
 - ASIX
 categories:
 - [Source Code, Linux Driver, USB-Net]
+- Linux Driver
 ---
 
 In this post, we'll analyze the Linux Driver of USB-Ethernet adapters, which are using `AX88179`/`AX88178a` chips.
@@ -574,7 +575,7 @@ If we are handling the last packet, firstly we remove the first two bytes. They 
 
 Then, we update the length to the right length of Network Packet and do some cleanup work. Then the stripped frame will be used by the system, as a network packet. **Note: only the last packet will be "returned" by the origin socket buffer.**
 
-But if we take a look at the end of the network packet, there are serveral bytes which are not used by the protocol itself. This will lead an error, I'll talk about it in the next post.
+But if we take a look at the end of the network packet, there are serveral bytes which are not used by the protocol itself. This will lead an error, I'll talk about it in the [next post](/2019/12/11/Bug_AX88179_178a_USB_Ethernet_adapter_Linux_Driver/).
 
 ```c
 ax_skb = skb_clone(skb, GFP_ATOMIC);
@@ -684,6 +685,6 @@ Return the instance.
 
 By analyzing this codebase, we should be able to know how a USB network device works.
 
-In the next post, I'll talk about the serious bug which is found in this driver.
+In the [next post](/2019/12/11/Bug_AX88179_178a_USB_Ethernet_adapter_Linux_Driver/), I'll talk about the serious bug which is found in this driver.
 
 See you!
