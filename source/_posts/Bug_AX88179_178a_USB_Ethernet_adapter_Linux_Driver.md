@@ -1,6 +1,6 @@
 ---
 title: Bug AX88179_178a USB-Ethernet adapter Linux Driver
-date: 2019-12-11 10:52:00
+date: 2019-12-12 10:52:00
 tags:
 - Linux
 - Linux Driver
@@ -16,22 +16,47 @@ In my previous post, [AX88179_178a USB-Ethernet adapter Linux Driver](/2019/12/0
 
 # Background
 
-1. Bridged network on Virtual Box
+The phenomenon is that the TLS connection cannot be established through a bridged network. Both in the two following cases:
+
+1. Bridged network on VirtualBox
+
+In VirtualBox, we setuped a bridged network via the device `Edimax EU-4306`, to connect the Virtual Machine with a raspberry.
 
 2. Bridged network on Raspberry PI
 
 {% asset_img topology.png Topology %}
 
+On device a, we made a network bridge to connect the PC and the device b. All the packets which don't have a destination to device a will be resent to the other side.
 
 # Diagnosis
 
+It was a mystery why in these two cases, the communication doesn't work.
+
+So, I used Wireshark to do a monitoring on the interfaces.
+
+First one was running on the PC:
+
 {% asset_img 1.pc_send.png PC send packet %}
+
+We can see that, the first packet with 1514 length is the No.616. We should note that the packet No.617 is the one with length 336, and it acts as a TLS handshake packet.
+
+The second one is on the device a, monitoring the network interface which is created by `Edimax EU-4306`:
 
 {% asset_img 2.a_receive.png A reception %}
 
+The packet matches the No.616 is the packet No.1858 on this interface. And No.617 matches No.1859. Both of them has two bytes in addition at the end. The two bytes are translated as `VSS-Monitoring ethernet trailer, Source Port: 26490` or something similar.
+
+The device a should resent all packets to the other network interface.
+
+Here is the traffic on the other network interface:
+
 {% asset_img 3.a_send.png A send packet %}
 
+We cannot find the index of packet, but we can well find the packet in order. The two we are following are the one with 1516 length and the one following it with 338 length.
+
 {% asset_img 4.b_receive.png B reception %}
+
+And finally, on the device b, our destination, we can see that all packets with 1516 length disappeared, which means that they are dropped.
 
 # Problem
 
