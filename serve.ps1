@@ -1,1 +1,1 @@
-docker run -p 4000:4000 -v D:/Develop/inoki-blog:/usr/blog --rm inoki-blog
+docker run -ti -p 4000:4000 -v D:/Develop/inoki-blog:/usr/blog --rm inoki-blog
