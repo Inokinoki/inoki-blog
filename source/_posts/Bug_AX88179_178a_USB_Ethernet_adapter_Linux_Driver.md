@@ -191,7 +191,11 @@ Okay, we test!
 
 # Test
 
-Here we fix!
+We test it with the ARP packet mentioned in my last post:
+
+{% asset_img fixed.png Fixed %}
+
+Here we can see the length is 60, no more 62. It means we fixed it!
 
 # Conclusion
 
