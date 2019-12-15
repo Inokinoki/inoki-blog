@@ -39,7 +39,7 @@ site:
     url: ../images/logo.png
   title: Inoki in the world # 页面title
   favicon: /favicon.png
-  board: # 站点公告
+  board: Welcome to Inoki's Blog # 站点公告
   copyright: true # 底部版权信息
 
 # config
@@ -48,7 +48,7 @@ config:
   layout: main-center # 布局方式 main-left main-center main-right
   toc: true # 是否开启文章章节目录导航
   menu_highlight: true # 是否开启当前菜单高亮显示
-  thumbnail: true # enable posts thumbnail, options: true, false
+  thumbnail: false # enable posts thumbnail, options: true, false
   excerpt_link: Read More
 
 # Pagination
@@ -63,11 +63,10 @@ pagination:
 sidebar: right
 widgets:
   - board
-  - category
-  - tag
-  - tagcloud
-  - archive
   - recent_posts
+  - tagcloud
+  - tag
+  - category
 
 # display widgets at the bottom of index pages (pagination == 2)
 index_widgets:
@@ -92,7 +91,7 @@ search:
 
 # Donate
 donate:
-  enable: true
+  enable: false
   # 微信打赏
   wechatpay:
     qrcode: images/donate/wechatpayimg.jpg
@@ -206,8 +205,8 @@ profile:
   avatar: images/avatar.jpg
   gravatar: # Gravatar email address, if you enable Gravatar, your avatar config will be overriden
   author: Inoki
-  author_title: Ph.D Candidate
-  author_description: 个人简介
+  author_title: Ph.D student
+  author_description: Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.
   location: France
   follow: https://github.com/inokinoki
   # Social Links
@@ -215,11 +214,11 @@ profile:
     links:
       github: https://github.com/inokinoki
       # weibo: http://weibo.com/lossingdawnn
-      # twitter: https://twitter.com/iwebued
-      # facebook: /
+      twitter: https://twitter.com/IIInoki
+      facebook: https://www.facebook.com/inoki.noki.10
       # dribbble: /
       # behance: https://www.behance.net/cofess
-      rss: atom.xml
+      # rss: atom.xml
     link_tooltip: true # enable the social link tooltip, options: true, false
   # My Skills
   skills:
