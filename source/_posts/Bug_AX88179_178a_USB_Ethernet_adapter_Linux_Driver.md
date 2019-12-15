@@ -26,7 +26,7 @@ In VirtualBox, we setuped a bridged network via the device `Edimax EU-4306`, to 
 
 {% asset_img topology.png Topology %}
 
-On device a, we made a network bridge to connect the PC and the device b. All the packets which don't have a destination to device a will be resent to the other side.
+On device B, we made a network bridge to connect the PC and the device A. All the packets which don't have a destination to device a will be resent to the other side.
 
 # Diagnosis
 
@@ -40,13 +40,13 @@ First one was running on the PC:
 
 We can see that, the first packet with 1514 length is the No.616. We should note that the packet No.617 is the one with length 336, and it acts as a TLS handshake packet.
 
-The second one is on the device a, monitoring the network interface which is created by `Edimax EU-4306`:
+The second one is on the device B, monitoring the network interface which is created by `Edimax EU-4306`:
 
 {% asset_img 2.a_receive.png A reception %}
 
 The packet matches the No.616 is the packet No.1858 on this interface. And No.617 matches No.1859. Both of them has two bytes in addition at the end. The two bytes are translated as `VSS-Monitoring ethernet trailer, Source Port: 26490` or something similar.
 
-The device a should resent all packets to the other network interface.
+The device B should resent all packets to the other network interface.
 
 Here is the traffic on the other network interface:
 
@@ -56,7 +56,7 @@ We cannot find the index of packet, but we can well find the packet in order. Th
 
 {% asset_img 4.b_receive.png B reception %}
 
-And finally, on the device b, our destination, we can see that all packets with 1516 length disappeared, which means that they are dropped.
+And finally, on the device A, our destination, we can see that all packets with 1516 length disappeared, which means that they are dropped.
 
 # Problem
 
