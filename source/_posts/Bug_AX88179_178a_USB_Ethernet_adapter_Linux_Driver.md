@@ -179,7 +179,7 @@ if (ax_skb) {
     skb_pull(ax_skb, 2);
     
     skb_set_tail_pointer(ax_skb, pkt_len);
-    ax_skb->truesize = skb->len + sizeof(struct sk_buff);
+    ax_skb->truesize = ax_skb->len + sizeof(struct sk_buff);
     ax88179_rx_checksum(ax_skb, pkt_hdr);
     usbnet_skb_return(dev, ax_skb);
 } else {
