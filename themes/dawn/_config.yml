@@ -5,7 +5,7 @@ menu:
   #Categories: categories  # 分类
   Tags: tags  # 标签
   # Repository: repository  # github repositories
-  # Books: books  # 豆瓣书单
+  Books: book-list.html
   # Links: links  # 友链
   # About: about  # 关于
 
