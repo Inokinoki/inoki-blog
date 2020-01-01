@@ -38,7 +38,7 @@ site:
     height: 40
     url: ../images/logo.png
   title: Inoki in the world # 页面title
-  favicon: /favicon.png
+  favicon: /favicon.ico
   board: Welcome to Inoki's Blog # 站点公告
   copyright: true # 底部版权信息
 
