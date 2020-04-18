@@ -1,5 +1,5 @@
 ---
-title: KDE Connect iOS 开发日记(0)
+title: KDE Connect iOS 开发日记(0) 索引
 date: 2020-04-18 10:34:50
 tags:
 - KDE Connect
@@ -16,8 +16,10 @@ categories:
 
 # 目录
 
-1. [KDE Connect iOS 开发日记(1)](/2020/04/18/KDEConnect-iOS-dev-dairy-ZHCN-1/)
-2. [KDE Connect iOS 开发日记(2)](/2020/04/19/KDEConnect-iOS-dev-dairy-ZHCN-2/)
+1. [KDE Connect iOS 开发日记(1) 构建](/2020/04/18/KDEConnect-iOS-dev-dairy-ZHCN-1/)
+2. KDE Connect iOS 开发日记(2) 识别协议
+2. KDE Connect iOS 开发日记(3) 证书
+
 
 *...剩余部分仍在构建中*
 

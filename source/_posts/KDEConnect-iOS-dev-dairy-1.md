@@ -1,5 +1,5 @@
 ---
-title: KDE Connect iOS Develop Dairy(1)
+title: KDE Connect iOS Develop Dairy(1) Build
 date: 2020-04-18 21:43:50
 tags:
 - KDE Connect
