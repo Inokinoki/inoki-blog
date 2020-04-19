@@ -152,7 +152,7 @@ So, I change the line in `lib/NetworkPackage.m`:
 
 Finally, the KDE Connect iOS can find the other device and establish the connections to them:
 
-{% asset_img discovery.png Discovery %}
+{% asset_img discovery.jpg Discovery %}
 
 On the contrary, the others cannot find KDE Connect iOS client out yet. That's because the new version requires TLS/SSL after a TCP connnection. This will get fixed in the next post.
 
