@@ -17,7 +17,7 @@ categories:
 # 目录
 
 1. [KDE Connect iOS 开发日记(1) 构建](/2020/04/18/KDEConnect-iOS-dev-dairy-ZHCN-1/)
-2. KDE Connect iOS 开发日记(2) 识别协议
+2. [KDE Connect iOS 开发日记(2) 识别协议](/2020/04/19/KDEConnect-iOS-dev-dairy-ZHCN-2/)
 2. KDE Connect iOS 开发日记(3) 证书
 
 

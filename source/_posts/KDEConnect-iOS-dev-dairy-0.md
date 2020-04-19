@@ -16,7 +16,7 @@ This serie of blogs aims in bringing KDE Connect back to the iOS platform. You c
 # Context
 
 1. [KDE Connect iOS Develop Dairy(1) Build](/2020/04/18/KDEConnect-iOS-dev-dairy-1/)
-2. KDE Connect iOS Develop Dairy(2) Identity Protocol
+2. [KDE Connect iOS Develop Dairy(2) Identity Protocol](/2020/04/19/KDEConnect-iOS-dev-dairy-2/)
 3. KDE Connect iOS Develop Dairy(3) Certificate
 
 *...Under Construction*
