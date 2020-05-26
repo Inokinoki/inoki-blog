@@ -1,5 +1,5 @@
 ---
-title: LoRa 中的关键概念
+title: 【译】LoRa 中的关键概念
 date: 2020-05-25 11:20:00
 tags:
 - 中文
