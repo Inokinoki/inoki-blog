@@ -253,7 +253,7 @@ if (data->thread_id == cloudCandidates->m_source_thread_id)
 
 # 处理用户选择的候选
 
-除去中间的处理云输入请求返回结果的过程（另起一篇来讲），和用户交互的最后一步就是用户对候选进行选择的过程。
+除去中间的处理云输入请求返回结果的过程（在[《候选词解析》](/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/)这篇文章中详述），和用户交互的最后一步就是用户对候选进行选择的过程。
 
 在这一过程中，`CloudCandidates` 实例中的 `selectCandidate` 会被调用，被选中的候选会作为参数传入。
 
