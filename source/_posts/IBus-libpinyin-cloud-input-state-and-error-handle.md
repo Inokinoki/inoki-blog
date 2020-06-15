@@ -9,7 +9,7 @@ categories:
 - ibus-libpinyin
 ---
 
-上一篇文章描述了云输入部分发出请求，接收到回复之后对回复的验证、处理，以及对返回的候选词的提取。在取得候选之后，会将其加入到 `m_candidates` 列表中，并返回一个状态；若没有取得候选或者在验证过程中发现了问题，也会返回一个指出问题的错误状态。
+上一篇文章描述了云输入部分发出请求，接收到回复之后对回复的验证、处理，以及对返回的候选词的提取。在取得候选之后，会将其加入到 parser 中的 `m_candidates` 列表中，并返回一个状态；若没有取得候选或者在验证过程中发现了问题，也会返回一个指出问题的错误状态。
 
 这篇文章接着这个流程，叙述在代码中是如何对这些状态或错误进行一系列处理的。除此之外，在发送请求前和发送请求时也有相应的状态，这篇文章的最后也会对这个过程进行描述。
 
@@ -57,7 +57,7 @@ enum CandidateResponseParserError {
 
 如果到最后，发现云输入源没有返回任何候选，那么就用 `PARSER_NO_CANDIDATE` 通知上层。
 
-以上几个错误都在上篇文章[《候选词解析》](/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/)中出现过。
+以上几个错误或状态都在上篇文章[《云输入在 ibus-libpinyin 中的实现 - 候选词解析》](/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/)中出现过。
 
 而 `PARSER_NETWORK_ERROR` 比较特殊，它仅仅用在取得的回复的输入流/缓冲区无效时，它仅仅在 `CloudCandidatesResponseJsonParser` 被返回：
 
