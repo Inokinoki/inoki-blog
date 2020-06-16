@@ -1,31 +1,31 @@
 ---
-title: My book list
+title: Book list 书单
 ---
 
-# Compiler / 编译原理
+# Compiler 编译器
 
 《Compilers: Principales, Techniques and Tools》
 
-# Algorithm / 算法
+# Algorithm 算法
 
 《Introduction to Algorithms》
 
 《Mastering Algorithms with C》
 
-# Computer Graphics / 计算机图形学
+# Computer Graphics 计算机图形学
 
 《Computer Graphics with OpenGL》
 
-# Mobile Applications / 移动应用
+# Mobile Applications 移动应用
 
-# Programming Languages / 编程语言
+# Programming Languages 编程语言
 
 《C++ Primer》
 
 《Learn Objective-C on the Mac》
 
 
-# Applications / 应用
+# Applications 应用
 
 《FFmpeg Beginner's handbook》
 
@@ -37,15 +37,15 @@ title: My book list
 
 《A Heavy Commented Linux Kernel Source Code》
 
-# Cybersecutiry / 网络安全
+# Cybersecutiry 网络安全
 
 《Gray Hat Python: Python Programming for Hackers and Reverse Engineers》
 
-# Web / 网页技术
+# Web 网页技术
 
 《WebKit 技术内幕》
 
-# Other books about Computer Science
+# Other books about Computer Science 其他
 
 《Code: The Hidden Language of Computer Hardware and Software》
 

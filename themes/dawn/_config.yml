@@ -2,12 +2,12 @@
 menu:
   Home: .
   Archives: archives  # 归档
-  #Categories: categories  # 分类
+  # Categories: categories  # 分类
   Tags: tags  # 标签
   # Repository: repository  # github repositories
-  Books: book-list.html
-  # Links: links  # 友链
-  # About: about  # 关于
+  Books: book
+  Links: links  # 友链
+  About: about  # 关于
 
 # http://blog.cofess.com/hexo-theme-pure/iconfont/demo_fontclass.html
 # Enable/Disable menu icons
