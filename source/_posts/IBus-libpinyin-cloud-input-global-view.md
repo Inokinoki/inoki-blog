@@ -202,20 +202,20 @@ g_timeout_add (guint interval,
 ```cpp
 typedef struct
 {
-    guint thread_id;
+    guint event_id;
     const gchar request_str[MAX_PINYIN_LEN + 1];
     CloudCandidates *cloud_candidates;
 } DelayedCloudAsyncRequestCallbackUserData;
 ```
 
-其中，`thread_id` 是当前的用户数据对应的事件 id，`request_str` 是当前延时希望发出请求所用的拼音，而`cloud_candidates` 则是对云输入候选进行处理的实例的引用，也就是延时的发送者。
+其中，~~`thread_id`~~ `event_id` 是当前的用户数据对应的事件 id，`request_str` 是当前延时希望发出请求所用的拼音，而`cloud_candidates` 则是对云输入候选进行处理的实例的引用，也就是延时的发送者。
 
 在创建延时之前，会首先分配、创建一个 `DelayedCloudAsyncRequestCallbackUserData` 的实例，并把对应的数据填入。
 
 然后，创建延时事件并在当前 `CloudCandidates` 实例中记录其 id：
 
 ```cpp
-thread_id = m_source_thread_id = g_timeout_add_full(G_PRIORITY_DEFAULT, m_delayed_time, delayedCloudAsyncRequestCallBack, user_data, delayedCloudAsyncRequestDestroyCallBack);
+event_id = m_source_event_id = g_timeout_add_full(G_PRIORITY_DEFAULT, m_delayed_time, delayedCloudAsyncRequestCallBack, user_data, delayedCloudAsyncRequestDestroyCallBack);
 ```
 
 函数 `delayedCloudAsyncRequestCallBack` 会在延时结束后被调用，`delayedCloudAsyncRequestDestroyCallBack` 则会在 `delayedCloudAsyncRequestCallBack` 返回 `FALSE`，事件循环决定结束延时事件后被调用。
@@ -238,9 +238,9 @@ CloudCandidates::delayedCloudAsyncRequestDestroyCallBack (gpointer user_data)
 
 ```cpp
 /* only send with a latest timer */
-if (data->thread_id == cloudCandidates->m_source_thread_id)
+if (data->event_id == cloudCandidates->m_source_event_id)
 {
-    cloudCandidates->m_source_thread_id = 0;
+    cloudCandidates->m_source_event_id = 0;
     cloudCandidates->cloudAsyncRequest(data->request_str);
 }
 ```
