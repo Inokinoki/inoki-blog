@@ -19,6 +19,8 @@ categories:
 
 在处理过程中，会使用一系列字符串被更新到候选列表中，用来替代最初的占位符，告诉用户云输入候选处理当前的状态：
 
+**已过期:**
+
 ```cpp
 static const std::string CANDIDATE_CLOUD_PREFIX = "☁";
 
@@ -28,6 +30,24 @@ static const std::string CANDIDATE_NO_CANDIDATE_TEXT = CANDIDATE_CLOUD_PREFIX + 
 static const std::string CANDIDATE_INVALID_DATA_TEXT = CANDIDATE_CLOUD_PREFIX + "[Invalid Data]";
 static const std::string CANDIDATE_BAD_FORMAT_TEXT = CANDIDATE_CLOUD_PREFIX + "[Bad Format]";
 ```
+
+**更新：**
+
+```cpp
+static const std::string CANDIDATE_PENDING_TEXT_WITHOUT_PREFIX      = "[⏱️]";
+static const std::string CANDIDATE_LOADING_TEXT_WITHOUT_PREFIX      = "...";
+static const std::string CANDIDATE_NO_CANDIDATE_TEXT_WITHOUT_PREFIX = "[🚫]";
+static const std::string CANDIDATE_INVALID_DATA_TEXT_WITHOUT_PREFIX = "[❌]";
+static const std::string CANDIDATE_BAD_FORMAT_TEXT_WITHOUT_PREFIX   = "[❓]";
+
+static const std::string CANDIDATE_PENDING_TEXT         = CANDIDATE_CLOUD_PREFIX + CANDIDATE_PENDING_TEXT_WITHOUT_PREFIX;
+static const std::string CANDIDATE_LOADING_TEXT         = CANDIDATE_CLOUD_PREFIX + CANDIDATE_LOADING_TEXT_WITHOUT_PREFIX;
+static const std::string CANDIDATE_NO_CANDIDATE_TEXT    = CANDIDATE_CLOUD_PREFIX + CANDIDATE_NO_CANDIDATE_TEXT_WITHOUT_PREFIX;
+static const std::string CANDIDATE_INVALID_DATA_TEXT    = CANDIDATE_CLOUD_PREFIX + CANDIDATE_INVALID_DATA_TEXT_WITHOUT_PREFIX ;
+static const std::string CANDIDATE_BAD_FORMAT_TEXT      = CANDIDATE_CLOUD_PREFIX + CANDIDATE_BAD_FORMAT_TEXT_WITHOUT_PREFIX;
+```
+
+其中，带有 `WITHOUT_PREFIX` 后缀的在状态改变时，会被储存在缓存的候选列表 `m_candidates` 中，更新候选时添加到候选列表中。
 
 这些字符串带有一个 "☁" 的前缀，后面则是对应的状态字符串。
 
@@ -91,7 +111,7 @@ ret_code = parser->parse (stream);
 
 ### 使用迭代器记录
 
-最近的版本中，在插入占位符时，`m_cloud_candidates_first_pos` 和 `m_candidates_end_pos` 记录下来的了云输入占位符的开始位置和结束位置。这里的  `m_cloud_candidates_first_pos` 指向整句候选之后的第一个位置，而 `m_candidates_end_pos` 指向它之后第 N 个位置，其中 N 为配置的云输入候选词个数。
+上个 20 版的版本中，在插入占位符时，`m_cloud_candidates_first_pos` 和 `m_candidates_end_pos` 记录下来的了云输入占位符的开始位置和结束位置。这里的  `m_cloud_candidates_first_pos` 指向整句候选之后的第一个位置，而 `m_candidates_end_pos` 指向它之后第 N 个位置，其中 N 为配置的云输入候选词个数。
 
 在进行更新占位符时，使用下面的循环即可，之后的章节中不再累述：
 
@@ -106,6 +126,10 @@ for (std::vector<EnhancedCandidate>::iterator pos = m_cloud_candidates_first_pos
 比如，在云输入进行 `processCandidates` 之后， Lua 脚本候选又在相同位置（整句候选之后的第一个位置）进行了添加和处理，这时 `m_cloud_candidates_first_pos` 的指向实际上是 Lua 脚本候选词，于是在更新过程中，它（们）就会被云输入的候选覆盖掉。
 
 我采用的解决方案是，将云输入的候选处理放到最后。
+
+### 不记录云占位符的位置
+
+为了解决使用迭代器记录产生的问题，再加上每次云输入请求都会记录请求的拼音、并保存已解析的候选，最近的 20 版云输入已经可以通过 `editor` 的 `updateCandidates` 调用 `CloudCandidates` 的 `processCandidates` 正常更新候选。
 
 ### 使用下标记录
 

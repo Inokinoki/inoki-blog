@@ -30,11 +30,18 @@ categories:
 
 这个位置在 18 版云输入是由 `m_first_cloud_candidate_position` 属性指定的，作为一个整数表示的下标，它给定了一个固定位置来插入、修改占位符。这样可能会在候选词较少时导致用数组下标访问越界的问题。
 
-20 版云输入中，则将其放在 1-3 个整句候选词的后面。并把该位置用一个迭代器记录下来，方便取到候选词之后对占位符进行快速的修改。
+20 版云输入中，则将其放在 1-3 个整句候选词的后面。~~并把该位置用一个迭代器记录下来，方便取到候选词之后对占位符进行快速的修改。~~
 
 在这两个版本的云输入中，`m_cloud_candidates_number` 都用来指定候选词的个数。
 
-一切处理结束后，若拼音长度大于 `m_min_cloud_trigger_length`，即最小的触发云输入请求的拼音长度（18 版中可配置，20 版中由 `CLOUD_MINIMUM_TRIGGER_LENGTH` 宏定义），`CloudCandidates` 会去调用对应的方法来请求云输入的候选，以便之后对占位符进行替换。
+~~一切处理结束后，若拼音长度大于 `m_min_cloud_trigger_length`，即最小的触发云输入请求的拼音长度（18 版中可配置，20 版中由 `CLOUD_MINIMUM_TRIGGER_LENGTH` 宏定义），`CloudCandidates` 会去调用对应的方法来请求云输入的候选，以便之后对占位符进行替换。~~
+
+在异步模式下，如果使用迭代器记录占位符的插入位置，另一边使用这个位置进行读取的话，是线程不安全的，可能会产生数据竞争。而在候选列表更新后，如果另一个线程仍使用之前的迭代器，存在非法访问的可能性。
+
+最新的版本中，不再对占位符插入位置进行记录。而是在每次被调用时，判断记录的最近一次请求拼音是否与本次一致：
+
+- 如果一致，则将 `m_candidates` 更新到候选列表中
+- 如果不一致，则添加占位符到候选列表中
 
 ## 占位符个数的处理
 
@@ -70,7 +77,7 @@ m_cloud_candidates_number = 1;
 
 ## 异步请求
 
-异步请求在 18 版云输入中其实已经有了一个雏形了，即 `cloudAsyncRequest` 方法。
+异步请求在 18 版云输入中其实已经有了一个雏形，即 `cloudAsyncRequest` 方法。
 
 这个方法调用 `soup_session_send_async` 来发送请求，`cloudResponseCallBack` 被作为回调函数参数传入，完成时会被调用来处理结果。
 
@@ -154,6 +161,8 @@ PhoneticEditor::updateCandidates (void)
 
 在 `cloudResponseCallBack` 获取到返回的结果的输入流之后，`processCloudResponse` 被调用来处理和解析结果，结果会被更新到候选词列表中，替换原来的占位符。这个过程在之后的文章会详细描述。
 
+**已过期：**
+
 之后就是将候选更新到输入法面板了，为了避免和 18 版一样的问题，这里我没有再直接调用 `update` 方法，而是选择性的调用一些操作：
 
 ```cpp
@@ -168,6 +177,36 @@ cloudCandidates->m_editor->updateLookupTableFast ();
 3. 快速更新查询表。
 
 这里的过程是否可以简化，还需要进一步的研究和讨论。
+
+**更新：**
+
+在最新的版本中，加入了最近一次请求的拼音字符串和对应的结果的缓存，所有对占位符进行的修改、以及云输入候选的更新都被放在了 `CloudCandidates::processCandidates` 中处理。
+
+因此，在需要更新的时候，只需要将需要的候选置入结果缓存 `m_candidates` 中，然后调用下面的更新方法即可：
+
+```cpp
+void
+CloudCandidates::updateLookupTable ()
+{
+    /* retrieve cursor position in lookup table */
+    guint cursor = m_editor->m_lookup_table.cursorPos ();
+
+    /* update cached cloud input candidates */
+    m_editor->updateCandidates ();
+
+    /* regenerate lookup table */
+    m_editor->m_lookup_table.clear ();
+    m_editor->fillLookupTable ();
+
+    /* recover cursor position in lookup table */
+    m_editor->m_lookup_table.setCursorPos (cursor);
+
+    /* notify ibus */
+    m_editor->updateLookupTableFast ();
+}
+```
+
+这个更新的实现还考虑了保存光标位置，并在更新之后恢复，防止由于云输入候选的更新导致用户选择候选的光标重置的问题。
 
 ### 延时异步
 
@@ -266,7 +305,8 @@ if (data->event_id == cloudCandidates->m_source_event_id)
 for (std::vector<EnhancedCandidate>::iterator pos = m_candidates.begin(); pos != m_candidates.end(); ++pos) {
     if (pos->m_candidate_id == enhanced.m_candidate_id) {
         enhanced.m_display_string = pos->m_display_string;
-        return SELECT_CANDIDATE_COMMIT;
+        /* modify in-place and commit */
+        return SELECT_CANDIDATE_COMMIT | SELECT_CANDIDATE_MODIFY_IN_PLACE;
     }
 }
 ```
