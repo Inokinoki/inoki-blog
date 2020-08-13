@@ -39,7 +39,7 @@ site:
     url: ../images/logo.png
   title: Inoki in the world # 页面title
   favicon: /favicon.ico
-  board: Welcome to Inoki's Blog # 站点公告
+  board: Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here. # 站点公告
   copyright: true # 底部版权信息
 
 # config
@@ -194,7 +194,7 @@ plugins:
   tencent_analytics:
 
 # Miscellaneous
-twitter:
+twitter: IIInoki
 google_plus:
 fb_admins:
 fb_app_id:
@@ -205,7 +205,7 @@ profile:
   avatar: images/avatar.jpg
   gravatar: # Gravatar email address, if you enable Gravatar, your avatar config will be overriden
   author: Inoki
-  author_title: Ph.D student
+  author_title: Student
   author_description: Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.
   location: France
   follow: https://github.com/inokinoki
