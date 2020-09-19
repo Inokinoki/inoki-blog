@@ -1,6 +1,6 @@
 ---
-title: GBDK Sprite 精灵
-date: 2015-09-19 21:41:23
+title: 【译】GBDK Sprite 精灵
+date: 2020-09-19 21:41:23
 tags:
 - GBDK
 - 中文
