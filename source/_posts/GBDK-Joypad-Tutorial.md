@@ -39,7 +39,7 @@ J_RIGHT
 
 ## Program 1: 返回 joypad() 状态
 
-{% asset_img Program1.gif }
+{% asset_img Program1.gif %}
 
 让我们编写一个简单的程序来在按下按钮时返回 joypad() 的状态：
 
@@ -94,7 +94,7 @@ void main(void){
 
 ## Program 2: 使用 waitpad() 和 waitpadup()
 
-{% asset_img Program2.gif }
+{% asset_img Program2.gif %}
 
 您还可以使用另外两个游戏手柄的函数：
 
@@ -130,7 +130,7 @@ void main(void){
 
 ## Program 3: 在屏幕上移动精灵
 
-{% asset_img Program3.gif }
+{% asset_img Program3.gif %}
 
 现在，让我们使用 joypad() 函数在屏幕上移动精灵。如果您对 GBDK Sprite 不熟悉，则需要查看 GBDK Sprite 教程。
 

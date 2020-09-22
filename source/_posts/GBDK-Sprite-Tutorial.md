@@ -24,15 +24,15 @@ categories:
 
 运行 GBTD。单击视图，图块大小，16x16。
 
-{% asset_img 01gbtd16x16.png }
+{% asset_img 01gbtd16x16.png %}
 
 绘制图像，将其复制并粘贴到第二个瓦块插槽中，然后进行更改以制作两帧动画。 我们将在这些之间来回切换。
 
-{% asset_img 02gbtdtwotiles.png }
+{% asset_img 02gbtdtwotiles.png %}
 
 单击文件，导出到，将 Type 更改为 GBDK C 文件（* .c），并将 To 更改为1。我还将文件名和标签更改为“ smile”。 点击确定。
 
-{% asset_img 03gbtdexport.png }
+{% asset_img 03gbtdexport.png %}
 
 这将创建一个 .c 和 .h 文件。.c 文件应如下所示：
 
@@ -121,7 +121,7 @@ void main(){
 
 运行 BGB 并加载 gamename.gb。
 
-{% asset_img 04bgbhalfsmile.png }
+{% asset_img 04bgbhalfsmile.png %}
 
 Emmmmmm，这里只有半张脸。好吧，由于 Gameboy 只能处理最大 8x16 的瓦块，我们需要通过把两个 8x16 的瓦块画在一起来构造一个 16x16 的。
 
@@ -130,7 +130,7 @@ Emmmmmm，这里只有半张脸。好吧，由于 Gameboy 只能处理最大 8x1
 
 在 BGB 中，您已编写的 rom 已加载并运行，右键单击，将鼠标悬停在 “其他” 上，单击 “VRAM查看器”。
 
-{% asset_img 05bgbvramviewer.png }
+{% asset_img 05bgbvramviewer.png %}
 
 在这里，您可以看到我们使用 set_sprite_data 设置为 8x8 瓦片的精灵。最左侧的两个数字 0 和 1 亮起，表示它们正在使用中。我们想要的是设置第二个图块，将其用脸的右半部分填充，然后将其与左半部分对齐。
 
@@ -202,7 +202,7 @@ void main(){
 
 编译并运行它。成功运行！
 
-{% asset_img 06bgbwink.gif }
+{% asset_img 06bgbwink.gif %}
 
 在 VRAM 查看器中实时观看图块切换。
 
@@ -291,7 +291,7 @@ void main(){
 
 编译并在 VRAM 查看器中查看！
 
-{% asset_img 07bgbsmilefrown.gif }
+{% asset_img 07bgbsmilefrown.gif %}
 
 # 结论
 
