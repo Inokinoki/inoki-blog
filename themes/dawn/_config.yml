@@ -40,7 +40,7 @@ site:
   title: Inoki in the world # 页面title
   favicon: /favicon.ico
   board: Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here. # 站点公告
-  copyright: true # 底部版权信息
+  copyright: false # 底部版权信息
 
 # config
 config:
@@ -207,7 +207,7 @@ profile:
   author: Inoki
   author_title: Student
   author_description: Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.
-  location: France
+  location: Earth
   follow: https://github.com/inokinoki
   # Social Links
   social:
@@ -215,7 +215,7 @@ profile:
       github: https://github.com/inokinoki
       # weibo: http://weibo.com/lossingdawnn
       twitter: https://twitter.com/IIInoki
-      facebook: https://www.facebook.com/inoki.noki.10
+      # facebook: https://www.facebook.com/inoki.noki.10
       # dribbble: /
       # behance: https://www.behance.net/cofess
       # rss: atom.xml
