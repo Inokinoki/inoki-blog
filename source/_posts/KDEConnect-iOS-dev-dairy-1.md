@@ -14,7 +14,7 @@ The project uses [CocoaPods](https://cocoapods.org/) to manage its dependencies:
 ### WHAT IS COCOAPODS
 CocoaPods is a dependency manager for Swift and Objective-C Cocoa projects. It has over 72 thousand libraries and is used in over 3 million apps. CocoaPods can help you scale your projects elegantly.
 
-The CocoaPods file is `Podfile`, which describes the iOS version `(7.0)` to use, and the dependencies name, version and source:
+The CocoaPods file is `Podfile`, which describes the iOS version `(7.0)` to use, and the dependencies name, version, and source:
 
 ```
 platform :ios, '7.0'
@@ -77,14 +77,14 @@ In this project, the `.xcworkspace` file is `kdeconnect-ios.xcworkspace`. So, I 
 [!] The platform of the target `Pods` (iOS 7.0) may not be compatible with `VTAcknowledgementsViewController (1.5.2)` which has a minimum requirement of iOS 8.0 - tvOS 9.0.
 ```
 
-It's obvious that the target OS version should be updated. I directly update it to `platform :ios, '12.0'`.
+The target OS version should be updated. I directly update it to `platform :ios, '12.0'`.
 
 ```
 [!] The abstract target Pods is not inherited by a concrete target, so the following dependencies won't make it into any targets in your project:
     ...
 ```
 
-This message indicates that the `pods`(dependencies) don't have a target, according to the CocoaPod doc, I should add `target "kdeconnect-ios"` and wrap all the pods with a `do ... end` body.
+This message indicates that the `pods`(dependencies) do not have a target; according to the CocoaPod doc, I should add `target "kdeconnect-ios"` and wrap all the pods with a `do ... end` body.
 
 ## Final Podfile
 
@@ -118,11 +118,11 @@ Pod installation complete! There are 6 dependencies from the Podfile and 6 total
 
 # Build with XCode
 
-Without error in installing dependencies, it's possible to open and build it with XCode (though it could be the worst IDE in the world).
+Without error in installing dependencies, it is possible to open and build it with XCode (though it could be the worst IDE in the world).
 
 ## Identifier
 
-The first issue occured while I click `Build`:
+The first issue occurred while I click `Build`:
 
 {% asset_img error-identifier.png Identifier error %}
 
@@ -131,11 +131,11 @@ Failed to register bundle identifier.
 The app identifier "application-identifier" cannot be registered to your development team. Change your bundle identifier to a unique string to try again.
 ```
 
-Apple wants to generate a self-signed certificate for my Apple account and for the application. But it cannot handle the identifier. I change it to `org.kde.kdeconnect.ios` and click `Try again`. It works.
+Apple wants to generate a self-signed certificate for my Apple account and the application. But it cannot handle the identifier. I change it to `org.kde.kdeconnect.ios` and click `Try again`. It works.
 
 ## Multiple commands produce
 
-Then, rebuild and another one came out:
+Then, rebuild. And another one came out:
 
 {% asset_img error-multiple-commands-produce.png Language file error %}
 
@@ -159,7 +159,7 @@ After that, another error occurs:
 kdeconnect-ios/AppSettingViewController.m:27:9: 'IASKPSTitleValueSpecifierViewCell.h' file not found
 ```
 
-This may be an update of one dependency, just remove this import line:
+This may be an update of one dependency; remove this import line:
 
 ```
 #import "IASKPSTitleValueSpecifierViewCell.h"
@@ -175,13 +175,13 @@ I rebuilt it, but another one came...
 ld: '/Users/inoki/Projects/kdeconnect-ios-test/Pods/XbICalendar/libical/lib/libical.a(icalcomponent.c.o)' does not contain bitcode. You must rebuild it with bitcode enabled (Xcode setting ENABLE_BITCODE), obtain an updated library from the vendor, or disable bitcode for this target. for architecture arm64
 ```
 
-Bitcode may be a feature, but I just want to get it build as soon as possible. So, I disable it in `Build Settings->Build Options`:
+Bitcode may be a feature, but I want to get it to build as soon as possible. So, I disable it in `Build Settings->Build Options`:
 
 {% asset_img error-bitcode-fix.png Bitcode %}
 
 ## Link with WebKit
 
-Another link error occurs. It's about the WebView stuff:
+Another link error occurs. It is about the WebView stuff:
 
 ```
 Undefined symbols for architecture arm64: "_OBJC_CLASS_$_WKWebView"
@@ -201,7 +201,7 @@ Finally, at the end of building phases, the error came out:
 Pods/Pods-acknowledgements.plist:0: Reading data: The file “Pods-acknowledgements.plist” couldn’t be opened because there is no such file.
 ```
 
-This could be an error caused by CocoaPod version. To fix it, just copy the files in `Pods/Target Support Files/Pods-kdeconnect-ios` to `Pods/`:
+This could be an error caused by CocoaPod version. To fix it, copy the files in `Pods/Target Support Files/Pods-kdeconnect-ios` to `Pods/`:
 
 ```sh
 cp Pods-kdeconnect-ios-acknowledgements.plist ../../Pods-acknowledgements.plist
