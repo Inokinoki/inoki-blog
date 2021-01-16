@@ -158,7 +158,7 @@ movies:
   - https://api.douban.com/v2/movie/search?q={text} # 电影搜索
 
 douban:
-  user: 伊诺奇 # 豆瓣用户名
+  user: inoki # 豆瓣用户名
   start: 0 # 从哪一条记录开始
   count: 100 # 获取豆瓣书单数据条数
 
