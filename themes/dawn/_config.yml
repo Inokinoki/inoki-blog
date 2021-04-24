@@ -170,7 +170,7 @@ pv:
     enable: false  # cnzz统计
     web_id: # cnzz id
   leancloud:
-    enable: true  # leancloud统计,网站需备案
+    enable: false  # leancloud统计,网站需备案
     app_id: QC5aQ8pUah279L1skNerLRTU-gzGzoHsz # leancloud <AppID>
     app_key: mhvEFRRIuPHtjNgOXAe9axsk # leancloud <AppKey>
 
