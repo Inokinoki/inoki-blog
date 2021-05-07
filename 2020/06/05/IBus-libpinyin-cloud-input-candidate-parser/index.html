@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>云输入在 ibus-libpinyin 中的实现 - 候选词解析 | Inoki in the world</title>
+  <meta name="description" content="上一篇文章粗略地介绍了目前在 ibus-libpinyin 的云输入实现的整个流程，其中对请求返回结果的解析没有提及。这篇文章会重点阐述返回结果的解析是如何实现的，之后的过程，包括在候选列表中更新占位符、错误处理，会在下一篇中详细讲解。 注：同上一篇文章一样，之前的版本称为 18 版云输入，现在的一系列版本称为 20 版。  返回结果的示例 目前，云输入功能可选的有 Google 和百度两个源，可">
+<meta name="keywords" content="IBus,ibus-libpinyin,Cloud Input">
+<meta property="og:type" content="article">
+<meta property="og:title" content="云输入在 ibus-libpinyin 中的实现 - 候选词解析">
+<meta property="og:url" content="https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="上一篇文章粗略地介绍了目前在 ibus-libpinyin 的云输入实现的整个流程，其中对请求返回结果的解析没有提及。这篇文章会重点阐述返回结果的解析是如何实现的，之后的过程，包括在候选列表中更新占位符、错误处理，会在下一篇中详细讲解。 注：同上一篇文章一样，之前的版本称为 18 版云输入，现在的一系列版本称为 20 版。  返回结果的示例 目前，云输入功能可选的有 Google 和百度两个源，可">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-05-07T21:05:25.056Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="云输入在 ibus-libpinyin 中的实现 - 候选词解析">
+<meta name="twitter:description" content="上一篇文章粗略地介绍了目前在 ibus-libpinyin 的云输入实现的整个流程，其中对请求返回结果的解析没有提及。这篇文章会重点阐述返回结果的解析是如何实现的，之后的过程，包括在候选列表中更新占位符、错误处理，会在下一篇中详细讲解。 注：同上一篇文章一样，之前的版本称为 18 版云输入，现在的一系列版本称为 20 版。  返回结果的示例 目前，云输入功能可选的有 Google 和百度两个源，可">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/inokinoki" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Student</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/KDE-Connect/">KDE Connect</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/02/07/KDEConnect-iOS-dev-dairy-3/" class="title">KDE Connect iOS Develop Dairy(3) Certificate</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-02-07T14:34:50.000Z" itemprop="datePublished">2021-02-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Embedded-System/">Embedded System</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Embedded-System/Raspberry-PI/">Raspberry PI</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/">Translation</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/Chinese/">Chinese</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/" class="title">【译】Xen 的奇妙冒险 —— RPi4 篇</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-27T15:47:40.000Z" itemprop="datePublished">2021-01-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/KDE/">KDE</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/" class="title">SDDM tips (1)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-25T09:30:40.000Z" itemprop="datePublished">2021-01-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Dairy/">Dairy</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2020/12/30/My-2020/" class="title">滑稽、混乱、局促与 2020</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-12-30T09:41:40.000Z" itemprop="datePublished">2020-12-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/GBDK/">GBDK</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2020/09/19/GBDK-Joypad-Tutorial/" class="title">【译】GBDK 手柄</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-09-19T22:41:23.000Z" itemprop="datePublished">2020-09-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ASIX/" style="font-size: 13.14px;">ASIX</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Bare-Metal/" style="font-size: 13px;">Bare Metal</a> <a href="/tags/Bug/" style="font-size: 13.29px;">Bug</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Cloud-Input/" style="font-size: 13.43px;">Cloud Input</a> <a href="/tags/Craft/" style="font-size: 13.14px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.29px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/Embedded-System/" style="font-size: 13.43px;">Embedded System</a> <a href="/tags/FFmpeg/" style="font-size: 13.14px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.14px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/Go/" style="font-size: 13.14px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.57px;">IBus</a> <a href="/tags/IoT/" style="font-size: 13.57px;">IoT</a> <a href="/tags/KDE/" style="font-size: 13.14px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.71px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.14px;">KDE Frameworks</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.29px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.14px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.57px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.57px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Python/" style="font-size: 13.14px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qt/" style="font-size: 13px;">Qt</a> <a href="/tags/Raspberry-PI/" style="font-size: 13.43px;">Raspberry PI</a> <a href="/tags/Router/" style="font-size: 13.29px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.29px;">SDR</a> <a href="/tags/Source-Code/" style="font-size: 13.14px;">Source Code</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/Ubuntu/" style="font-size: 13.14px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.14px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.14px;">Windows</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.43px;">ibus-libpinyin</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.14px;">private</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/翻译/" style="font-size: 13.86px;">翻译</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-PI/">Raspberry PI</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">15</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-PI/">Raspberry PI</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">10</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">10</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-IBus-libpinyin-cloud-input-candidate-parser" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      云输入在 ibus-libpinyin 中的实现 - 候选词解析
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/" class="article-date">
+	  <time datetime="2020-06-05T23:55:00.000Z" itemprop="datePublished">2020-06-05</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/Cloud-Input/">Cloud Input</a>, <a class="article-tag-link" href="/tags/IBus/">IBus</a>, <a class="article-tag-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 3.6k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 14(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>上一篇文章粗略地介绍了目前在 ibus-libpinyin 的云输入实现的整个流程，其中对请求返回结果的解析没有提及。这篇文章会重点阐述返回结果的解析是如何实现的，之后的过程，包括在候选列表中更新占位符、错误处理，会在下一篇中详细讲解。</p>
+<p>注：同上一篇文章一样，之前的版本称为 18 版云输入，现在的一系列版本称为 20 版。</p>
+<h1 id="返回结果的示例"><a class="markdownIt-Anchor" href="#返回结果的示例"></a> 返回结果的示例</h1>
+<p>目前，云输入功能可选的有 Google 和百度两个源，可能是为了让墙内外的用户都能使用吧。</p>
+<p>其中，一个典型的 Google 源返回结果如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">"SUCCESS"</span>,[[<span class="string">"ceshi"</span>,[<span class="string">"测试"</span>],[],&#123;<span class="attr">"annotation"</span>:[<span class="string">"ce shi"</span>],<span class="attr">"candidate_type"</span>:[<span class="number">0</span>],<span class="attr">"lc"</span>:[<span class="string">"16 16"</span>]&#125;]]]</span><br></pre></td></tr></table></figure>
+<p>关键的请求参数为：</p>
+<table>
+<thead>
+<tr>
+<th>参数名</th>
+<th>参数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text</td>
+<td>ceshi</td>
+</tr>
+<tr>
+<td>num</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>其中 text 是请求的拼音，num 是期望返回的候选个数。</p>
+<p>百度源的返回结果及其对应的请求参数是：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"errmsg"</span>:<span class="string">""</span>,<span class="attr">"errno"</span>:<span class="string">"0"</span>,<span class="attr">"result"</span>:[[[<span class="string">"百度"</span>,<span class="number">5</span>,&#123;<span class="attr">"pinyin"</span>:<span class="string">"bai'du"</span>,<span class="attr">"type"</span>:<span class="string">"IMEDICT"</span>&#125;]],<span class="string">"bai'du"</span>],<span class="attr">"status"</span>:<span class="string">"T"</span>&#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>参数名</th>
+<th>参数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>input</td>
+<td>baidu</td>
+</tr>
+<tr>
+<td>ed</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>这里，input 是请求的拼音，而 ed 是请求的候选词个数。</p>
+<p>可以看出，两个源返回的都是 json 字符串，并且格式还算是清晰。接下来就是把候选（比如 Google 源的示例中的“测试”和百度源的示例中的“百度”）解析提取出来的过程。</p>
+<h1 id="18-版解析实现"><a class="markdownIt-Anchor" href="#18-版解析实现"></a> 18 版解析实现</h1>
+<p>18 版的云输入使用了一个非常简易的解析方式：将回复存入字符串，通过截取子串的方式处理字符串来提取候选。在此之前，首先要将回复放入一个字符串中。</p>
+<h2 id="将回复放入字符串"><a class="markdownIt-Anchor" href="#将回复放入字符串"></a> 将回复放入字符串</h2>
+<p>在 18 版中，无论是同步模式还是异步模式，结果最终都被储存在叫做 <code>res</code> 的字符串中。</p>
+<h3 id="同步"><a class="markdownIt-Anchor" href="#同步"></a> 同步</h3>
+<p>同步模式下，在请求完全结束后，把消息取出并置入 <code>buffer</code> 缓冲区，最后放入 <code>res</code> 中。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">SoupMessageBody *msgBody =soup_message_body_new ();</span><br><span class="line">soup_message_body_truncate (msgBody);</span><br><span class="line">msgBody = msg-&gt;response_body;</span><br><span class="line"><span class="comment">/* clear useless characters */</span></span><br><span class="line">soup_message_body_flatten(msgBody);</span><br><span class="line">SoupBuffer *bufferBody= soup_message_body_get_chunk(msgBody, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> gchar *buffer= bufferBody-&gt;data;</span><br><span class="line">String res;</span><br><span class="line">res.clear ();</span><br><span class="line">res.append (buffer);</span><br></pre></td></tr></table></figure>
+<h3 id="异步"><a class="markdownIt-Anchor" href="#异步"></a> 异步</h3>
+<p>异步模式下，在请求完成后可以获取到回复的输入流。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GError **error = <span class="literal">NULL</span>;</span><br><span class="line">GInputStream *stream = soup_session_send_finish (SOUP_SESSION(source_object), result, error);</span><br></pre></td></tr></table></figure>
+<p>然后从输入流中读取字符到 <code>buffer</code> 变量中，最后将其放入 <code>res</code> 字符串中。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">gchar buffer[BUFFERLENGTH];</span><br><span class="line">error = <span class="literal">NULL</span>;</span><br><span class="line">g_input_stream_read (stream, buffer, BUFFERLENGTH, <span class="literal">NULL</span>, error);</span><br><span class="line">CloudCandidates *cloudCandidates = <span class="keyword">static_cast</span>&lt;CloudCandidates *&gt; (user_data);</span><br><span class="line"></span><br><span class="line">String res;</span><br><span class="line">res.clear ();</span><br><span class="line">res.append (buffer);</span><br></pre></td></tr></table></figure>
+<p>异步模式下，返回的输入流并不一定包含完整的字符串，大部分延迟较高的情况下，当执行到上面代码中的 <code>g_input_stream_read</code> 时，流中的内容都不是完整的，从而导致 <code>res</code> 中只储存了前几个字符，这会导致下面字符串处理时程序崩溃。</p>
+<h2 id="通过字符串处理解析候选"><a class="markdownIt-Anchor" href="#通过字符串处理解析候选"></a> 通过字符串处理解析候选</h2>
+<p>对百度源的回复的解析是一个简易的字符串判断与提取：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*BAIDU */</span></span><br><span class="line"><span class="keyword">if</span> (res[<span class="number">11</span>]==<span class="string">'T'</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (res[<span class="number">49</span>] !=<span class="string">']'</span>)</span><br><span class="line">    &#123;   </span><br><span class="line">        <span class="comment">/*respond true , with results*/</span></span><br><span class="line">        gchar **resultsArr = g_strsplit(res.data()+<span class="number">49</span>, <span class="string">"],"</span>, <span class="number">0</span>);</span><br><span class="line">        guint resultsArrLength = g_strv_length(resultsArr);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i != resultsArrLength<span class="number">-1</span>; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> end =<span class="built_in">strcspn</span>(resultsArr[i], <span class="string">","</span>);</span><br><span class="line">            <span class="built_in">std</span>::<span class="built_in">string</span> tmp = g_strndup(resultsArr[i]+<span class="number">2</span>,end<span class="number">-3</span>);</span><br><span class="line">            cloudCandidates-&gt;m_candidates[i].m_display_string = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码中多处出现了硬编码 <code>res</code> 数组下标的情况。虽然这里的代码在网关正常返回结果的时候的确可以运行，但网关返回错误信息时、或者异步模式下 <code>res</code> 中储存的不是完整的流中的字符串时，就会产生数组越界、非法访问，从而导致输入法崩溃。</p>
+<p>对 Google 源的解析也一样是字符串的判断和提取：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*GOOGLE */</span></span><br><span class="line"><span class="keyword">const</span> gchar *tmp_res = res;</span><br><span class="line"><span class="keyword">const</span> gchar *prefix = <span class="string">"[\"SUCCESS\""</span>;</span><br><span class="line"><span class="keyword">if</span> (g_str_has_prefix (tmp_res, prefix))</span><br><span class="line">&#123;</span><br><span class="line">    gchar **prefix_arr = g_strsplit (tmp_res, <span class="string">"\",[\""</span>, <span class="number">-1</span>);</span><br><span class="line">    gchar *prefix_str = prefix_arr[<span class="number">1</span>];</span><br><span class="line">    gchar **suffix_arr = g_strsplit (prefix_str, <span class="string">"\"],"</span>, <span class="number">-1</span>);</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> tmp = suffix_arr[<span class="number">0</span>];</span><br><span class="line">    cloudCandidates-&gt;m_candidates[<span class="number">0</span>].m_display_string = tmp;</span><br><span class="line">    g_strfreev (prefix_arr);</span><br><span class="line">    g_strfreev (suffix_arr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的代码没有硬编码的下标，但如果 <code>res</code> 中没能取到回复输入流中的所有字符，会导致没有候选的情况出现。</p>
+<h1 id="20-版解析实现"><a class="markdownIt-Anchor" href="#20-版解析实现"></a> 20 版解析实现</h1>
+<p>在 20 版中，为了验证数据，也为了解析这一过程的健壮性，我选择移除 18 版中的字符串判断与提取这一方法，转而使用完整的 json 解析。</p>
+<p>其中，考虑到 ibus-libpinyin 整体依赖于 glib，直接使用 <code>JSON-GLib</code> 会更加方便，于是添加了它作为一个依赖。</p>
+<h2 id="类关系"><a class="markdownIt-Anchor" href="#类关系"></a> 类关系</h2>
+<p>为了可拓展性，参考了导师的意见，我创建了 <code>CloudCandidatesResponseParser</code> 类作为所有解析类的基类。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CloudCandidatesResponseParser</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    CloudCandidatesResponseParser () : m_annotation (<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line">    <span class="keyword">virtual</span> ~CloudCandidatesResponseParser () &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> guint <span class="title">parse</span> <span class="params">(GInputStream *stream)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> guint <span class="title">parse</span> <span class="params">(<span class="keyword">const</span> gchar *data)</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">virtual</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt; &amp;getStringCandidates () &#123; <span class="keyword">return</span> m_candidates; &#125;</span><br><span class="line">    <span class="keyword">virtual</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;EnhancedCandidate&gt; getCandidates ();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">const</span> gchar *<span class="title">getAnnotation</span> <span class="params">()</span> </span>&#123; <span class="keyword">return</span> m_annotation; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt; m_candidates;</span><br><span class="line">    <span class="keyword">const</span> gchar *m_annotation;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>它包含了两个私有（保护）属性和它们的 getter：</p>
+<ul>
+<li><code>m_candidates</code> 是解析出的候选列表，每个元素是一个字符串；</li>
+<li><code>m_annotation</code> 是解析出的结果中返回的拼音的值。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">virtual</span> guint <span class="title">parse</span> <span class="params">(GInputStream *stream)</span> </span>= <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">virtual</span> guint <span class="title">parse</span> <span class="params">(<span class="keyword">const</span> gchar *data)</span> </span>= <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>这是两个未实现的方法，需要在具体的类中实现，用来负责解析流中或者缓冲区中的数据。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CloudCandidatesResponseJsonParser</span> :</span> <span class="keyword">public</span> CloudCandidatesResponseParser</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    CloudCandidatesResponseJsonParser ();</span><br><span class="line">    <span class="keyword">virtual</span> ~CloudCandidatesResponseJsonParser ();</span><br><span class="line"></span><br><span class="line">    <span class="function">guint <span class="title">parse</span> <span class="params">(GInputStream *stream)</span></span>;</span><br><span class="line">    <span class="function">guint <span class="title">parse</span> <span class="params">(<span class="keyword">const</span> gchar *data)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    JsonParser *m_parser;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> guint <span class="title">parseJsonResponse</span> <span class="params">(JsonNode *root)</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>接下来，<code>CloudCandidatesResponseJsonParser</code> 类继承了 <code>CloudCandidatesResponseParser</code> 类，并实现了上述的两个方法。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">guint CloudCandidatesResponseJsonParser::parse (GInputStream *stream)</span><br><span class="line">&#123;</span><br><span class="line">    GError **error = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!stream)</span><br><span class="line">        <span class="keyword">return</span> PARSER_NETWORK_ERROR;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* parse Json from input steam */</span></span><br><span class="line">    <span class="keyword">if</span> (!json_parser_load_from_stream (m_parser, stream, <span class="literal">NULL</span>, error) || error != <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        g_input_stream_close (stream, <span class="literal">NULL</span>, error);  <span class="comment">// Close stream to release libsoup connexion</span></span><br><span class="line">        <span class="keyword">return</span> PARSER_BAD_FORMAT;</span><br><span class="line">    &#125;</span><br><span class="line">    g_input_stream_close (stream, <span class="literal">NULL</span>, error);  <span class="comment">// Close stream to release libsoup connexion</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> parseJsonResponse (json_parser_get_root (m_parser));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">guint CloudCandidatesResponseJsonParser::parse (<span class="keyword">const</span> gchar *data)</span><br><span class="line">&#123;</span><br><span class="line">    GError **error = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!data)</span><br><span class="line">        <span class="keyword">return</span> PARSER_NETWORK_ERROR;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* parse Json from data */</span></span><br><span class="line">    <span class="keyword">if</span> (!json_parser_load_from_data (m_parser, data, <span class="built_in">strlen</span> (data), error) || error != <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> PARSER_BAD_FORMAT;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> parseJsonResponse (json_parser_get_root (m_parser));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它们都是用一个 <code>JSON-GLib</code> 中的 <code>JsonParser</code> 示例去解析，并把解析的对象传给 <code>CloudCandidatesResponseJsonParser</code> 中定义的 <code>parseJsonResponse</code> 来进行具体的处理。</p>
+<p>这个方法在当前类中也是未实现的状态，具体的处理行为是和云输入的源有关的，因此，交给下面在 <code>GoogleCloudCandidatesResponseJsonParser</code> 和 <code>BaiduCloudCandidatesResponseJsonParser</code> 中实现的 <code>parseJsonResponse</code> 分别进行 Google 源和百度源返回结果的处理。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GoogleCloudCandidatesResponseJsonParser</span> :</span> <span class="keyword">public</span> CloudCandidatesResponseJsonParser</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function">guint <span class="title">parseJsonResponse</span> <span class="params">(JsonNode *root)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    GoogleCloudCandidatesResponseJsonParser () : CloudCandidatesResponseJsonParser () &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaiduCloudCandidatesResponseJsonParser</span> :</span> <span class="keyword">public</span> CloudCandidatesResponseJsonParser</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function">guint <span class="title">parseJsonResponse</span> <span class="params">(JsonNode *root)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    BaiduCloudCandidatesResponseJsonParser () : CloudCandidatesResponseJsonParser () &#123;&#125;</span><br><span class="line">    ~BaiduCloudCandidatesResponseJsonParser () &#123; <span class="keyword">if</span> (m_annotation) g_free ((gpointer)m_annotation); &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>下面的小节就来描述一下在这两个类中 <code>parseJsonResponse</code> 做了什么。</p>
+<h1 id="候选词提取处理"><a class="markdownIt-Anchor" href="#候选词提取处理"></a> 候选词提取处理</h1>
+<p>这一步的目的，是将候选词和拼音解析出来，分别放入 <code>m_candidates</code> 列表和 <code>m_annotation</code> 中。为了方便理解，下面结合之前提到的两个具体例子来辅助理解。</p>
+<h2 id="google-源的返回结果处理"><a class="markdownIt-Anchor" href="#google-源的返回结果处理"></a> Google 源的返回结果处理</h2>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">"SUCCESS"</span>,[[<span class="string">"ceshi"</span>,[<span class="string">"测试"</span>],[],&#123;<span class="attr">"annotation"</span>:[<span class="string">"ce shi"</span>],<span class="attr">"candidate_type"</span>:[<span class="number">0</span>],<span class="attr">"lc"</span>:[<span class="string">"16 16"</span>]&#125;]]]</span><br></pre></td></tr></table></figure>
+<p>我们使用最初的那个 Google 源的回复举例，Google 源的处理实现如下，其中的参数 <code>JsonNode *root</code> 为 <code>JSON-GLib</code> 解析出的一个实例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">guint GoogleCloudCandidatesResponseJsonParser::parseJsonResponse (JsonNode *root)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (!JSON_NODE_HOLDS_ARRAY (root))</span><br><span class="line">        <span class="keyword">return</span> PARSER_BAD_FORMAT;</span><br></pre></td></tr></table></figure>
+<p>首先先检查格式，最外层应当是一个数组，若格式有问题，就返回一个 <code>PARSER_BAD_FORMAT</code> 的状态。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* validate Google source and the structure of response */</span></span><br><span class="line">JsonArray *google_root_array = json_node_get_array (root);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> gchar *google_response_status;</span><br><span class="line">JsonArray *google_response_array;</span><br><span class="line">JsonArray *google_result_array;</span><br><span class="line"><span class="keyword">const</span> gchar *google_candidate_annotation;</span><br><span class="line">JsonArray *google_candidate_array;</span><br><span class="line">guint result_counter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (json_array_get_length (google_root_array) &lt;= <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> PARSER_INVALID_DATA;</span><br></pre></td></tr></table></figure>
+<p>紧接着获取到这个数组实例，并准备一些变量方便之后对元素的描述。</p>
+<p>然后检测数组的大小是否至少为2，以免之后获取元素时出现越界。若元素数量符合期待，紧接着就可以做进一步的元素取出。否则返回一个 <code>PARSER_INVALID_DATA</code> 状态。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">google_response_status = json_array_get_string_element (google_root_array, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (g_strcmp0 (google_response_status, <span class="string">"SUCCESS"</span>))</span><br><span class="line">    <span class="keyword">return</span> PARSER_INVALID_DATA;</span><br><span class="line"></span><br><span class="line">google_response_array = json_array_get_array_element (google_root_array, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (json_array_get_length (google_response_array) &lt; <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> PARSER_INVALID_DATA;</span><br><span class="line"></span><br><span class="line">google_result_array = json_array_get_array_element (google_response_array, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>紧接着，取出数组中的元素：</p>
+<ol>
+<li>第一个元素（下标为0），应当是一个字符串，描述这次请求是否是成功的，若不成功，则返回一个 <code>PARSER_INVALID_DATA</code> 状态。</li>
+<li>第二个元素是接下来要处理的 <code>google_response_array</code> 这个数组结构，长度至少为1，对应的 json 部分为：</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[<span class="string">"ceshi"</span>,[<span class="string">"测试"</span>],[],&#123;<span class="attr">"annotation"</span>:[<span class="string">"ce shi"</span>],<span class="attr">"candidate_type"</span>:[<span class="number">0</span>],<span class="attr">"lc"</span>:[<span class="string">"16 16"</span>]&#125;]]</span><br></pre></td></tr></table></figure>
+<p>然后进一步的取到它的内层数组 <code>google_result_array</code>，从这里开始，就有了真正需要的数据。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">google_candidate_annotation = json_array_get_string_element (google_result_array, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!google_candidate_annotation)</span><br><span class="line">    <span class="keyword">return</span> PARSER_INVALID_DATA;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* update annotation with the returned annotation */</span></span><br><span class="line">m_annotation = google_candidate_annotation;</span><br></pre></td></tr></table></figure>
+<p>第一个取出的是 <code>google_result_array</code> 的第一个元素，这个元素应当是一个字符串，表示的是用户的输入，在上述例子中为 <code>&quot;ceshi&quot;</code> 这个元素。并把它存到当前实例的 <code>m_annotation</code> 属性中。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">    google_candidate_array = json_array_get_array_element (google_result_array, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    result_counter = json_array_get_length (google_candidate_array);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (result_counter &lt; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> PARSER_NO_CANDIDATE;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (guint i = <span class="number">0</span>; i &lt; result_counter; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">string</span> candidate = json_array_get_string_element (google_candidate_array, i);</span><br><span class="line">        m_candidates.push_back (candidate);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> PARSER_NOERR;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第二个取出的是 <code>google_result_array</code> 的第二个元素，是一个包含了候选词的数组，取名为 <code>google_candidate_array</code>。</p>
+<p>先判断它的长度，若不包含任何元素，则返回 <code>PARSER_NO_CANDIDATE</code> 状态。</p>
+<p>有元素的话就把所有元素取出，添加到 <code>m_candidates</code> 这个属性对应的候选词列表中。然后返回 <code>PARSER_NOERR</code> 状态。</p>
+<h2 id="百度源的返回结果处理"><a class="markdownIt-Anchor" href="#百度源的返回结果处理"></a> 百度源的返回结果处理</h2>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"errmsg"</span>:<span class="string">""</span>,<span class="attr">"errno"</span>:<span class="string">"0"</span>,<span class="attr">"result"</span>:[[[<span class="string">"百度"</span>,<span class="number">5</span>,&#123;<span class="attr">"pinyin"</span>:<span class="string">"bai'du"</span>,<span class="attr">"type"</span>:<span class="string">"IMEDICT"</span>&#125;]],<span class="string">"bai'du"</span>],<span class="attr">"status"</span>:<span class="string">"T"</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>同样的，对于百度，我们也使用最初的例子，其中的参数 <code>JsonNode *root</code> 也是 <code>JSON-GLib</code> 解析出的一个实例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">guint BaiduCloudCandidatesResponseJsonParser::parseJsonResponse (JsonNode *root)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (!JSON_NODE_HOLDS_OBJECT (root))</span><br><span class="line">        <span class="keyword">return</span> PARSER_BAD_FORMAT;</span><br></pre></td></tr></table></figure>
+<p>先检查格式，最外层应当是一个对应，在格式不匹配的情况下就返回一个 <code>PARSER_BAD_FORMAT</code> 的状态。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* validate Baidu source and the structure of response */</span></span><br><span class="line">JsonObject *baidu_root_object = json_node_get_object (root);</span><br><span class="line"><span class="keyword">const</span> gchar *baidu_response_status;</span><br><span class="line">JsonArray *baidu_result_array;</span><br><span class="line">JsonArray *baidu_candidate_array;</span><br><span class="line"><span class="keyword">const</span> gchar *baidu_candidate_annotation;</span><br><span class="line">guint result_counter;</span><br></pre></td></tr></table></figure>
+<p>类似但却不同的，这里是获取到这个 json 对象的实例，并创建一系列变量用来接收之后的元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!json_object_has_member (baidu_root_object, <span class="string">"status"</span>))</span><br><span class="line">    <span class="keyword">return</span> PARSER_INVALID_DATA;</span><br><span class="line"></span><br><span class="line">baidu_response_status = json_object_get_string_member (baidu_root_object, <span class="string">"status"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (g_strcmp0 (baidu_response_status, <span class="string">"T"</span>))</span><br><span class="line">    <span class="keyword">return</span> PARSER_INVALID_DATA;</span><br></pre></td></tr></table></figure>
+<p>首先先看 <code>status</code> 元素存在且是否为 <code>T</code>，如果不存在或者为其他值，这次请求的应当已经是失败的了，就不需要进行下一步的操作，直接返回 <code>PARSER_INVALID_DATA</code> 状态。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!json_object_has_member (baidu_root_object, <span class="string">"result"</span>))</span><br><span class="line">    <span class="keyword">return</span> PARSER_INVALID_DATA;</span><br><span class="line"></span><br><span class="line">baidu_result_array = json_object_get_array_member (baidu_root_object, <span class="string">"result"</span>);</span><br><span class="line"></span><br><span class="line">baidu_candidate_array = json_array_get_array_element (baidu_result_array, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>然后则是对 <code>result</code> 元素存在性的检测，这个元素是存放有结果的一个数组。这个数组的第一个元素是存放有候选词信息的数组，将其取出，用 <code>baidu_candidate_array</code> 指向它。这是之后取候选词时主要要操作的对象。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">baidu_candidate_annotation = json_array_get_string_element (baidu_result_array, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!baidu_candidate_annotation)</span><br><span class="line">    <span class="keyword">return</span> PARSER_INVALID_DATA;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* update annotation with the returned annotation */</span></span><br><span class="line">m_annotation = <span class="literal">NULL</span>;</span><br><span class="line">gchar **words = g_strsplit (baidu_candidate_annotation, <span class="string">"'"</span>, <span class="number">-1</span>);</span><br><span class="line">m_annotation = g_strjoinv (<span class="string">""</span>, words);</span><br><span class="line">g_strfreev (words);</span><br></pre></td></tr></table></figure>
+<p>第二个元素则是返回回来的匹配到的拼音，它是一个字符串，这个表示拼音的字符串使用了单引号 <code>'</code> 作为分割，而我们所希望的是一个没有分隔符的连续的拼音串（方便与当前编辑器中的用户输入），因此需要对其进行分割与合并的处理。</p>
+<p>进行处理后，存放在 <code>m_annotation</code> 中。由于是通过 <code>g_strjoinv</code> 创建出来的，这个字符串是需要手动释放的。于是，在上面展示的 <code>BaiduCloudCandidatesResponseJsonParser</code> 类的析构函数中完成了这一释放过程：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~BaiduCloudCandidatesResponseJsonParser () &#123; <span class="keyword">if</span> (m_annotation) g_free ((gpointer)m_annotation); &#125;</span><br></pre></td></tr></table></figure>
+<p>处理完了拼音，接下来就可以拿起之前取出的 <code>baidu_candidate_array</code> 候选词数组了。整体流程和 Google 源的十分相似，唯一不同的是更内层的处理。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">result_counter = json_array_get_length (baidu_candidate_array);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (result_counter &lt; <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> PARSER_NO_CANDIDATE;</span><br></pre></td></tr></table></figure>
+<p>首先是看候选数组的长度，判断有无可用的候选词。</p>
+<p>而数组内的每一个候选词，都有以下结构：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">"百度"</span>,<span class="number">5</span>,&#123;<span class="attr">"pinyin"</span>:<span class="string">"bai'du"</span>,<span class="attr">"type"</span>:<span class="string">"IMEDICT"</span>&#125;]</span><br></pre></td></tr></table></figure>
+<p>第一个元素是候选词的字符串，紧跟着的应当是候选在 UTF-8 编码情况下的长度，之后是这个候选对应，包含拼音和类型的一个 json 对象。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">for</span> (guint i = <span class="number">0</span>; i &lt; result_counter; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">string</span> candidate;</span><br><span class="line">        JsonArray *baidu_candidate = json_array_get_array_element (baidu_candidate_array, i);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (json_array_get_length (baidu_candidate) &lt; <span class="number">1</span>)</span><br><span class="line">            candidate = CANDIDATE_INVALID_DATA_TEXT;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            candidate = json_array_get_string_element (baidu_candidate, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        m_candidates.push_back (candidate);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> PARSER_NOERR;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我们只取候选数组里的第一个元素，也就是候选词的字符串，并将其加入到 <code>m_candidates</code> 候选数组中。如果没有这个元素，就添加一个 <code>CANDIDATE_INVALID_DATA_TEXT</code> 作为提示。</p>
+<p>最后，返回 <code>PARSER_NOERR</code>。</p>
+<h1 id="两个源返回结果上的差异"><a class="markdownIt-Anchor" href="#两个源返回结果上的差异"></a> 两个源返回结果上的差异</h1>
+<p>两个源上返回的内容有不一致的地方，因此个别细节需要单独考虑。</p>
+<p>其中比较重要的，也是引发一些其他问题的一个点就是，对用户输入的 echo。</p>
+<p>在 20 版异步模式下，可能会有多个请求的回复陆续到达，而它们的顺序是无法保证的。为了解决这个问题，对返回结果对应的用户输入和当前的用户输入进行了比较，如果一致，说明是当前用户输入进行的请求，否则就丢弃这个结果对应的候选。</p>
+<ul>
+<li>Google 源在返回候选词结果时，不仅对候选词进行了拼音标注，还将请求时的用户输入返回；</li>
+<li>百度源则没有返回请求时发送的原始的用户输入，有对候选词的拼音标注，和自动补全拼音后的用户输入。</li>
+</ul>
+<p>因此，对百度源返回的结果，目前无法找回原始的用户输入，也就无法和当前编辑器中的用户输入进行成功匹配。在输入拼音不完全的时候会有候选词被丢弃的情况出现。</p>
+<p>对此，有以下几种方案：</p>
+<ol>
+<li>导师提出了在有不完整拼音（模糊拼音）的情况下不给百度源发送请求；</li>
+<li>写一个字符串相似程度的算法，为百度源的返回结果设定一个相似度阈值，达到阈值之后就允许显示；</li>
+<li>无论是否匹配，在百度源的情况下都允许显示。</li>
+</ol>
+<p>具体采用哪一种比较好，还需要进一步的讨论。目前采用的是第三种方案。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>这篇文章讲述了对从请求的回复中提取候选的过程，提取出候选后，会根据状态处理提取出来的候选，这部分会在下篇文章叙述。最后交由在 <a href="/2020/05/31/IBus-libpinyin-cloud-input-global-view/">云输入在 ibus-libpinyin 中的实现 - 概述 </a> 一文中描述的过程，更新替换候选词的占位符，完成整个云输入的过程。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/" title="云输入在 ibus-libpinyin 中的实现 - 候选词解析" target="_blank" rel="external">https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/inokinoki" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/inokinoki" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Student</small></a></h3>
+        <div>Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/" title="云输入在 ibus-libpinyin 中的实现 - 状态与错误处理"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/05/31/IBus-libpinyin-cloud-input-global-view/" title="云输入在 ibus-libpinyin 中的实现 - 概述"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <!--
+        <script src="https://s19.cnzz.com/z_stat.php?id=1273905585&web_id=1273905585" language="JavaScript"></script>
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_s_tag = document.createElement('script');
+            cnzz_s_tag.type = 'text/javascript';
+            cnzz_s_tag.async = true;
+            cnzz_s_tag.charset = 'utf-8';
+            cnzz_s_tag.src = 'https://s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26show%3Dpic';
+            var root_s = document.getElementsByTagName('script')[0];
+            root_s.parentNode.insertBefore(cnzz_s_tag, root_s);
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        -->
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/';
+        
+        this.page.identifier = 'IBus-libpinyin-cloud-input-candidate-parser';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>

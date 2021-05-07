@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Inoki in the world</title>
+    <link>https://blog.inoki.cc/</link>
+    
+    <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
+    
+    <description></description>
+    <pubDate>Fri, 07 May 2021 21:05:25 GMT</pubDate>
+    <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>KDE Connect iOS Develop Dairy(3) Certificate</title>
+      <link>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</link>
+      <guid>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</guid>
+      <pubDate>Sun, 07 Feb 2021 14:34:50 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;As mentioned at the end of my previous post &lt;a href=&quot;https://blog.inoki.cc/2020/04/19/KDEConnect-iOS-dev-dairy-2/&quot;&gt;KDE Connect iOS
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>【译】Xen 的奇妙冒险 —— RPi4 篇</title>
+      <link>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/</link>
+      <guid>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/</guid>
+      <pubDate>Wed, 27 Jan 2021 15:47:40 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.linux.com/featured/xen-on-raspberry-pi-4-adventures/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Xen on Raspberry Pi 4
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>SDDM tips (1)</title>
+      <link>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/</link>
+      <guid>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/</guid>
+      <pubDate>Mon, 25 Jan 2021 09:30:40 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;SDDM is the abbreviation of Simple Desktop Display Manager, which is a default display manager for LXQt and KDE Plasma.&lt;br&gt;
+It
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>滑稽、混乱、局促与 2020</title>
+      <link>https://blog.inoki.cc/2020/12/30/My-2020/</link>
+      <guid>https://blog.inoki.cc/2020/12/30/My-2020/</guid>
+      <pubDate>Wed, 30 Dec 2020 09:41:40 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;从去年 11 月陆续收到 offer 并选择了自己最感兴趣的一个那一刻起，我想象中的 2020
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/12/30/My-2020/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>【译】GBDK 手柄</title>
+      <link>https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/</link>
+      <guid>https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/</guid>
+      <pubDate>Sat, 19 Sep 2020 22:41:23 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://gbdev.gg8.se/wiki/articles/GBDK_Joypad_Tutorial&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>【译】GBDK Sprite 精灵</title>
+      <link>https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/</link>
+      <guid>https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/</guid>
+      <pubDate>Sat, 19 Sep 2020 21:41:23 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://gbdev.gg8.se/wiki/articles/GBDK_Sprite_Tutorial&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>KDE Frameworks - KDNSSD</title>
+      <link>https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/</link>
+      <guid>https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/</guid>
+      <pubDate>Sun, 06 Sep 2020 08:22:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;&lt;strong&gt;Important&lt;/strong&gt;: this post assumes that you have knowledge on Qt and CMake/QMake, and that you have at least some concept on
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>【译】软件定义无线电的基础 —— 3.接收机</title>
+      <link>https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/</link>
+      <guid>https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/</guid>
+      <pubDate>Fri, 07 Aug 2020 20:27:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.eetimes.com/sdr-basics-part-3-transmitters/&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>云输入在 ibus-libpinyin 中的实现 - 配置项</title>
+      <link>https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/</link>
+      <guid>https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/</guid>
+      <pubDate>Thu, 16 Jul 2020 20:20:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;前几篇文章描述了云输入请求的全过程。其中，和云输入有关的参数（比如：需要请求几个云输入结果，延时发送请求需要延时多久等）是由 &lt;code&gt;GLib&lt;/code&gt; 中的 &lt;code&gt;GSettings&lt;/code&gt;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>KDE Connect 安装 Q&amp;A</title>
+      <link>https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/</link>
+      <guid>https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/</guid>
+      <pubDate>Tue, 07 Jul 2020 23:33:33 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;这篇文章记录了 QQ 群中回答的一些安装配置方面的问题。&lt;/p&gt;
+&lt;p&gt;群号码：668331167 或点击链接加入群聊&lt;a href=&quot;https://jq.qq.com/?_wv=1027&amp;amp;k=0rBiLpax&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>【译】为 Rust 生成 Qt 绑定</title>
+      <link>https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/</link>
+      <guid>https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/</guid>
+      <pubDate>Sat, 04 Jul 2020 16:51:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.vandenoever.info/blog/2017/09/04/rust_qt_binding_generator.html&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>【译】软件定义无线电的基础 —— 2.接收机</title>
+      <link>https://blog.inoki.cc/2020/07/03/Basic-of-Software-Defined-Radio-2/</link>
+      <guid>https://blog.inoki.cc/2020/07/03/Basic-of-Software-Defined-Radio-2/</guid>
+      <pubDate>Fri, 03 Jul 2020 20:08:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.eetimes.com/sdr-basics-part-2-receivers/&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/07/03/Basic-of-Software-Defined-Radio-2/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>KDE Frameworks - Introduction</title>
+      <link>https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/</link>
+      <guid>https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/</guid>
+      <pubDate>Thu, 02 Jul 2020 23:22:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;&lt;strong&gt;Note: this is an extraction of &lt;a href=&quot;https://api.kde.org/frameworks/index.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;KDE Frameworks
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>【译】软件定义无线电的基础 —— 1.概述</title>
+      <link>https://blog.inoki.cc/2020/07/02/Basic-of-Software-Defined-Radio-1/</link>
+      <guid>https://blog.inoki.cc/2020/07/02/Basic-of-Software-Defined-Radio-1/</guid>
+      <pubDate>Thu, 02 Jul 2020 20:08:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.eetimes.com/basics-of-software-defined-radio-part-1/&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/07/02/Basic-of-Software-Defined-Radio-1/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>云输入在 ibus-libpinyin 中的实现 - 状态与错误处理</title>
+      <link>https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/</link>
+      <guid>https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/</guid>
+      <pubDate>Mon, 15 Jun 2020 16:33:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;上一篇文章描述了云输入部分发出请求，接收到回复之后对回复的验证、处理，以及对返回的候选词的提取。在取得候选之后，会将其加入到 parser 中的 &lt;code&gt;m_candidates&lt;/code&gt;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>云输入在 ibus-libpinyin 中的实现 - 候选词解析</title>
+      <link>https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/</link>
+      <guid>https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/</guid>
+      <pubDate>Fri, 05 Jun 2020 23:55:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;上一篇文章粗略地介绍了目前在 ibus-libpinyin
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>云输入在 ibus-libpinyin 中的实现 - 概述</title>
+      <link>https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/</link>
+      <guid>https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/</guid>
+      <pubDate>Sun, 31 May 2020 23:55:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;在 2018 年的 Google Summer of Code (GSoC)中，ibus-libpinyin 的云输入功能由 Linyu Xu 首次引入。该版本并没有被合并入主分支中，本文将其称为 18 版云输入。&lt;/p&gt;
+&lt;p&gt;18
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>【译】LoRaWAN 入门</title>
+      <link>https://blog.inoki.cc/2020/05/26/LoRa-Primer/</link>
+      <guid>https://blog.inoki.cc/2020/05/26/LoRa-Primer/</guid>
+      <pubDate>Tue, 26 May 2020 10:28:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;LoRaWAN（或简称 LoRa）是 LPWAN（“低功耗广域网”）技术。所使用的无线电技术很漂亮，可确保您以很小的发射功率就可以在相当长的距离内发送数据。&lt;/p&gt;
+&lt;p&gt;LoRa 在称为的 ISM
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/05/26/LoRa-Primer/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>【译】LoRa 数据速率和扩频因子</title>
+      <link>https://blog.inoki.cc/2020/05/25/LoRa-Data-rate-and-spreading-factor/</link>
+      <guid>https://blog.inoki.cc/2020/05/25/LoRa-Data-rate-and-spreading-factor/</guid>
+      <pubDate>Mon, 25 May 2020 11:20:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://docs.exploratory.engineering/lora/dr_sf/&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/05/25/LoRa-Data-rate-and-spreading-factor/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>【译】LoRa 中的关键概念</title>
+      <link>https://blog.inoki.cc/2020/05/25/LoRa-Key_Concept/</link>
+      <guid>https://blog.inoki.cc/2020/05/25/LoRa-Key_Concept/</guid>
+      <pubDate>Mon, 25 May 2020 11:20:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://docs.exploratory.engineering/lora/lora_key_concepts/&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2020/05/25/LoRa-Key_Concept/#disqus_thread</comments>
+    </item>
+    
+  </channel>
+</rss>

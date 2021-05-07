@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>云输入在 ibus-libpinyin 中的实现 - 状态与错误处理 | Inoki in the world</title>
+  <meta name="description" content="上一篇文章描述了云输入部分发出请求，接收到回复之后对回复的验证、处理，以及对返回的候选词的提取。在取得候选之后，会将其加入到 parser 中的 m_candidates 列表中，并返回一个状态；若没有取得候选或者在验证过程中发现了问题，也会返回一个指出问题的错误状态。 这篇文章接着这个流程，叙述在代码中是如何对这些状态或错误进行一系列处理的。除此之外，在发送请求前和发送请求时也有相应的状态，这篇">
+<meta name="keywords" content="IBus,ibus-libpinyin,Cloud Input">
+<meta property="og:type" content="article">
+<meta property="og:title" content="云输入在 ibus-libpinyin 中的实现 - 状态与错误处理">
+<meta property="og:url" content="https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="上一篇文章描述了云输入部分发出请求，接收到回复之后对回复的验证、处理，以及对返回的候选词的提取。在取得候选之后，会将其加入到 parser 中的 m_candidates 列表中，并返回一个状态；若没有取得候选或者在验证过程中发现了问题，也会返回一个指出问题的错误状态。 这篇文章接着这个流程，叙述在代码中是如何对这些状态或错误进行一系列处理的。除此之外，在发送请求前和发送请求时也有相应的状态，这篇">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-05-07T21:05:25.056Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="云输入在 ibus-libpinyin 中的实现 - 状态与错误处理">
+<meta name="twitter:description" content="上一篇文章描述了云输入部分发出请求，接收到回复之后对回复的验证、处理，以及对返回的候选词的提取。在取得候选之后，会将其加入到 parser 中的 m_candidates 列表中，并返回一个状态；若没有取得候选或者在验证过程中发现了问题，也会返回一个指出问题的错误状态。 这篇文章接着这个流程，叙述在代码中是如何对这些状态或错误进行一系列处理的。除此之外，在发送请求前和发送请求时也有相应的状态，这篇">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/inokinoki" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Student</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/KDE-Connect/">KDE Connect</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/02/07/KDEConnect-iOS-dev-dairy-3/" class="title">KDE Connect iOS Develop Dairy(3) Certificate</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-02-07T14:34:50.000Z" itemprop="datePublished">2021-02-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Embedded-System/">Embedded System</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Embedded-System/Raspberry-PI/">Raspberry PI</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/">Translation</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/Chinese/">Chinese</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/" class="title">【译】Xen 的奇妙冒险 —— RPi4 篇</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-27T15:47:40.000Z" itemprop="datePublished">2021-01-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/KDE/">KDE</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/" class="title">SDDM tips (1)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-25T09:30:40.000Z" itemprop="datePublished">2021-01-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Dairy/">Dairy</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2020/12/30/My-2020/" class="title">滑稽、混乱、局促与 2020</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-12-30T09:41:40.000Z" itemprop="datePublished">2020-12-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/GBDK/">GBDK</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2020/09/19/GBDK-Joypad-Tutorial/" class="title">【译】GBDK 手柄</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-09-19T22:41:23.000Z" itemprop="datePublished">2020-09-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ASIX/" style="font-size: 13.14px;">ASIX</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Bare-Metal/" style="font-size: 13px;">Bare Metal</a> <a href="/tags/Bug/" style="font-size: 13.29px;">Bug</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Cloud-Input/" style="font-size: 13.43px;">Cloud Input</a> <a href="/tags/Craft/" style="font-size: 13.14px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.29px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/Embedded-System/" style="font-size: 13.43px;">Embedded System</a> <a href="/tags/FFmpeg/" style="font-size: 13.14px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.14px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/Go/" style="font-size: 13.14px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.57px;">IBus</a> <a href="/tags/IoT/" style="font-size: 13.57px;">IoT</a> <a href="/tags/KDE/" style="font-size: 13.14px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.71px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.14px;">KDE Frameworks</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.29px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.14px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.57px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.57px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Python/" style="font-size: 13.14px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qt/" style="font-size: 13px;">Qt</a> <a href="/tags/Raspberry-PI/" style="font-size: 13.43px;">Raspberry PI</a> <a href="/tags/Router/" style="font-size: 13.29px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.29px;">SDR</a> <a href="/tags/Source-Code/" style="font-size: 13.14px;">Source Code</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/Ubuntu/" style="font-size: 13.14px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.14px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.14px;">Windows</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.43px;">ibus-libpinyin</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.14px;">private</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/翻译/" style="font-size: 13.86px;">翻译</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-PI/">Raspberry PI</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">15</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-PI/">Raspberry PI</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">10</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">10</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-IBus-libpinyin-cloud-input-state-and-error-handle" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      云输入在 ibus-libpinyin 中的实现 - 状态与错误处理
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/" class="article-date">
+	  <time datetime="2020-06-15T16:33:00.000Z" itemprop="datePublished">2020-06-15</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/Cloud-Input/">Cloud Input</a>, <a class="article-tag-link" href="/tags/IBus/">IBus</a>, <a class="article-tag-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.9k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 10(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>上一篇文章描述了云输入部分发出请求，接收到回复之后对回复的验证、处理，以及对返回的候选词的提取。在取得候选之后，会将其加入到 parser 中的 <code>m_candidates</code> 列表中，并返回一个状态；若没有取得候选或者在验证过程中发现了问题，也会返回一个指出问题的错误状态。</p>
+<p>这篇文章接着这个流程，叙述在代码中是如何对这些状态或错误进行一系列处理的。除此之外，在发送请求前和发送请求时也有相应的状态，这篇文章的最后也会对这个过程进行描述。</p>
+<p>由于之前的版本并没有状态与错误处理的流程，因此在这篇文章中不再对 18 和 20 版进行区分，只描述最新版本中的做法。</p>
+<h1 id="状态指示字符串"><a class="markdownIt-Anchor" href="#状态指示字符串"></a> 状态指示字符串</h1>
+<p>在处理过程中，会使用一系列字符串被更新到候选列表中，用来替代最初的占位符，告诉用户云输入候选处理当前的状态：</p>
+<p><strong>已过期:</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_CLOUD_PREFIX = <span class="string">"☁"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_PENDING_TEXT = CANDIDATE_CLOUD_PREFIX;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_LOADING_TEXT = CANDIDATE_CLOUD_PREFIX + <span class="string">"..."</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_NO_CANDIDATE_TEXT = CANDIDATE_CLOUD_PREFIX + <span class="string">"[No Candidate]"</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_INVALID_DATA_TEXT = CANDIDATE_CLOUD_PREFIX + <span class="string">"[Invalid Data]"</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_BAD_FORMAT_TEXT = CANDIDATE_CLOUD_PREFIX + <span class="string">"[Bad Format]"</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>更新：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_PENDING_TEXT_WITHOUT_PREFIX      = <span class="string">"[⏱️]"</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_LOADING_TEXT_WITHOUT_PREFIX      = <span class="string">"..."</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_NO_CANDIDATE_TEXT_WITHOUT_PREFIX = <span class="string">"[🚫]"</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_INVALID_DATA_TEXT_WITHOUT_PREFIX = <span class="string">"[❌]"</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_BAD_FORMAT_TEXT_WITHOUT_PREFIX   = <span class="string">"[❓]"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_PENDING_TEXT         = CANDIDATE_CLOUD_PREFIX + CANDIDATE_PENDING_TEXT_WITHOUT_PREFIX;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_LOADING_TEXT         = CANDIDATE_CLOUD_PREFIX + CANDIDATE_LOADING_TEXT_WITHOUT_PREFIX;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_NO_CANDIDATE_TEXT    = CANDIDATE_CLOUD_PREFIX + CANDIDATE_NO_CANDIDATE_TEXT_WITHOUT_PREFIX;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_INVALID_DATA_TEXT    = CANDIDATE_CLOUD_PREFIX + CANDIDATE_INVALID_DATA_TEXT_WITHOUT_PREFIX ;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> CANDIDATE_BAD_FORMAT_TEXT      = CANDIDATE_CLOUD_PREFIX + CANDIDATE_BAD_FORMAT_TEXT_WITHOUT_PREFIX;</span><br></pre></td></tr></table></figure>
+<p>其中，带有 <code>WITHOUT_PREFIX</code> 后缀的在状态改变时，会被储存在缓存的候选列表 <code>m_candidates</code> 中，更新候选时添加到候选列表中。</p>
+<p>这些字符串带有一个 “☁” 的前缀，后面则是对应的状态字符串。</p>
+<ul>
+<li><code>CANDIDATE_PENDING_TEXT</code> 用来指示请求还未发送；</li>
+<li><code>CANDIDATE_LOADING_TEXT</code> 在请求已发送，但未收到有效回复时显示。</li>
+</ul>
+<p>其他三个则是用来显示处理请求的回复时的错误状态。</p>
+<h1 id="处理回复时可能的错误状态"><a class="markdownIt-Anchor" href="#处理回复时可能的错误状态"></a> 处理回复时可能的错误/状态</h1>
+<p>在 <code>CloudCandidates.cpp</code> 中，定义了一系列可能的错误或状态：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> CandidateResponseParserError &#123;</span><br><span class="line">    PARSER_NOERR,</span><br><span class="line">    PARSER_INVALID_DATA,</span><br><span class="line">    PARSER_BAD_FORMAT,</span><br><span class="line">    PARSER_NO_CANDIDATE,</span><br><span class="line">    PARSER_NETWORK_ERROR,</span><br><span class="line">    PARSER_UNKNOWN</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>PARSER_NOERR</code> 是没有发现处理过程中存在问题。</p>
+<p><code>PARSER_INVALID_DATA</code> 和 <code>PARSER_BAD_FORMAT</code> 是指在验证过程中发现返回的结构不同、或者返回的结果无效。</p>
+<p>如果到最后，发现云输入源没有返回任何候选，那么就用 <code>PARSER_NO_CANDIDATE</code> 通知上层。</p>
+<p>以上几个错误或状态都在上篇文章<a href="/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/">《云输入在 ibus-libpinyin 中的实现 - 候选词解析》</a>中出现过。</p>
+<p>而 <code>PARSER_NETWORK_ERROR</code> 比较特殊，它仅仅用在取得的回复的输入流/缓冲区无效时，它仅仅在 <code>CloudCandidatesResponseJsonParser</code> 被返回：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">guint CloudCandidatesResponseJsonParser::parse (GInputStream *stream)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">    <span class="keyword">if</span> (!stream)</span><br><span class="line">        <span class="keyword">return</span> PARSER_NETWORK_ERROR;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果输入流或者缓冲区的读取没有问题，就交给具体实现的 <code>parseJsonResponse</code> 去解析，并返回它传回的错误（无错误则返回 <code>PARSER_NOERR</code>）。</p>
+<p>最后一个 <code>PARSER_UNKNOWN</code> 仅作保留，没有使用。</p>
+<h1 id="错误状态的处理"><a class="markdownIt-Anchor" href="#错误状态的处理"></a> 错误/状态的处理</h1>
+<p>处理收到的回复时，是由 <code>CloudCandidates</code> 中的 <code>processCloudResponse</code> 方法来调用具体的 Parser 实现的 parse 方法的，返回的错误也就储存在 <code>processCloudResponse</code> 方法的 <code>ret_code</code> 变量中：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ret_code = parser-&gt;parse (stream);</span><br></pre></td></tr></table></figure>
+<p>接下来会先对处理过程中一个重要的流程——如何替换候选列表中的云输入占位符，进行描述。然后是对各个错误类型的处理。</p>
+<h2 id="替换占位符-更新候选的方法"><a class="markdownIt-Anchor" href="#替换占位符-更新候选的方法"></a> 替换占位符、更新候选的方法</h2>
+<p>在处理时，很重要的一个操作是找到之前插入的云输入占位符的位置，以便更新占位符处的文本。</p>
+<h3 id="使用迭代器记录"><a class="markdownIt-Anchor" href="#使用迭代器记录"></a> 使用迭代器记录</h3>
+<p>上个 20 版的版本中，在插入占位符时，<code>m_cloud_candidates_first_pos</code> 和 <code>m_candidates_end_pos</code> 记录下来的了云输入占位符的开始位置和结束位置。这里的  <code>m_cloud_candidates_first_pos</code> 指向整句候选之后的第一个位置，而 <code>m_candidates_end_pos</code> 指向它之后第 N 个位置，其中 N 为配置的云输入候选词个数。</p>
+<p>在进行更新占位符时，使用下面的循环即可，之后的章节中不再累述：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;EnhancedCandidate&gt;::iterator pos = m_cloud_candidates_first_pos; pos != m_candidates_end_pos; ++pos) &#123;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方法的确能提高更新速度，因为它减少了每次从头查找的多余操作。但有一个问题是，如果云输入插入占位符并记录下来之后，其他候选处理过程又添加了新的候选，这时这两个迭代器的指向可能就不对了。</p>
+<p>比如，在云输入进行 <code>processCandidates</code> 之后， Lua 脚本候选又在相同位置（整句候选之后的第一个位置）进行了添加和处理，这时 <code>m_cloud_candidates_first_pos</code> 的指向实际上是 Lua 脚本候选词，于是在更新过程中，它（们）就会被云输入的候选覆盖掉。</p>
+<p>我采用的解决方案是，将云输入的候选处理放到最后。</p>
+<h3 id="不记录云占位符的位置"><a class="markdownIt-Anchor" href="#不记录云占位符的位置"></a> 不记录云占位符的位置</h3>
+<p>为了解决使用迭代器记录产生的问题，再加上每次云输入请求都会记录请求的拼音、并保存已解析的候选，最近的 20 版云输入已经可以通过 <code>editor</code> 的 <code>updateCandidates</code> 调用 <code>CloudCandidates</code> 的 <code>processCandidates</code> 正常更新候选。</p>
+<h3 id="使用下标记录"><a class="markdownIt-Anchor" href="#使用下标记录"></a> 使用下标记录</h3>
+<p>而之前的版本是使用一个固定开始下标和固定的占位符个数来记录，这种记录方法可能会导致程序在特定情况下崩溃。比如，固定的开始下标为2时，假如只有一个匹配的候选，使用2这个下标访问候选词列表，就会发生越界的问题。</p>
+<h2 id="处理-parser_network_error"><a class="markdownIt-Anchor" href="#处理-parser_network_error"></a> 处理 PARSER_NETWORK_ERROR</h2>
+<p>首先进行处理的是最特殊的错误状态，即网络出错时。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pos-&gt;m_display_string = CANDIDATE_INVALID_DATA_TEXT;</span><br></pre></td></tr></table></figure>
+<p>在输入或者缓冲区不可用时，会把所有的占位符都修改为显示最开始提到的一系列状态指示字符串中的 <code>CANDIDATE_INVALID_DATA_TEXT</code>。</p>
+<h2 id="处理-parser_network_error-之后"><a class="markdownIt-Anchor" href="#处理-parser_network_error-之后"></a> 处理 PARSER_NETWORK_ERROR 之后</h2>
+<p>如果没有发生网络错误，说明至少回复是被处理了的。考虑到异步请求无法保证先后顺序，在进行接下来的其他判断时，我们希望确定在处理的的确是最近一次请求的。也就是说，只有在这个判断确认是最近一次的请求时，才进一步判断之后的小节里描述的其他状态。</p>
+<p>我的方法是判断 parser 中获取到的拼音是否与当前编辑器中的一致：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (!g_strcmp0 (annotation, text) || !g_strcmp0 (annotation, double_pinyin_text))</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上一篇中的章节 <a href="/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/#%E4%B8%A4%E4%B8%AA%E6%BA%90%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%E4%B8%8A%E7%9A%84%E5%B7%AE%E5%BC%82">两个源返回结果上的差异</a> 中，有提到从百度源解析出的拼音是进行了自动补全的，这种情况下就会导致这里的判断结果为假，从而导致结果被丢弃。</p>
+<p>目前采用的方案是，对百度源不进行这一判断。因此，在新版本中这个条件添加了当前使用的是否是百度源的判断。</p>
+<h2 id="处理-parser_noerr"><a class="markdownIt-Anchor" href="#处理-parser_noerr"></a> 处理 PARSER_NOERR</h2>
+<p>这是无错误的情况。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (ret_code == PARSER_NOERR)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* update to the candidates list */</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt; &amp;updated_candidates = parser-&gt;getStringCandidates ();</span><br></pre></td></tr></table></figure>
+<p>首先，将获取到的储存在 parser 中的候选取出。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;EnhancedCandidate&gt;::iterator pos = m_cloud_candidates_first_pos;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;EnhancedCandidate&gt;::iterator cached_candidate_pos = m_candidates.begin();</span><br></pre></td></tr></table></figure>
+<p>找到候选词列表中占位符的初始位置，获取在 <code>CloudCandidates</code> 缓存的占位符的迭代器。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">for</span> (guint i = <span class="number">0</span>; cached_candidate_pos != m_candidates.end() &amp;&amp; pos != m_candidates_end_pos &amp;&amp; i &lt; updated_candidates.size ();</span><br><span class="line">        ++i, ++pos, ++cached_candidate_pos)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/* display candidate with prefix in lookup table */</span></span><br><span class="line">        EnhancedCandidate &amp; enhanced = *pos;</span><br><span class="line">        enhanced.m_candidate_id = i;</span><br><span class="line">        enhanced.m_display_string = CANDIDATE_CLOUD_PREFIX + updated_candidates[i];</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* cache candidate without prefix in m_candidates */</span></span><br><span class="line">        EnhancedCandidate &amp; cached = *cached_candidate_pos;</span><br><span class="line">        cached.m_display_string = updated_candidates[i];</span><br><span class="line">        cached.m_candidate_id = enhanced.m_candidate_id;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>紧接着对每个候选词列表中的占位符进行更新，将其修改为 <code>&quot;☁&quot;</code> + 候选词，同时将缓存的占位符修改为不带 <code>&quot;☁&quot;</code> 的候选词，并同步对应的候选在候选词列表中的 id。这样，当用户选择一个候选时，只需要遍历缓存在 <code>CloudCandidates</code> 中的候选，将传入的候选（为用户选中的）修改为缓存的对应的不带有 <code>&quot;☁&quot;</code> 的项并返回。</p>
+<p>在之前的版本中，缓存的占位符没有被很好的使用，当用户选择时，会去遍历传入的选中的候选的字符内容，如果找到 <code>&quot;☁&quot;</code> 标记，则将其移除并返回。</p>
+<p>新的实现更好一些，能够物尽其用，将缓存的候选最大程度利用上。</p>
+<p>详细的用户选择后的操作在《云输入在 ibus-libpinyin 中的实现 - 概述》 <a href="/2020/05/31/IBus-libpinyin-cloud-input-global-view/#%E5%A4%84%E7%90%86%E7%94%A8%E6%88%B7%E9%80%89%E6%8B%A9%E7%9A%84%E5%80%99%E9%80%89">处理用户选择的候选</a> 一章。</p>
+<h2 id="处理-parser_no_candidate"><a class="markdownIt-Anchor" href="#处理-parser_no_candidate"></a> 处理 PARSER_NO_CANDIDATE</h2>
+<p>这种情况是指结构正确、解析过程中没有出现问题，但没有解析出候选。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pos-&gt;m_display_string = CANDIDATE_NO_CANDIDATE_TEXT;</span><br></pre></td></tr></table></figure>
+<p>我认为这应当是一个出现了错误的状态，而不是说是单纯的没有候选。因此，这里把所有的占位符都修改为状态指示字符串中的 <code>CANDIDATE_NO_CANDIDATE_TEXT</code>。</p>
+<h2 id="处理-parser_invalid_data"><a class="markdownIt-Anchor" href="#处理-parser_invalid_data"></a> 处理 PARSER_INVALID_DATA</h2>
+<p>这种情况告诉用户，请求时返回的数据无效。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pos-&gt;m_display_string = CANDIDATE_INVALID_DATA_TEXT;</span><br></pre></td></tr></table></figure>
+<p>类似的，把所有的占位符都修改为状态指示字符串中的 <code>CANDIDATE_INVALID_DATA_TEXT</code>。</p>
+<h2 id="处理-parser_bad_format"><a class="markdownIt-Anchor" href="#处理-parser_bad_format"></a> 处理 PARSER_BAD_FORMAT</h2>
+<p>在处理时发现数据的格式有问题，就会返回这种错误状态，这种情况可能在输入流或缓冲区不完整时出现。比如这里的读取流并进行 Json 解析时：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* parse Json from input steam */</span></span><br><span class="line"><span class="keyword">if</span> (!json_parser_load_from_stream (m_parser, stream, <span class="literal">NULL</span>, error) || error != <span class="literal">NULL</span>)</span><br><span class="line">&#123;</span><br><span class="line">    g_input_stream_close (stream, <span class="literal">NULL</span>, error);  <span class="comment">/* Close stream to release libsoup connexion */</span></span><br><span class="line">    <span class="keyword">return</span> PARSER_BAD_FORMAT;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样，这里把所有的占位符都修改为状态指示字符串中的 <code>CANDIDATE_BAD_FORMAT_TEXT</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pos-&gt;m_display_string = CANDIDATE_BAD_FORMAT_TEXT;</span><br></pre></td></tr></table></figure>
+<h1 id="不同阶段下的状态"><a class="markdownIt-Anchor" href="#不同阶段下的状态"></a> 不同阶段下的状态</h1>
+<p>除了上述的对收到的回复的解析时的错误或状态的处理，在此之前，还有对延时请求和等待回复两个状态。这两个状态可以简化在出现错误时对错误的定位。</p>
+<h2 id="延迟请求状态"><a class="markdownIt-Anchor" href="#延迟请求状态"></a> 延迟请求状态</h2>
+<p>在候选词列表插入占位符时，占位符的初始显示为 <code>CANDIDATE_PENDING_TEXT</code>。插入占位符之后，即进入延期等待状态。</p>
+<h2 id="等待回复状态"><a class="markdownIt-Anchor" href="#等待回复状态"></a> 等待回复状态</h2>
+<p>在延时等待结束之后，<code>cloudAsyncRequest</code> 方法会被调用用来发送请求。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span></span><br><span class="line">CloudCandidates::cloudAsyncRequest (<span class="keyword">const</span> gchar* requestStr)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">    SoupMessage *msg = soup_message_new (<span class="string">"GET"</span>, queryRequest);</span><br><span class="line">    soup_session_send_async (m_session, msg, <span class="literal">NULL</span>, cloudResponseCallBack, <span class="keyword">static_cast</span>&lt;gpointer&gt; (<span class="keyword">this</span>));</span><br><span class="line">    m_message = msg;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* update loading text to replace pending text */</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;EnhancedCandidate&gt;::iterator pos = m_cloud_candidates_first_pos; pos != m_candidates_end_pos; ++pos) &#123;</span><br><span class="line">        <span class="keyword">if</span> (CANDIDATE_CLOUD_INPUT == pos-&gt;m_candidate_type) &#123;</span><br><span class="line">            <span class="keyword">if</span> (CANDIDATE_PENDING_TEXT == pos-&gt;m_display_string) &#123;</span><br><span class="line">                pos-&gt;m_display_string = CANDIDATE_LOADING_TEXT;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个方法中，请求发送完成之后，会将占位符更新为 <code>CANDIDATE_LOADING_TEXT</code>。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>这篇文章讲述了云输入的不同阶段下对状态的处理，以及解析请求的回复之后、对解析成功与否的状态和错误的处理。</p>
+<p>它们都将特定的字符串更新到了候选词列表中，但这个列表是存在在 ibus-libpinyin 中的，真正显示在用户眼前，则是通过 ibus-libpinyin 通知 ibus 有新的候选列表完成的。这一过程在《云输入在 ibus-libpinyin 中的实现 - 概述》<a href="/2020/05/31/IBus-libpinyin-cloud-input-global-view/#20-%E7%89%88%E5%BC%82%E6%AD%A5%E8%AF%B7%E6%B1%82">20-版异步请求</a>中有相关解释。</p>
+<p>下一篇文章会重点讨论一下与云输入有关的配置项。到这里，云输入的整体流程应当已经比较清楚了，我还会继续跟着开发过程更新这几篇文章中相关的内容。</p>
+<p>不出意外，在云输入合并之后，下一步就是实现双拼形码相关的功能了。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/" title="云输入在 ibus-libpinyin 中的实现 - 状态与错误处理" target="_blank" rel="external">https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/inokinoki" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/inokinoki" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Student</small></a></h3>
+        <div>Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/07/02/Basic-of-Software-Defined-Radio-1/" title="【译】软件定义无线电的基础 —— 1.概述"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/" title="云输入在 ibus-libpinyin 中的实现 - 候选词解析"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <!--
+        <script src="https://s19.cnzz.com/z_stat.php?id=1273905585&web_id=1273905585" language="JavaScript"></script>
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_s_tag = document.createElement('script');
+            cnzz_s_tag.type = 'text/javascript';
+            cnzz_s_tag.async = true;
+            cnzz_s_tag.charset = 'utf-8';
+            cnzz_s_tag.src = 'https://s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26show%3Dpic';
+            var root_s = document.getElementsByTagName('script')[0];
+            root_s.parentNode.insertBefore(cnzz_s_tag, root_s);
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        -->
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/';
+        
+        this.page.identifier = 'IBus-libpinyin-cloud-input-state-and-error-handle';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>

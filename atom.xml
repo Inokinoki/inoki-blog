@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Inoki in the world</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://blog.inoki.cc/"/>
+  <updated>2021-05-07T21:05:25.068Z</updated>
+  <id>https://blog.inoki.cc/</id>
+  
+  <author>
+    <name>Inoki</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>KDE Connect iOS Develop Dairy(3) Certificate</title>
+    <link href="https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/"/>
+    <id>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</id>
+    <published>2021-02-07T14:34:50.000Z</published>
+    <updated>2021-05-07T21:05:25.068Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;As mentioned at the end of my previous post &lt;a href=&quot;https://blog.inoki.cc/2020/04/19/KDEConnect-iOS-dev-dairy-2/&quot;&gt;KDE Connect iOS
+        
+      
+    
+    </summary>
+    
+    
+      <category term="KDE Connect" scheme="https://blog.inoki.cc/categories/KDE-Connect/"/>
+    
+    
+      <category term="KDE Connect" scheme="https://blog.inoki.cc/tags/KDE-Connect/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】Xen 的奇妙冒险 —— RPi4 篇</title>
+    <link href="https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/"/>
+    <id>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/</id>
+    <published>2021-01-27T15:47:40.000Z</published>
+    <updated>2021-05-07T21:05:25.088Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://www.linux.com/featured/xen-on-raspberry-pi-4-adventures/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Xen on Raspberry Pi 4
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Translation" scheme="https://blog.inoki.cc/categories/Translation/"/>
+    
+      <category term="Embedded System" scheme="https://blog.inoki.cc/categories/Embedded-System/"/>
+    
+      <category term="Chinese" scheme="https://blog.inoki.cc/categories/Translation/Chinese/"/>
+    
+      <category term="Raspberry PI" scheme="https://blog.inoki.cc/categories/Embedded-System/Raspberry-PI/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SDDM tips (1)</title>
+    <link href="https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/"/>
+    <id>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/</id>
+    <published>2021-01-25T09:30:40.000Z</published>
+    <updated>2021-05-07T21:05:25.032Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;SDDM is the abbreviation of Simple Desktop Display Manager, which is a default display manager for LXQt and KDE Plasma.&lt;br&gt;
+It
+        
+      
+    
+    </summary>
+    
+    
+      <category term="KDE" scheme="https://blog.inoki.cc/categories/KDE/"/>
+    
+    
+      <category term="KDE" scheme="https://blog.inoki.cc/tags/KDE/"/>
+    
+      <category term="SDDM" scheme="https://blog.inoki.cc/tags/SDDM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>滑稽、混乱、局促与 2020</title>
+    <link href="https://blog.inoki.cc/2020/12/30/My-2020/"/>
+    <id>https://blog.inoki.cc/2020/12/30/My-2020/</id>
+    <published>2020-12-30T09:41:40.000Z</published>
+    <updated>2021-05-07T21:05:25.076Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;从去年 11 月陆续收到 offer 并选择了自己最感兴趣的一个那一刻起，我想象中的 2020
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Dairy" scheme="https://blog.inoki.cc/categories/Dairy/"/>
+    
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="private" scheme="https://blog.inoki.cc/tags/private/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】GBDK 手柄</title>
+    <link href="https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/"/>
+    <id>https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/</id>
+    <published>2020-09-19T22:41:23.000Z</published>
+    <updated>2021-05-07T21:05:25.052Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://gbdev.gg8.se/wiki/articles/GBDK_Joypad_Tutorial&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="GBDK" scheme="https://blog.inoki.cc/categories/GBDK/"/>
+    
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="GBDK" scheme="https://blog.inoki.cc/tags/GBDK/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】GBDK Sprite 精灵</title>
+    <link href="https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/"/>
+    <id>https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/</id>
+    <published>2020-09-19T21:41:23.000Z</published>
+    <updated>2021-05-07T21:05:25.052Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://gbdev.gg8.se/wiki/articles/GBDK_Sprite_Tutorial&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="GBDK" scheme="https://blog.inoki.cc/categories/GBDK/"/>
+    
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="GBDK" scheme="https://blog.inoki.cc/tags/GBDK/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>KDE Frameworks - KDNSSD</title>
+    <link href="https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/"/>
+    <id>https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/</id>
+    <published>2020-09-06T08:22:00.000Z</published>
+    <updated>2021-05-07T21:05:25.060Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;strong&gt;Important&lt;/strong&gt;: this post assumes that you have knowledge on Qt and CMake/QMake, and that you have at least some concept on
+        
+      
+    
+    </summary>
+    
+    
+      <category term="KDE Frameworks" scheme="https://blog.inoki.cc/categories/KDE-Frameworks/"/>
+    
+    
+      <category term="KDE Frameworks" scheme="https://blog.inoki.cc/tags/KDE-Frameworks/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】软件定义无线电的基础 —— 3.接收机</title>
+    <link href="https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/"/>
+    <id>https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/</id>
+    <published>2020-08-07T20:27:00.000Z</published>
+    <updated>2021-05-07T21:05:25.036Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://www.eetimes.com/sdr-basics-part-3-transmitters/&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Translation" scheme="https://blog.inoki.cc/categories/Translation/"/>
+    
+      <category term="Chinese" scheme="https://blog.inoki.cc/categories/Translation/Chinese/"/>
+    
+      <category term="SDR" scheme="https://blog.inoki.cc/categories/SDR/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="SDR" scheme="https://blog.inoki.cc/tags/SDR/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>云输入在 ibus-libpinyin 中的实现 - 配置项</title>
+    <link href="https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/"/>
+    <id>https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/</id>
+    <published>2020-07-16T20:20:00.000Z</published>
+    <updated>2021-05-07T21:05:25.056Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;前几篇文章描述了云输入请求的全过程。其中，和云输入有关的参数（比如：需要请求几个云输入结果，延时发送请求需要延时多久等）是由 &lt;code&gt;GLib&lt;/code&gt; 中的 &lt;code&gt;GSettings&lt;/code&gt;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/categories/ibus-libpinyin/"/>
+    
+    
+      <category term="IBus" scheme="https://blog.inoki.cc/tags/IBus/"/>
+    
+      <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/tags/ibus-libpinyin/"/>
+    
+      <category term="Cloud Input" scheme="https://blog.inoki.cc/tags/Cloud-Input/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>KDE Connect 安装 Q&amp;A</title>
+    <link href="https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/"/>
+    <id>https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/</id>
+    <published>2020-07-07T23:33:33.000Z</published>
+    <updated>2021-05-07T21:05:25.060Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;这篇文章记录了 QQ 群中回答的一些安装配置方面的问题。&lt;/p&gt;
+&lt;p&gt;群号码：668331167 或点击链接加入群聊&lt;a href=&quot;https://jq.qq.com/?_wv=1027&amp;amp;k=0rBiLpax&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="KDE Connect" scheme="https://blog.inoki.cc/categories/KDE-Connect/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/categories/KDE-Connect/%E4%B8%AD%E6%96%87/"/>
+    
+    
+      <category term="KDE Connect" scheme="https://blog.inoki.cc/tags/KDE-Connect/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】为 Rust 生成 Qt 绑定</title>
+    <link href="https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/"/>
+    <id>https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/</id>
+    <published>2020-07-04T16:51:00.000Z</published>
+    <updated>2021-05-07T21:05:25.076Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://www.vandenoever.info/blog/2017/09/04/rust_qt_binding_generator.html&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Translation" scheme="https://blog.inoki.cc/categories/Translation/"/>
+    
+      <category term="Chinese" scheme="https://blog.inoki.cc/categories/Translation/Chinese/"/>
+    
+      <category term="Qt" scheme="https://blog.inoki.cc/categories/Qt/"/>
+    
+      <category term="Rust" scheme="https://blog.inoki.cc/categories/Rust/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="Qt" scheme="https://blog.inoki.cc/tags/Qt/"/>
+    
+      <category term="Rust" scheme="https://blog.inoki.cc/tags/Rust/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】软件定义无线电的基础 —— 2.接收机</title>
+    <link href="https://blog.inoki.cc/2020/07/03/Basic-of-Software-Defined-Radio-2/"/>
+    <id>https://blog.inoki.cc/2020/07/03/Basic-of-Software-Defined-Radio-2/</id>
+    <published>2020-07-03T20:08:00.000Z</published>
+    <updated>2021-05-07T21:05:25.032Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://www.eetimes.com/sdr-basics-part-2-receivers/&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Translation" scheme="https://blog.inoki.cc/categories/Translation/"/>
+    
+      <category term="Chinese" scheme="https://blog.inoki.cc/categories/Translation/Chinese/"/>
+    
+      <category term="SDR" scheme="https://blog.inoki.cc/categories/SDR/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="SDR" scheme="https://blog.inoki.cc/tags/SDR/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>KDE Frameworks - Introduction</title>
+    <link href="https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/"/>
+    <id>https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/</id>
+    <published>2020-07-02T23:22:00.000Z</published>
+    <updated>2021-05-07T21:05:25.060Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;strong&gt;Note: this is an extraction of &lt;a href=&quot;https://api.kde.org/frameworks/index.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;KDE Frameworks
+        
+      
+    
+    </summary>
+    
+    
+      <category term="KDE Frameworks" scheme="https://blog.inoki.cc/categories/KDE-Frameworks/"/>
+    
+    
+      <category term="KDE Frameworks" scheme="https://blog.inoki.cc/tags/KDE-Frameworks/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】软件定义无线电的基础 —— 1.概述</title>
+    <link href="https://blog.inoki.cc/2020/07/02/Basic-of-Software-Defined-Radio-1/"/>
+    <id>https://blog.inoki.cc/2020/07/02/Basic-of-Software-Defined-Radio-1/</id>
+    <published>2020-07-02T20:08:00.000Z</published>
+    <updated>2021-05-07T21:05:25.032Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://www.eetimes.com/basics-of-software-defined-radio-part-1/&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Translation" scheme="https://blog.inoki.cc/categories/Translation/"/>
+    
+      <category term="Chinese" scheme="https://blog.inoki.cc/categories/Translation/Chinese/"/>
+    
+      <category term="SDR" scheme="https://blog.inoki.cc/categories/SDR/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="SDR" scheme="https://blog.inoki.cc/tags/SDR/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>云输入在 ibus-libpinyin 中的实现 - 状态与错误处理</title>
+    <link href="https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/"/>
+    <id>https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/</id>
+    <published>2020-06-15T16:33:00.000Z</published>
+    <updated>2021-05-07T21:05:25.056Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;上一篇文章描述了云输入部分发出请求，接收到回复之后对回复的验证、处理，以及对返回的候选词的提取。在取得候选之后，会将其加入到 parser 中的 &lt;code&gt;m_candidates&lt;/code&gt;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/categories/ibus-libpinyin/"/>
+    
+    
+      <category term="IBus" scheme="https://blog.inoki.cc/tags/IBus/"/>
+    
+      <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/tags/ibus-libpinyin/"/>
+    
+      <category term="Cloud Input" scheme="https://blog.inoki.cc/tags/Cloud-Input/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>云输入在 ibus-libpinyin 中的实现 - 候选词解析</title>
+    <link href="https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/"/>
+    <id>https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/</id>
+    <published>2020-06-05T23:55:00.000Z</published>
+    <updated>2021-05-07T21:05:25.056Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;上一篇文章粗略地介绍了目前在 ibus-libpinyin
+        
+      
+    
+    </summary>
+    
+    
+      <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/categories/ibus-libpinyin/"/>
+    
+    
+      <category term="IBus" scheme="https://blog.inoki.cc/tags/IBus/"/>
+    
+      <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/tags/ibus-libpinyin/"/>
+    
+      <category term="Cloud Input" scheme="https://blog.inoki.cc/tags/Cloud-Input/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>云输入在 ibus-libpinyin 中的实现 - 概述</title>
+    <link href="https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/"/>
+    <id>https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/</id>
+    <published>2020-05-31T23:55:00.000Z</published>
+    <updated>2021-05-07T21:05:25.056Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;在 2018 年的 Google Summer of Code (GSoC)中，ibus-libpinyin 的云输入功能由 Linyu Xu 首次引入。该版本并没有被合并入主分支中，本文将其称为 18 版云输入。&lt;/p&gt;
+&lt;p&gt;18
+        
+      
+    
+    </summary>
+    
+    
+      <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/categories/ibus-libpinyin/"/>
+    
+    
+      <category term="IBus" scheme="https://blog.inoki.cc/tags/IBus/"/>
+    
+      <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/tags/ibus-libpinyin/"/>
+    
+      <category term="Cloud Input" scheme="https://blog.inoki.cc/tags/Cloud-Input/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】LoRaWAN 入门</title>
+    <link href="https://blog.inoki.cc/2020/05/26/LoRa-Primer/"/>
+    <id>https://blog.inoki.cc/2020/05/26/LoRa-Primer/</id>
+    <published>2020-05-26T10:28:00.000Z</published>
+    <updated>2021-05-07T21:05:25.072Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;LoRaWAN（或简称 LoRa）是 LPWAN（“低功耗广域网”）技术。所使用的无线电技术很漂亮，可确保您以很小的发射功率就可以在相当长的距离内发送数据。&lt;/p&gt;
+&lt;p&gt;LoRa 在称为的 ISM
+        
+      
+    
+    </summary>
+    
+    
+      <category term="LoRa" scheme="https://blog.inoki.cc/categories/LoRa/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="LoRaWAN" scheme="https://blog.inoki.cc/tags/LoRaWAN/"/>
+    
+      <category term="LoRa" scheme="https://blog.inoki.cc/tags/LoRa/"/>
+    
+      <category term="IoT" scheme="https://blog.inoki.cc/tags/IoT/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】LoRa 数据速率和扩频因子</title>
+    <link href="https://blog.inoki.cc/2020/05/25/LoRa-Data-rate-and-spreading-factor/"/>
+    <id>https://blog.inoki.cc/2020/05/25/LoRa-Data-rate-and-spreading-factor/</id>
+    <published>2020-05-25T11:20:00.000Z</published>
+    <updated>2021-05-07T21:05:25.072Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://docs.exploratory.engineering/lora/dr_sf/&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="LoRa" scheme="https://blog.inoki.cc/categories/LoRa/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="LoRaWAN" scheme="https://blog.inoki.cc/tags/LoRaWAN/"/>
+    
+      <category term="LoRa" scheme="https://blog.inoki.cc/tags/LoRa/"/>
+    
+      <category term="IoT" scheme="https://blog.inoki.cc/tags/IoT/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】LoRa 中的关键概念</title>
+    <link href="https://blog.inoki.cc/2020/05/25/LoRa-Key_Concept/"/>
+    <id>https://blog.inoki.cc/2020/05/25/LoRa-Key_Concept/</id>
+    <published>2020-05-25T11:20:00.000Z</published>
+    <updated>2021-05-07T21:05:25.072Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://docs.exploratory.engineering/lora/lora_key_concepts/&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="LoRa" scheme="https://blog.inoki.cc/categories/LoRa/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="LoRaWAN" scheme="https://blog.inoki.cc/tags/LoRaWAN/"/>
+    
+      <category term="LoRa" scheme="https://blog.inoki.cc/tags/LoRa/"/>
+    
+      <category term="IoT" scheme="https://blog.inoki.cc/tags/IoT/"/>
+    
+  </entry>
+  
+</feed>

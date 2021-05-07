@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>Python Source Code Analysis (1) | Inoki in the world</title>
+  <meta name="description" content="In this post, we will take a dissecion of source code of Python. To benefit the simplicity and meanwhile follow the most recent functionnalities, I choose Python 3.6.9 to do the analysis. In the last">
+<meta name="keywords" content="Python,Source Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python Source Code Analysis (1)">
+<meta property="og:url" content="https://blog.inoki.cc/2019/10/21/Python-code-analyse-1/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="In this post, we will take a dissecion of source code of Python. To benefit the simplicity and meanwhile follow the most recent functionnalities, I choose Python 3.6.9 to do the analysis. In the last">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-05-07T21:05:25.076Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python Source Code Analysis (1)">
+<meta name="twitter:description" content="In this post, we will take a dissecion of source code of Python. To benefit the simplicity and meanwhile follow the most recent functionnalities, I choose Python 3.6.9 to do the analysis. In the last">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2019/10/21/Python-code-analyse-1/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/inokinoki" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Student</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/KDE-Connect/">KDE Connect</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/02/07/KDEConnect-iOS-dev-dairy-3/" class="title">KDE Connect iOS Develop Dairy(3) Certificate</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-02-07T14:34:50.000Z" itemprop="datePublished">2021-02-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Embedded-System/">Embedded System</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Embedded-System/Raspberry-PI/">Raspberry PI</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/">Translation</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/Chinese/">Chinese</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/" class="title">【译】Xen 的奇妙冒险 —— RPi4 篇</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-27T15:47:40.000Z" itemprop="datePublished">2021-01-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/KDE/">KDE</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/" class="title">SDDM tips (1)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-25T09:30:40.000Z" itemprop="datePublished">2021-01-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Dairy/">Dairy</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2020/12/30/My-2020/" class="title">滑稽、混乱、局促与 2020</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-12-30T09:41:40.000Z" itemprop="datePublished">2020-12-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/GBDK/">GBDK</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2020/09/19/GBDK-Joypad-Tutorial/" class="title">【译】GBDK 手柄</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-09-19T22:41:23.000Z" itemprop="datePublished">2020-09-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ASIX/" style="font-size: 13.14px;">ASIX</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Bare-Metal/" style="font-size: 13px;">Bare Metal</a> <a href="/tags/Bug/" style="font-size: 13.29px;">Bug</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Cloud-Input/" style="font-size: 13.43px;">Cloud Input</a> <a href="/tags/Craft/" style="font-size: 13.14px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.29px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/Embedded-System/" style="font-size: 13.43px;">Embedded System</a> <a href="/tags/FFmpeg/" style="font-size: 13.14px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.14px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/Go/" style="font-size: 13.14px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.57px;">IBus</a> <a href="/tags/IoT/" style="font-size: 13.57px;">IoT</a> <a href="/tags/KDE/" style="font-size: 13.14px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.71px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.14px;">KDE Frameworks</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.29px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.14px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.57px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.57px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Python/" style="font-size: 13.14px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qt/" style="font-size: 13px;">Qt</a> <a href="/tags/Raspberry-PI/" style="font-size: 13.43px;">Raspberry PI</a> <a href="/tags/Router/" style="font-size: 13.29px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.29px;">SDR</a> <a href="/tags/Source-Code/" style="font-size: 13.14px;">Source Code</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/Ubuntu/" style="font-size: 13.14px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.14px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.14px;">Windows</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.43px;">ibus-libpinyin</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.14px;">private</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/翻译/" style="font-size: 13.86px;">翻译</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-PI/">Raspberry PI</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">15</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-PI/">Raspberry PI</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">10</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">10</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Python-code-analyse-1" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python Source Code Analysis (1)
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/10/21/Python-code-analyse-1/" class="article-date">
+	  <time datetime="2019-10-21T16:49:40.000Z" itemprop="datePublished">2019-10-21</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Programming-Language/">Programming Language</a>►<a class="article-category-link" href="/categories/Programming-Language/Python/">Python</a>►<a class="article-category-link" href="/categories/Source-Code/">Source Code</a>►<a class="article-category-link" href="/categories/Source-Code/Python/">Python</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/Python/">Python</a>, <a class="article-tag-link" href="/tags/Source-Code/">Source Code</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/10/21/Python-code-analyse-1/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.8k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 17(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>In this post, we will take a dissecion of source code of Python.</p>
+<p>To benefit the simplicity and meanwhile follow the most recent functionnalities, I choose <code>Python 3.6.9</code> to do the analysis.</p>
+<p>In the last post, the entry of Python is found, so it’s time to look at it!</p>
+<h1 id="py_main-the-python-main-function"><a class="markdownIt-Anchor" href="#py_main-the-python-main-function"></a> Py_Main - the Python Main function</h1>
+<p>According to C89 standard, in a C function, all the variables should be declared at the beginning. So, we can take a look at those variables.</p>
+<h1 id="variables"><a class="markdownIt-Anchor" href="#variables"></a> Variables</h1>
+<p>The variables are listed below, though we’ll not explicite them at the moment.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">int</span> c;</span><br><span class="line">    <span class="keyword">int</span> sts;</span><br><span class="line">    <span class="keyword">wchar_t</span> *command = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">wchar_t</span> *filename = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">wchar_t</span> *<span class="keyword">module</span> = <span class="literal">NULL</span>;</span><br><span class="line">    FILE *fp = <span class="built_in">stdin</span>;</span><br><span class="line">    <span class="keyword">char</span> *p;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> MS_WINDOWS</span></span><br><span class="line">    <span class="keyword">wchar_t</span> *wp;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="keyword">int</span> skipfirstline = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> stdin_is_interactive = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> help = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> version = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> saw_unbuffered_flag = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">char</span> *opt;</span><br><span class="line">    PyCompilerFlags cf;</span><br><span class="line">    PyObject *main_importer_path = <span class="literal">NULL</span>;</span><br><span class="line">    PyObject *warning_option = <span class="literal">NULL</span>;</span><br><span class="line">    PyObject *warning_options = <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="arguments"><a class="markdownIt-Anchor" href="#arguments"></a> Arguments</h1>
+<p>Then, after listing and initializing all variables, Python will try to find flags in the arguments.</p>
+<p>First, Python tries to find some options which are needed by some initializations.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Hash randomization needed early for all string operations</span></span><br><span class="line"><span class="comment">   (including -W and -X options). */</span></span><br><span class="line"><span class="keyword">while</span> ((c = _PyOS_GetOpt(argc, argv, PROGRAM_OPTS)) != EOF) &#123;</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="string">'m'</span> || c == <span class="string">'c'</span>) &#123;</span><br><span class="line">        <span class="comment">/* -c / -m is the last option: following arguments are</span></span><br><span class="line"><span class="comment">            not interpreter options. */</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="string">'E'</span>) &#123;</span><br><span class="line">        Py_IgnoreEnvironmentFlag++;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>PROGRAM_OPTS</code> is defined as <code>BASE_OPTS</code>, and <code>#define BASE_OPTS L&quot;bBc:dEhiIJm:OqRsStuvVW:xX:?&quot;</code> is at the header of <code>main.c</code>.</p>
+<p><code>_PyOS_GetOpt</code> is implemented in <code>Python/getopt.c</code>, which validates and returns argument option. If an option is not in <code>PROGRAM_OPTS</code>, a <code>_</code> will be returned. It will not accept <code>--argument</code> and returns a -1 if an argument with that form is found.</p>
+<p>In these lines, only options <code>E</code>, <code>m</code>, <code>c</code> are detected:</p>
+<ul>
+<li>if <code>E</code> is detected, the flag which leads to the negligence of <code>PYTHONPATH</code>, <code>PYTHONHOME</code> environment variables.</li>
+<li>once <code>m</code> or <code>c</code> is detected, following parameters should be the name of module(for <code>m</code> option) or the command that will be executed(for <code>c</code> option). So we terminated this loop.</li>
+</ul>
+<p>Then, Python gets the <code>PYTHONMALLOC</code> variables and tries to use it to setup allocators.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">opt = Py_GETENV(<span class="string">"PYTHONMALLOC"</span>);</span><br><span class="line"><span class="keyword">if</span> (_PyMem_SetupAllocators(opt) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,</span><br><span class="line">            <span class="string">"Error in PYTHONMALLOC: unknown allocator \"%s\"!\n"</span>, opt);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Valid allocators are <code>pymalloc</code>, <code>pymalloc_debug</code>, <code>malloc</code>, <code>malloc_debug</code> and <code>debug</code>. If you’d like to get more about them, <code>Objects/obmalloc.c</code> is a good place.</p>
+<p>And then Python does an initialization of Random module. In this module, <code>PYTHONHASHSEED</code> can be used to initialize random module. And it resets warning options, resets option parsing process to process all options.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_PyRandom_Init();</span><br><span class="line"></span><br><span class="line">PySys_ResetWarnOptions();</span><br><span class="line">_PyOS_ResetGetOpt();</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> ((c = _PyOS_GetOpt(argc, argv, PROGRAM_OPTS)) != EOF) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>We finally enter the period to parse all arguments. They will be explicited in order.</p>
+<h2 id="option-c"><a class="markdownIt-Anchor" href="#option-c"></a> Option c</h2>
+<p><strong>-c cmd : program passed in as string (terminates option list)`</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (c == <span class="string">'c'</span>) &#123;</span><br><span class="line">    <span class="keyword">size_t</span> len;</span><br><span class="line">    <span class="comment">/* -c is the last option; following arguments</span></span><br><span class="line"><span class="comment">        that look like options are left for the</span></span><br><span class="line"><span class="comment">        command to interpret. */</span></span><br><span class="line"></span><br><span class="line">    len = wcslen(_PyOS_optarg) + <span class="number">1</span> + <span class="number">1</span>;</span><br><span class="line">    command = (<span class="keyword">wchar_t</span> *)PyMem_RawMalloc(<span class="keyword">sizeof</span>(<span class="keyword">wchar_t</span>) * len);</span><br><span class="line">    <span class="keyword">if</span> (command == <span class="literal">NULL</span>)</span><br><span class="line">        Py_FatalError(</span><br><span class="line">            <span class="string">"not enough memory to copy -c argument"</span>);</span><br><span class="line">    wcscpy(command, _PyOS_optarg);</span><br><span class="line">    command[len - <span class="number">2</span>] = <span class="string">'\n'</span>;</span><br><span class="line">    command[len - <span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>If we encounter an <code>c</code> option, all other arguments will be neglected. The following argument will be parsed as the commands to be run.</p>
+<h2 id="option-m"><a class="markdownIt-Anchor" href="#option-m"></a> Option m</h2>
+<p><strong>-m mod : run library module as a script (terminates option list)</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (c == <span class="string">'m'</span>) &#123;</span><br><span class="line">    <span class="comment">/* -m is the last option; following arguments</span></span><br><span class="line"><span class="comment">        that look like options are left for the</span></span><br><span class="line"><span class="comment">        module to interpret. */</span></span><br><span class="line">    <span class="keyword">module</span> = _PyOS_optarg;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>If we encounter an <code>m</code> option, all other arguments will be neglected. The following argument will be parsed as the module to be run.</p>
+<h2 id="other-options"><a class="markdownIt-Anchor" href="#other-options"></a> Other options</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">-B     : don&apos;t write .py[co] files on import; also PYTHONDONTWRITEBYTECODE=x</span><br><span class="line">-d     : debug output from parser; also PYTHONDEBUG=x</span><br><span class="line">-E     : ignore PYTHON* environment variables (such as PYTHONPATH)</span><br><span class="line">-h     : print this help message and exit (also --help)</span><br><span class="line">-i     : inspect interactively after running script; forces a prompt even</span><br><span class="line">         if stdin does not appear to be a terminal; also PYTHONINSPECT=x</span><br><span class="line">-O     : optimize generated bytecode slightly; also PYTHONOPTIMIZE=x</span><br><span class="line">-OO    : remove doc-strings in addition to the -O optimizations</span><br><span class="line">-R     : use a pseudo-random salt to make hash() values of various types be</span><br><span class="line">         unpredictable between separate invocations of the interpreter, as</span><br><span class="line">         a defense against denial-of-service attacks</span><br><span class="line">-Q arg : division options: -Qold (default), -Qwarn, -Qwarnall, -Qnew</span><br><span class="line">-s     : don&apos;t add user site directory to sys.path; also PYTHONNOUSERSITE</span><br><span class="line">-S     : don&apos;t imply &apos;import site&apos; on initialization</span><br><span class="line">-t     : issue warnings about inconsistent tab usage (-tt: issue errors)</span><br><span class="line">-u     : unbuffered binary stdout and stderr; also PYTHONUNBUFFERED=x</span><br><span class="line">         see man page for details on internal buffering relating to &apos;-u&apos;</span><br><span class="line">-v     : verbose (trace import statements); also PYTHONVERBOSE=x</span><br><span class="line">         can be supplied multiple times to increase verbosity</span><br><span class="line">-V     : print the Python version number and exit (also --version)</span><br><span class="line">-W arg : warning control; arg is action:message:category:module:lineno</span><br><span class="line">         also PYTHONWARNINGS=arg</span><br><span class="line">-x     : skip first line of source, allowing use of non-Unix forms of #!cmd</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> (c) &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="string">'b'</span>:</span><br><span class="line">    Py_BytesWarningFlag++;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'d'</span>:</span><br><span class="line">    Py_DebugFlag++;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'i'</span>:</span><br><span class="line">    Py_InspectFlag++;</span><br><span class="line">    Py_InteractiveFlag++;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'I'</span>:</span><br><span class="line">    Py_IsolatedFlag++;</span><br><span class="line">    Py_NoUserSiteDirectory++;</span><br><span class="line">    Py_IgnoreEnvironmentFlag++;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* case 'J': reserved for Jython */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'O'</span>:</span><br><span class="line">    Py_OptimizeFlag++;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'B'</span>:</span><br><span class="line">    Py_DontWriteBytecodeFlag++;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'s'</span>:</span><br><span class="line">    Py_NoUserSiteDirectory++;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'S'</span>:</span><br><span class="line">    Py_NoSiteFlag++;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'E'</span>:</span><br><span class="line">    <span class="comment">/* Already handled above */</span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'t'</span>:</span><br><span class="line">    <span class="comment">/* ignored for backwards compatibility */</span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'u'</span>:</span><br><span class="line">    Py_UnbufferedStdioFlag = <span class="number">1</span>;</span><br><span class="line">    saw_unbuffered_flag = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'v'</span>:</span><br><span class="line">    Py_VerboseFlag++;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'x'</span>:</span><br><span class="line">    skipfirstline = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'h'</span>:</span><br><span class="line"><span class="keyword">case</span> <span class="string">'?'</span>:</span><br><span class="line">    help++;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'V'</span>:</span><br><span class="line">    version++;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'W'</span>:</span><br><span class="line">    <span class="keyword">if</span> (warning_options == <span class="literal">NULL</span>)</span><br><span class="line">        warning_options = PyList_New(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (warning_options == <span class="literal">NULL</span>)</span><br><span class="line">        Py_FatalError(<span class="string">"failure in handling of -W argument"</span>);</span><br><span class="line">    warning_option = PyUnicode_FromWideChar(_PyOS_optarg, <span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">if</span> (warning_option == <span class="literal">NULL</span>)</span><br><span class="line">        Py_FatalError(<span class="string">"failure in handling of -W argument"</span>);</span><br><span class="line">    <span class="keyword">if</span> (PyList_Append(warning_options, warning_option) == <span class="number">-1</span>)</span><br><span class="line">        Py_FatalError(<span class="string">"failure in handling of -W argument"</span>);</span><br><span class="line">    Py_DECREF(warning_option);</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'X'</span>:</span><br><span class="line">    PySys_AddXOption(_PyOS_optarg);</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'q'</span>:</span><br><span class="line">    Py_QuietFlag++;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">'R'</span>:</span><br><span class="line">    <span class="comment">/* Ignored */</span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* This space reserved for other options */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">    <span class="keyword">return</span> usage(<span class="number">2</span>, argv[<span class="number">0</span>]);</span><br><span class="line">    <span class="comment">/*NOTREACHED*/</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="actions-and-behaviors"><a class="markdownIt-Anchor" href="#actions-and-behaviors"></a> Actions and behaviors</h1>
+<p>After recording all options in specified flags, Python can handle them with a determined order or a determined prority (if actions are incompatible).</p>
+<h2 id="help-version"><a class="markdownIt-Anchor" href="#help-version"></a> Help, Version</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (help)</span><br><span class="line">    <span class="keyword">return</span> usage(<span class="number">0</span>, argv[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (version) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Python %s\n"</span>, version &gt;= <span class="number">2</span> ? Py_GetVersion() : PY_VERSION);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The option for help has the highest priority, then the option for the version. If they occured, Python will directly terminate after executing their proper actions.</p>
+<h2 id="sync-with-env"><a class="markdownIt-Anchor" href="#sync-with-env"></a> Sync with env</h2>
+<p>Then, Python tries to get env</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!Py_InspectFlag &amp;&amp;</span><br><span class="line">    (p = Py_GETENV(<span class="string">"PYTHONINSPECT"</span>)) &amp;&amp; *p != <span class="string">'\0'</span>)</span><br><span class="line">    Py_InspectFlag = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">if</span> (!saw_unbuffered_flag &amp;&amp;</span><br><span class="line">    (p = Py_GETENV(<span class="string">"PYTHONUNBUFFERED"</span>)) &amp;&amp; *p != <span class="string">'\0'</span>)</span><br><span class="line">    Py_UnbufferedStdioFlag = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!Py_NoUserSiteDirectory &amp;&amp;</span><br><span class="line">    (p = Py_GETENV(<span class="string">"PYTHONNOUSERSITE"</span>)) &amp;&amp; *p != <span class="string">'\0'</span>)</span><br><span class="line">    Py_NoUserSiteDirectory = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p>One thing should be noticed is that, <code>Py_GETENV</code> is a macro like this:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Py_GETENV(s) (Py_IgnoreEnvironmentFlag ? NULL : getenv(s))</span></span><br></pre></td></tr></table></figure>
+<p>which will actually return NULL if the flag <code>Py_IgnoreEnvironmentFlag</code> is not zero. The flag is set by <code>-E</code> option. I think this is a good design.</p>
+<h2 id="parse-warning-option"><a class="markdownIt-Anchor" href="#parse-warning-option"></a> Parse warning option</h2>
+<p>Python then uses the code below to parse warning option in different systems, since they might have different default character sets.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> MS_WINDOWS</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (warning_options != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    Py_ssize_t i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; PyList_GET_SIZE(warning_options); i++) &#123;</span><br><span class="line">        PySys_AddWarnOptionUnicode(PyList_GET_ITEM(warning_options, i));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>At the end, add them to Python warning option list.</p>
+<h2 id="get-script-file-name"><a class="markdownIt-Anchor" href="#get-script-file-name"></a> Get script file name</h2>
+<p>Get filename if no command, no module, the arguments are not all read, and the current argument is not <code>-</code>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (command == <span class="literal">NULL</span> &amp;&amp; <span class="keyword">module</span> == <span class="literal">NULL</span> &amp;&amp; _PyOS_optind &lt; argc &amp;&amp;</span><br><span class="line">    wcscmp(argv[_PyOS_optind], <span class="string">L"-"</span>) != <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    filename = argv[_PyOS_optind];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="check-interactivity-of-current-terminal"><a class="markdownIt-Anchor" href="#check-interactivity-of-current-terminal"></a> Check interactivity of current terminal</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">stdin_is_interactive = Py_FdIsInteractive(<span class="built_in">stdin</span>, (<span class="keyword">char</span> *)<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Python/pylifecycle.c</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * The file descriptor fd is considered ``interactive'' if either</span></span><br><span class="line"><span class="comment"> *   a) isatty(fd) is TRUE, or</span></span><br><span class="line"><span class="comment"> *   b) the -i flag was given, and the filename associated with</span></span><br><span class="line"><span class="comment"> *      the descriptor is NULL or "&lt;stdin&gt;" or "???".</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">Py_FdIsInteractive(FILE *fp, <span class="keyword">const</span> <span class="keyword">char</span> *filename)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (isatty((<span class="keyword">int</span>)fileno(fp)))</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (!Py_InteractiveFlag)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> (filename == <span class="literal">NULL</span>) ||</span><br><span class="line">           (<span class="built_in">strcmp</span>(filename, <span class="string">"&lt;stdin&gt;"</span>) == <span class="number">0</span>) ||</span><br><span class="line">           (<span class="built_in">strcmp</span>(filename, <span class="string">"???"</span>) == <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>So, stdin is always interactive.</p>
+<h2 id="play-with-buffers"><a class="markdownIt-Anchor" href="#play-with-buffers"></a> Play with buffers</h2>
+<p>Use <code>-u</code> option to disable input/ouput buffer in Python. This can resolve some problem if you’d like to use pipe as the input or the output of a Python program.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (Py_UnbufferedStdioFlag) &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> HAVE_SETVBUF</span></span><br><span class="line">    setvbuf(<span class="built_in">stdin</span>,  (<span class="keyword">char</span> *)<span class="literal">NULL</span>, _IONBF, BUFSIZ);</span><br><span class="line">    setvbuf(<span class="built_in">stdout</span>, (<span class="keyword">char</span> *)<span class="literal">NULL</span>, _IONBF, BUFSIZ);</span><br><span class="line">    setvbuf(<span class="built_in">stderr</span>, (<span class="keyword">char</span> *)<span class="literal">NULL</span>, _IONBF, BUFSIZ);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span> <span class="comment">/* !HAVE_SETVBUF */</span></span></span><br><span class="line">    setbuf(<span class="built_in">stdin</span>,  (<span class="keyword">char</span> *)<span class="literal">NULL</span>);</span><br><span class="line">    setbuf(<span class="built_in">stdout</span>, (<span class="keyword">char</span> *)<span class="literal">NULL</span>);</span><br><span class="line">    setbuf(<span class="built_in">stderr</span>, (<span class="keyword">char</span> *)<span class="literal">NULL</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* !HAVE_SETVBUF */</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>If <code>Py_UnbufferedStdioFlag</code> is not set, but we’ll enter the interactive mode, do not either use the input/output buffer.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (Py_InteractiveFlag) &#123;</span><br><span class="line">#ifdef MS_WINDOWS</span><br><span class="line">    <span class="comment">/* Doesn't have to have line-buffered -- use unbuffered */</span></span><br><span class="line">    <span class="comment">/* Any set[v]buf(stdin, ...) screws up Tkinter :-( */</span></span><br><span class="line">    setvbuf(<span class="built_in">stdout</span>, (<span class="keyword">char</span> *)<span class="literal">NULL</span>, _IONBF, BUFSIZ);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span> <span class="comment">/* !MS_WINDOWS */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> HAVE_SETVBUF</span></span><br><span class="line">    setvbuf(<span class="built_in">stdin</span>,  (<span class="keyword">char</span> *)<span class="literal">NULL</span>, _IOLBF, BUFSIZ);</span><br><span class="line">    setvbuf(<span class="built_in">stdout</span>, (<span class="keyword">char</span> *)<span class="literal">NULL</span>, _IOLBF, BUFSIZ);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* HAVE_SETVBUF */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* !MS_WINDOWS */</span></span></span><br><span class="line">    <span class="comment">/* Leave stderr alone - it should be unbuffered anyway. */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="play-with-program-name"><a class="markdownIt-Anchor" href="#play-with-program-name"></a> Play with program name</h2>
+<p>Python wants to set itself as the program name through <code>Py_SetProgramName</code> function. It’s a simple function, but on macOS, the Python interpreter can be in an App package rather than a bare environment. So, it requires lots of lines to retrieve the program name.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __APPLE__</span></span><br><span class="line">    <span class="comment">/* On MacOS X, when the Python interpreter is embedded in an</span></span><br><span class="line"><span class="comment">       application bundle, it gets executed by a bootstrapping script</span></span><br><span class="line"><span class="comment">       that does os.execve() with an argv[0] that's different from the</span></span><br><span class="line"><span class="comment">       actual Python executable. This is needed to keep the Finder happy,</span></span><br><span class="line"><span class="comment">       or rather, to work around Apple's overly strict requirements of</span></span><br><span class="line"><span class="comment">       the process name. However, we still need a usable sys.executable,</span></span><br><span class="line"><span class="comment">       so the actual executable path is passed in an environment variable.</span></span><br><span class="line"><span class="comment">       See Lib/plat-mac/bundlebuiler.py for details about the bootstrap</span></span><br><span class="line"><span class="comment">       script. */</span></span><br><span class="line">    <span class="keyword">if</span> ((p = Py_GETENV(<span class="string">"PYTHONEXECUTABLE"</span>)) &amp;&amp; *p != <span class="string">'\0'</span>) &#123;</span><br><span class="line">        <span class="keyword">wchar_t</span>* buffer;</span><br><span class="line">        <span class="keyword">size_t</span> len = <span class="built_in">strlen</span>(p) + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        buffer = PyMem_RawMalloc(len * <span class="keyword">sizeof</span>(<span class="keyword">wchar_t</span>));</span><br><span class="line">        <span class="keyword">if</span> (buffer == <span class="literal">NULL</span>) &#123;</span><br><span class="line">            Py_FatalError(</span><br><span class="line">               <span class="string">"not enough memory to copy PYTHONEXECUTABLE"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        mbstowcs(buffer, p, len);</span><br><span class="line">        Py_SetProgramName(buffer);</span><br><span class="line">        <span class="comment">/* buffer is now handed off - do not free */</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">#ifdef WITH_NEXT_FRAMEWORK</span><br><span class="line">        <span class="keyword">char</span>* pyvenv_launcher = getenv(<span class="string">"__PYVENV_LAUNCHER__"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (pyvenv_launcher &amp;&amp; *pyvenv_launcher) &#123;</span><br><span class="line">            <span class="comment">/* Used by Mac/Tools/pythonw.c to forward</span></span><br><span class="line"><span class="comment">             * the argv0 of the stub executable</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            <span class="keyword">wchar_t</span>* wbuf = Py_DecodeLocale(pyvenv_launcher, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (wbuf == <span class="literal">NULL</span>) &#123;</span><br><span class="line">                Py_FatalError(<span class="string">"Cannot decode __PYVENV_LAUNCHER__"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            Py_SetProgramName(wbuf);</span><br><span class="line"></span><br><span class="line">            <span class="comment">/* Don't free wbuf, the argument to Py_SetProgramName</span></span><br><span class="line"><span class="comment">             * must remain valid until Py_FinalizeEx is called.</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            Py_SetProgramName(argv[<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">        Py_SetProgramName(argv[<span class="number">0</span>]);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">    Py_SetProgramName(argv[<span class="number">0</span>]);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>Otherwise, we can see that, <code>argv[0]</code> is passed in.</p>
+<h2 id="initialize-python"><a class="markdownIt-Anchor" href="#initialize-python"></a> Initialize Python</h2>
+<p>This function will call <code>Py_InitializeEx(1);</code> and then <code>_Py_InitializeEx_Private(install_sigs, 1);</code>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Py_Initialize();</span><br></pre></td></tr></table></figure>
+<p>The function <code>_Py_InitializeEx_Private</code> will establish the entire environment. <strong>In the next post, we can get deeper in it</strong>.</p>
+<h2 id="print-python-version-in-interactive-mode"><a class="markdownIt-Anchor" href="#print-python-version-in-interactive-mode"></a> Print Python version in interactive mode</h2>
+<p>Python will then print Python version if we want to directly enter into interactive mode, i.e, run <code>python</code> without any other arguments.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!Py_QuietFlag &amp;&amp; (Py_VerboseFlag ||</span><br><span class="line">                    (command == <span class="literal">NULL</span> &amp;&amp; filename == <span class="literal">NULL</span> &amp;&amp;</span><br><span class="line">                        <span class="keyword">module</span> == <span class="literal">NULL</span> &amp;&amp; stdin_is_interactive))) &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Python %s on %s\n"</span>,</span><br><span class="line">        Py_GetVersion(), Py_GetPlatform());</span><br><span class="line">    <span class="keyword">if</span> (!Py_NoSiteFlag)</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"%s\n"</span>, COPYRIGHT);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="prepare-argv-for-python-osargv"><a class="markdownIt-Anchor" href="#prepare-argv-for-python-osargv"></a> Prepare argv for Python os.argv</h2>
+<p>Use <code>-m</code> or <code>-c</code> as premier argument.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (command != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    <span class="comment">/* Backup _PyOS_optind and force sys.argv[0] = '-c' */</span></span><br><span class="line">    _PyOS_optind--;</span><br><span class="line">    argv[_PyOS_optind] = <span class="string">L"-c"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">module</span> != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    <span class="comment">/* Backup _PyOS_optind and force sys.argv[0] = '-m'*/</span></span><br><span class="line">    _PyOS_optind--;</span><br><span class="line">    argv[_PyOS_optind] = <span class="string">L"-m"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="prepare-main-importer-path"><a class="markdownIt-Anchor" href="#prepare-main-importer-path"></a> Prepare main importer path</h2>
+<p>Main importer path is exactly the module in which Python will run as <code>__main__</code>. So, to launch Python with a file in the arguments, it’s to use the file as the main importer path.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (filename != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    main_importer_path = AsImportPathEntry(filename);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>If there is no file name provided, <code>main_importer_path</code> will not be set, either. So we do not know which we should use as the first parameter in <code>sys.argv</code>. Python chooses to treat it after.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if (main_importer_path != NULL) &#123;</span><br><span class="line">    /* Let RunMainFromImporter adjust sys.path[0] later */</span><br><span class="line">    PySys_SetArgvEx(argc-_PyOS_optind, argv+_PyOS_optind, 0);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    /* Use config settings to decide whether or not to update sys.path[0] */</span><br><span class="line">    PySys_SetArgv(argc-_PyOS_optind, argv+_PyOS_optind);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="prepare-for-interactive-mode"><a class="markdownIt-Anchor" href="#prepare-for-interactive-mode"></a> Prepare for interactive mode</h2>
+<p>If we are going to use interactive/inspect mode, we’ll need the library <code>readline</code>. So, import it and decrease the reference count of it, to delete it later.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((Py_InspectFlag || (command == <span class="literal">NULL</span> &amp;&amp; filename == <span class="literal">NULL</span> &amp;&amp; <span class="keyword">module</span> == <span class="literal">NULL</span>)) &amp;&amp;</span><br><span class="line">    isatty(fileno(<span class="built_in">stdin</span>)) &amp;&amp;</span><br><span class="line">    !Py_IsolatedFlag) &#123;</span><br><span class="line">    PyObject *v;</span><br><span class="line">    v = PyImport_ImportModule(<span class="string">"readline"</span>);</span><br><span class="line">    <span class="keyword">if</span> (v == <span class="literal">NULL</span>)</span><br><span class="line">        PyErr_Clear();</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        Py_DECREF(v);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="run-command-if-conform"><a class="markdownIt-Anchor" href="#run-command-if-conform"></a> Run command if conform</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (command) &#123;</span><br><span class="line">    sts = run_command(command, &amp;cf);</span><br><span class="line">    PyMem_RawFree(command);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="run-module-if-conform"><a class="markdownIt-Anchor" href="#run-module-if-conform"></a> Run module if conform</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">module</span>) &#123;</span><br><span class="line">    sts = (RunModule(<span class="keyword">module</span>, <span class="number">1</span>) != <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="run-interactive-or-run-files"><a class="markdownIt-Anchor" href="#run-interactive-or-run-files"></a> Run interactive or run files</h2>
+<p>If neither command nor module conforms, Python will try to find other way to launch.</p>
+<p>Firstly, it tries to run interactive mode, while filename is not set.</p>
+<p>This action is what happens in the background when we launch <code>python</code> without arguments from our terminal.</p>
+<p>But it is not where the program begins. Here, we’ve just launched a hook to mark that we need interactive mode.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (filename == <span class="literal">NULL</span> &amp;&amp; stdin_is_interactive) &#123;</span><br><span class="line">    Py_InspectFlag = <span class="number">0</span>; <span class="comment">/* do exit on SystemExit */</span></span><br><span class="line">    RunStartupFile(&amp;cf);</span><br><span class="line">    RunInteractiveHook();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Then, if <code>main_importer_path</code> is set(previously by the file), the main program will run with the file as the main importer. As you know, import all things in the module and set <code>__name__</code> to <code>__main__</code>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sts = <span class="number">-1</span>;               <span class="comment">/* keep track of whether we've already run __main__ */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (main_importer_path != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    sts = RunMainFromImporter(main_importer_path);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>But what will happen if file name is set, but main importer is not found, or the file doesn’t exist?</p>
+<p>Python tries to open the file and read it line by line, then executes it.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (sts==<span class="number">-1</span> &amp;&amp; filename != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    fp = _Py_wfopen(filename, <span class="string">L"r"</span>);</span><br><span class="line">    <span class="keyword">if</span> (fp == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="keyword">char</span> *cfilename_buffer;</span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span> *cfilename;</span><br><span class="line">        <span class="keyword">int</span> err = errno;</span><br><span class="line">        cfilename_buffer = Py_EncodeLocale(filename, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="keyword">if</span> (cfilename_buffer != <span class="literal">NULL</span>)</span><br><span class="line">            cfilename = cfilename_buffer;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            cfilename = <span class="string">"&lt;unprintable file name&gt;"</span>;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"%ls: can't open file '%s': [Errno %d] %s\n"</span>,</span><br><span class="line">            argv[<span class="number">0</span>], cfilename, err, strerror(err));</span><br><span class="line">        <span class="keyword">if</span> (cfilename_buffer)</span><br><span class="line">            PyMem_Free(cfilename_buffer);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (skipfirstline) &#123;</span><br><span class="line">        <span class="keyword">int</span> ch;</span><br><span class="line">        <span class="comment">/* Push back first newline so line numbers</span></span><br><span class="line"><span class="comment">            remain the same */</span></span><br><span class="line">        <span class="keyword">while</span> ((ch = getc(fp)) != EOF) &#123;</span><br><span class="line">            <span class="keyword">if</span> (ch == <span class="string">'\n'</span>) &#123;</span><br><span class="line">                (<span class="keyword">void</span>)ungetc(ch, fp);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> _<span class="title">Py_stat_struct</span> <span class="title">sb</span>;</span></span><br><span class="line">        <span class="keyword">if</span> (_Py_fstat_noraise(fileno(fp), &amp;sb) == <span class="number">0</span> &amp;&amp;</span><br><span class="line">            S_ISDIR(sb.st_mode)) &#123;</span><br><span class="line">            <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,</span><br><span class="line">                    <span class="string">"%ls: '%ls' is a directory, cannot continue\n"</span>,</span><br><span class="line">                    argv[<span class="number">0</span>], filename);</span><br><span class="line">            fclose(fp);</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>sts</code> will be set to another value, so the following lines will only be executed if there is no file name given.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (sts == <span class="number">-1</span>)</span><br><span class="line">    sts = run_file(fp, filename, &amp;cf);</span><br></pre></td></tr></table></figure>
+<p>From here, the <strong>Python main program is over</strong>. Except some small things will be executed after the running.</p>
+<h2 id="re-run-interactive"><a class="markdownIt-Anchor" href="#re-run-interactive"></a> Re-run Interactive</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (Py_InspectFlag &amp;&amp; stdin_is_interactive &amp;&amp;</span><br><span class="line">    (filename != <span class="literal">NULL</span> || command != <span class="literal">NULL</span> || <span class="keyword">module</span> != <span class="literal">NULL</span>)) &#123;</span><br><span class="line">    Py_InspectFlag = <span class="number">0</span>;</span><br><span class="line">    RunInteractiveHook();</span><br><span class="line">    <span class="comment">/* XXX */</span></span><br><span class="line">    sts = PyRun_AnyFileFlags(<span class="built_in">stdin</span>, <span class="string">"&lt;stdin&gt;"</span>, &amp;cf) != <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>As we see above, we need <code>Py_InspectFlag</code>, <code>stdin_is_interactive</code> are both true, and set at least a file name, a command or a module to run interactive mode. Which means, probably there was one script which has been executed, an the script imported the interactive mode.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Check this environment variable at the end, to give programs the</span></span><br><span class="line"><span class="comment"> * opportunity to set it from Python.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">if</span> (!Py_InspectFlag &amp;&amp;</span><br><span class="line">    (p = Py_GETENV(<span class="string">"PYTHONINSPECT"</span>)) &amp;&amp; *p != <span class="string">'\0'</span>)</span><br><span class="line">&#123;</span><br><span class="line">    Py_InspectFlag = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Thus, run <code>python -c &quot;import os; os.environ['PYTHONINSPECT']='1'&quot;</code> can also help enter interactive mode 😃</p>
+<p>But notice that, it will be executed if <code>Py_InspectFlag</code> is not set. That means previously we are not in the interactive mode. Thus, run <code>python</code> and <code>&quot;import os; os.environ['PYTHONINSPECT']='1'&quot;</code> in it, then exit, this will not help to re-enter the interactive mode.</p>
+<h2 id="clear-and-end-up"><a class="markdownIt-Anchor" href="#clear-and-end-up"></a> Clear and end up</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (Py_FinalizeEx() &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">/* Value unlikely to be confused with a non-error exit status or</span></span><br><span class="line"><span class="comment">    other special meaning */</span></span><br><span class="line">    sts = <span class="number">120</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> sts;</span><br></pre></td></tr></table></figure>
+<h1 id="conclusion"><a class="markdownIt-Anchor" href="#conclusion"></a> Conclusion</h1>
+<p>Up to now, a Python interpreter/program has been launched and finished.</p>
+<p>In the next post, we’ll look deeper into <code>_Py_InitializeEx_Private</code>, to see how Python Main function builds Python env through this function. But at the beginning, we’ll talk about other functions in <code>Python/main.c</code>, they are small functions but really vital.</p>
+<p>See you then!</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2019/10/21/Python-code-analyse-1/" title="Python Source Code Analysis (1)" target="_blank" rel="external">https://blog.inoki.cc/2019/10/21/Python-code-analyse-1/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/inokinoki" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/inokinoki" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Student</small></a></h3>
+        <div>Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/10/22/Python-invalidate-hundreds-of-papers/" title="【译】Python 脚本导致数以百计的论文无效"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/10/20/Data-Structure/" title="面试常见基础数据结构"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <!--
+        <script src="https://s19.cnzz.com/z_stat.php?id=1273905585&web_id=1273905585" language="JavaScript"></script>
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_s_tag = document.createElement('script');
+            cnzz_s_tag.type = 'text/javascript';
+            cnzz_s_tag.async = true;
+            cnzz_s_tag.charset = 'utf-8';
+            cnzz_s_tag.src = 'https://s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26show%3Dpic';
+            var root_s = document.getElementsByTagName('script')[0];
+            root_s.parentNode.insertBefore(cnzz_s_tag, root_s);
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        -->
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2019/10/21/Python-code-analyse-1/';
+        
+        this.page.identifier = 'Python-code-analyse-1';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>

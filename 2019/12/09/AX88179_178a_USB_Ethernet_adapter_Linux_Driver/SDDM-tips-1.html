@@ -1,0 +1,71 @@
+<hr>
+<p>title: SDDM tips (1)<br>
+date: 2021-01-25 09:30:40<br>
+tags:</p>
+<ul>
+<li>KDE</li>
+<li>SDDM<br>
+categories:</li>
+<li>KDE</li>
+</ul>
+<hr>
+<p>SDDM is the abbreviation of Simple Desktop Display Manager, which is a default display manager for LXQt and KDE Plasma.<br>
+It officially supports Linux and FreeBSD, but should also work well with other Unix-like system.</p>
+<h1 id="user-home"><a class="markdownIt-Anchor" href="#user-home"></a> User HOME</h1>
+<p>SDDM works under a special user in an UNIX-like system: <code>sddm</code>. Its HOME directory is set to <code>/var/lib/sddm</code>.</p>
+<p>If we want to install it ourselves, an <code>sddm</code> user needs to be created, with its home set to <code>/var/lib/sddm</code> by default.</p>
+<p>In this directory, a <code>state.conf</code> will be created. The content of it on my PC is:</p>
+<pre class="highlight"><code class="">[Last]
+# Name of the last logged-in user.
+# This user will be preselected when the login screen appears
+User=inoki
+
+
+# Name of the session for the last logged-in user.
+# This session will be preselected when the login screen appears.
+Session=/usr/share/xsessions/plasma.desktop
+</code></pre>
+<p>which notes the latest login user and the correspond session. This will accelerate the next login.</p>
+<p>The file is declared in <code>src/common/configuration.h</code> and will be loaded later.</p>
+<h1 id="configurations"><a class="markdownIt-Anchor" href="#configurations"></a> Configurations</h1>
+<p>Like the other programs, SDDM also reads configuration from <code>/etc</code>. The file is <code>/etc/sddm.conf</code>, which contains several sections:</p>
+<ul>
+<li>General</li>
+<li>Theme</li>
+<li>Users</li>
+<li>Wayland</li>
+<li>X11</li>
+</ul>
+<h1 id="icons"><a class="markdownIt-Anchor" href="#icons"></a> Icons</h1>
+<p>User icons are stored in <code>$(DATADIR)/faces/</code> or <code>~/.face.icon</code> (for each user).</p>
+<h1 id="themes"><a class="markdownIt-Anchor" href="#themes"></a> Themes</h1>
+<p>Themes are stored in <code>$(DATADIR)/themes/</code>. SDDM loads <code>Main.qml</code> file in it to create an user interface.</p>
+<h1 id="scripts"><a class="markdownIt-Anchor" href="#scripts"></a> Scripts</h1>
+<p>Scripts to launch a specific session under an environment are stored in <code>$(DATADIR)/scripts/</code>. These scripts will start the desktop environment.</p>
+<p>For example, for X11, the configuration items are:</p>
+<pre class="highlight"><code class="">[X11]
+DisplayCommand=/usr/share/sddm/scripts/Xsetup
+DisplayStopCommand=/usr/share/sddm/scripts/Xstop
+EnableHiDPI=false
+MinimumVT=1
+ServerArguments=-nolisten tcp
+ServerPath=/usr/bin/X
+SessionCommand=/usr/share/sddm/scripts/Xsession
+SessionDir=/usr/share/xsessions
+SessionLogFile=.local/share/sddm/xorg-session.log
+UserAuthFile=.Xauthority
+XauthPath=/usr/bin/xauth
+XephyrPath=/usr/bin/Xephyr
+</code></pre>
+<p>The script is <code>Xsetup</code>, <code>Xsession</code>, <code>Xstop</code>, etc. The desktop entries for desktop environments are placed in <code>/usr/share/xsessions</code>.</p>
+<p>In my case, the <code>plasma.desktop</code> indicates the executable:</p>
+<pre class="highlight"><code class="">[Desktop Entry]
+Type=XSession
+Exec=/usr/bin/startplasma-x11
+TryExec=/usr/bin/startplasma-x11
+DesktopNames=KDE
+Name=Plasma
+...
+</code></pre>
+<h1 id="conclusion"><a class="markdownIt-Anchor" href="#conclusion"></a> Conclusion</h1>
+<p>Unfinished. TBC…</p>

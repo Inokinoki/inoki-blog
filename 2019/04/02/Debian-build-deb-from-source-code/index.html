@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>【译】 从源代码构建 deb 包 | Inoki in the world</title>
+  <meta name="description" content="原文链接: https://wiki.debian.org/Packaging/Intro  Debian 打包介绍 本文是一个关于如何制作 Debian 包的介绍性教程，它不会对 Debian 打包系统中的复杂概念深入介绍，但它介绍了能够为简单软件制作 Debian 包的方法。 出于这个目的，我们只使用来自于 debhelper 9 的 dh 命令。  需求 这个教程假设您已：  理解二进制包的">
+<meta name="keywords" content="翻译,中文,Pack,Debian">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】 从源代码构建 deb 包">
+<meta property="og:url" content="https://blog.inoki.cc/2019/04/02/Debian-build-deb-from-source-code/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="原文链接: https://wiki.debian.org/Packaging/Intro  Debian 打包介绍 本文是一个关于如何制作 Debian 包的介绍性教程，它不会对 Debian 打包系统中的复杂概念深入介绍，但它介绍了能够为简单软件制作 Debian 包的方法。 出于这个目的，我们只使用来自于 debhelper 9 的 dh 命令。  需求 这个教程假设您已：  理解二进制包的">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-05-07T21:05:25.052Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】 从源代码构建 deb 包">
+<meta name="twitter:description" content="原文链接: https://wiki.debian.org/Packaging/Intro  Debian 打包介绍 本文是一个关于如何制作 Debian 包的介绍性教程，它不会对 Debian 打包系统中的复杂概念深入介绍，但它介绍了能够为简单软件制作 Debian 包的方法。 出于这个目的，我们只使用来自于 debhelper 9 的 dh 命令。  需求 这个教程假设您已：  理解二进制包的">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2019/04/02/Debian-build-deb-from-source-code/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/inokinoki" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Student</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/KDE-Connect/">KDE Connect</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/02/07/KDEConnect-iOS-dev-dairy-3/" class="title">KDE Connect iOS Develop Dairy(3) Certificate</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-02-07T14:34:50.000Z" itemprop="datePublished">2021-02-07</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Embedded-System/">Embedded System</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Embedded-System/Raspberry-PI/">Raspberry PI</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/">Translation</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/Chinese/">Chinese</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/" class="title">【译】Xen 的奇妙冒险 —— RPi4 篇</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-27T15:47:40.000Z" itemprop="datePublished">2021-01-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/KDE/">KDE</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/" class="title">SDDM tips (1)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-25T09:30:40.000Z" itemprop="datePublished">2021-01-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Dairy/">Dairy</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2020/12/30/My-2020/" class="title">滑稽、混乱、局促与 2020</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-12-30T09:41:40.000Z" itemprop="datePublished">2020-12-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/GBDK/">GBDK</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2020/09/19/GBDK-Joypad-Tutorial/" class="title">【译】GBDK 手柄</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-09-19T22:41:23.000Z" itemprop="datePublished">2020-09-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ASIX/" style="font-size: 13.14px;">ASIX</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Bare-Metal/" style="font-size: 13px;">Bare Metal</a> <a href="/tags/Bug/" style="font-size: 13.29px;">Bug</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Cloud-Input/" style="font-size: 13.43px;">Cloud Input</a> <a href="/tags/Craft/" style="font-size: 13.14px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.29px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/Embedded-System/" style="font-size: 13.43px;">Embedded System</a> <a href="/tags/FFmpeg/" style="font-size: 13.14px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.14px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/Go/" style="font-size: 13.14px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.57px;">IBus</a> <a href="/tags/IoT/" style="font-size: 13.57px;">IoT</a> <a href="/tags/KDE/" style="font-size: 13.14px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.71px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.14px;">KDE Frameworks</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.29px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.14px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.57px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.57px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Python/" style="font-size: 13.14px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qt/" style="font-size: 13px;">Qt</a> <a href="/tags/Raspberry-PI/" style="font-size: 13.43px;">Raspberry PI</a> <a href="/tags/Router/" style="font-size: 13.29px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.29px;">SDR</a> <a href="/tags/Source-Code/" style="font-size: 13.14px;">Source Code</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/Ubuntu/" style="font-size: 13.14px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.14px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.14px;">Windows</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.43px;">ibus-libpinyin</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.14px;">private</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/翻译/" style="font-size: 13.86px;">翻译</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-PI/">Raspberry PI</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">15</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-PI/">Raspberry PI</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">10</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">10</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Debian-build-deb-from-source-code" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【译】 从源代码构建 deb 包
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/04/02/Debian-build-deb-from-source-code/" class="article-date">
+	  <time datetime="2019-04-02T21:08:00.000Z" itemprop="datePublished">2019-04-02</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Package/">Package</a>►<a class="article-category-link" href="/categories/Package/Debian/">Debian</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/Debian/">Debian</a>, <a class="article-tag-link" href="/tags/Pack/">Pack</a>, <a class="article-tag-link" href="/tags/中文/">中文</a>, <a class="article-tag-link" href="/tags/翻译/">翻译</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/04/02/Debian-build-deb-from-source-code/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 4.2k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 15(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>原文链接: <a href="https://wiki.debian.org/Packaging/Intro" target="_blank" rel="noopener">https://wiki.debian.org/Packaging/Intro</a></p>
+<h1 id="debian-打包介绍"><a class="markdownIt-Anchor" href="#debian-打包介绍"></a> Debian 打包介绍</h1>
+<p>本文是一个关于如何制作 Debian 包的介绍性教程，它不会对 Debian 打包系统中的复杂概念深入介绍，但它介绍了能够为简单软件制作 Debian 包的方法。<br>
+出于这个目的，我们只使用来自于 <code>debhelper 9</code> 的 <code>dh</code> 命令。</p>
+<h1 id="需求"><a class="markdownIt-Anchor" href="#需求"></a> 需求</h1>
+<p>这个教程假设您已：</p>
+<ul>
+<li>理解二进制包的安装过程；</li>
+<li>了解命令行的使用，并且使用您偏爱的文本编辑器编辑文本文件；</li>
+</ul>
+<p>技术要求：</p>
+<ul>
+<li>build-essential</li>
+<li>devscripts</li>
+<li>debhelper version 9 或更高版本</li>
+</ul>
+<h1 id="三个核心概念"><a class="markdownIt-Anchor" href="#三个核心概念"></a> 三个核心概念</h1>
+<p>三个最核心的概念为：</p>
+<ul>
+<li>上游原始代码包（upstream tarball）:
+<ul>
+<li>通常，人们为上游开发者（通常为第三方）编写的软件打包。</li>
+<li>上游开发者会使用源代码归档软件或原始代码包的方式发放他们的软件。</li>
+<li>原始代码包一般是上游制作的 <code>.tar.gz</code> 或 <code>.tgz</code> 文件，它也可能被压缩成 <code>.tar.bz2</code>，<code>.tb2</code> 或 <code>.tar.xz</code> 格式。原始代码包就是 Debian 构建包时使用的原材料。</li>
+</ul>
+</li>
+<li>源码包：
+<ul>
+<li>当您拥有了上游制作的原始代码包，下一步就可以制作 Debian 源码包了。</li>
+</ul>
+</li>
+<li>二进制包：
+<ul>
+<li>从源码包您可以构建 Debian 二进制包，它才是是实际上会被安装的包。</li>
+</ul>
+</li>
+</ul>
+<p>最简单的源码包由3个文件组成：</p>
+<ul>
+<li>上游原始代码包，需要被重命名来符合一个特定的模式。</li>
+<li>一个 debian 目录，带有所有上游源代码的更改记录，外加所有为 Debian 打包系统生成的所有文件。这种包拥有 <code>.debian.tar.gz</code> 的文件名。</li>
+<li>一个描述文件（以 <code>.dsc</code> 结尾），罗列了其他两个文件。</li>
+</ul>
+<p>听起来有些过于复杂，人们的第一印象是：所有东西都放在一个文件里会更简单。然而，保持上游代码包与 Debian 特定更改分离可以节省大量磁盘空间和带宽。对 Debian 来说，追踪必要的修改也更加简单。</p>
+<h1 id="打包工作流"><a class="markdownIt-Anchor" href="#打包工作流"></a> 打包工作流</h1>
+<p>打包工作流通常如下表所示：</p>
+<ol>
+<li>重命名上游代码包</li>
+<li>解压缩上游代码包</li>
+<li>添加 Debian 打包文件</li>
+<li>构建这个包</li>
+<li>安装这个包</li>
+</ol>
+<p>之后您就可以在您的电脑上测试它了。</p>
+<p>源码包和二进制包都可以被上传到 Debian。</p>
+<p>为了这个教程，我们使用这个代码包：<a href="https://wiki.debian.org/Packaging/Intro?action=AttachFile&amp;do=view&amp;target=hithere-1.0.tar.gz" target="_blank" rel="noopener">hithere</a></p>
+<h2 id="第一步更改上游代码包名称"><a class="markdownIt-Anchor" href="#第一步更改上游代码包名称"></a> 第一步：更改上游代码包名称</h2>
+<p>Debian 打包系统假定上游代码包拥有一个十分特殊的名字，必须遵守一个特定的模式。它的名字由源代码包名、一个下划线、上游版本号组成，最后以<code>.orig.tar.gz</code> 组成。源代码包应当全部使用小写字母，并且包含字母、数字、符号，一些其他的字符也可以出现。</p>
+<p>如果上游开发者使用了一个很好的 Debian 源代码包名，您可以直接使用。否则，请尽可能小的对名称进行改动以适应 Debian。在我们的情况下，上游开发者已经选取了一个很好的名字：“hithere”了，所以我们无需担心。我们应当最终使用 <code>hithere_1.0.orig.tar.gz</code> 作为上游代码包的名称。请注意，这里我们使用了一个下划线，而不是“-”，因为打包工具极其吹毛求疵。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mv hithere-1.0.tar.gz hithere_1.0.orig.tar.gz</span><br></pre></td></tr></table></figure>
+<h2 id="第二步解压缩上游代码包"><a class="markdownIt-Anchor" href="#第二步解压缩上游代码包"></a> 第二步：解压缩上游代码包</h2>
+<p>通常情况下，源代码会进入一个以包名和上游版本号命名的目录中（使用连接符连接，而不是下划线），因此理想状况下我们使用的上游代码包会被解压缩到一个叫做<code>hithere-1.0</code> 的目录中。打包工具仍旧挑剔，因此我们必须这样做。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tar xf hithere_1.0.orig.tar.gz</span><br></pre></td></tr></table></figure>
+<h2 id="第三步添加-debian-打包文件"><a class="markdownIt-Anchor" href="#第三步添加-debian-打包文件"></a> 第三步：添加 Debian 打包文件</h2>
+<p>以下所有文件都在源码树的 <code>debian/</code> 子目录中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> hithere-1.0</span><br><span class="line">$ mkdir debian</span><br></pre></td></tr></table></figure>
+<p>我们需要提供不少文件，让我们按顺序来看。</p>
+<h3 id="debianchangelog"><a class="markdownIt-Anchor" href="#debianchangelog"></a> debian/changelog</h3>
+<p>第一个文件是 <code>debian/changelog</code>，这个是记录 Debian 包变化的日志文件。它无需罗列出上游代码的每一个改变，只要它能帮助用户总结这些变化即可。我们在制作第一个版本，所以这里应当什么都没有。然而，我们仍需制作一个变化日志的入口，因为打包工具会从日志里读取特定信息。最重要的是它会读取包的版本。</p>
+<p><code>debian/changelog</code> 拥有一个十分特殊的格式。最简单的创建方式就是使用 <code>dch</code> 工具。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dch --create -v 1.0-1 --package hithere</span><br></pre></td></tr></table></figure>
+<p>会在文件中产生以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hithere (1.0-1) UNRELEASED; urgency=low</span><br><span class="line"></span><br><span class="line">  * Initial release. (Closes: #XXXXXX)</span><br><span class="line"></span><br><span class="line"> -- Lars Wirzenius &lt;liw@liw.fi&gt;  Thu, 18 Nov 2010 17:25:32 +0000</span><br></pre></td></tr></table></figure>
+<p>这里有很多注意点：</p>
+<p><code>hithere</code> 部分必须与源代码包的名字相同。<code>1.0-1</code> 是版本号，<code>1.0</code> 部分是上游版本号。<code>-1</code> 部分是 Debian 的版本：它是第一个上游版本为 <code>1.0</code> 的 Debian 包。如果这个 Debian 包有错误，并且被修复了，那么上游版本号仍保持相同，下一个版本应当被叫做 <code>1.0-2</code>，接下来是 <code>1.0-3</code>，依此类推。</p>
+<p>UNRELEASED 被称作上传目标。它会告诉上传工具这个二进制包应当被上传到哪里。UNRELEASED 意味着这个包还没有做好上传的准备。保持 UNRELEASED 是一个好主意，以避免您错误上传它。</p>
+<p>目前请先忽略 <code>urgency=low</code>。</p>
+<p><code>(Closes：#XXXXXX)</code> 作用在于上传包时关闭错误。这是在 Debian 中关闭错误的常用方法：当上传修复错误的包时，错误跟踪器会注意到这一点，并将错误标记为已关闭。我们可以删除 <code>(Closes...)</code> 位。或者不管它，现在它不重要。</p>
+<p>更改日志中的最后一行指出是谁在何时制作了这个版本的软件包。<code>dch</code> 工具会尝试猜测名称和电子邮件地址，但您应当使用正确的详细信息对其进行配置。详细信息，请参阅 <code>dch(1)</code> 手册页。</p>
+<h3 id="debiancompat"><a class="markdownIt-Anchor" href="#debiancompat"></a> debian/compat</h3>
+<p><code>debian/compat</code> 明确 <code>debhelper</code> 工具的兼容等级。我们目前不需要知道它意味着什么。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10</span><br></pre></td></tr></table></figure>
+<h3 id="debiancontrol"><a class="markdownIt-Anchor" href="#debiancontrol"></a> debian/control</h3>
+<p>控制文件描述代码和二进制包，并给出他们的详细信息，比如名称、包的维护者是谁，等等。下面是一个示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Source: hithere</span><br><span class="line">Maintainer: Lars Wirzenius &lt;liw@liw.fi&gt;</span><br><span class="line">Section: misc</span><br><span class="line">Priority: optional</span><br><span class="line">Standards-Version: 3.9.2</span><br><span class="line">Build-Depends: debhelper (&gt;= 9)</span><br><span class="line"></span><br><span class="line">Package: hithere</span><br><span class="line">Architecture: any</span><br><span class="line">Depends: $&#123;shlibs:Depends&#125;, $&#123;misc:Depends&#125;</span><br><span class="line">Description: greet user</span><br><span class="line"> hithere greets the user, or the world.</span><br></pre></td></tr></table></figure>
+<p>在这个文件里有许多需求的字段，但是现在您可以像对待魔法一样对待它。那么，在 <code>debian/control</code> 中有两段文字。</p>
+<p>第一段文字描述了源代码包，使用以下字段：</p>
+<h4 id="source"><a class="markdownIt-Anchor" href="#source"></a> Source</h4>
+<p>源代码包名。</p>
+<h4 id="maintainer"><a class="markdownIt-Anchor" href="#maintainer"></a> Maintainer</h4>
+<p>维护者的姓名和电子邮箱。</p>
+<h4 id="priority"><a class="markdownIt-Anchor" href="#priority"></a> Priority</h4>
+<p>包的重要性（‘required 可选的’, ‘important 重要的’, ‘standard 标准’ 或 ‘optional’ 其中之一）。通常，包是“可选”的，除非它对于标准系统功能是“必不可少的”，即启动或网络功能。 如果包与另一个“可选”包冲突，或者它不打算用于标准桌面安装，则应该是“额外”的而不是“可选”的。 “额外”包的显着例子是调试包。 （由Sebastian Tennant添加）。</p>
+<h4 id="build-depends"><a class="markdownIt-Anchor" href="#build-depends"></a> Build-Depends</h4>
+<p>需要安装以构建程序包的程序包列表。实际使用包时有可能需要它们。</p>
+<p>第一个之后的所有段落都描述了从此源构建的二进制包。 可以有许多从同一来源构建的二进制包; 但对于我们的例子只有一个。 我们使用这些字段：</p>
+<h4 id="package"><a class="markdownIt-Anchor" href="#package"></a> Package</h4>
+<p>二进制包的名称。 名称可能与源包名称不同。</p>
+<h4 id="architecture"><a class="markdownIt-Anchor" href="#architecture"></a> Architecture</h4>
+<p>指定二进制包预期使用的计算机体系结构：用于32位Intel CPU的i386，用于64位的amd64，用于ARM处理器的armel等等。 Debian总共可以处理大约十几种计算机体系结构，因此这种体系结构支持至关重要。 “Architecture”字段可以包含特定体系结构的名称，但通常它包含两个特殊值中的一个。</p>
+<p>any<br>
+（我们在示例中看到）意味着可以为任何体系结构构建包。 换句话说，代码是可移植的，因此它不会对硬件做太多假设。 但是，仍然需要为每个体系结构单独构建二进制包。</p>
+<p>all<br>
+意味着相同的二进制包将适用于所有体系结构，而无需为每个体系结构单独构建。 例如，仅包含shell脚本的包将是“all”。 Shell脚本在任何地方都可以工作，不需要编译。</p>
+<h4 id="depends"><a class="markdownIt-Anchor" href="#depends"></a> Depends</h4>
+<p>为了让二进制包中程序能够正常运行，需要安装的包列表。手动列出这些依赖项是繁琐且容易出错的工作。为了能够让其工作，我们需要一个神奇的小东西 <code>${shlibs:Depends}</code>。另一个神奇的东西是给 <code>debhelper</code> 的，它是 <code>${misc:Depends}</code>。shlibs 是为了动态链接库，而 misc 是为了 <code>debherlper</code> 的一些工作。对于别的依赖，您可以将其手动加入到 <code>Depends</code> 或 <code>Build-Depends</code> 中。但请注意，<code>${...}</code> 仅在 <code>Depends</code> 中有效。</p>
+<h4 id="description"><a class="markdownIt-Anchor" href="#description"></a> Description</h4>
+<p>二进制包的完整描述。它希望对用户有所帮助。第一行用作简要概要（摘要）描述，其余部分是包的更长的描述。<br>
+命令 <code>cme edit dpkg</code> 提供了一个GUI能够用来编辑大多数打包文件，包括 <code>debian/control</code>。 请参阅使用 <code>cme</code> 页面管理 <code>Debian</code> 软件包。<code>cme</code>命令在 Debian 中的 <code>cme</code> 包中提供。您也可以使用 <code>cme edit dpkg-control</code> 命令仅编辑 <code>debian/control</code> 文件。</p>
+<h3 id="debiancopyright"><a class="markdownIt-Anchor" href="#debiancopyright"></a> debian/copyright</h3>
+<p>这是一个非常重要的文件，但是现在我们将先使用一个空文件。<br>
+对于 Debian ，此文件用于跟踪有关包的合法性、版权相关信息。但是，从技术角度来看，这并不重要。目前，我们将专注于技术方面。如果有兴趣，我们可以稍后再回到 <code>debian/copyright</code>。</p>
+<h3 id="debianrules"><a class="markdownIt-Anchor" href="#debianrules"></a> debian/rules</h3>
+<p>它应当长这个样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/make -f</span><br><span class="line">%:</span><br><span class="line">        dh $@</span><br></pre></td></tr></table></figure>
+<p><strong>注意： 最后一行应当使用一个 Tab 字符进行缩进，而不使用空格。这个文件是一个 Makefile，因此 Tab 字符是 make 所期望的。</strong></p>
+<p>事实上 <code>debian/rules</code> 可能是一个相当复杂的文件。然而，在 <code>debhelper 7</code> 中的 <code>dh</code> 命令让它可以在大多数情况下变得更简单。</p>
+<h3 id="debiansourceformat"><a class="markdownIt-Anchor" href="#debiansourceformat"></a> debian/source/format</h3>
+<p>最后一个我们需要的文件是 <code>debian/source/format</code>，它应当包含源代码包的版本号，这里为 <code>3.0 (quilt)</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3.0 (quilt)</span><br></pre></td></tr></table></figure>
+<h2 id="第四步构建这个包"><a class="markdownIt-Anchor" href="#第四步构建这个包"></a> 第四步：构建这个包</h2>
+<h3 id="第一次尝试"><a class="markdownIt-Anchor" href="#第一次尝试"></a> 第一次尝试</h3>
+<p>现在我们可以构建这个包了。有很多我们可以使用的命令，但是我们只使用其中一个，如果您运行以下命令，您会得到像下面的输出：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ debuild -us -uc</span><br><span class="line">make[1]: Entering directory <span class="string">'/home/liw/debian-packaging-tutorial/x/hithere-1.0'</span></span><br><span class="line">install hithere /home/liw/debian-packaging-tutorial/x/hithere-1.0/debian/hithere/usr/<span class="built_in">local</span>/bin</span><br><span class="line">install: cannot create regular file <span class="string">'/home/liw/debian-packaging-tutorial/x/hithere-1.0/debian/hithere/usr/local/bin'</span>: No such file or directory</span><br><span class="line">make[1]: *** [install] Error 1</span><br><span class="line">make[1]: Leaving directory <span class="string">'/home/liw/debian-packaging-tutorial/x/hithere-1.0'</span></span><br><span class="line">dh_auto_install: make -j1 install DESTDIR=/home/liw/debian-packaging-tutorial/x/hithere-1.0/debian/hithere returned <span class="built_in">exit</span> code 2</span><br><span class="line">make: *** [binary] Error 29</span><br><span class="line">dpkg-buildpackage: error: fakeroot debian/rules binary gave error <span class="built_in">exit</span> status 2</span><br><span class="line">debuild: fatal error at line 1325:</span><br><span class="line">dpkg-buildpackage -rfakeroot -D -us -uc failed</span><br></pre></td></tr></table></figure>
+<p>有些地方不太对劲。这经常发生：您已经尽力创建了符合规范的 <code>debian/*</code> 文件了，但是仍有一些东西不太对劲。可见，出错的地方在：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">install hithere /home/liw/debian-packaging-tutorial/x/hithere-1.0/debian/hithere/usr/local/bin</span><br></pre></td></tr></table></figure>
+<p>上游代码中的 Makefile 尝试将程序安装到错误的地方。</p>
+<p>这边有许多可以做的事情，来解决这个问题：第一件事是 Debian 打包系统如何工作。</p>
+<h3 id="修正"><a class="markdownIt-Anchor" href="#修正"></a> 修正</h3>
+<p>当程序被构建并被“安装”时，通常情况下，它还不会被安装到 <code>/usr</code> 或者 <code>/usr/local</code>，而是被安装到 <code>debian/</code> 子目录。</p>
+<p>我们在 <code>debian/hithere</code> 目录下创建了一个整个文件系统的子集，并将其打包进二进制包中。因此 <code>.../debian/hithere/usr/local/bin</code> 是没问题的，除非它不应当被安装到 <code>usr/local</code> 而是 <code>usr</code> 目录。我们需要做一些事情来确保程序被安装到正确的位置 <code>debian/hithere/usr/bin</code>。正确的方法是修改 <code>debian/rules</code> 文件来告诉 Makefile 应当在哪里安装软件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/make -f</span><br><span class="line">%:</span><br><span class="line">        dh $@</span><br><span class="line"></span><br><span class="line">override_dh_auto_install:</span><br><span class="line">        $(MAKE) DESTDIR=$$(pwd)/debian/hithere prefix=/usr install</span><br></pre></td></tr></table></figure>
+<p>这个仍是一个小魔法，为了理解它，您应当知道 Makefile 如何工作，还应当知道 <code>debhelper</code> 的不同阶段。</p>
+<p>目前，我可以大概说明下：有一个名为 <code>debherlper</code> 的命令负责安装上游文件，这个阶段被称为 <code>dh_auto_install</code>。我们需要覆盖这个阶段，为此，我们在 <code>debian/rule</code> 中重写了 <code>override_dh_auto_install</code> 规则。这个文件的最后一行是一种1970年代的技术，为了从 <code>debian/rules</code> 中使用正确的参数调用上游中的 Makefile 文件。</p>
+<p>让我们再试一下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ debuild -us -uc</span><br></pre></td></tr></table></figure>
+<p>仍然失败了！但这次失败的命令是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">install hithere /home/liw/debian-packaging-tutorial/x/hithere-1.0/debian/hithere/usr/bin</span><br></pre></td></tr></table></figure>
+<p>我们正在尝试将软件安装至正确的地方，但是这个目录不存在。为了修正这个错误，我们应当告诉打包工具先创建这个目录。</p>
+<p>理想状况下，上游 Makefile 文件会自动创建目录，但这种情况下，是上游开发者太懒惰了，他没有创建这个目录。</p>
+<h3 id="另一个修正"><a class="markdownIt-Anchor" href="#另一个修正"></a> 另一个修正</h3>
+<p>打包工具（特别是<code>debhelper</code>）提供了一种实现方式。创建一个名为 <code>debian/hithere.dirs</code> 的文件，里面的内容应当是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">usr/bin</span><br><span class="line">usr/share/man/man1</span><br></pre></td></tr></table></figure>
+<p>第二行创建了一个给手册页面的目录。之后我们会需要它。您应当小心的维护这样的文件，因为它可能会导致您的包在未来版本产生空目录，当包中的项目不再有效时。</p>
+<p>让我们再试一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ debuild -us -uc</span><br></pre></td></tr></table></figure>
+<p>现在构建成功了，但是仍有一些小问题。<code>debuild</code> 运行了 <code>lintian</code> 工具，这个工具可以检测构建的包的一些常见的错误，它给出了我们创建的包的一些错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Now running lintian...</span><br><span class="line">W: hithere source: out-of-date-standards-version 3.9.0 (current is 3.9.1)</span><br><span class="line">W: hithere: copyright-without-copyright-notice</span><br><span class="line">W: hithere: new-package-should-close-itp-bug</span><br><span class="line">W: hithere: wrong-bug-number-in-closes l3:#XXXXXX</span><br><span class="line">Finished running lintian.</span><br></pre></td></tr></table></figure>
+<p>这些错误应当被修正，但是对我们来说它们不会导致错误。现在我们先忽略他们。查看父目录，您可以找到构建好的包。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ ls ..</span><br><span class="line">hithere-1.0                  hithere_1.0-1_amd64.deb  hithere_1.0.orig.tar.gz</span><br><span class="line">hithere_1.0-1_amd64.build    hithere_1.0-1.debian.tar.gz</span><br><span class="line">hithere_1.0-1_amd64.changes  hithere_1.0-1.dsc</span><br></pre></td></tr></table></figure>
+<h2 id="第五步安装构建好的包"><a class="markdownIt-Anchor" href="#第五步安装构建好的包"></a> 第五步：安装构建好的包</h2>
+<p>接下来的命令会安装您构建好的包。<strong>不要</strong>在计算机上直接运行它，除非您不介意损坏系统。</p>
+<p>通常情况下，在备份好的计算机上进行包开发是最好的，这样，在所有事情变糟糕的情况下，您可以不用完全安装整个系统。虚拟机是一个不错的进行开发的地方。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ sudo dpkg -i ../hithere_1.0-1_amd64.deb</span><br><span class="line"></span><br><span class="line">[sudo] password <span class="keyword">for</span> liw:</span><br><span class="line">Selecting previously deselected package hithere.</span><br><span class="line">(Reading database ... 154793 files and directories currently installed.)</span><br><span class="line">Unpacking hithere (from ../hithere_1.0-1_amd64.deb) ...</span><br><span class="line">Setting up hithere (1.0-1) ...</span><br><span class="line">Processing triggers <span class="keyword">for</span> man-db ...</span><br><span class="line">liw@havelock$</span><br></pre></td></tr></table></figure>
+<p>那么，如何测试打好的包呢？我们可以运行命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hithere</span><br></pre></td></tr></table></figure>
+<p>OK 了！</p>
+<p>但现在并不完美。记得 lintian 还有一些事情涵待解决，<code>debian/copyright</code> 仍然是空的，等等。我们现在有了一个可以运行的 deb 包了，但是它还并不是我们所期待的高质量的 Debian 包。</p>
+<h1 id="结论"><a class="markdownIt-Anchor" href="#结论"></a> 结论</h1>
+<p>一旦您构建了您自己的包，自然而然地，您会想要知道如何设置您自己的 apt 仓库，这样您自己的包会很容易被安装。我所知道的最好的工具是 <code>reprepro</code>。为了更多的测试您的包，您可能也会想要了解 <code>piuparts</code>。原作者编写的这个工具，他觉得这个工具很棒并且没有任何 bug ！</p>
+<p>最后，如果您开始修改上游代码，您可能想要了解一下 quilt 工具。</p>
+<p>其他您可能想要阅读的信息可以在 <a href="http://www.debian.org/devel/" target="_blank" rel="noopener">http://www.debian.org/devel/</a> 页面找到。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2019/04/02/Debian-build-deb-from-source-code/" title="【译】 从源代码构建 deb 包" target="_blank" rel="external">https://blog.inoki.cc/2019/04/02/Debian-build-deb-from-source-code/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/inokinoki" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/inokinoki" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Student</small></a></h3>
+        <div>Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/04/30/Build-go-for-newifi2-d1-router-chinese/" title="为 Newifi 2 (D1) 路由器构建 Go 语言"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/03/24/man-epoll/" title="Linux manual epoll(7)"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <!--
+        <script src="https://s19.cnzz.com/z_stat.php?id=1273905585&web_id=1273905585" language="JavaScript"></script>
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_s_tag = document.createElement('script');
+            cnzz_s_tag.type = 'text/javascript';
+            cnzz_s_tag.async = true;
+            cnzz_s_tag.charset = 'utf-8';
+            cnzz_s_tag.src = 'https://s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26show%3Dpic';
+            var root_s = document.getElementsByTagName('script')[0];
+            root_s.parentNode.insertBefore(cnzz_s_tag, root_s);
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        -->
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2019/04/02/Debian-build-deb-from-source-code/';
+        
+        this.page.identifier = 'Debian-build-deb-from-source-code';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>
