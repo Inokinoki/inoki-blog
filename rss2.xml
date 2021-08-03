@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Mon, 02 Aug 2021 20:12:30 GMT</pubDate>
+    <pubDate>Tue, 03 Aug 2021 19:03:53 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】 Vulkan 光线追踪</title>
+      <link>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/</link>
+      <guid>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/</guid>
+      <pubDate>Mon, 02 Aug 2021 23:08:10 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.khronos.org/blog/vulkan-ray-tracing-final-specification-release&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Vulkan Ray
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Write your own IME on macOS - 1. Create project</title>
@@ -413,27 +434,6 @@ It
       
       
       <comments>https://blog.inoki.cc/2020/05/26/LoRa-Primer/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】LoRa 数据速率和扩频因子</title>
-      <link>https://blog.inoki.cc/2020/05/25/LoRa-Data-rate-and-spreading-factor/</link>
-      <guid>https://blog.inoki.cc/2020/05/25/LoRa-Data-rate-and-spreading-factor/</guid>
-      <pubDate>Mon, 25 May 2020 11:20:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://docs.exploratory.engineering/lora/dr_sf/&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2020/05/25/LoRa-Data-rate-and-spreading-factor/#disqus_thread</comments>
     </item>
     
   </channel>
