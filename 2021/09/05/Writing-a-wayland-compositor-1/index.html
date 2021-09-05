@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>【译】从头开始构建 Wayland 合成器 —— 1. Hello wlroots | Inoki in the world</title>
+  <meta name="description" content="原文链接：Writing a Wayland Compositor, Part 1: Hello wlroots 这是一系列文章中的第一篇。 我正在写一篇关于从头开始构建一个 Wayland 合成器的文章。你可能知道，我（原作者）是 Sway 的主要维护者，这是一个相当受欢迎的 Wayland 合成器。在过去的几个月里，我们和许多其他优秀的开发者一起，一直在开发 wlroots。这是一个用于创建新">
+<meta name="keywords" content="翻译,中文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】从头开始构建 Wayland 合成器 —— 1. Hello wlroots">
+<meta property="og:url" content="https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="原文链接：Writing a Wayland Compositor, Part 1: Hello wlroots 这是一系列文章中的第一篇。 我正在写一篇关于从头开始构建一个 Wayland 合成器的文章。你可能知道，我（原作者）是 Sway 的主要维护者，这是一个相当受欢迎的 Wayland 合成器。在过去的几个月里，我们和许多其他优秀的开发者一起，一直在开发 wlroots。这是一个用于创建新">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-09-05T20:02:56.826Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】从头开始构建 Wayland 合成器 —— 1. Hello wlroots">
+<meta name="twitter:description" content="原文链接：Writing a Wayland Compositor, Part 1: Hello wlroots 这是一系列文章中的第一篇。 我正在写一篇关于从头开始构建一个 Wayland 合成器的文章。你可能知道，我（原作者）是 Sway 的主要维护者，这是一个相当受欢迎的 Wayland 合成器。在过去的几个月里，我们和许多其他优秀的开发者一起，一直在开发 wlroots。这是一个用于创建新">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/inokinoki" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Student</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Wayland/">Wayland</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/">Translation</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/Chinese/">Chinese</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/09/05/Writing-a-wayland-compositor-1/" class="title">【译】从头开始构建 Wayland 合成器 —— 1. Hello wlroots</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-09-05T20:47:40.000Z" itemprop="datePublished">2021-09-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/iOS/">iOS</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/09/05/SecIdentity-iOS-storage/" class="title">The right way to store and retrieve SecIdentity/Identity on iOS</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-09-05T09:42:00.000Z" itemprop="datePublished">2021-09-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Computer-Graphics/">Computer Graphics</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Computer-Graphics/Vulkan/">Vulkan</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/">Translation</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/Chinese/">Chinese</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/08/02/Vulkan-Ray-Tracing-Specification/" class="title">【译】 Vulkan 光线追踪</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-02T23:08:10.000Z" itemprop="datePublished">2021-08-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/IME/">IME</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/06/19/Write-your-own-IME-on-macOS-1/" class="title">Write your own IME on macOS - 1. Create project</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-06-19T19:15:00.000Z" itemprop="datePublished">2021-06-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/KDE-Connect/">KDE Connect</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/02/07/KDEConnect-iOS-dev-dairy-3/" class="title">KDE Connect iOS Develop Dairy(3) Certificate</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-02-07T14:34:50.000Z" itemprop="datePublished">2021-02-07</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ASIX/" style="font-size: 13.14px;">ASIX</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Bare-Metal/" style="font-size: 13px;">Bare Metal</a> <a href="/tags/Bug/" style="font-size: 13.29px;">Bug</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Cloud-Input/" style="font-size: 13.43px;">Cloud Input</a> <a href="/tags/Computer-Graphics/" style="font-size: 13px;">Computer Graphics</a> <a href="/tags/Craft/" style="font-size: 13.14px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.29px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/Embedded-System/" style="font-size: 13.43px;">Embedded System</a> <a href="/tags/FFmpeg/" style="font-size: 13.14px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.14px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/Go/" style="font-size: 13.14px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.57px;">IBus</a> <a href="/tags/IME/" style="font-size: 13px;">IME</a> <a href="/tags/IoT/" style="font-size: 13.57px;">IoT</a> <a href="/tags/KDE/" style="font-size: 13.14px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.71px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.14px;">KDE Frameworks</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.29px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.14px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.57px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.57px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Python/" style="font-size: 13.14px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qt/" style="font-size: 13px;">Qt</a> <a href="/tags/Raspberry-PI/" style="font-size: 13.43px;">Raspberry PI</a> <a href="/tags/Ray-Tracing/" style="font-size: 13px;">Ray Tracing</a> <a href="/tags/Router/" style="font-size: 13.29px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.29px;">SDR</a> <a href="/tags/Source-Code/" style="font-size: 13.14px;">Source Code</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/Ubuntu/" style="font-size: 13.14px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/Vulkan/" style="font-size: 13px;">Vulkan</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.14px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.14px;">Windows</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/iOS/" style="font-size: 13px;">iOS</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.43px;">ibus-libpinyin</a> <a href="/tags/macOS/" style="font-size: 13px;">macOS</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.14px;">private</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/翻译/" style="font-size: 13.86px;">翻译</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-Graphics/">Computer Graphics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IME/">IME</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-PI/">Raspberry PI</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray-Tracing/">Ray Tracing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vulkan/">Vulkan</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macOS/">macOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/">Computer Graphics</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/Vulkan/">Vulkan</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-PI/">Raspberry PI</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/IME/">IME</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Wayland/">Wayland</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">12</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Writing-a-wayland-compositor-1" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【译】从头开始构建 Wayland 合成器 —— 1. Hello wlroots
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2021/09/05/Writing-a-wayland-compositor-1/" class="article-date">
+	  <time datetime="2021-09-05T20:47:40.000Z" itemprop="datePublished">2021-09-05</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>►<a class="article-category-link" href="/categories/Linux/Wayland/">Wayland</a>►<a class="article-category-link" href="/categories/Translation/">Translation</a>►<a class="article-category-link" href="/categories/Translation/Chinese/">Chinese</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/中文/">中文</a>, <a class="article-tag-link" href="/tags/翻译/">翻译</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/09/05/Writing-a-wayland-compositor-1/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.9k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 11(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>原文链接：<a href="https://drewdevault.com/2018/02/17/Writing-a-Wayland-compositor-1.html" target="_blank" rel="noopener">Writing a Wayland Compositor, Part 1: Hello wlroots</a></p>
+<p>这是一系列文章中的第一篇。</p>
+<p>我正在写一篇关于从头开始构建一个 Wayland 合成器的文章。你可能知道，我（原作者）是 Sway 的主要维护者，这是一个相当受欢迎的 Wayland 合成器。在过去的几个月里，我们和许多其他优秀的开发者一起，一直在开发 wlroots。这是一个用于创建新的 Wayland 合成器的强大工具，但它非常复杂难以理解。不要感到绝望！这篇文章的目的是让大家了解 Wayland 合成器。这些文章的目的是让你理解并自如地使用它。</p>
+<p>在我们深入讨论之前，请注意：wlroots 团队今天开始了一项众筹活动，以资助我们每个核心贡献者的旅行，让他们亲自会面并在黑客马拉松上工作两周。请考虑为该活动做出贡献!</p>
+<p>在试图理解这一系列博文之前，你必须阅读并理解我之前的文章《Wayland 介绍》，因为我将依靠那里介绍的概念和术语来加快事情的进展。一些 OpenGL 的背景是有帮助的，但不是必须的。对 C 语言的良好理解是必须的。如果你对这个系列的任何文章有任何问题，请通过 <a href="mailto:sir@cmpwn.com" target="_blank" rel="noopener">sir@cmpwn.com</a> 直接联系我，或者联系 <a href="http://irc.freenode.net" target="_blank" rel="noopener">irc.freenode.net</a> 上的 #sway-devel 的 wlroots 团队。</p>
+<p>在这一系列的文章中，我们正在构建的合成器将托管在 GitHub 上——Wayland McWayface。本系列文章中的每篇文章都会对从零到功能齐全的 Wayland 合成器之间的一次提交进行分解，这篇文章的提交是 f89092e。我只解释重要的部分–我建议你单独查看整个提交。</p>
+<p>让我们开始吧。</p>
+<h1 id="第一步"><a class="markdownIt-Anchor" href="#第一步"></a> 第一步</h1>
+<p>首先，我将定义一个结构来保存我们的合成器的状态：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mcw_server</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_display</span> *<span class="title">wl_display</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_event_loop</span> *<span class="title">wl_event_loop</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>注意：mcw 是 McWayface 的简称。我们将在整个系列文章中使用这个缩写。我们将把其中一个放在一边，并为它初始化一个 Wayland 的 display（注意：我们完全可以利用 wlroots 后端来制作非 Wayland 合成器的应用程序。然而，我们还是需要一个 Wayland 的 display，因为事件循环对于很多 wlroots 的内部程序来说是必要的）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mcw_server</span> <span class="title">server</span>;</span></span><br><span class="line"></span><br><span class="line">    server.wl_display = wl_display_create();</span><br><span class="line">    assert(server.wl_display);</span><br><span class="line">    server.wl_event_loop = wl_display_get_event_loop(server.wl_display);</span><br><span class="line">    assert(server.wl_event_loop);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Wayland 的 display 给了我们很多东西，但现在我们关心的是事件循环。这个事件循环被深深地整合到了 wlroots 中，它被用来在整个应用程序中分配信号，当各种文件描述符上的数据可用时被通知，等等。</p>
+<h1 id="创建后端"><a class="markdownIt-Anchor" href="#创建后端"></a> 创建后端</h1>
+<p>接下来，我们需要创建后端：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mcw_server</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_display</span> *<span class="title">wl_display</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_event_loop</span> *<span class="title">wl_event_loop</span>;</span></span><br><span class="line"> </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wlr_backend</span> *<span class="title">backend</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>后端是我们第一个 wlroots 概念，它负责从你那里抽象出低层次的输入和输出实现。每个后端可以生成零个或多个输入设备（如鼠标、键盘等）和零个或多个输出设备（如你桌上的显示器）。后端与 Wayland 无关–它们的目的是帮助你使用你作为 Wayland 合成器所需的其他 API。有各种不同目的的后端：</p>
+<ul>
+<li>drm 后端利用 Linux 的 DRM 子系统直接渲染到你的物理显示器</li>
+<li>libinput 后端利用 libinput 来枚举和控制物理输入设备</li>
+<li>Wayland 后端在另一个运行 Wayland 合成器的窗口上创建 “输出”，允许你对合成器进行嵌套。这对调试很有用</li>
+<li>X11 后端与 Wayland 后端类似，但在 X11 服务器上打开一个 X11 窗口，而不是在 Wayland 服务器上打开一个 Wayland 窗口</li>
+</ul>
+<p>另一个重要的后端是多后端，它允许你同时初始化几个后端并聚合它们的输入和输出设备。例如，这对于同时利用 drm 和 libinput 是必要的。</p>
+<p>我们的库 wlroots 提供了一个辅助函数，用于根据用户的环境自动选择最合适的后端：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    server.wl_event_loop = wl_display_get_event_loop(server.wl_display);</span><br><span class="line">    assert(server.wl_event_loop);</span><br><span class="line"> </span><br><span class="line">    server.backend = wlr_backend_autocreate(server.wl_display);</span><br><span class="line">    assert(server.backend);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我一般建议在开发过程中使用 Wayland 或 X11 后端，特别是在我们有办法退出合成器之前。如果你在运行中的 Wayland 或 X11 会话中调用 <code>wlr_backend_autocreate</code>，相应的后端会被自动选择。</p>
+<p>我们现在可以启动后端并进入 Wayland 事件循环：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!wlr_backend_start(server.backend)) &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Failed to start backend\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">wl_display_run(server.wl_display);</span><br><span class="line">wl_display_destroy(server.wl_display);</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>如果你在这时运行你的合成器，你应该看到后端启动，然后…什么都不做。如果你从运行中的 Wayland 或 X11 服务器上运行，它会打开一个窗口。如果你在 DRM 上运行它，它可能会做得很少，你甚至不能切换到另一个 TTY 来杀死它。</p>
+<h1 id="添加事件监听函数"><a class="markdownIt-Anchor" href="#添加事件监听函数"></a> 添加事件监听函数</h1>
+<p>为了渲染东西，我们需要知道我们可以在哪些输出上渲染。后台提供了一个 <code>wl_signal</code>，当它得到一个新的输出时通知我们。这将发生在启动时，以及任何输出在运行时被热插拔时。</p>
+<p>让我们把它添加到我们的服务器结构体中：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mcw_server</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_display</span> *<span class="title">wl_display</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_event_loop</span> *<span class="title">wl_event_loop</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wlr_backend</span> *<span class="title">backend</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_listener</span> <span class="title">new_output</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_list</span> <span class="title">outputs</span>;</span> <span class="comment">// mcw_output::link</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这增加了一个 <code>wl_listeners</code>，当新的输出被添加时，它就会被通知。我们还添加了一个 <code>wl_list</code>（这只是一个由 <code>libwayland-server</code> 提供的链接列表），我们以后会在其中存储一些状态。为了得到通知，我们必须使用 <code>wl_signal_add</code>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">assert(server.backend);</span><br><span class="line"></span><br><span class="line">wl_list_init(&amp;server.outputs);</span><br><span class="line">server.new_output.notify = new_output_notify;</span><br><span class="line">wl_signal_add(&amp;server.backend-&gt;events.new_output, &amp;server.new_output);</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> (!wlr_backend_start(server.backend)) &#123;</span><br></pre></td></tr></table></figure>
+<p>我们在这里指定被通知的函数 <code>new_output_notify</code>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">new_output_notify</span><span class="params">(struct wl_listener *listener, <span class="keyword">void</span> *data)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mcw_server</span> *<span class="title">server</span> = <span class="title">wl_container_of</span>(</span></span><br><span class="line"><span class="class">        <span class="title">listener</span>, <span class="title">server</span>, <span class="title">new_output</span>);</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wlr_output</span> *<span class="title">wlr_output</span> = <span class="title">data</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!wl_list_empty(&amp;wlr_output-&gt;modes)) &#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">wlr_output_mode</span> *<span class="title">mode</span> =</span></span><br><span class="line"><span class="class">            <span class="title">wl_container_of</span>(<span class="title">wlr_output</span>-&gt;<span class="title">modes</span>.<span class="title">prev</span>, <span class="title">mode</span>, <span class="title">link</span>);</span></span><br><span class="line">        wlr_output_set_mode(wlr_output, mode);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mcw_output</span> *<span class="title">output</span> = <span class="title">calloc</span>(1, <span class="title">sizeof</span>(<span class="title">struct</span> <span class="title">mcw_output</span>));</span></span><br><span class="line">    clock_gettime(CLOCK_MONOTONIC, &amp;output-&gt;last_frame);</span><br><span class="line">    output-&gt;server = server;</span><br><span class="line">    output-&gt;wlr_output = wlr_output;</span><br><span class="line">    wl_list_insert(&amp;server-&gt;outputs, &amp;output-&gt;link);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这有点复杂! 这个函数在处理传入的 <code>wlr_output</code> 时有几个作用。<code>wl_container_of</code> 使用一些基于 <code>offsetof</code> 的魔法，从监听器的指针中得到 <code>mcw_server</code> 的引用，然后我们将数据投到实际的类型，即 <code>wlr_output</code>。</p>
+<h1 id="设置输出"><a class="markdownIt-Anchor" href="#设置输出"></a> 设置输出</h1>
+<p>我们要做的下一件事是设置输出模式。一些后端（特别是 X11 和 Wayland）不支持设置模式，但它们对于 DRM 是必要的。输出模式指定了输出所支持的尺寸和刷新率，例如 1920x1080@60Hz。这个 if 语句的主体只是选择了最后一个（通常是最高的分辨率和刷新率），并通过 <code>wlr_output_set_mode</code> 将其应用于输出。我们必须设置输出模式，以便对其进行渲染。</p>
+<p>然后，我们设置了一些状态，让我们在合成器中跟踪这些输出。我在文件的顶部添加了这个结构定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mcw_output</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wlr_output</span> *<span class="title">wlr_output</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mcw_server</span> *<span class="title">server</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">last_frame</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_list</span> <span class="title">link</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这将是我们用来存储我们对这个输出的任何状态的结构，这些状态是特定于我们的合成器需求的。我们包括一个对 <code>wlr_output</code> 的引用，一个对拥有这个输出的 <code>mcw_server</code> 的引用，以及最后一帧的时间，这在后面会有用。我们还预留了一个 <code>wl_list</code>，它被 <code>libwayland</code> 用于链接列表。</p>
+<p>最后，我们将这个输出添加到服务器的输出列表中。</p>
+<p>我们现在可以使用了，但它会泄露内存。我们还需要处理输出的移除，用一个由 <code>wlr_output</code> 提供的信号。我们将监听器添加到 <code>mcw_output</code> 结构中：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mcw_output</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wlr_output</span> *<span class="title">wlr_output</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mcw_server</span> *<span class="title">server</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">last_frame</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_listener</span> <span class="title">destroy</span>;</span></span><br><span class="line"> </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_list</span> <span class="title">link</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>然后我们在增加输出的时候把它加进来：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    wl_list_insert(&amp;server-&gt;outputs, &amp;output-&gt;link);</span><br><span class="line"></span><br><span class="line">    output-&gt;destroy.notify = output_destroy_notify;</span><br><span class="line">    wl_signal_add(&amp;wlr_output-&gt;events.destroy, &amp;output-&gt;destroy);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这将调用我们的 <code>output_destroy_notify</code> 函数来处理当输出被拔掉或以其他方式从 <code>wlroots</code> 移除时的清理工作。我们的处理程序看起来像这样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">output_destroy_notify</span><span class="params">(struct wl_listener *listener, <span class="keyword">void</span> *data)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mcw_output</span> *<span class="title">output</span> = <span class="title">wl_container_of</span>(<span class="title">listener</span>, <span class="title">output</span>, <span class="title">destroy</span>);</span></span><br><span class="line">    wl_list_remove(&amp;output-&gt;link);</span><br><span class="line">    wl_list_remove(&amp;output-&gt;destroy.link);</span><br><span class="line">    wl_list_remove(&amp;output-&gt;frame.link);</span><br><span class="line">    <span class="built_in">free</span>(output);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这些代码应该能够自解释的。我们现在有一个对输出的引用。然而，我们仍然没有渲染任何东西–如果你再次运行合成器，你会发现同样的行为。</p>
+<h1 id="监听帧的更新信号"><a class="markdownIt-Anchor" href="#监听帧的更新信号"></a> 监听帧的更新信号</h1>
+<p>为了渲染东西，我们必须监听帧的信号。根据选择的模式，输出只能以一定的速率接收新的帧。我们在 <code>wlroots</code> 中为你跟踪这一点，并在绘制新帧的时候发出帧信号。</p>
+<p>让我们为此目的在 <code>mcw_output</code> 结构中添加一个监听器。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mcw_output</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wlr_output</span> *<span class="title">wlr_output</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mcw_server</span> *<span class="title">server</span>;</span></span><br><span class="line"> </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_listener</span> <span class="title">destroy</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_listener</span> <span class="title">frame</span>;</span></span><br><span class="line"> </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wl_list</span> <span class="title">link</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>然后，我们可以扩展 <code>new_output_notify</code> 来注册帧信号的监听器。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    output-&gt;destroy.notify = output_destroy_notify;</span><br><span class="line">    wl_signal_add(&amp;wlr_output-&gt;events.destroy, &amp;output-&gt;destroy);</span><br><span class="line">    output-&gt;frame.notify = output_frame_notify;</span><br><span class="line">    wl_signal_add(&amp;wlr_output-&gt;events.frame, &amp;output-&gt;frame);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在，每当输出准备好了一个新的帧，<code>output_frame_notify</code> 就会被调用。不过，我们仍然需要编写这个函数。让我们从最基本的开始。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">output_frame_notify</span><span class="params">(struct wl_listener *listener, <span class="keyword">void</span> *data)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mcw_output</span> *<span class="title">output</span> = <span class="title">wl_container_of</span>(<span class="title">listener</span>, <span class="title">output</span>, <span class="title">frame</span>);</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wlr_output</span> *<span class="title">wlr_output</span> = <span class="title">data</span>;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="渲染一些内容"><a class="markdownIt-Anchor" href="#渲染一些内容"></a> 渲染一些内容</h1>
+<p>为了在这里渲染任何东西，我们需要首先获得一个 <code>wlr_renderer2</code>。我们可以从后端获得一个。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">output_frame_notify</span><span class="params">(struct wl_listener *listener, <span class="keyword">void</span> *data)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mcw_output</span> *<span class="title">output</span> = <span class="title">wl_container_of</span>(<span class="title">listener</span>, <span class="title">output</span>, <span class="title">frame</span>);</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wlr_output</span> *<span class="title">wlr_output</span> = <span class="title">data</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wlr_renderer</span> *<span class="title">renderer</span> = <span class="title">wlr_backend_get_renderer</span>(<span class="title">wlr_output</span>-&gt;<span class="title">backend</span>);</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在我们可以利用这个渲染器，在输出端画一些东西：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">output_frame_notify</span><span class="params">(struct wl_listener *listener, <span class="keyword">void</span> *data)</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mcw_output</span> *<span class="title">output</span> = <span class="title">wl_container_of</span>(<span class="title">listener</span>, <span class="title">output</span>, <span class="title">frame</span>);</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wlr_output</span> *<span class="title">wlr_output</span> = <span class="title">data</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">wlr_renderer</span> *<span class="title">renderer</span> = <span class="title">wlr_backend_get_renderer</span>(<span class="title">wlr_output</span>-&gt;<span class="title">backend</span>);</span></span><br><span class="line"></span><br><span class="line">    wlr_output_make_current(wlr_output, <span class="literal">NULL</span>);</span><br><span class="line">    wlr_renderer_begin(renderer, wlr_output);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">float</span> color[<span class="number">4</span>] = &#123;<span class="number">1.0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1.0</span>&#125;;</span><br><span class="line">    wlr_renderer_clear(renderer, color);</span><br><span class="line"></span><br><span class="line">    wlr_output_swap_buffers(wlr_output, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">    wlr_renderer_end(renderer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用 <code>wlr_output_make_current</code> 使输出的 OpenGL 上下文成为 “当前”，从这里你可以使用 OpenGL 调用来渲染到输出的缓冲区。我们调用 <code>wlr_renderer_begin</code> 来为我们配置一些合理的OpenGL默认值。</p>
+<p>在这一点上，我们可以开始渲染了。我们将在后面详细介绍你能用 <code>wlr_renderer</code> 做什么，但现在我们将满足于把输出清除为纯红色。</p>
+<p>当我们完成渲染后，我们调用 <code>wlr_output_swap_buffers</code> 来交换输出的前后缓冲区，将我们所渲染的内容提交到实际的屏幕上。我们调用 <code>wlr_renderer_end</code> 来清理 OpenGL 上下文，我们就完成了。现在运行我们的合成器应该可以看到一个纯红色的屏幕</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>今天的文章到此结束。如果你看一下本文所描述的提交，你会发现我用一些代码更进一步，每一帧都把显示器清除成不同颜色。请随意尝试类似的变化吧</p>
+<p>在接下来的两篇文章中，我们将完成 Wayland 服务器的连接，并在屏幕上呈现一个 Wayland 客户端。请期待吧!</p>
+<p>本文及原文使用 CC-BY-SA 协议开放。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/" title="【译】从头开始构建 Wayland 合成器 —— 1. Hello wlroots" target="_blank" rel="external">https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/inokinoki" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/inokinoki" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Student</small></a></h3>
+        <div>Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2021/09/05/SecIdentity-iOS-storage/" title="The right way to store and retrieve SecIdentity/Identity on iOS"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <!--
+        <script src="https://s19.cnzz.com/z_stat.php?id=1273905585&web_id=1273905585" language="JavaScript"></script>
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_s_tag = document.createElement('script');
+            cnzz_s_tag.type = 'text/javascript';
+            cnzz_s_tag.async = true;
+            cnzz_s_tag.charset = 'utf-8';
+            cnzz_s_tag.src = 'https://s19.cnzz.com/z_stat.php%3Fid%3D1273905585%26show%3Dpic';
+            var root_s = document.getElementsByTagName('script')[0];
+            root_s.parentNode.insertBefore(cnzz_s_tag, root_s);
+        </script>
+
+        <script type="text/javascript">
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273905585'%3E%3C/span%3E%3Cscript src='"
+                + cnzz_protocol
+                + "s19.cnzz.com/z_stat.php%3Fid%3D1273905585' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        -->
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/';
+        
+        this.page.identifier = 'Writing-a-wayland-compositor-1';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>

@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sun, 05 Sep 2021 10:24:05 GMT</pubDate>
+    <pubDate>Sun, 05 Sep 2021 20:02:56 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】从头开始构建 Wayland 合成器 —— 1. Hello wlroots</title>
+      <link>https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/</link>
+      <guid>https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/</guid>
+      <pubDate>Sun, 05 Sep 2021 20:47:40 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://drewdevault.com/2018/02/17/Writing-a-Wayland-compositor-1.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Writing a Wayland
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>The right way to store and retrieve SecIdentity/Identity on iOS</title>
@@ -411,28 +432,6 @@ It
       
       
       <comments>https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>云输入在 ibus-libpinyin 中的实现 - 概述</title>
-      <link>https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/</link>
-      <guid>https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/</guid>
-      <pubDate>Sun, 31 May 2020 23:55:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;在 2018 年的 Google Summer of Code (GSoC)中，ibus-libpinyin 的云输入功能由 Linyu Xu 首次引入。该版本并没有被合并入主分支中，本文将其称为 18 版云输入。&lt;/p&gt;
-&lt;p&gt;18
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/#disqus_thread</comments>
     </item>
     
   </channel>
