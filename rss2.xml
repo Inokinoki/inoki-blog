@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Tue, 03 Aug 2021 19:03:53 GMT</pubDate>
+    <pubDate>Sun, 05 Sep 2021 10:24:05 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>The right way to store and retrieve SecIdentity/Identity on iOS</title>
+      <link>https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/</link>
+      <guid>https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/</guid>
+      <pubDate>Sun, 05 Sep 2021 09:42:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;Apple does have a &lt;a
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】 Vulkan 光线追踪</title>
@@ -412,28 +433,6 @@ It
       
       
       <comments>https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】LoRaWAN 入门</title>
-      <link>https://blog.inoki.cc/2020/05/26/LoRa-Primer/</link>
-      <guid>https://blog.inoki.cc/2020/05/26/LoRa-Primer/</guid>
-      <pubDate>Tue, 26 May 2020 10:28:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;LoRaWAN（或简称 LoRa）是 LPWAN（“低功耗广域网”）技术。所使用的无线电技术很漂亮，可确保您以很小的发射功率就可以在相当长的距离内发送数据。&lt;/p&gt;
-&lt;p&gt;LoRa 在称为的 ISM
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2020/05/26/LoRa-Primer/#disqus_thread</comments>
     </item>
     
   </channel>

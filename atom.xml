@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2021-08-03T19:03:53.148Z</updated>
+  <updated>2021-09-05T10:24:05.962Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,38 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>The right way to store and retrieve SecIdentity/Identity on iOS</title>
+    <link href="https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/"/>
+    <id>https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/</id>
+    <published>2021-09-05T09:42:00.000Z</published>
+    <updated>2021-09-05T10:24:05.962Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;Apple does have a &lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="iOS" scheme="https://blog.inoki.cc/categories/iOS/"/>
+    
+    
+      <category term="iOS" scheme="https://blog.inoki.cc/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
     <title>【译】 Vulkan 光线追踪</title>
     <link href="https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/"/>
     <id>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/</id>
     <published>2021-08-02T23:08:10.000Z</published>
-    <updated>2021-08-03T19:03:53.148Z</updated>
+    <updated>2021-09-05T10:24:05.962Z</updated>
     
     <summary type="html">
     
@@ -62,7 +89,7 @@
     <link href="https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/"/>
     <id>https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/</id>
     <published>2021-06-19T19:15:00.000Z</published>
-    <updated>2021-08-03T19:03:53.156Z</updated>
+    <updated>2021-09-05T10:24:05.974Z</updated>
     
     <summary type="html">
     
@@ -91,7 +118,7 @@
     <link href="https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/"/>
     <id>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</id>
     <published>2021-02-07T14:34:50.000Z</published>
-    <updated>2021-08-03T19:03:53.136Z</updated>
+    <updated>2021-09-05T10:24:05.950Z</updated>
     
     <summary type="html">
     
@@ -118,7 +145,7 @@
     <link href="https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/"/>
     <id>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/</id>
     <published>2021-01-27T15:47:40.000Z</published>
-    <updated>2021-08-03T19:03:53.160Z</updated>
+    <updated>2021-09-05T10:24:05.978Z</updated>
     
     <summary type="html">
     
@@ -153,7 +180,7 @@
     <link href="https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/"/>
     <id>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/</id>
     <published>2021-01-25T09:30:40.000Z</published>
-    <updated>2021-08-03T19:03:53.100Z</updated>
+    <updated>2021-09-05T10:24:05.914Z</updated>
     
     <summary type="html">
     
@@ -183,7 +210,7 @@ It
     <link href="https://blog.inoki.cc/2020/12/30/My-2020/"/>
     <id>https://blog.inoki.cc/2020/12/30/My-2020/</id>
     <published>2020-12-30T09:41:40.000Z</published>
-    <updated>2021-08-03T19:03:53.144Z</updated>
+    <updated>2021-09-05T10:24:05.958Z</updated>
     
     <summary type="html">
     
@@ -212,7 +239,7 @@ It
     <link href="https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/"/>
     <id>https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/</id>
     <published>2020-09-19T22:41:23.000Z</published>
-    <updated>2021-08-03T19:03:53.120Z</updated>
+    <updated>2021-09-05T10:24:05.934Z</updated>
     
     <summary type="html">
     
@@ -241,7 +268,7 @@ It
     <link href="https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/"/>
     <id>https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/</id>
     <published>2020-09-19T21:41:23.000Z</published>
-    <updated>2021-08-03T19:03:53.120Z</updated>
+    <updated>2021-09-05T10:24:05.938Z</updated>
     
     <summary type="html">
     
@@ -270,7 +297,7 @@ It
     <link href="https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/"/>
     <id>https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/</id>
     <published>2020-09-06T08:22:00.000Z</published>
-    <updated>2021-08-03T19:03:53.128Z</updated>
+    <updated>2021-09-05T10:24:05.946Z</updated>
     
     <summary type="html">
     
@@ -297,7 +324,7 @@ It
     <link href="https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/"/>
     <id>https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/</id>
     <published>2020-08-07T20:27:00.000Z</published>
-    <updated>2021-08-03T19:03:53.100Z</updated>
+    <updated>2021-09-05T10:24:05.918Z</updated>
     
     <summary type="html">
     
@@ -332,7 +359,7 @@ It
     <link href="https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/"/>
     <id>https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/</id>
     <published>2020-07-16T20:20:00.000Z</published>
-    <updated>2021-08-03T19:03:53.120Z</updated>
+    <updated>2021-09-05T10:24:05.938Z</updated>
     
     <summary type="html">
     
@@ -363,7 +390,7 @@ It
     <link href="https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/"/>
     <id>https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/</id>
     <published>2020-07-07T23:33:33.000Z</published>
-    <updated>2021-08-03T19:03:53.128Z</updated>
+    <updated>2021-09-05T10:24:05.946Z</updated>
     
     <summary type="html">
     
@@ -393,7 +420,7 @@ It
     <link href="https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/"/>
     <id>https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/</id>
     <published>2020-07-04T16:51:00.000Z</published>
-    <updated>2021-08-03T19:03:53.148Z</updated>
+    <updated>2021-09-05T10:24:05.962Z</updated>
     
     <summary type="html">
     
@@ -432,7 +459,7 @@ It
     <link href="https://blog.inoki.cc/2020/07/03/Basic-of-Software-Defined-Radio-2/"/>
     <id>https://blog.inoki.cc/2020/07/03/Basic-of-Software-Defined-Radio-2/</id>
     <published>2020-07-03T20:08:00.000Z</published>
-    <updated>2021-08-03T19:03:53.100Z</updated>
+    <updated>2021-09-05T10:24:05.918Z</updated>
     
     <summary type="html">
     
@@ -467,7 +494,7 @@ It
     <link href="https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/"/>
     <id>https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/</id>
     <published>2020-07-02T23:22:00.000Z</published>
-    <updated>2021-08-03T19:03:53.128Z</updated>
+    <updated>2021-09-05T10:24:05.946Z</updated>
     
     <summary type="html">
     
@@ -494,7 +521,7 @@ It
     <link href="https://blog.inoki.cc/2020/07/02/Basic-of-Software-Defined-Radio-1/"/>
     <id>https://blog.inoki.cc/2020/07/02/Basic-of-Software-Defined-Radio-1/</id>
     <published>2020-07-02T20:08:00.000Z</published>
-    <updated>2021-08-03T19:03:53.100Z</updated>
+    <updated>2021-09-05T10:24:05.918Z</updated>
     
     <summary type="html">
     
@@ -529,7 +556,7 @@ It
     <link href="https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/"/>
     <id>https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/</id>
     <published>2020-06-15T16:33:00.000Z</published>
-    <updated>2021-08-03T19:03:53.124Z</updated>
+    <updated>2021-09-05T10:24:05.938Z</updated>
     
     <summary type="html">
     
@@ -560,7 +587,7 @@ It
     <link href="https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/"/>
     <id>https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/</id>
     <published>2020-06-05T23:55:00.000Z</published>
-    <updated>2021-08-03T19:03:53.120Z</updated>
+    <updated>2021-09-05T10:24:05.938Z</updated>
     
     <summary type="html">
     
@@ -591,7 +618,7 @@ It
     <link href="https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/"/>
     <id>https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/</id>
     <published>2020-05-31T23:55:00.000Z</published>
-    <updated>2021-08-03T19:03:53.124Z</updated>
+    <updated>2021-09-05T10:24:05.938Z</updated>
     
     <summary type="html">
     
@@ -615,42 +642,6 @@ It
       <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/tags/ibus-libpinyin/"/>
     
       <category term="Cloud Input" scheme="https://blog.inoki.cc/tags/Cloud-Input/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【译】LoRaWAN 入门</title>
-    <link href="https://blog.inoki.cc/2020/05/26/LoRa-Primer/"/>
-    <id>https://blog.inoki.cc/2020/05/26/LoRa-Primer/</id>
-    <published>2020-05-26T10:28:00.000Z</published>
-    <updated>2021-08-03T19:03:53.140Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;LoRaWAN（或简称 LoRa）是 LPWAN（“低功耗广域网”）技术。所使用的无线电技术很漂亮，可确保您以很小的发射功率就可以在相当长的距离内发送数据。&lt;/p&gt;
-&lt;p&gt;LoRa 在称为的 ISM
-        
-      
-    
-    </summary>
-    
-    
-      <category term="LoRa" scheme="https://blog.inoki.cc/categories/LoRa/"/>
-    
-    
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
-      <category term="LoRaWAN" scheme="https://blog.inoki.cc/tags/LoRaWAN/"/>
-    
-      <category term="LoRa" scheme="https://blog.inoki.cc/tags/LoRa/"/>
-    
-      <category term="IoT" scheme="https://blog.inoki.cc/tags/IoT/"/>
     
   </entry>
   
