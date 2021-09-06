@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2021-09-06T16:26:05.763Z</updated>
+  <updated>2021-09-06T18:04:39.583Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,81 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>【译】从头开始构建 Wayland 合成器 —— 1. Hello wlroots</title>
+    <title>【译】从零开始的 Wayland 合成器 —— 3. 渲染一个窗口</title>
+    <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/"/>
+    <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/</id>
+    <published>2021-09-06T20:48:40.000Z</published>
+    <updated>2021-09-06T18:04:39.583Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://drewdevault.com/2018/02/28/Writing-a-wayland-compositor-part-3.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Writing a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Translation" scheme="https://blog.inoki.cc/categories/Translation/"/>
+    
+      <category term="Chinese" scheme="https://blog.inoki.cc/categories/Translation/Chinese/"/>
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
+    
+      <category term="Wayland" scheme="https://blog.inoki.cc/categories/Linux/Wayland/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】从零开始的 Wayland 合成器 —— 2. 装配服务器</title>
+    <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/"/>
+    <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/</id>
+    <published>2021-09-06T20:47:40.000Z</published>
+    <updated>2021-09-06T18:04:39.583Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://drewdevault.com/2018/02/22/Writing-a-wayland-compositor-part-2.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Writing a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Translation" scheme="https://blog.inoki.cc/categories/Translation/"/>
+    
+      <category term="Chinese" scheme="https://blog.inoki.cc/categories/Translation/Chinese/"/>
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
+    
+      <category term="Wayland" scheme="https://blog.inoki.cc/categories/Linux/Wayland/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】从零开始的 Wayland 合成器 —— 1. Hello wlroots</title>
     <link href="https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/"/>
     <id>https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/</id>
     <published>2021-09-05T20:47:40.000Z</published>
-    <updated>2021-09-06T16:26:05.763Z</updated>
+    <updated>2021-09-06T18:04:39.583Z</updated>
     
     <summary type="html">
     
@@ -56,7 +126,7 @@
     <link href="https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/"/>
     <id>https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/</id>
     <published>2021-09-05T09:42:00.000Z</published>
-    <updated>2021-09-06T16:26:05.751Z</updated>
+    <updated>2021-09-06T18:04:39.563Z</updated>
     
     <summary type="html">
     
@@ -83,7 +153,7 @@
     <link href="https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/"/>
     <id>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/</id>
     <published>2021-08-02T23:08:10.000Z</published>
-    <updated>2021-09-06T16:26:05.751Z</updated>
+    <updated>2021-09-06T18:04:39.567Z</updated>
     
     <summary type="html">
     
@@ -124,7 +194,7 @@
     <link href="https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/"/>
     <id>https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/</id>
     <published>2021-06-19T19:15:00.000Z</published>
-    <updated>2021-09-06T16:26:05.759Z</updated>
+    <updated>2021-09-06T18:04:39.579Z</updated>
     
     <summary type="html">
     
@@ -153,7 +223,7 @@
     <link href="https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/"/>
     <id>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</id>
     <published>2021-02-07T14:34:50.000Z</published>
-    <updated>2021-09-06T16:26:05.739Z</updated>
+    <updated>2021-09-06T18:04:39.551Z</updated>
     
     <summary type="html">
     
@@ -180,7 +250,7 @@
     <link href="https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/"/>
     <id>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/</id>
     <published>2021-01-27T15:47:40.000Z</published>
-    <updated>2021-09-06T16:26:05.763Z</updated>
+    <updated>2021-09-06T18:04:39.583Z</updated>
     
     <summary type="html">
     
@@ -215,7 +285,7 @@
     <link href="https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/"/>
     <id>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/</id>
     <published>2021-01-25T09:30:40.000Z</published>
-    <updated>2021-09-06T16:26:05.707Z</updated>
+    <updated>2021-09-06T18:04:39.511Z</updated>
     
     <summary type="html">
     
@@ -245,7 +315,7 @@ It
     <link href="https://blog.inoki.cc/2020/12/30/My-2020/"/>
     <id>https://blog.inoki.cc/2020/12/30/My-2020/</id>
     <published>2020-12-30T09:41:40.000Z</published>
-    <updated>2021-09-06T16:26:05.747Z</updated>
+    <updated>2021-09-06T18:04:39.563Z</updated>
     
     <summary type="html">
     
@@ -274,7 +344,7 @@ It
     <link href="https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/"/>
     <id>https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/</id>
     <published>2020-09-19T22:41:23.000Z</published>
-    <updated>2021-09-06T16:26:05.727Z</updated>
+    <updated>2021-09-06T18:04:39.535Z</updated>
     
     <summary type="html">
     
@@ -303,7 +373,7 @@ It
     <link href="https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/"/>
     <id>https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/</id>
     <published>2020-09-19T21:41:23.000Z</published>
-    <updated>2021-09-06T16:26:05.727Z</updated>
+    <updated>2021-09-06T18:04:39.535Z</updated>
     
     <summary type="html">
     
@@ -332,7 +402,7 @@ It
     <link href="https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/"/>
     <id>https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/</id>
     <published>2020-09-06T08:22:00.000Z</published>
-    <updated>2021-09-06T16:26:05.735Z</updated>
+    <updated>2021-09-06T18:04:39.547Z</updated>
     
     <summary type="html">
     
@@ -359,7 +429,7 @@ It
     <link href="https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/"/>
     <id>https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/</id>
     <published>2020-08-07T20:27:00.000Z</published>
-    <updated>2021-09-06T16:26:05.711Z</updated>
+    <updated>2021-09-06T18:04:39.511Z</updated>
     
     <summary type="html">
     
@@ -394,7 +464,7 @@ It
     <link href="https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/"/>
     <id>https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/</id>
     <published>2020-07-16T20:20:00.000Z</published>
-    <updated>2021-09-06T16:26:05.727Z</updated>
+    <updated>2021-09-06T18:04:39.535Z</updated>
     
     <summary type="html">
     
@@ -425,7 +495,7 @@ It
     <link href="https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/"/>
     <id>https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/</id>
     <published>2020-07-07T23:33:33.000Z</published>
-    <updated>2021-09-06T16:26:05.735Z</updated>
+    <updated>2021-09-06T18:04:39.547Z</updated>
     
     <summary type="html">
     
@@ -455,7 +525,7 @@ It
     <link href="https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/"/>
     <id>https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/</id>
     <published>2020-07-04T16:51:00.000Z</published>
-    <updated>2021-09-06T16:26:05.751Z</updated>
+    <updated>2021-09-06T18:04:39.563Z</updated>
     
     <summary type="html">
     
@@ -494,7 +564,7 @@ It
     <link href="https://blog.inoki.cc/2020/07/03/Basic-of-Software-Defined-Radio-2/"/>
     <id>https://blog.inoki.cc/2020/07/03/Basic-of-Software-Defined-Radio-2/</id>
     <published>2020-07-03T20:08:00.000Z</published>
-    <updated>2021-09-06T16:26:05.711Z</updated>
+    <updated>2021-09-06T18:04:39.511Z</updated>
     
     <summary type="html">
     
@@ -529,7 +599,7 @@ It
     <link href="https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/"/>
     <id>https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/</id>
     <published>2020-07-02T23:22:00.000Z</published>
-    <updated>2021-09-06T16:26:05.735Z</updated>
+    <updated>2021-09-06T18:04:39.547Z</updated>
     
     <summary type="html">
     
@@ -556,7 +626,7 @@ It
     <link href="https://blog.inoki.cc/2020/07/02/Basic-of-Software-Defined-Radio-1/"/>
     <id>https://blog.inoki.cc/2020/07/02/Basic-of-Software-Defined-Radio-1/</id>
     <published>2020-07-02T20:08:00.000Z</published>
-    <updated>2021-09-06T16:26:05.711Z</updated>
+    <updated>2021-09-06T18:04:39.511Z</updated>
     
     <summary type="html">
     
@@ -583,68 +653,6 @@ It
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
       <category term="SDR" scheme="https://blog.inoki.cc/tags/SDR/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>云输入在 ibus-libpinyin 中的实现 - 状态与错误处理</title>
-    <link href="https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/"/>
-    <id>https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/</id>
-    <published>2020-06-15T16:33:00.000Z</published>
-    <updated>2021-09-06T16:26:05.731Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;上一篇文章描述了云输入部分发出请求，接收到回复之后对回复的验证、处理，以及对返回的候选词的提取。在取得候选之后，会将其加入到 parser 中的 &lt;code&gt;m_candidates&lt;/code&gt;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/categories/ibus-libpinyin/"/>
-    
-    
-      <category term="IBus" scheme="https://blog.inoki.cc/tags/IBus/"/>
-    
-      <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/tags/ibus-libpinyin/"/>
-    
-      <category term="Cloud Input" scheme="https://blog.inoki.cc/tags/Cloud-Input/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>云输入在 ibus-libpinyin 中的实现 - 候选词解析</title>
-    <link href="https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/"/>
-    <id>https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/</id>
-    <published>2020-06-05T23:55:00.000Z</published>
-    <updated>2021-09-06T16:26:05.727Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;上一篇文章粗略地介绍了目前在 ibus-libpinyin
-        
-      
-    
-    </summary>
-    
-    
-      <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/categories/ibus-libpinyin/"/>
-    
-    
-      <category term="IBus" scheme="https://blog.inoki.cc/tags/IBus/"/>
-    
-      <category term="ibus-libpinyin" scheme="https://blog.inoki.cc/tags/ibus-libpinyin/"/>
-    
-      <category term="Cloud Input" scheme="https://blog.inoki.cc/tags/Cloud-Input/"/>
     
   </entry>
   
