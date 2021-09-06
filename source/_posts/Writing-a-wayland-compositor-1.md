@@ -1,5 +1,5 @@
 ---
-title: 【译】从头开始构建 Wayland 合成器 —— 1. Hello wlroots
+title: 【译】从零开始的 Wayland 合成器 —— 1. Hello wlroots
 date: 2021-09-05 20:47:40
 tags:
 - 中文
