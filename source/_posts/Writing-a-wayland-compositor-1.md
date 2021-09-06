@@ -11,6 +11,8 @@ categories:
 
 原文链接：[Writing a Wayland Compositor, Part 1: Hello wlroots](https://drewdevault.com/2018/02/17/Writing-a-Wayland-compositor-1.html)
 
+**译者注：这个系列文章中使用的为早期 wlroots 版本，大约在 0.3 到 0.4.1 之间，请注意安装的版本**
+
 这是一系列文章中的第一篇。
 
 我正在写一篇关于从头开始构建一个 Wayland 合成器的文章。你可能知道，我（原作者）是 Sway 的主要维护者，这是一个相当受欢迎的 Wayland 合成器。在过去的几个月里，我们和许多其他优秀的开发者一起，一直在开发 wlroots。这是一个用于创建新的 Wayland 合成器的强大工具，但它非常复杂难以理解。不要感到绝望！这篇文章的目的是让大家了解 Wayland 合成器。这些文章的目的是让你理解并自如地使用它。
