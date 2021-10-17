@@ -1,12 +1,15 @@
 ---
 title: 【译】高通 Android 设备的启动信任链
-date: 2021-10-17
+date: 2021-10-17 09:40:00
 tags:
 - Android
 - Aboot
+- ABL
+- XBL
+- Bootloader
 - Linux
 categories:
-- [Linux, Android, Aboot]
+- [Linux, Android, Bootloader]
 ---
 
 原文链接：[https://lineageos.org/engineering/Qualcomm-Firmware/](https://lineageos.org/engineering/Qualcomm-Firmware/)
