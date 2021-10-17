@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Inoki in the world">
 <meta property="og:description" content="已经有很多文章解析过 Android 在高通平台的启动流程了。从我翻译的【译】高通 Android 设备的启动信任链中，可以总结为下：   Aboot：在 MSM8994（Snapdragon 810）之前，设备首先加载高通的 bootrom（PBL）和 SBL 来初始化一些硬件，紧接着交给 Aboot，这个程序是在 LittleKernel 系统的基础上构建的一个应用程序，它包含了 fastbo">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-10-17T10:57:50.202Z">
+<meta property="og:updated_time" content="2021-10-17T12:25:12.574Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 启动加载器分析 —— Aboot">
 <meta name="twitter:description" content="已经有很多文章解析过 Android 在高通平台的启动流程了。从我翻译的【译】高通 Android 设备的启动信任链中，可以总结为下：   Aboot：在 MSM8994（Snapdragon 810）之前，设备首先加载高通的 bootrom（PBL）和 SBL 来初始化一些硬件，紧接着交给 Aboot，这个程序是在 LittleKernel 系统的基础上构建的一个应用程序，它包含了 fastbo">
@@ -446,7 +446,14 @@
 <h1 id="结论"><a class="markdownIt-Anchor" href="#结论"></a> 结论</h1>
 <p>这篇文章简要描述和分析了 2016 年之前、基于 lk 内核的 Android 使用的 Aboot 启动加载器的实现，但并没有太过深入 lk 针对某一平台或者某一架构进行构建和设置的内容。希望对您有所帮助。</p>
 <h2 id="补充"><a class="markdownIt-Anchor" href="#补充"></a> 补充</h2>
+<ul>
+<li>
 <p>请注意，无论 ARM32 还是 AArch64 的设备，都会在 32 位模式下运行 lk 和其中的应用程序 Aboot，在加载内核时才会确定使用的内核为 32 位或是 64 位，进而通过相应的启动模式启动内核。</p>
+</li>
+<li>
+<p>在加载的时候，由于 MMU 可能存在，Aboot 通过 VA() 宏将物理地址映射到 lk 读取到的虚拟地址上，并把内核加载到该地址。</p>
+</li>
+</ul>
 
       
     </div>
