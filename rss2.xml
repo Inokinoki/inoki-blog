@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sun, 17 Oct 2021 08:45:55 GMT</pubDate>
+    <pubDate>Sun, 17 Oct 2021 10:57:50 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Android 启动加载器分析 —— Aboot</title>
+      <link>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</link>
+      <guid>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</guid>
+      <pubDate>Sun, 17 Oct 2021 10:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;已经有很多文章解析过 Android 在高通平台的启动流程了。从我翻译的&lt;a href=&quot;https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/&quot;&gt;【译】高通 Android
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】高通 Android 设备的启动信任链</title>
@@ -411,27 +432,6 @@ It
       
       
       <comments>https://blog.inoki.cc/2020/07/03/Basic-of-Software-Defined-Radio-2/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>KDE Frameworks - Introduction</title>
-      <link>https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/</link>
-      <guid>https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/</guid>
-      <pubDate>Thu, 02 Jul 2020 23:22:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;&lt;strong&gt;Note: this is an extraction of &lt;a href=&quot;https://api.kde.org/frameworks/index.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;KDE Frameworks
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/#disqus_thread</comments>
     </item>
     
   </channel>
