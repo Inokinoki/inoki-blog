@@ -14,7 +14,7 @@ categories:
 
 - Aboot：在 MSM8994（Snapdragon 810）之前，设备首先加载高通的 bootrom（PBL）和 SBL 来初始化一些硬件，紧接着交给 Aboot，这个程序是在 LittleKernel 系统的基础上构建的一个应用程序，它包含了 fastboot，可以实现正常启动 boot 分区的镜像（包含 Linux Kernel 和 ramdisk）、或是根据特定按键组合启动 recovery 中的镜像（一般为 recovery）或留在 Aboot 中的 Fastboot。当使用 `adb reboot bootloader` 时，就是启动到这里并停留在 fastboot 中；
 
-- XBL/ABL：在 MSM8996（Snapdragon 820）之后，PBL 加载全新的 XBL，紧接着链式加载 ABL，这个程序是基于 EDK II 构建的用来替换 Aboot 的启动加载器，它可以根据按键组合选择留在 fastboot、使用系统 kernel 和在系统目录的 ramdisk 启动到 Android 系统、或是使用 recovery 的 ramdisk 启动到 Recovery。
+- XBL/ABL：在 MSM8996（Snapdragon 820）之后，PBL 加载全新的 XBL，紧接着链式加载 ABL，这个程序是基于 EDK II 构建的用来替换 Aboot 的启动加载器（实际上在 MSM8996 平台，由于 XBL 和 ABL 不够成熟，仍使用 Aboot，由 XBL 来对其进行加载），它可以根据按键组合选择留在 fastboot、使用系统 kernel 和在系统目录的 ramdisk 启动到 Android 系统、或是使用 recovery 的 ramdisk 启动到 Recovery。
 
 这两种启动模式中，Aboot 和 ABL 的源码都可以在 Google 或是 Code Aurora Forum 处找到：
 
