@@ -20,28 +20,22 @@
   <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
   
   
-  <title>【译】 Vulkan 光线追踪 | Inoki in the world</title>
-  <meta name="description" content="原文链接：Vulkan Ray Tracing Final Specification Release  总览 今天，Khronos® 发布了一套 Vulkan®、GLSL 和 SPIR-V 扩展规范的最终版本，将光线追踪无缝集成到现有的Vulkan框架中。这是一个重要的里程碑，因为它是业界第一个开放的、跨厂商的、跨平台的光线追踪加速标准–可以使用现有的GPU计算或专门的光线追踪核心来部署。凡是使">
-<meta name="keywords" content="翻译,中文,Computer Graphics,Vulkan,Ray Tracing">
+  <title>Android 启动加载器分析 —— ABL(1) | Inoki in the world</title>
+  <meta name="description" content="我的前一篇文章《Android 启动加载器分析 —— Aboot》中分析了高通平台前代的 Aboot 的整体启动流程和相应的代码。 在 2016 年之后，MSM8996（Snapdragon 820）平台的 PBL 加载全新的 XBL，紧接着链式加载 ABL 或 Aboot（仅对于 XBL 还未成熟的 MSM8996 平台），这个程序是基于 EDK II 构建的用来替换 Aboot 的启动加载器，">
+<meta name="keywords" content="Linux,Android,ABL,Bootloader">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【译】 Vulkan 光线追踪">
-<meta property="og:url" content="https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/index.html">
+<meta property="og:title" content="Android 启动加载器分析 —— ABL(1)">
+<meta property="og:url" content="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/index.html">
 <meta property="og:site_name" content="Inoki in the world">
-<meta property="og:description" content="原文链接：Vulkan Ray Tracing Final Specification Release  总览 今天，Khronos® 发布了一套 Vulkan®、GLSL 和 SPIR-V 扩展规范的最终版本，将光线追踪无缝集成到现有的Vulkan框架中。这是一个重要的里程碑，因为它是业界第一个开放的、跨厂商的、跨平台的光线追踪加速标准–可以使用现有的GPU计算或专门的光线追踪核心来部署。凡是使">
+<meta property="og:description" content="我的前一篇文章《Android 启动加载器分析 —— Aboot》中分析了高通平台前代的 Aboot 的整体启动流程和相应的代码。 在 2016 年之后，MSM8996（Snapdragon 820）平台的 PBL 加载全新的 XBL，紧接着链式加载 ABL 或 Aboot（仅对于 XBL 还未成熟的 MSM8996 平台），这个程序是基于 EDK II 构建的用来替换 Aboot 的启动加载器，">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://www.khronos.org/assets/uploads/blogs/2020-Vulkan-Ray-Tracing-development-timeline-1.jpg">
-<meta property="og:image" content="https://www.khronos.org/assets/uploads/blogs/2020-Deferred-Host-Operations-enable-Acceleration-Structures-to-be-built-using-multiple-CPU-cores-for-faster-frame-rates-and-elimination-of-frame-stuttering-2.jpg">
-<meta property="og:image" content="https://www.khronos.org/assets/uploads/blogs/2020-Ray-tracing-pipelines-provide-implicit-management-of-ray-intersections-3.jpg">
-<meta property="og:image" content="https://www.khronos.org/assets/uploads/blogs/2020-Ray_Queries_provide_explicit_ray_management_from_within_any_shader-4.jpg">
-<meta property="og:image" content="https://www.khronos.org/assets/uploads/blogs/2020-Comparing-Vulkan-Ray-Tracing-and-DXR.-It-is-straightforward-to-port-code-between-the-two-APIs-including-re-use-of-ray-tracing-shaders-written-in-HLSL-5_.jpg">
-<meta property="og:updated_time" content="2021-10-18T19:16:00.586Z">
+<meta property="og:updated_time" content="2021-10-18T19:16:00.602Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【译】 Vulkan 光线追踪">
-<meta name="twitter:description" content="原文链接：Vulkan Ray Tracing Final Specification Release  总览 今天，Khronos® 发布了一套 Vulkan®、GLSL 和 SPIR-V 扩展规范的最终版本，将光线追踪无缝集成到现有的Vulkan框架中。这是一个重要的里程碑，因为它是业界第一个开放的、跨厂商的、跨平台的光线追踪加速标准–可以使用现有的GPU计算或专门的光线追踪核心来部署。凡是使">
-<meta name="twitter:image" content="https://www.khronos.org/assets/uploads/blogs/2020-Vulkan-Ray-Tracing-development-timeline-1.jpg">
+<meta name="twitter:title" content="Android 启动加载器分析 —— ABL(1)">
+<meta name="twitter:description" content="我的前一篇文章《Android 启动加载器分析 —— Aboot》中分析了高通平台前代的 Aboot 的整体启动流程和相应的代码。 在 2016 年之后，MSM8996（Snapdragon 820）平台的 PBL 加载全新的 XBL，紧接着链式加载 ABL 或 Aboot（仅对于 XBL 还未成熟的 MSM8996 平台），这个程序是基于 EDK II 构建的用来替换 Aboot 的启动加载器，">
 <meta name="twitter:creator" content="@IIInoki">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/index.html">
+  <link rel="canonical" href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
   
@@ -332,14 +326,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-Vulkan-Ray-Tracing-Specification" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+  <article id="post-android-bootloader-analysis-abl-1" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      【译】 Vulkan 光线追踪
+      Android 启动加载器分析 —— ABL(1)
     </h1>
   
 
@@ -347,8 +341,8 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2021/08/02/Vulkan-Ray-Tracing-Specification/" class="article-date">
-	  <time datetime="2021-08-02T23:08:10.000Z" itemprop="datePublished">2021-08-02</time>
+	<a href="/2021/10/18/android-bootloader-analysis-abl-1/" class="article-date">
+	  <time datetime="2021-10-18T19:48:00.000Z" itemprop="datePublished">2021-10-18</time>
 	</a>
 </span>
 
@@ -356,138 +350,57 @@
 <!--
   <span class="article-category">
     <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/Computer-Graphics/">Computer Graphics</a>►<a class="article-category-link" href="/categories/Computer-Graphics/Vulkan/">Vulkan</a>►<a class="article-category-link" href="/categories/Translation/">Translation</a>►<a class="article-category-link" href="/categories/Translation/Chinese/">Chinese</a>
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>►<a class="article-category-link" href="/categories/Linux/Android/">Android</a>►<a class="article-category-link" href="/categories/Linux/Android/Bootloader/">Bootloader</a>
   </span>
 -->
 
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link" href="/tags/Computer-Graphics/">Computer Graphics</a>, <a class="article-tag-link" href="/tags/Ray-Tracing/">Ray Tracing</a>, <a class="article-tag-link" href="/tags/Vulkan/">Vulkan</a>, <a class="article-tag-link" href="/tags/中文/">中文</a>, <a class="article-tag-link" href="/tags/翻译/">翻译</a>
+	<a class="article-tag-link" href="/tags/ABL/">ABL</a>, <a class="article-tag-link" href="/tags/Android/">Android</a>, <a class="article-tag-link" href="/tags/Bootloader/">Bootloader</a>, <a class="article-tag-link" href="/tags/Linux/">Linux</a>
   </span>
 
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/08/02/Vulkan-Ray-Tracing-Specification/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/10/18/android-bootloader-analysis-abl-1/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 5.3k(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 825(words)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 18(minutes)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 3(minutes)</span>
 	
 
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>原文链接：<a href="https://www.khronos.org/blog/vulkan-ray-tracing-final-specification-release" target="_blank" rel="noopener">Vulkan Ray Tracing Final Specification Release</a></p>
-<h1 id="总览"><a class="markdownIt-Anchor" href="#总览"></a> 总览</h1>
-<p>今天，Khronos® 发布了一套 Vulkan®、GLSL 和 SPIR-V 扩展规范的最终版本，将光线追踪无缝集成到现有的Vulkan框架中。这是一个重要的里程碑，因为它是业界第一个开放的、跨厂商的、跨平台的光线追踪加速标准–可以使用现有的GPU计算或专门的光线追踪核心来部署。凡是使用过 DirectX 12 中的 DirectX 光线追踪（DXR）的人都会对 Vulkan 光线追踪感到熟悉，但它也引入了一些高级功能，比如将光线追踪设置操作负载平衡到主机 CPU 上的能力。尽管光线追踪将首先部署在桌面系统上，但这些 Vulkan 扩展的设计是为了使光线追踪也能部署在移动设备上，并激励光线追踪的使用。</p>
-<p>这些扩展最初是在 2020 年 3 月作为临时版本发布的。从那时起（见图 1），我们收到并采纳了硬件供应商和软件开发商的反馈，包括 Khronos 内部和更广泛的行业，但 API 的整体状态和提供的功能基本上没有变化。感谢所有审阅和使用临时扩展的人，特别是那些提供反馈意见的人!</p>
-<p><img src="https://www.khronos.org/assets/uploads/blogs/2020-Vulkan-Ray-Tracing-development-timeline-1.jpg" alt="Vulkan Ray Tracing Dev Timeline"></p>
-<p>今天发布的扩展规范只是 Vulkan 光线追踪技术推广的开始。在未来几天和几周内，其他生态系统组件，如着色器工具链和验证层将被更新，以支持光线追踪功能，确保开发人员能够在他们的应用程序中轻松使用这些扩展。这些生态系统的更新进展可以在 GitHub 上跟踪。这将在12月中旬发布支持 Khronos Vulkan 光线追踪的 Vulkan SDK（1.2.162.0 或更高版本）时达到最高活跃度。</p>
-<p>这篇文章将强调 Vulkan Ray Tracing 扩展的临时版本和最终版本之间最重要的区别，并解释这些变化背后的一些原因。</p>
-<h1 id="秀出我们的规范"><a class="markdownIt-Anchor" href="#秀出我们的规范"></a> 秀出我们的规范！</h1>
-<p>这套 Vulkan 光线追踪扩展所提供的整体功能自其临时版本以来没有变化。今天发布的最终扩展集是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Vulkan extension specifications</span><br><span class="line">    VK_KHR_acceleration_structure</span><br><span class="line">    VK_KHR_ray_tracing_pipeline</span><br><span class="line">    VK_KHR_ray_query</span><br><span class="line">    VK_KHR_pipeline_library</span><br><span class="line">    VK_KHR_deferred_host_operations</span><br><span class="line">SPIR-V extensions specifications</span><br><span class="line">    SPV_KHR_ray_tracing</span><br><span class="line">    SPV_KHR_ray_query</span><br><span class="line">GLSL extensions specifications</span><br><span class="line">    GLSL_EXT_ray_tracing</span><br><span class="line">    GLSL_EXT_ray_query</span><br><span class="line">    GLSL_EXT_ray_flags_primitive_culling</span><br></pre></td></tr></table></figure>
-<h2 id="拓展的结构"><a class="markdownIt-Anchor" href="#拓展的结构"></a> 拓展的结构</h2>
-<p>最明显的变化是，临时的 <code>VK_KHR_ray_tracing</code> 扩展已经被分成了 3 个扩展：</p>
-<ul>
-<li>VK_KHR_acceleration_structure - 用于加速结构的构建和管理</li>
-<li>VK_KHR_ray_tracing_pipeline - 用于光线追踪着色器的阶段和流水线</li>
-<li>VK_KHR_ray_query -  为所有着色器阶段提供光线查询的基本</li>
-</ul>
-<p>我们收到的反馈是，一些市场希望能够支持光线追踪查询而不支持光线追踪流水线，为了避免重复和人为的依赖，我们对原来的扩展进行了细分。实现可以选择支持 <code>VK_KHR_ray_tracing_pipeline</code>、<code>VK_KHR_ray_query</code> 或两者之一，取决于市场需要。这两个扩展都依赖于<code>VK_KHR_acceleration_structure</code> 扩展，为加速结构管理提供一个共同的基础。主要的桌面厂商仍然致力于支持光线流水线和光线查询。关于对可选功能的支持和对其他市场的支持的具体细节，请与各个供应商商谈。</p>
-<p>Vulkan 光线追踪扩展不再被标记为临时性的，因此五个扩展的扩展接口现在被定义在主 <code>vulkan_core.h</code> 头中，而不是临时的 <code>vulkan_beta.h</code>，用户不再需要 <code>#define VK_ENABLE_BETA_EXTENSIONS</code> 来启用 Vulkan 光线追踪功能。</p>
-<p>扩展的依赖性也有变化。现在需要 Vulkan 1.1 和 SPIR-V 1.4。<code>VK_KHR_acceleration_structure</code> 需要Vulkan 1.1、<code>VK_EXT_descriptor_indexing</code>、<code>VK_KHR_buffer_device_address</code>，以及<code>VK_KHR_deferred_host_operations</code>。我们意识到，一个冗长的扩展依赖列表是令人讨厌的，理想情况下，我们希望简单地要求 Vulkan 1.2，但目前并非所有平台都支持 Vulkan 1.2，我们不想为采用光线追踪功能添加任何人为障碍。如果所有的目标市场都支持 Vulkan 1.2，那么应用程序就可以直接以 Vulkan 1.2 为目标，以达到简化的目的。我们也考虑过不把 <code>VK_KHR_deferred_host_operations</code> 作为一个明确的依赖关系，但是用延迟操作创建流水线的变化要求我们保留它。我们把 <code>VK_KHR_pipeline_library</code> 作为 <code>VK_KHR_ray_tracing_pipeline</code> 的软要求，而不是严格要求，因此应用程序只需要在实际使用时启用它。除了 <code>VK_KHR_acceleration_structure</code>，<code>VK_KHR_ray_tracing_pipeline</code> 和 <code>VK_KHR_ray_query</code> 都至少需要 SPIR-V 1.4，因为该版本中增加了入口点要求的变化。SPIR-V 1.5 也可以用于 Vulkan 1.2 的实现。</p>
-<p>从功能上讲，所有的实现都必须具备以下功能：</p>
-<ul>
-<li>VK_KHR_deferred_host_operations</li>
-<li>accelerationStructure</li>
-<li>descriptorBindingAccelerationStructureUpdateAfterBind</li>
-<li><code>descriptorIndexing</code> 功能（如果支持 Vulkan 1.2）或 <code>VK_EXT_descriptor_indexing</code> 扩展所需的所有功能</li>
-<li>Vulkan 1.2 中的 <code>bufferDeviceAddress</code> 或 <code>VK_KHR_buffer_device_address</code></li>
-</ul>
-<p>支持 <code>VK_KHR_ray_tracing_pipeline</code> 的实现需要：</p>
-<ul>
-<li>VK_KHR_acceleration_structure</li>
-<li>rayTracingPipeline</li>
-<li>rayTracingPipelineTraceRaysIndirect</li>
-<li><code>rayTraversalPrimitiveCulling</code> 若 <code>VK_KHR_ray_query</code> 也被支持</li>
-<li><code>VK_KHR_pipeline_library</code></li>
-</ul>
-<p>支持 <code>VK_KHR_ray_query</code> 的实现需要 require:</p>
-<ul>
-<li>VK_KHR_acceleration_structure</li>
-<li>rayQuery.</li>
-</ul>
-<p>此外，还有一些可选择的能力与扩展定义。</p>
-<p>对于 <code>VK_KHR_acceleration_structure</code>，有：</p>
-<ul>
-<li>accelerationStructureCaptureReplay</li>
-<li>accelerationStructureIndirectBuild</li>
-<li>accelerationStructureHostCommands</li>
-</ul>
-<p>对于 <code>VK_KHR_ray_tracing_pipeline</code>，有：</p>
-<ul>
-<li>rayTracingPipelineShaderGroupHandleCaptureReplay</li>
-<li>rayTracingPipelineShaderGroupHandleCaptureReplayMixed</li>
-<li>rayTraversalPrimitiveCulling，若 <code>VK_KHR_ray_query</code> 未支持</li>
-</ul>
-<h2 id="加速结构"><a class="markdownIt-Anchor" href="#加速结构"></a> 加速结构</h2>
-<p>在最终的 Vulkan 光线追踪功能中，对应用程序影响最大的变化是加速结构的创建和布局。</p>
-<p>我们从 API 翻译层（如 vkd3d-proton）的作者那里得到反馈，在临时 API Vulkan 光线追踪加速结构的基础上分层 DXR 是不现实的。这导致了对加速结构创建大小的改变，并使用 VkBuffer 上的加速结构存储分配，而不是专门的加速结构对象存储。这些变化的一个影响是，<code>VkAccelerationStructureKHR</code> 和 <code>VkAccelerationStructureNV</code> 不再是别名，不能互换使用。同样地，任何以它们为参数的结构或函数也不再是别名了。</p>
-<p>我们还为分层添加了一个新的加速结构类型 <code>VK_ACCELERATION_STRUCTURE_TYPE_GENERIC_KHR</code>。 在实际的加速结构类型（顶部或底部）还不清楚的情况下，可以在加速结构创建时使用。实际的加速结构类型必须指定为 <code>VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR</code> 或 <code>VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR</code>，当执行构建时不能改变。直接为 Vulkan 编写的应用程序不应该使用 <code>VK_ACCELERATION_STRUCTURE_TYPE_GENERIC_KHR</code>，因为这可能会影响未来的能力或性能。</p>
-<p>我们还收到了分层 Vulkan 实现（如 MoltenVK）的作者的反馈，指出一些光线追踪的要求（如设备地址）会使 Vulkan 无法在其他一些 API 上以分层方式实现。不幸的是，我们不可能在解决这个问题的同时还支持其他目标，比如与 DXR 的功能对等。我们希望其他 API 的未来版本也能添加必要的功能来实现这种分层。</p>
-<p>我们听说开发者真的很喜欢统一的创建和构建参数，就像在 <code>VK_NV_ray_tracing</code> 和 DXR 中。我们将加速结构的创建改为基于大小，大小可以从用于构建的同一结构中计算（<code>vkGetAccelerationStructureBuildSizesKHR</code>），或者从精简查询中计算（<code>vkCmdWriteAccelerationStructuresPropertiesKHR</code>）。我们还了解到，一些实现在创建时需要额外的信息，这导致 <code>vkGetAccelerationStructureBuildSizesKHR</code> 中增加了 <code>pMaxPrimitiveCounts</code>。</p>
-<p>以前的几何体描述的某些方面很混乱，与自动生成的代码不能很好地配合（如验证层），因此我们解决了 <code>ppGeometries</code> 二元性造成的模糊，并增加了一个额外的 <code>pGeometries</code> 字段，但要求每次只使用其中一个字段。</p>
-<p>其他新增内容包括：加速器结构的创建时间捕获和重放标志（用于调试工具），加速器结构的 <code>nullDescriptor</code> 支持，作为与 <code>VK_EXT_robustness2</code> 的交互，以及加速器结构的 <code>VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT</code> 支持。</p>
-<p>最后但并非最不重要的是，我们做了修改，以便在所有扩展中一致地使用设备地址。我们还提出了许多命名建议，其中一些被采纳了，并且出于一致性和可扩展性的考虑，我们做了各种命名和风格上的改变。关于这些和其他变化的更多细节，请参见问题 3 和 4 以及 <code>VK_KHR_acceleration_structure</code> 中的变化日志。</p>
-<h2 id="延迟的主机操作"><a class="markdownIt-Anchor" href="#延迟的主机操作"></a> 延迟的主机操作</h2>
-<p>我们修改了 <code>vkBuildAccelerationStructuresKHR</code> 和 <code>vkCreateRayTracingPipelinesKHR</code> 命令中延迟主机操作的使用方式。现在，延迟操作请求不再被链入每个单独的构建或创建操作的 <code>pNext</code> 中，而是作为命令的顶级参数传入，整个命令要么延迟，要么不延迟。当命令被推迟时，应用程序不得访问返回参数，直到推迟的操作完成。之前的命令语义中，一些子操作可以被延迟，而另一些则不能，这使得对命令返回值的行为预期不明确，很难理解什么时候访问它们是安全的。我们认为，新的语义更清晰，应该能够提供更多的并行机会，但如上所述，这是以要求 <code>VK_KHR_deferred_host_operations</code> 扩展在任何时候都被启用为代价。</p>
-<p><img src="https://www.khronos.org/assets/uploads/blogs/2020-Deferred-Host-Operations-enable-Acceleration-Structures-to-be-built-using-multiple-CPU-cores-for-faster-frame-rates-and-elimination-of-frame-stuttering-2.jpg" alt="Deferred Host Operations"></p>
-<h2 id="光线追踪流水线"><a class="markdownIt-Anchor" href="#光线追踪流水线"></a> 光线追踪流水线</h2>
-<p>对光线追踪流水线机制的改变没有那么剧烈，其中一些只影响 SPIR-V 和着色器编译器工具链。</p>
-<p>除了上面提到的针对延迟操作的 <code>vkCreateRayTracingPipelinesKHR</code> 的变化之外，还有一些变化，使 <code>VkPipelineLibraryCreateInfoKHR</code> 和 <code>VkRayTracingPipelineInterfaceCreateInfoKHR</code> 成为可选项，这样如果不使用 <code>VK_KHR_pipeline_library</code>，就不需要启用它们。</p>
-<p>对于光线追踪流水线来说，最大的 API 变化是增加了明确的堆栈大小管理。光线追踪流水线有一个潜在的大型着色器集，在光线追踪过程中可能会以各种调用链组合的方式被调用。在给定的着色器执行过程中，实现可以使用堆栈在内存中存储参数，这个堆栈的大小需要足够大，以处理实现可以执行的任何调用链中所有着色器所需的堆栈大小。默认的堆栈大小有可能相当大，所以我们增加了一种方法，让应用程序在流水线编译后指定一个更理想的堆栈大小。这是在应用程序可以根据对着色器和调用链属性的特定应用知识计算出更严格的堆栈大小约束的情况下使用的。为光线追踪流水线添加了一个新的动态状态（<code>VK_DYNAMIC_STATE_RAY_TRACING_PIPELINE_STACK_SIZE_KHR</code>），以及查询着色器组的堆栈大小（<code>vkGetRayTracingShaderGroupStackSizeKHR</code>）和为流水线设置动态堆栈大小（<code>vkCmdSetRayTracingPipelineStackSizeKHR</code>）的命令。</p>
-<p>另一个新增功能是基于 DXR 分层工作的反馈，即通过加速结构地址追踪光线的能力。有了这个功能，从 <code>vkGetAccelerationStructureDeviceAddressKHR</code> 获取的加速结构的设备地址可以存储在一个缓冲区或其他着色器资源中。在着色器中，可以使用SPIR-V <code>OpConvertUToAccelerationStructureKHR</code>指令（在 GLSL 中表现为 <code>accelerationStructureEXT</code> 类型构造器）将其转换为不透明的 <code>OpTypeAccelerationStructureKHR</code> 描述器类型。然后，产生的变量可以用来指定加速结构，以便在 <code>OpTraceRayKHR</code> 指令（<code>traceRayEXT()</code>）中进行追踪。这种转换是单向的，在不透明的加速结构描述符上不支持其他操作。</p>
-<p><img src="https://www.khronos.org/assets/uploads/blogs/2020-Ray-tracing-pipelines-provide-implicit-management-of-ray-intersections-3.jpg" alt="Ray tracing pipelines"></p>
-<p>SPIR-V 工作组也提供了关于 SPIR-V 扩展的反馈，这导致了对 <code>OpTraceRayKHR</code> 的有效载荷参数和 <code>OpExecuteCallableKHR</code> 的可调用数据参数的修改。以前，这些参数与 GLSL 中声明的有效载荷或可调用数据结构的位置布局限定符匹配。然而，这些位置在 SPIR-V 中是没有意义的，因此被替换为直接指向适当的存储类的指针，而不是使用整数位置。这对 GLSL 扩展没有影响，因为 glslang 自动处理了转换，然而，这确实需要 <code>OpTraceRayKHR</code> 和 <code>OpExecuteCallableKHR</code> 的新操作码，它们不能再与 <code>SPV_NV_ray_tracing</code> 的相应操作相联系。</p>
-<p>另一个由内部反馈驱动的 SPIR-V 变化是将 <code>OpIgnoreIntersectionKHR</code> 和 <code>OpTerminateRayKHR</code> 变成终止指令，因为它们终止了执行它们的调用。这些指令也必须是一个块中的最后一条指令。同样，这也导致了新的操作码被分配给这些指令。这一变化确实影响了 GLSL–这些指令不再是内置函数，而是跳转语句，因此在着色器中使用时，不再显示为 <code>ignoreIntersectionEXT()</code>；而是简单地显示为 <code>ignoreIntersectionEXT</code>；。</p>
-<p>在总结 SPIR-V 对光线追踪流水线的修改时，有一个新的能力和枚举（<code>RayTracingKHR</code>），使实现和工具链能够区分为现在已经过时的临时扩展而编写的 SPIR-V 和最终语义。我们还对 <code>ShaderRecordBufferKHR</code> 所需的明确布局做了一些澄清，并将其与StorageBuffer存储类的处理方式相同。我们还规定了 <code>OpReportIntersectionKHR</code> 的返回值和超出范围的T值的行为，并澄清了只有一个子集的比特用于各种光线追踪参数。</p>
-<p>与 <code>VK_KHR_acceleration_structure</code> 扩展一样，我们做了修改，以完全使用缓冲设备地址，因此着色器绑定表现在被作为缓冲设备地址通过 <code>VkStridedDeviceAddressRegionKHR</code> 结构提供给追踪光线命令。同样地，<code>vkCmdTraceRaysIndirectKHR</code> 的间接参数也通过缓冲设备地址传递。</p>
-<p>我们还更新了与 Vulkan 1.2 和 <code>VK_KHR_vulkan_memory_model</code> 扩展的交互，并要求某些内置变量（主要是与子组相关的）在支持着色器调用的着色器中被标记为 <code>Volatile</code>。</p>
-<p>其他变化包括为着色器组句柄添加创建时间捕获和重放标志，添加以前遗漏的各种属性和限制，以及一些重命名以提高清晰度。关于这些和其他变化的更多细节，请参见 <code>VK_KHR_ray_tracing_pipeline</code> 中的问题 3 和 4，<code>SPV_KHR_ray_tracing</code> 中的问题 2，以及扩展变化日志。</p>
-<h2 id="光线查询"><a class="markdownIt-Anchor" href="#光线查询"></a> 光线查询</h2>
-<p>鉴于 Vulkan 的 API 中很少有光线查询，大部分与光线查询有关的变化都在 SPIR-V 的扩展和交互中。</p>
-<p><code>SPV_KHR_ray_query</code> 还包括支持通过加速结构地址发出光线查询，并增加了<code>OpConvertUToAccelerationStructureKHR</code>，同样可以用来将加速结构设备地址转换成不透明的<code>OpTypeAccelerationStructureKHR</code> 描述符。然后，这些描述符可以用来为 <code>OpRayQueryInitializeKHR</code> 指定要追踪的加速结构。</p>
-<p>与光线流水线一样，存在一个新的能力和枚举（RayQueryKHR），使实现和工具链能够区分为现在已经过时的临时扩展而编写的 SPIR-V 和最终语义。我们还澄清了只有一个子集的位用于剔除掩码，并且不允许从 AABB 基元中查询候选 T 值。</p>
-<p>最后，我们还规定了光线参数的数值限制，要求 HitT 在 <code>OpRayQueryGenerateIntersectionKHR</code> 的光线区间内，并将追踪限制在顶层加速结构上。</p>
-<p>关于这些和其他变化的更多细节，请参见 <code>VK_KHR_ray_query</code> 的第1期，<code>SPV_KHR_ray_query</code> 的第1期，以及扩展的变化日志。</p>
-<p><img src="https://www.khronos.org/assets/uploads/blogs/2020-Ray_Queries_provide_explicit_ray_management_from_within_any_shader-4.jpg" alt="Ray Queries"></p>
-<h1 id="路在脚下"><a class="markdownIt-Anchor" href="#路在脚下"></a> 路在脚下</h1>
-<p>This section gives an overview of the new flow for acceleration structure creation and includes a quick primer on resource creation flags and ray tracing synchronization.</p>
-<h2 id="加速结构的创建"><a class="markdownIt-Anchor" href="#加速结构的创建"></a> 加速结构的创建</h2>
-<p>为了创建一个加速结构，应用程序必须首先确定加速结构所需的尺寸。对于构建来说，加速结构的大小以及构建和更新的缓冲区大小是通过 <code>vkGetAccelerationStructureBuildSizesInfoKHR</code> 结构中的 <code>vkGetAccelerationStructureBuildSizesKHR</code> 命令获得。要创建的加速结构的形状和类型在 <code>VkAccelerationStructureBuildGeometryInfoKHR</code> 结构中描述。这和以后用于实际构建的结构是一样的，但是加速结构参数和几何体数据指针不需要在这时完全填充（尽管它们可以填充），只是加速结构类型，以及几何体类型、计数和最大尺寸。这些尺寸对任何足够相似的加速结构都是有效的。对于将成为压缩拷贝目标的加速结构，所需的尺寸可以通过 <code>vkCmdWriteAccelerationStructuresPropertiesKHR</code> 命令获得。一旦确定了所需的大小，应用程序就会为加速结构创建一个 VkBuffer（<code>accelerationStructureSize</code>），并根据需要为构建（<code>buildScratchSize</code>）和更新（<code>updateScratchSize</code>）缓冲区创建 VkBuffer。</p>
-<p>接下来，可以使用 <code>vkCreateAccelerationStructureKHR</code> 命令创建 <code>VkAccelerationStructureKHR</code> 对象，该命令创建一个指定类型和大小的加速结构，并将其放置在 <code>VkAccelerationStructureCreateInfoKHR</code> 中提供的缓冲区的偏移处。与 Vulkan 中的大多数其他资源不同，缓冲区的指定部分完全为加速结构提供了内存；不需要查询额外的内存需求或将内存绑定到加速结构对象上。如果需要，可以在同一个 <code>VkBuffer</code> 中放置多个加速结构，只要加速结构不重叠。</p>
-<p>最后，可以使用 <code>vkCmdBuildAccelerationStructuresKHR</code> 命令来构建加速结构。构建时使用与确定加速结构大小相同的 <code>VkAccelerationStructureBuildGeometryInfoKHR</code> 结构，但这次必须指定目标加速结构以及所有几何数据指针（用于顶点、索引、变换、aabbs和实例）和抓取数据指针。一旦构建完成，加速结构是完全独立的，构建输入和从头开始的缓冲区可以被应用程序重新利用，除非它计划将它们用于未来的更新构建。</p>
-<h2 id="资源使用与同步"><a class="markdownIt-Anchor" href="#资源使用与同步"></a> 资源使用与同步</h2>
-<p>本节提供了关于何时应使用各种缓冲区使用标志的高层次概述，以及对各种光线追踪操作应使用何种类型的同步的简要描述。</p>
-<p>将用于加速结构备份的缓冲区是用 <code>VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR</code> 用法创建的，将用于构建从头空间的缓冲区需要指定 <code>VK_BUFFER_USAGE_STORAGE_BUFFER_BIT</code> 用法。和加速结构的构建输入，如顶点、索引、变换、aabb和实例数据，需要指定 <code>VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR</code> 用法。用于着色器绑定表的缓冲区以 <code>VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR</code> 用法创建，用于间接构建和跟踪参数的缓冲区以 <code>VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT</code> 用法创建。</p>
-<p>为了与加速结构构建命令（<code>vkCmdBuildAccelerationStructuresKHR</code> <code>vkCmdBuildAccelerationStructuresIndirectKHR</code>）同步依赖，使用 <code>VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHRpipeline</code> 阶段。对源加速结构或目标加速结构的访问，以及对取回缓冲区的访问，使用 <code>VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR</code> 或 <code>VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR</code> 的访问类型。对构建的输入缓冲区（顶点、索引、变换、aabb或实例数据）的访问使用 <code>VK_ACCESS_SHADER_READ_BIT</code> 的访问类型，对间接参数的访问使用 <code>VK_ACCESS_INDIRECT_COMMAND_READ_BIT</code> 的访问类型。</p>
-<p>当与加速结构复制命令（<code>vkCmdWriteAccelerationStructuresPropertiesKHR</code>、<code>vkCmdCopyAccelerationStructureKHR</code>、<code>vkCmdCopyAccelerationStructureToMemoryKHR</code> 和 <code>vkCmdCopyMemoryToAccelerationStructureKHR</code>）同步依赖时，也使用 <code>VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR</code> 流水线阶段。读取或写入加速结构的访问分别使用 <code>VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR</code> 或者 <code>VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR</code>。通过设备地址访问缓冲区进行读取或写入，分别使用 <code>VK_ACCESS_TRANSFER_READ_BIT</code> 或 <code>VK_ACCESS_TRANSFER_WRITE_BIT</code> 的访问类型。</p>
-<p>为了与光线追踪命令（<code>vkCmdTraceRaysKHR</code> 和 <code>vkCmdTraceRaysIndirectKHR</code>）同步依赖， <code>VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR</code> 流水线阶段被用于访问着色器绑定表缓冲区，访问类型为 <code>VK_ACCESS_SHADER_READ_BIT</code>。对于间接参数的访问，使用 <code>VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT</code> 流水线阶段，访问类型为 <code>VK_ACCESS_INDIRECT_COMMAND_READ_BIT</code>。</p>
-<p>为了与任何图形、计算或光线追踪流水线阶段中用于光线查询指令的加速结构同步依赖关系，适当的流水线阶段与 <code>VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR</code> 访问类型应当一起使用。</p>
-<p><img src="https://www.khronos.org/assets/uploads/blogs/2020-Comparing-Vulkan-Ray-Tracing-and-DXR.-It-is-straightforward-to-port-code-between-the-two-APIs-including-re-use-of-ray-tracing-shaders-written-in-HLSL-5_.jpg" alt="Comparing Vulkan Ray Tracing and DXR"></p>
-<h1 id="结论与资源"><a class="markdownIt-Anchor" href="#结论与资源"></a> 结论与资源</h1>
-<p>现在，最终的 Vulkan 光线追踪扩展已经发布，目前支持临时规范的生态系统工件将尽快更新，工具和其他组件的推出将在 GitHub 上进行跟踪。我们鼓励所有开发者过渡到使用最终的 Khronos Vulkan 光线追踪扩展。</p>
-<p>包括用于 NVIDIA GPU 的最终 Vulkan 光线追踪扩展的驱动程序可以在 <a href="http://developer.nvidia.com/vulkan-driver" target="_blank" rel="noopener">developer.nvidia.com/vulkan-driver</a> 上找到，同时还有关于哪些GPU受到支持的信息。支持这些扩展的 AMD GPU 的初始驱动程序可以在https://www.amd.com/en/support/kb/release-notes/rn-rad-win-20-11-2-vrt-beta。英特尔 Xe-HPG GPU 将支持光线追踪扩展，于2021年推出，并通过常规驱动更新程序提供驱动支持。</p>
-<p>关于如何将 Vulkan 光线追踪用于混合渲染的见解，其中光栅化和光线追踪被串联使用，以实现引人注目的视觉保真度和互动性，请查看 Vulkan 光线追踪混合渲染的最佳实践博客，其中讨论了光线追踪反射在《重返德军总部：新血缘》中使用最终扩展描述的光线追踪反射的实现。。</p>
-<p>今天还发布了最新的 NVIDIA Vulkan 光线追踪教程，以及支持 Vulkan 光线追踪扩展的 NVIDIA Nsight 图形开发工具的 2020.6 版本。敬请关注更多即将发布的关于生产驱动、工具和示例的公告。</p>
-<p>Vulkan 工作组很高兴能够让开发者和内容创作社区使用 Vulkan 光线追踪，我们欢迎任何反馈或问题。这些问题可以通过 Khronos 开发者 Slack 和 Vulkan GitHub 问题追踪器进行分享。</p>
-<p>欢迎来到便携式、跨厂商、跨平台的光线追踪加速时代！</p>
+        <p>我的前一篇文章<a href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/">《Android 启动加载器分析 —— Aboot》</a>中分析了高通平台前代的 Aboot 的整体启动流程和相应的代码。</p>
+<p>在 2016 年之后，MSM8996（Snapdragon 820）平台的 PBL 加载全新的 XBL，紧接着链式加载 ABL 或 Aboot（仅对于 XBL 还未成熟的 MSM8996 平台），这个程序是基于 EDK II 构建的用来替换 Aboot 的启动加载器，它可以根据按键组合选择留在 fastboot、使用系统 kernel 和在系统目录的 ramdisk 启动到 Android 系统、或是使用 recovery 的 ramdisk 启动到 Recovery。</p>
+<p>本文介绍 ABL 的代码组织和大致启动流程，由于篇幅限制，对于启动 Linux 和 fastboot 的代码解析将会单独发各自的文章。</p>
+<h1 id="代码组织"><a class="markdownIt-Anchor" href="#代码组织"></a> 代码组织</h1>
+<p>高通平台的 ABL 源码可以在 <a href="https://source.codeaurora.org/quic/la/abl/tianocore/edk2/" target="_blank" rel="noopener">Code Aurora Forum</a><br>
+) 处找到。</p>
+<p>ABL 是基于 EDK II 构建的，整体的项目结构是标准的 EDK II 源码树。本文使用成文时的 <code>uefi.lnx.3.0.r1</code> 分支来分析，提交为 c4da6fcb959fa67cb2aa89007beebfab66226268。</p>
+<p>在项目的 Makefile 中，最重要的两个构建目标是：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ABL_FV_IMG := <span class="variable">$(BUILD_ROOT)</span>/FV/abl.fv</span><br><span class="line">ABL_FV_ELF := <span class="variable">$(BOOTLOADER_OUT)</span>/../../unsigned_abl.elf</span><br></pre></td></tr></table></figure>
+<p>其中，<code>ABL_FV_IMG</code> 是最重要的构建目标，它是从 <code>QcomModulePkg</code> 构建的 firmware（fv，固件）：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">ABL_FV_IMG: EDK_TOOLS_BIN</span></span><br><span class="line">	@. ./edksetup.sh BaseTools &amp;&amp; \</span><br><span class="line">	build -p <span class="variable">$(WORKSPACE)</span>/QcomModulePkg/QcomModulePkg.dsc</span><br><span class="line"></span><br><span class="line">    cp <span class="variable">$(BUILD_ROOT)</span>/FV/FVMAIN_COMPACT.Fv <span class="variable">$(ABL_FV_IMG)</span></span><br></pre></td></tr></table></figure>
+<p>而 <code>ABL_FV_ELF</code> 则只是调用 <code>QcomModulePkg/Tools/image_header.py</code> 来把 <code>abl.fv</code> 转换为一个 ELF 文件，可以刷写到设备的 EMMC 或闪存中的 abl 分区。</p>
+<p>在 <code>QcomModulePkg</code> 中，固件的入口是 <code>FV.FVMAIN_COMPACT</code>，它包含了 <code>FV.FVMAIN</code>，在这个模块里，囊括了 EDK II 提供的基础 ARM 栈、MMU 等组件，并包含了 <code>QcomModulePkg/Application/LinuxLoader/LinuxLoader.inf</code> 这个 Linux 的加载器，用来在 ARM 平台上将这个固件启动并加载 Android 的 Linux 内核。</p>
+<p>这个 LinuxLoader 是一个 UEFI 应用程序，它的程序入口点定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ENTRY_POINT                    = LinuxLoaderEntry</span><br></pre></td></tr></table></figure>
+<p>它包含了 EDK II 中的一些模块：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[Packages]</span><br><span class="line">	ArmPkg/ArmPkg.dec</span><br><span class="line">	MdePkg/MdePkg.dec</span><br><span class="line">	EmbeddedPkg/EmbeddedPkg.dec</span><br><span class="line">	ArmPlatformPkg/ArmPlatformPkg.dec</span><br><span class="line">	MdeModulePkg/MdeModulePkg.dec</span><br><span class="line">	QcomModulePkg/QcomModulePkg.dec</span><br></pre></td></tr></table></figure>
+<p>其中，在 <code>QcomModulePkg</code> 的 <code>Library</code> 中，有 <code>FastbootLib</code>、<code>BootLib</code>、<code>zlib</code> 等库，Fastboot 的实现就在 <code>FastbootLib</code> 中，而 <code>BootLib</code> 中包含了启动 Linux 内核的具体实现，至于 <code>zlib</code> 则是因为 Linux 内核有时是被压缩了的。</p>
+<h1 id="启动流程"><a class="markdownIt-Anchor" href="#启动流程"></a> 启动流程</h1>
+<p>在 <code>LinuxLoaderEntry</code> 入口点的函数中，程序首先调用一些基础的平台代码设置环境，然后通过 <code>DeviceInfoInit ()</code> 获取启动验证状态和设备状态，再使用 <code>EnumeratePartitions ()</code> 和 <code>UpdatePartitionEntries ()</code> 获取并更新分区信息。</p>
+<p>如果存在多个启动 slot 的话（这里指有 A/B 分区的 Android 设备，其中 A 和 B 一般即为两个 slot），就寻找已激活的 slot 并记录。</p>
+<p>紧接着获取按键状态，在 <code>SCAN_DOWN</code> 按下时设置启动至 fastboot 的标识，<code>SCAN_UP</code> 为启动至 recovery 的表示，而 <code>SCAN_ESC</code> 按下时则重启设备至 Emergency Download（EDL）模式。然后程序获取重启的原因并设置相应标识。</p>
+<p>在不启动至 fastboot 时，加载并验证启动镜像，若加载并验证成功，则调用 <code>BootLinux (&amp;Info)</code> 启动 Linux 内核。否则调用 <code>FastbootInitialize ()</code> 初始化并运行 fastboot。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>本文分析了 ABL 的项目结构和整体启动流程。下篇文章中会讨论正常启动 Linux（也包含 recovery 的启动）的代码流程。</p>
 
       
     </div>
@@ -497,7 +410,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>Permanent Link：</strong>
-      <a href="https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/" title="【译】 Vulkan 光线追踪" target="_blank" rel="external">https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/</a>
+      <a href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/" title="Android 启动加载器分析 —— ABL(1)" target="_blank" rel="external">https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</a>
     </li>
     
     <!--
@@ -547,13 +460,9 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2021/09/05/SecIdentity-iOS-storage/" title="The right way to store and retrieve SecIdentity/Identity on iOS"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2021/06/19/Write-your-own-IME-on-macOS-1/" title="Write your own IME on macOS - 1. Create project"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2021/10/17/android-bootloader-analysis-aboot/" title="Android 启动加载器分析 —— Aboot"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
@@ -667,9 +576,9 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
     <script defer>
     var disqus_config = function () {
         
-            this.page.url = 'https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/';
+            this.page.url = 'https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/';
         
-        this.page.identifier = 'Vulkan-Ray-Tracing-Specification';
+        this.page.identifier = 'android-bootloader-analysis-abl-1';
     };
     (function() { 
         var d = document, s = d.createElement('script');  
