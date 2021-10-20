@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Mon, 18 Oct 2021 19:16:00 GMT</pubDate>
+    <pubDate>Wed, 20 Oct 2021 18:01:38 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>通过 Linux sysfs 玩转硬件</title>
+      <link>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/</link>
+      <guid>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/</guid>
+      <pubDate>Wed, 20 Oct 2021 19:34:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;对于一些非嵌入式、离硬件比较远的程序员，与硬件有关的事情可能完全是一个黑匣子：我只需要插上 USB 线缆、插上 HDMI 线缆，就可以把硬件连接到计算机；我只需要按一个按键，就可以调节屏幕的亮度。作为一个程序员或者计算机爱好者，我有没有可能自己写一些代码 snippets
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Android 启动加载器分析 —— ABL(1)</title>
@@ -411,27 +432,6 @@ It
       
       
       <comments>https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】为 Rust 生成 Qt 绑定</title>
-      <link>https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/</link>
-      <guid>https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/</guid>
-      <pubDate>Sat, 04 Jul 2020 16:51:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.vandenoever.info/blog/2017/09/04/rust_qt_binding_generator.html&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/#disqus_thread</comments>
     </item>
     
   </channel>
