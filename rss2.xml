@@ -9,7 +9,7 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Wed, 20 Oct 2021 18:01:38 GMT</pubDate>
+    <pubDate>Thu, 21 Oct 2021 20:17:15 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
@@ -34,6 +34,27 @@
     </item>
     
     <item>
+      <title>Android bootloader analysis -- ABL(1)</title>
+      <link>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</link>
+      <guid>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</guid>
+      <pubDate>Mon, 18 Oct 2021 19:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;In my previous article &lt;a href=&quot;https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/&quot;&gt;“Android Bootloader Analysis –
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/#disqus_thread</comments>
+    </item>
+    
+    <item>
       <title>Android 启动加载器分析 —— ABL(1)</title>
       <link>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</link>
       <guid>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</guid>
@@ -52,6 +73,27 @@
       
       
       <comments>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>Android bootloader analysis -- Aboot</title>
+      <link>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</link>
+      <guid>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</guid>
+      <pubDate>Sun, 17 Oct 2021 10:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;There are already many articles that explain the boot process of Android on Qualcomm platform. From my translation of &lt;a
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/#disqus_thread</comments>
     </item>
     
     <item>
@@ -389,49 +431,6 @@ It
       
       
       <comments>https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>云输入在 ibus-libpinyin 中的实现 - 配置项</title>
-      <link>https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/</link>
-      <guid>https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/</guid>
-      <pubDate>Thu, 16 Jul 2020 20:20:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;前几篇文章描述了云输入请求的全过程。其中，和云输入有关的参数（比如：需要请求几个云输入结果，延时发送请求需要延时多久等）是由 &lt;code&gt;GLib&lt;/code&gt; 中的 &lt;code&gt;GSettings&lt;/code&gt;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>KDE Connect 安装 Q&amp;A</title>
-      <link>https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/</link>
-      <guid>https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/</guid>
-      <pubDate>Tue, 07 Jul 2020 23:33:33 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;这篇文章记录了 QQ 群中回答的一些安装配置方面的问题。&lt;/p&gt;
-&lt;p&gt;群号码：668331167 或点击链接加入群聊&lt;a href=&quot;https://jq.qq.com/?_wv=1027&amp;amp;k=0rBiLpax&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/#disqus_thread</comments>
     </item>
     
   </channel>
