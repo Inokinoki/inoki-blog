@@ -5,6 +5,7 @@ tags:
 - Linux
 - Linux Driver
 - sysfs
+- 中文
 categories:
 - [Linux, sysfs]
 ---

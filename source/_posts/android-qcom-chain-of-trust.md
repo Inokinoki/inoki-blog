@@ -8,6 +8,8 @@ tags:
 - XBL
 - Bootloader
 - Linux
+- 中文
+- 翻译
 categories:
 - [Linux, Android, Bootloader]
 ---

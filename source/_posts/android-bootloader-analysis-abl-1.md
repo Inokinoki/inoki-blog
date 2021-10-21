@@ -6,6 +6,7 @@ tags:
 - ABL
 - Linux
 - Bootloader
+- 中文
 categories:
 - [Linux, Android, Bootloader]
 ---
