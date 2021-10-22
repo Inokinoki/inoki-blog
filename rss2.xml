@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Thu, 21 Oct 2021 20:20:26 GMT</pubDate>
+    <pubDate>Fri, 22 Oct 2021 13:23:31 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Android 启动加载器分析 —— ABL(2)</title>
+      <link>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/</link>
+      <guid>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/</guid>
+      <pubDate>Fri, 22 Oct 2021 13:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;我的前一篇文章&lt;a href=&quot;https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/&quot;&gt;《Android 启动加载器分析 —— ABL(1)》&lt;/a&gt;中分析了当代高通平台的 ABL
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>通过 Linux sysfs 玩转硬件</title>
@@ -410,27 +431,6 @@ It
       
       
       <comments>https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】软件定义无线电的基础 —— 3.接收机</title>
-      <link>https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/</link>
-      <guid>https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/</guid>
-      <pubDate>Fri, 07 Aug 2020 20:27:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.eetimes.com/sdr-basics-part-3-transmitters/&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/#disqus_thread</comments>
     </item>
     
   </channel>
