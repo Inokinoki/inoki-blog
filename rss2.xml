@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Fri, 22 Oct 2021 13:23:31 GMT</pubDate>
+    <pubDate>Sun, 24 Oct 2021 22:33:02 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Android 启动加载器分析 —— ABL(3)</title>
+      <link>https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/</link>
+      <guid>https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/</guid>
+      <pubDate>Sun, 24 Oct 2021 22:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;我的前一篇文章&lt;a href=&quot;https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/&quot;&gt;《Android 启动加载器分析 —— ABL(1)》&lt;/a&gt;中分析了当代高通平台的 ABL
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Android 启动加载器分析 —— ABL(2)</title>
@@ -410,27 +431,6 @@ It
       
       
       <comments>https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>KDE Frameworks - KDNSSD</title>
-      <link>https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/</link>
-      <guid>https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/</guid>
-      <pubDate>Sun, 06 Sep 2020 08:22:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;&lt;strong&gt;Important&lt;/strong&gt;: this post assumes that you have knowledge on Qt and CMake/QMake, and that you have at least some concept on
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/#disqus_thread</comments>
     </item>
     
   </channel>
