@@ -75,6 +75,16 @@ ENTRY_POINT                    = LinuxLoaderEntry
 
 在不启动至 fastboot 时，加载并验证启动镜像，若加载并验证成功，则调用 `BootLinux (&Info)` 启动 Linux 内核。否则调用 `FastbootInitialize ()` 初始化并运行 fastboot。
 
+# 构建
+
+构建 EDK II 的基础工具需要主机指令集的 GCC 工具集，而 `QcomModulePkg` 需要 LLVM 和 CLANG，因此需要安装这两个工具。之后使用以下命令编译：
+
+```bash
+CLANG_PREFIX=aarch64-linux-gnu- PYTHON_COMMAND=python2 make
+```
+
+这里由于我的系统 python 指向的是 python3，而 EDK II 基础工具集需要 python2，因此我指定了使用 python2 为默认的解释器。
+
 # 总结
 
 本文分析了 ABL 的项目结构和整体启动流程。下篇文章中会讨论正常启动 Linux（也包含 recovery 的启动）的代码流程。
