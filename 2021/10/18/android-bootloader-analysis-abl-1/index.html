@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Inoki in the world">
 <meta property="og:description" content="我的前一篇文章《Android 启动加载器分析 —— Aboot》中分析了高通平台前代的 Aboot 的整体启动流程和相应的代码。 在 2016 年之后，MSM8996（Snapdragon 820）平台的 PBL 加载全新的 XBL，紧接着链式加载 ABL 或 Aboot（仅对于 XBL 还未成熟的 MSM8996 平台），这个程序是基于 EDK II 构建的用来替换 Aboot 的启动加载器，">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-10-24T22:33:02.928Z">
+<meta property="og:updated_time" content="2021-10-27T08:56:39.522Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 启动加载器分析 —— ABL(1)">
 <meta name="twitter:description" content="我的前一篇文章《Android 启动加载器分析 —— Aboot》中分析了高通平台前代的 Aboot 的整体启动流程和相应的代码。 在 2016 年之后，MSM8996（Snapdragon 820）平台的 PBL 加载全新的 XBL，紧接着链式加载 ABL 或 Aboot（仅对于 XBL 还未成熟的 MSM8996 平台），这个程序是基于 EDK II 构建的用来替换 Aboot 的启动加载器，">
@@ -366,7 +366,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/10/18/android-bootloader-analysis-abl-1/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 825(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 924(words)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 3(minutes)</span>
@@ -399,6 +399,10 @@
 <p>如果存在多个启动 slot 的话（这里指有 A/B 分区的 Android 设备，其中 A 和 B 一般即为两个 slot），就寻找已激活的 slot 并记录。</p>
 <p>紧接着获取按键状态，在 <code>SCAN_DOWN</code> 按下时设置启动至 fastboot 的标识，<code>SCAN_UP</code> 为启动至 recovery 的表示，而 <code>SCAN_ESC</code> 按下时则重启设备至 Emergency Download（EDL）模式。然后程序获取重启的原因并设置相应标识。</p>
 <p>在不启动至 fastboot 时，加载并验证启动镜像，若加载并验证成功，则调用 <code>BootLinux (&amp;Info)</code> 启动 Linux 内核。否则调用 <code>FastbootInitialize ()</code> 初始化并运行 fastboot。</p>
+<h1 id="构建"><a class="markdownIt-Anchor" href="#构建"></a> 构建</h1>
+<p>构建 EDK II 的基础工具需要主机指令集的 GCC 工具集，而 <code>QcomModulePkg</code> 需要 LLVM 和 CLANG，因此需要安装这两个工具。之后使用以下命令编译：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CLANG_PREFIX=aarch64-linux-gnu- PYTHON_COMMAND=python2 make</span><br></pre></td></tr></table></figure>
+<p>这里由于我的系统 python 指向的是 python3，而 EDK II 基础工具集需要 python2，因此我指定了使用 python2 为默认的解释器。</p>
 <h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
 <p>本文分析了 ABL 的项目结构和整体启动流程。下篇文章中会讨论正常启动 Linux（也包含 recovery 的启动）的代码流程。</p>
 
