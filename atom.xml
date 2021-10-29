@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2021-10-29T14:49:45.155Z</updated>
+  <updated>2021-10-29T14:57:42.842Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/"/>
     <id>https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/</id>
     <published>2021-10-24T22:48:00.000Z</published>
-    <updated>2021-10-29T14:49:45.155Z</updated>
+    <updated>2021-10-29T14:57:42.842Z</updated>
     
     <summary type="html">
     
@@ -60,7 +60,7 @@
     <link href="https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/"/>
     <id>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/</id>
     <published>2021-10-22T13:48:00.000Z</published>
-    <updated>2021-10-29T14:49:45.155Z</updated>
+    <updated>2021-10-29T14:57:42.842Z</updated>
     
     <summary type="html">
     
@@ -99,7 +99,7 @@
     <link href="https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/"/>
     <id>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/</id>
     <published>2021-10-20T19:34:00.000Z</published>
-    <updated>2021-10-29T14:49:45.159Z</updated>
+    <updated>2021-10-29T14:57:42.842Z</updated>
     
     <summary type="html">
     
@@ -134,7 +134,7 @@
     <link href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/"/>
     <id>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</id>
     <published>2021-10-18T19:48:00.000Z</published>
-    <updated>2021-10-29T14:49:45.155Z</updated>
+    <updated>2021-10-29T14:57:42.842Z</updated>
     
     <summary type="html">
     
@@ -171,7 +171,7 @@
     <link href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/"/>
     <id>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</id>
     <published>2021-10-18T19:48:00.000Z</published>
-    <updated>2021-10-29T14:49:45.155Z</updated>
+    <updated>2021-10-29T14:57:42.842Z</updated>
     
     <summary type="html">
     
@@ -210,7 +210,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</id>
     <published>2021-10-17T10:48:00.000Z</published>
-    <updated>2021-10-29T14:49:45.155Z</updated>
+    <updated>2021-10-29T14:57:42.842Z</updated>
     
     <summary type="html">
     
@@ -247,7 +247,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</id>
     <published>2021-10-17T10:48:00.000Z</published>
-    <updated>2021-10-29T14:49:45.155Z</updated>
+    <updated>2021-10-29T14:57:42.842Z</updated>
     
     <summary type="html">
     
@@ -286,7 +286,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/</id>
     <published>2021-10-17T09:40:00.000Z</published>
-    <updated>2021-10-29T14:49:45.155Z</updated>
+    <updated>2021-10-29T14:57:42.842Z</updated>
     
     <summary type="html">
     
@@ -331,7 +331,7 @@
     <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/"/>
     <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/</id>
     <published>2021-09-06T20:48:40.000Z</published>
-    <updated>2021-10-29T14:49:45.155Z</updated>
+    <updated>2021-10-29T14:57:42.842Z</updated>
     
     <summary type="html">
     
@@ -366,7 +366,7 @@
     <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/"/>
     <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/</id>
     <published>2021-09-06T20:47:40.000Z</published>
-    <updated>2021-10-29T14:49:45.155Z</updated>
+    <updated>2021-10-29T14:57:42.842Z</updated>
     
     <summary type="html">
     
@@ -401,7 +401,7 @@
     <link href="https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/"/>
     <id>https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/</id>
     <published>2021-09-05T20:47:40.000Z</published>
-    <updated>2021-10-29T14:49:45.155Z</updated>
+    <updated>2021-10-29T14:57:42.842Z</updated>
     
     <summary type="html">
     
@@ -436,7 +436,7 @@
     <link href="https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/"/>
     <id>https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/</id>
     <published>2021-09-05T09:42:00.000Z</published>
-    <updated>2021-10-29T14:49:45.139Z</updated>
+    <updated>2021-10-29T14:57:42.822Z</updated>
     
     <summary type="html">
     
@@ -463,7 +463,7 @@
     <link href="https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/"/>
     <id>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/</id>
     <published>2021-08-02T23:08:10.000Z</published>
-    <updated>2021-10-29T14:49:45.139Z</updated>
+    <updated>2021-10-29T14:57:42.822Z</updated>
     
     <summary type="html">
     
@@ -504,7 +504,7 @@
     <link href="https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/"/>
     <id>https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/</id>
     <published>2021-06-19T19:15:00.000Z</published>
-    <updated>2021-10-29T14:49:45.151Z</updated>
+    <updated>2021-10-29T14:57:42.834Z</updated>
     
     <summary type="html">
     
@@ -533,7 +533,7 @@
     <link href="https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/"/>
     <id>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</id>
     <published>2021-02-07T14:34:50.000Z</published>
-    <updated>2021-10-29T14:49:45.127Z</updated>
+    <updated>2021-10-29T14:57:42.810Z</updated>
     
     <summary type="html">
     
@@ -560,7 +560,7 @@
     <link href="https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/"/>
     <id>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/</id>
     <published>2021-01-27T15:47:40.000Z</published>
-    <updated>2021-10-29T14:49:45.155Z</updated>
+    <updated>2021-10-29T14:57:42.842Z</updated>
     
     <summary type="html">
     
@@ -595,7 +595,7 @@
     <link href="https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/"/>
     <id>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/</id>
     <published>2021-01-25T09:30:40.000Z</published>
-    <updated>2021-10-29T14:49:45.091Z</updated>
+    <updated>2021-10-29T14:57:42.766Z</updated>
     
     <summary type="html">
     
@@ -625,7 +625,7 @@ It
     <link href="https://blog.inoki.cc/2020/12/30/My-2020/"/>
     <id>https://blog.inoki.cc/2020/12/30/My-2020/</id>
     <published>2020-12-30T09:41:40.000Z</published>
-    <updated>2021-10-29T14:49:45.139Z</updated>
+    <updated>2021-10-29T14:57:42.818Z</updated>
     
     <summary type="html">
     
@@ -654,7 +654,7 @@ It
     <link href="https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/"/>
     <id>https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/</id>
     <published>2020-09-19T22:41:23.000Z</published>
-    <updated>2021-10-29T14:49:45.111Z</updated>
+    <updated>2021-10-29T14:57:42.790Z</updated>
     
     <summary type="html">
     
@@ -683,7 +683,7 @@ It
     <link href="https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/"/>
     <id>https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/</id>
     <published>2020-09-19T21:41:23.000Z</published>
-    <updated>2021-10-29T14:49:45.111Z</updated>
+    <updated>2021-10-29T14:57:42.790Z</updated>
     
     <summary type="html">
     
