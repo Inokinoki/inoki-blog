@@ -14,9 +14,6 @@ categories:
 
 # 了解三阶截点（IP3）的物理意义
 
-The higher the output at the intercept, the better the linearity and the lower the IMD. The IP3 value essentially indicates how large a signal the amplifier can process before IMD occurs. For example, an IP3 rating of 25 dBm is better than one of 18 dBm.
-Why IIP3 is measured in Receiver Chain
-
 当一个放大器或其他电路变得非线性时，它将开始产生放大的输入的谐波。二次、三次和更高次的谐波通常在放大器带宽之外，所以它们通常很容易过滤掉。然而，非线性也会产生两个或多个信号的混合效应。
 
 如果信号的频率很接近，产生的一些称为互调产物（Intermodulation products）的和差频率会出现在放大器的预期工作带宽内。这些不能被过滤掉，所以它们最终会成为被放大的主要信号中的干扰信号。
