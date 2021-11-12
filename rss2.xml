@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Fri, 29 Oct 2021 14:59:47 GMT</pubDate>
+    <pubDate>Fri, 12 Nov 2021 14:36:49 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】软件定义无线电的基础 —— 1.概述</title>
+      <link>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</link>
+      <guid>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</guid>
+      <pubDate>Fri, 12 Nov 2021 20:08:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.techplayon.com/physical-significance-iip3-important-receiver-chain/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;What is
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Android 启动加载器分析 —— ABL(3)</title>
@@ -410,27 +431,6 @@ It
       
       
       <comments>https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】GBDK Sprite 精灵</title>
-      <link>https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/</link>
-      <guid>https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/</guid>
-      <pubDate>Sat, 19 Sep 2020 21:41:23 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://gbdev.gg8.se/wiki/articles/GBDK_Sprite_Tutorial&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/#disqus_thread</comments>
     </item>
     
   </channel>
