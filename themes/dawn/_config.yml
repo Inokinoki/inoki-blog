@@ -208,7 +208,7 @@ profile:
   author_title: Student
   author_description: Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.
   location: Earth
-  follow: https://github.com/inokinoki
+  follow: /
   # Social Links
   social:
     links:
@@ -218,7 +218,7 @@ profile:
       # facebook: https://www.facebook.com/inoki.noki.10
       # dribbble: /
       # behance: https://www.behance.net/cofess
-      # rss: atom.xml
+      rss: atom.xml
     link_tooltip: true # enable the social link tooltip, options: true, false
   # My Skills
   skills:
