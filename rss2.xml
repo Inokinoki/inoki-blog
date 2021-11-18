@@ -9,7 +9,7 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Fri, 12 Nov 2021 14:43:10 GMT</pubDate>
+    <pubDate>Thu, 18 Nov 2021 08:54:56 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
@@ -97,27 +97,6 @@
     </item>
     
     <item>
-      <title>Android 启动加载器分析 —— ABL(1)</title>
-      <link>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</link>
-      <guid>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</guid>
-      <pubDate>Mon, 18 Oct 2021 19:48:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;我的前一篇文章&lt;a href=&quot;https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/&quot;&gt;《Android 启动加载器分析 —— Aboot》&lt;/a&gt;中分析了高通平台前代的 Aboot
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/#disqus_thread</comments>
-    </item>
-    
-    <item>
       <title>Android bootloader analysis -- ABL(1)</title>
       <link>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</link>
       <guid>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</guid>
@@ -136,6 +115,27 @@
       
       
       <comments>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>Android 启动加载器分析 —— ABL(1)</title>
+      <link>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</link>
+      <guid>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</guid>
+      <pubDate>Mon, 18 Oct 2021 19:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;我的前一篇文章&lt;a href=&quot;https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/&quot;&gt;《Android 启动加载器分析 —— Aboot》&lt;/a&gt;中分析了高通平台前代的 Aboot
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/#disqus_thread</comments>
     </item>
     
     <item>
