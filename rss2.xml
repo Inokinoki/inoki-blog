@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Thu, 18 Nov 2021 08:54:56 GMT</pubDate>
+    <pubDate>Fri, 19 Nov 2021 14:23:55 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义</title>
+      <link>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</link>
+      <guid>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</guid>
+      <pubDate>Fri, 19 Nov 2021 15:34:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://lwn.net/Articles/154602/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;On the value of
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】三阶截点（IP3）的物理意义</title>
@@ -410,27 +431,6 @@ It
       
       
       <comments>https://blog.inoki.cc/2020/12/30/My-2020/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】GBDK 手柄</title>
-      <link>https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/</link>
-      <guid>https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/</guid>
-      <pubDate>Sat, 19 Sep 2020 22:41:23 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://gbdev.gg8.se/wiki/articles/GBDK_Joypad_Tutorial&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/#disqus_thread</comments>
     </item>
     
   </channel>

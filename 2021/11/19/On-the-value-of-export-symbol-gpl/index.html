@@ -21,17 +21,22 @@
   <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
   
   
-  <title>Tag: Linux | Inoki in the world</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Inoki in the world">
-<meta property="og:url" content="https://blog.inoki.cc/tags/Linux/page/2/index.html">
+  <title>【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义 | Inoki in the world</title>
+  <meta name="description" content="原文链接：On the value of EXPORT_SYMBOL_GPL 当一个可加载模块被插入时，它对内核函数和数据结构的任何引用必须与当前运行的内核链接。然而，模块加载器并不提供对所有内核符号的访问；只有那些被明确被导出的才是可用的。导出这个需求减少了模块可以看到的 API，尽管没有减少那么多：在 2.6.13 内核中有超过 6000 个符号被导出。 导出有两种形式：vanilla（EXP">
+<meta name="keywords" content="翻译,中文,Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义">
+<meta property="og:url" content="https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/index.html">
 <meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="原文链接：On the value of EXPORT_SYMBOL_GPL 当一个可加载模块被插入时，它对内核函数和数据结构的任何引用必须与当前运行的内核链接。然而，模块加载器并不提供对所有内核符号的访问；只有那些被明确被导出的才是可用的。导出这个需求减少了模块可以看到的 API，尽管没有减少那么多：在 2.6.13 内核中有超过 6000 个符号被导出。 导出有两种形式：vanilla（EXP">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-11-19T14:23:55.310Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Inoki in the world">
+<meta name="twitter:title" content="【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义">
+<meta name="twitter:description" content="原文链接：On the value of EXPORT_SYMBOL_GPL 当一个可加载模块被插入时，它对内核函数和数据结构的任何引用必须与当前运行的内核链接。然而，模块加载器并不提供对所有内核符号的访问；只有那些被明确被导出的才是可用的。导出这个需求减少了模块可以看到的 API，尽管没有减少那么多：在 2.6.13 内核中有超过 6000 个符号被导出。 导出有两种形式：vanilla（EXP">
 <meta name="twitter:creator" content="@IIInoki">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://blog.inoki.cc/tags/Linux/page/2/index.html">
+  <link rel="canonical" href="https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
   
@@ -327,250 +332,158 @@
 </aside>
 
   
-  <main class="main" role="main">
-  <article class="content article article-tags post-type-list" itemscope="">
-    <header class="article-header">
-      <h1 itemprop="name" class="hidden-xs">Tag: Linux</h1>
-      <p class="text-muted hidden-xs">Total 2 articles</p>
-      <nav role="navigation" id="nav-main" class="okayNav">
-        <ul>
-          <li><a href="/tags">All</a></li>
-          
-          <li><a href="/tags/IBus/">IBus</a></li>
-          
-          <li><a href="/tags/libpinyin/">libpinyin</a></li>
-          
-          <li><a href="/tags/D-Bus/">D-Bus</a></li>
-          
-          <li><a href="/tags/翻译/">翻译</a></li>
-          
-          <li><a href="/tags/中文/">中文</a></li>
-          
-          <li><a href="/tags/Machine-Learning/">Machine Learning</a></li>
-          
-          <li><a href="/tags/Math/">Math</a></li>
-          
-          <li><a href="/tags/Matrix/">Matrix</a></li>
-          
-          <li><a href="/tags/macOS/">macOS</a></li>
-          
-          <li><a href="/tags/System/">System</a></li>
-          
-          <li><a href="/tags/Link-tool/">Link tool</a></li>
-          
-          <li><a href="/tags/Python/">Python</a></li>
-          
-          <li><a href="/tags/Source-Code/">Source Code</a></li>
-          
-          <li><a href="/tags/Linux/">Linux</a></li>
-          
-          <li><a href="/tags/Linux-Driver/">Linux Driver</a></li>
-          
-          <li><a href="/tags/ASIX/">ASIX</a></li>
-          
-          <li><a href="/tags/SDR/">SDR</a></li>
-          
-          <li><a href="/tags/Bug/">Bug</a></li>
-          
-          <li><a href="/tags/Cross-Compile/">Cross Compile</a></li>
-          
-          <li><a href="/tags/Router/">Router</a></li>
-          
-          <li><a href="/tags/Go/">Go</a></li>
-          
-          <li><a href="/tags/Ubuntu/">Ubuntu</a></li>
-          
-          <li><a href="/tags/Craft/">Craft</a></li>
-          
-          <li><a href="/tags/KDE/">KDE</a></li>
-          
-          <li><a href="/tags/openwrt/">openwrt</a></li>
-          
-          <li><a href="/tags/Windows/">Windows</a></li>
-          
-          <li><a href="/tags/Cuda/">Cuda</a></li>
-          
-          <li><a href="/tags/Visual-Studio/">Visual Studio</a></li>
-          
-          <li><a href="/tags/Pack/">Pack</a></li>
-          
-          <li><a href="/tags/Debian/">Debian</a></li>
-          
-          <li><a href="/tags/Algorithm/">Algorithm</a></li>
-          
-          <li><a href="/tags/Hash/">Hash</a></li>
-          
-          <li><a href="/tags/GDB/">GDB</a></li>
-          
-          <li><a href="/tags/Embedded-System/">Embedded System</a></li>
-          
-          <li><a href="/tags/Bare-Metal/">Bare Metal</a></li>
-          
-          <li><a href="/tags/Raspberry-PI/">Raspberry PI</a></li>
-          
-          <li><a href="/tags/Debug/">Debug</a></li>
-          
-          <li><a href="/tags/UART/">UART</a></li>
-          
-          <li><a href="/tags/FFmpeg/">FFmpeg</a></li>
-          
-          <li><a href="/tags/private/">private</a></li>
-          
-          <li><a href="/tags/GBDK/">GBDK</a></li>
-          
-          <li><a href="/tags/ibus-libpinyin/">ibus-libpinyin</a></li>
-          
-          <li><a href="/tags/Cloud-Input/">Cloud Input</a></li>
-          
-          <li><a href="/tags/Chrome-OS/">Chrome OS</a></li>
-          
-          <li><a href="/tags/KDE-Frameworks/">KDE Frameworks</a></li>
-          
-          <li><a href="/tags/KDE-Connect/">KDE Connect</a></li>
-          
-          <li><a href="/tags/Leetcode/">Leetcode</a></li>
-          
-          <li><a href="/tags/Dynamic-Programming/">Dynamic Programming</a></li>
-          
-          <li><a href="/tags/LoRaWAN/">LoRaWAN</a></li>
-          
-          <li><a href="/tags/LoRa/">LoRa</a></li>
-          
-          <li><a href="/tags/IoT/">IoT</a></li>
-          
-          <li><a href="/tags/OpenCL/">OpenCL</a></li>
-          
-          <li><a href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a></li>
-          
-          <li><a href="/tags/QUIC/">QUIC</a></li>
-          
-          <li><a href="/tags/HTTP/">HTTP</a></li>
-          
-          <li><a href="/tags/Qt/">Qt</a></li>
-          
-          <li><a href="/tags/Rust/">Rust</a></li>
-          
-          <li><a href="/tags/iOS/">iOS</a></li>
-          
-          <li><a href="/tags/WSL/">WSL</a></li>
-          
-          <li><a href="/tags/Docker/">Docker</a></li>
-          
-          <li><a href="/tags/VSCode/">VSCode</a></li>
-          
-          <li><a href="/tags/Computer-Graphics/">Computer Graphics</a></li>
-          
-          <li><a href="/tags/Vulkan/">Vulkan</a></li>
-          
-          <li><a href="/tags/Ray-Tracing/">Ray Tracing</a></li>
-          
-          <li><a href="/tags/Win-10-ARM/">Win 10 ARM</a></li>
-          
-          <li><a href="/tags/Win-10-IoT/">Win 10 IoT</a></li>
-          
-          <li><a href="/tags/IME/">IME</a></li>
-          
-          <li><a href="/tags/Android/">Android</a></li>
-          
-          <li><a href="/tags/ABL/">ABL</a></li>
-          
-          <li><a href="/tags/Bootloader/">Bootloader</a></li>
-          
-          <li><a href="/tags/Aboot/">Aboot</a></li>
-          
-          <li><a href="/tags/XBL/">XBL</a></li>
-          
-          <li><a href="/tags/sysfs/">sysfs</a></li>
-          
-          <li><a href="/tags/Man/">Man</a></li>
-          
-          <li><a href="/tags/epoll/">epoll</a></li>
-          
-          <li><a href="/tags/SDDM/">SDDM</a></li>
-          
-        </ul>
-      </nav>
-    </header>
-    <!-- /header -->
-    <div class="article-body">
-      <div class="row">
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-On-the-value-of-export-symbol-gpl" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
         
-<div class="col-md-6">
-    
-<article class="panel panel-default hover-shadow hover-grow" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2019-12-09T10:52:00.000Z" itemprop="datePublished">2019-12-09</time>
-     </div>
-     <h3 class="article-title" itemprop="name">
-       <a class="article-link" href="/2019/12/09/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/">AX88179_178a USB-Ethernet adapter Linux Driver</a>
-     </h3>
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/Linux/" class="label label-default mb">Linux</a>
-     
-      <a href="/tags/Linux-Driver/" class="label label-default mb">Linux Driver</a>
-     
-      <a href="/tags/ASIX/" class="label label-default mb">ASIX</a>
-     
-     
-   </div>
-   
-</article>
+  
+    <h1 class="article-title" itemprop="name">
+      【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2021/11/19/On-the-value-of-export-symbol-gpl/" class="article-date">
+	  <time datetime="2021-11-19T15:34:00.000Z" itemprop="datePublished">2021-11-19</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/Linux/">Linux</a>, <a class="article-tag-link" href="/tags/中文/">中文</a>, <a class="article-tag-link" href="/tags/翻译/">翻译</a>
+  </span>
 
 
-</div>
+        
 
-<div class="col-md-6">
-    
-<article class="panel panel-default hover-shadow hover-grow" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2019-03-24T10:49:40.000Z" itemprop="datePublished">2019-03-24</time>
-     </div>
-     <h3 class="article-title" itemprop="name">
-       <a class="article-link" href="/2019/03/24/man-epoll/">Linux manual epoll(7)</a>
-     </h3>
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/Linux/" class="label label-default mb">Linux</a>
-     
-      <a href="/tags/Man/" class="label label-default mb">Man</a>
-     
-      <a href="/tags/epoll/" class="label label-default mb">epoll</a>
-     
-     
-   </div>
-   
-</article>
-
-
-</div>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/11/19/On-the-value-of-export-symbol-gpl/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 729(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 2(minutes)</span>
+	
 
       </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>原文链接：<a href="https://lwn.net/Articles/154602/" target="_blank" rel="noopener">On the value of EXPORT_SYMBOL_GPL</a></p>
+<p>当一个可加载模块被插入时，它对内核函数和数据结构的任何引用必须与当前运行的内核链接。然而，模块加载器并不提供对所有内核符号的访问；只有那些被明确被导出的才是可用的。导出这个需求减少了模块可以看到的 API，尽管没有减少那么多：在 2.6.13 内核中有超过 6000 个符号被导出。</p>
+<p>导出有两种形式：vanilla（EXPORT_SYMBOL）和 GPL-only（EXPORT_SYMBOL_GPL）。前者可用于任何内核模块，而后者不能被任何没有 GPL 兼容许可证的模块使用。如果模块声明的许可证不合格，模块加载器将通过拒绝访问只适用于 GPL 的符号来执行这一区别。目前，只有不到 10% 的内核符号是 GPL-only 的，但是 GPL-only 符号的数量正在增长。在许多情况下，有一定的压力使新的导出只适用于 GPL。</p>
+<p>经常有人争论说，这两种类型的导出没有实际区别。那些认为所有的内核模块都被内核许可证要求为 GPL 许可证的人认为所有的符号在任何情况下都是隐含的 GPL-only。另一个阵营认为模块接口是 GPL 不能跨越的边界，他们不相信只适用于 GPL 的限制可以被坚持。在任何情况下，只适用于 GPL 的符号可以很容易地通过修补内核、虚假声明 GPL 兼容的许可证，或者通过插入一个提供更广泛访问感兴趣的符号的垫片模块而被规避。</p>
+<p>然而，Linus 认为，仅允许 GPL 的导出是重要的。</p>
+<pre><code>我和一两个律师谈过，这(a)绝对有 巨大 的区别，(b)他们喜欢这样。
+
+事实是，法律并不是一台盲目的、无意识的计算机，不会照字面意思去理解你所说的东西。意图是非常重要的。而用 xxx_GPL() 的版本来表明它是一个内部接口，确实非常有意义。
+
+其中一位律师说，这比试图让许可证解释所有的细节要好得多——将意图编入代码本身不仅更灵活，而且更不容易被误解。
+</code></pre>
+<p>他还指出，规避纯 GPL 的导出需要一个明确的行动，使其明确由此产生的版权侵犯是一个故意的行为。</p>
+<p>不管它们是否有任何法律意义，只适用于 GPL 的导出确实成功地传达了内核开发社区中希望限制使用非自由内核模块的大量子集的意愿。彻底禁止这类模块可能不会很快被提上日程，但它们的功能也不可能有太大增长。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/" title="【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义" target="_blank" rel="external">https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Student</small></a></h3>
+        <div>Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+      <!-- Blog post bottom bar -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="9214609149" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
     </div>
   </article>
   
     
-    <nav class="bar bar-footer clearfix" data-stick-bottom="">
-        <div class="bar-inner">
-        <div class="pager pull-left">
-            
-            <a class="extend prev" rel="prev" href="/tags/Linux/"><i class="icon icon-angle-left"></i> Prev</a><a class="page-number" href="/tags/Linux/">1</a><span class="page-number current">2</span>
-            
-            <a class="next disabled" href="javascript:;">Next <i class="icon icon-angle-right"></i></a>
-            
-        </div>
-        <div class="total-article bar-right">Page 2 of 2</div>
-        </div>
-    </nav>
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
     
+  </section>
 
- 
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2021/11/12/Physical-significance-iip3-important-receiver-chain/" title="【译】三阶截点（IP3）的物理意义"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+
 </main>
 
   <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
@@ -624,6 +537,30 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/';
+        
+        this.page.identifier = 'On-the-value-of-export-symbol-gpl';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
 
 
 
