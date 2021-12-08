@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <script data-ad-client="ca-pub-2713518338457470" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>【译】Linux 内核的用户态 I/O | Inoki in the world</title>
+  <meta name="description" content="原文链接：The Userspace I/O HOWTO  关于 UIO 如果你使用 UIO 作为你的设备卡的驱动程序，你可以获得：  只有一个小的内核模块需要编写和维护。 在用户空间开发你的驱动程序的主要部分，使用你习惯的所有工具和库。 驱动程序中的错误不会使内核崩溃。 你的驱动程序的更新可以在不重新编译内核的情况下进行。   UIO 是如何工作的 每个 IO 设备都是通过一个设备文件和几个 s">
+<meta name="keywords" content="翻译,中文,Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】Linux 内核的用户态 I&#x2F;O">
+<meta property="og:url" content="https://blog.inoki.cc/2021/12/08/uio-howto/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="原文链接：The Userspace I/O HOWTO  关于 UIO 如果你使用 UIO 作为你的设备卡的驱动程序，你可以获得：  只有一个小的内核模块需要编写和维护。 在用户空间开发你的驱动程序的主要部分，使用你习惯的所有工具和库。 驱动程序中的错误不会使内核崩溃。 你的驱动程序的更新可以在不重新编译内核的情况下进行。   UIO 是如何工作的 每个 IO 设备都是通过一个设备文件和几个 s">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-12-08T19:07:35.015Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】Linux 内核的用户态 I&#x2F;O">
+<meta name="twitter:description" content="原文链接：The Userspace I/O HOWTO  关于 UIO 如果你使用 UIO 作为你的设备卡的驱动程序，你可以获得：  只有一个小的内核模块需要编写和维护。 在用户空间开发你的驱动程序的主要部分，使用你习惯的所有工具和库。 驱动程序中的错误不会使内核崩溃。 你的驱动程序的更新可以在不重新编译内核的情况下进行。   UIO 是如何工作的 每个 IO 设备都是通过一个设备文件和几个 s">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2021/12/08/uio-howto/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="/" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Student</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/12/08/uio-howto/" class="title">【译】Linux 内核的用户态 I/O</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-12-08T19:34:00.000Z" itemprop="datePublished">2021-12-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/11/19/On-the-value-of-export-symbol-gpl/" class="title">【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-11-19T15:34:00.000Z" itemprop="datePublished">2021-11-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/SDR/">SDR</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/">Translation</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/Chinese/">Chinese</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/11/12/Physical-significance-iip3-important-receiver-chain/" class="title">【译】三阶截点（IP3）的物理意义</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-11-12T15:38:00.000Z" itemprop="datePublished">2021-11-12</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/10/24/android-bootloader-analysis-abl-3/" class="title">Android 启动加载器分析 —— ABL(3)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-10-24T22:48:00.000Z" itemprop="datePublished">2021-10-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/10/22/android-bootloader-analysis-abl-2/" class="title">Android 启动加载器分析 —— ABL(2)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-10-22T13:48:00.000Z" itemprop="datePublished">2021-10-22</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+<!-- Blog sidebar -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="2343090796" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ABL/" style="font-size: 13.44px;">ABL</a> <a href="/tags/ASIX/" style="font-size: 13.11px;">ASIX</a> <a href="/tags/Aboot/" style="font-size: 13.22px;">Aboot</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Android/" style="font-size: 13.56px;">Android</a> <a href="/tags/Bare-Metal/" style="font-size: 13px;">Bare Metal</a> <a href="/tags/Bootloader/" style="font-size: 13.56px;">Bootloader</a> <a href="/tags/Bug/" style="font-size: 13.22px;">Bug</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Cloud-Input/" style="font-size: 13.33px;">Cloud Input</a> <a href="/tags/Computer-Graphics/" style="font-size: 13px;">Computer Graphics</a> <a href="/tags/Craft/" style="font-size: 13.11px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.22px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/Embedded-System/" style="font-size: 13.33px;">Embedded System</a> <a href="/tags/FFmpeg/" style="font-size: 13.11px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.11px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/Go/" style="font-size: 13.11px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.44px;">IBus</a> <a href="/tags/IME/" style="font-size: 13px;">IME</a> <a href="/tags/IoT/" style="font-size: 13.44px;">IoT</a> <a href="/tags/KDE/" style="font-size: 13.11px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.67px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.11px;">KDE Frameworks</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.78px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.22px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.44px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.44px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Python/" style="font-size: 13.11px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qt/" style="font-size: 13px;">Qt</a> <a href="/tags/Raspberry-PI/" style="font-size: 13.33px;">Raspberry PI</a> <a href="/tags/Ray-Tracing/" style="font-size: 13px;">Ray Tracing</a> <a href="/tags/Router/" style="font-size: 13.22px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.33px;">SDR</a> <a href="/tags/Source-Code/" style="font-size: 13.11px;">Source Code</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/Ubuntu/" style="font-size: 13.11px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/Vulkan/" style="font-size: 13px;">Vulkan</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.11px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.11px;">Windows</a> <a href="/tags/XBL/" style="font-size: 13px;">XBL</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/iOS/" style="font-size: 13px;">iOS</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.33px;">ibus-libpinyin</a> <a href="/tags/macOS/" style="font-size: 13px;">macOS</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.11px;">private</a> <a href="/tags/sysfs/" style="font-size: 13px;">sysfs</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/翻译/" style="font-size: 13.89px;">翻译</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABL/">ABL</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Aboot/">Aboot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bootloader/">Bootloader</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-Graphics/">Computer Graphics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IME/">IME</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-PI/">Raspberry PI</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray-Tracing/">Ray Tracing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vulkan/">Vulkan</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XBL/">XBL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macOS/">macOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysfs/">sysfs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">23</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/">Computer Graphics</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/Vulkan/">Vulkan</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-PI/">Raspberry PI</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/IME/">IME</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">14</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/">Android</a><span class="category-list-count">7</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/Bootloader/">Bootloader</a><span class="category-list-count">7</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Wayland/">Wayland</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/sysfs/">sysfs</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">15</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-uio-howto" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【译】Linux 内核的用户态 I/O
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2021/12/08/uio-howto/" class="article-date">
+	  <time datetime="2021-12-08T19:34:00.000Z" itemprop="datePublished">2021-12-08</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/Linux/">Linux</a>, <a class="article-tag-link" href="/tags/中文/">中文</a>, <a class="article-tag-link" href="/tags/翻译/">翻译</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/12/08/uio-howto/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 6.7k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 25(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>原文链接：<a href="https://www.kernel.org/doc/html/latest/driver-api/uio-howto.html" target="_blank" rel="noopener">The Userspace I/O HOWTO</a></p>
+<h1 id="关于-uio"><a class="markdownIt-Anchor" href="#关于-uio"></a> 关于 UIO</h1>
+<p>如果你使用 UIO 作为你的设备卡的驱动程序，你可以获得：</p>
+<ul>
+<li>只有一个小的内核模块需要编写和维护。</li>
+<li>在用户空间开发你的驱动程序的主要部分，使用你习惯的所有工具和库。</li>
+<li>驱动程序中的错误不会使内核崩溃。</li>
+<li>你的驱动程序的更新可以在不重新编译内核的情况下进行。</li>
+</ul>
+<h2 id="uio-是如何工作的"><a class="markdownIt-Anchor" href="#uio-是如何工作的"></a> UIO 是如何工作的</h2>
+<p>每个 IO 设备都是通过一个设备文件和几个 sysfs 属性文件访问的。第一个设备的设备文件将被称为 <code>/dev/uio0</code>，随后的设备将被称为 <code>/dev/uio1</code>，<code>/dev/uio2</code>，以此类推。</p>
+<p><code>/dev/uioX</code> 是用来访问设备卡的地址空间。只需使用 <code>mmap()</code> 来访问你的设备卡的寄存器或 RAM 位置。</p>
+<p>中断是通过从 <code>/dev/uioX</code> 读取来处理的。从 <code>/dev/uioX</code> 读取的阻塞式 <code>read()</code> 将在中断发生后立即返回。你也可以在 <code>/dev/uioX</code> 上使用 <code>select()</code> 来等待一个中断。从 <code>/dev/uioX</code> 中读出的整数值代表总的中断数。你可以用这个数字来计算你是否错过了一些中断。</p>
+<p>对于一些内部有多个中断源，但没有独立的 IRQ 屏蔽和状态寄存器的硬件，可能会出现这样的情况：如果内核处理程序通过写入芯片的 IRQ 寄存器来禁用它们，用户空间无法确定中断源是什么。在这种情况下，内核必须完全禁用 IRQ，以使芯片的寄存器不被改变。现在，用户空间部分可以确定中断的原因，但它不能重新启用中断。另一种情况是，重新启用中断的芯片是对综合的 IRQ 状态/确认寄存器的读-修改-写操作。如果一个新的中断同时发生，这将是很荒谬的。</p>
+<p>为了解决这些问题，UIO 还实现了一个 <code>write()</code> 函数。对于只有一个中断源或者有独立的IRQ屏蔽和状态寄存器的硬件，通常不使用、可以忽略它。然而，如果你需要它，对 <code>/dev/uioX</code> 的写入将调用驱动实现的 <code>irqcontrol()</code> 函数。你必须写一个 32 位的值，通常是 0 或 1，以禁用或启用中断。如果一个驱动程序没有实现 <code>irqcontrol()</code>，<code>write()</code> 将返回 <code>-ENOSYS</code>。</p>
+<p>为了正确处理中断，你的自定义内核模块可以提供自己的中断处理程序。它将自动被内置的处理程序调用。</p>
+<p>对于那些不产生中断但需要轮询的卡，可以设置一个定时器，在可配置的时间间隔内触发中断处理程序。这种中断模拟是通过从定时器的事件处理程序调用 <code>uio_event_notify()</code> 来完成的。</p>
+<p>每个驱动程序都提供了用于读取或写入变量的属性。这些属性可以通过 sysfs 文件访问。一个自定义的内核驱动模块可以将自己的属性添加到 uio 驱动所拥有的设备上，但目前还没有添加到 uio 设备本身。如果发现有用的话，这在将来可能会发生改变。</p>
+<p>UIO框架提供了以下标准属性：</p>
+<ul>
+<li>name: 你的设备的名称。建议使用你的内核模块的名称。</li>
+<li>version：一个由你的驱动程序定义的版本字符串。这使得你的驱动程序的用户空间部分能够处理不同版本的内核模块。</li>
+<li>event：自上次读取设备节点以来，驱动程序处理的中断总数。</li>
+</ul>
+<p>这些属性出现在 <code>/sys/class/uio/uioX</code> 目录下。请注意，这个目录可能是一个符号链接，而不是一个真正的目录。任何访问它的用户空间代码必须能够处理这个问题。</p>
+<p>每个 UIO 设备都可以为<strong>内存映射提供一个或多个内存区域</strong>。这是必要的，因为一些工业 I/O 卡需要在一个驱动程序中访问一个以上的 PCI 内存区域。</p>
+<p>每个映射在 sysfs 中有自己的目录，第一个映射显示为 <code>/sys/class/uio/uioX/maps/map0/</code>。 后续的映射创建目录 map1/，map2/，等等。这些目录只有在映射的大小不为 0 时才会出现。</p>
+<p>每个 mapX/ 目录包含四个只读文件，显示内存的属性：</p>
+<ul>
+<li>name: 这个映射的一个字符串标识符。这是可选的，这个字符串可以是空的。驱动程序可以设置它，使用户空间更容易找到正确的映射。</li>
+<li>addr: 可以被映射的内存的地址。</li>
+<li>size：addr 所指向的内存的大小，以字节为单位。</li>
+<li>offset：在 <code>mmap()</code> 返回的指针上必须加上的偏移量，以获得实际的设备内存。如果设备的内存不是页对齐的，这就很重要。记住，由 <code>mmap()</code> 返回的指针总是页对齐的，所以总是加上这个偏移量是好的风格。</li>
+</ul>
+<p>在用户空间，不同的映射是通过调整 <code>mmap()</code> 调用的偏移量参数来区分的。为了映射 N 的内存，你必须使用 N 倍的页面大小作为你的偏移：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">offset = N * getpagesize();</span><br></pre></td></tr></table></figure>
+<p>Sometimes there is hardware with memory-like regions that can not be mapped with the technique described here, but there are still ways to access them from userspace. The most common example are x86 ioports. On x86 systems, userspace can access these ioports using ioperm(), iopl(), inb(), outb(), and similar functions.</p>
+<p>Since these ioport regions can not be mapped, they will not appear under /sys/class/uio/uioX/maps/ like the normal memory described above. Without information about the port regions a hardware has to offer, it becomes difficult for the userspace part of the driver to find out which ports belong to which UIO device.</p>
+<p>To address this situation, the new directory /sys/class/uio/uioX/portio/ was added. It only exists if the driver wants to pass information about one or more port regions to userspace. If that is the case, subdirectories named port0, port1, and so on, will appear underneath /sys/class/uio/uioX/portio/.</p>
+<p>有时，有些硬件的类似内存的区域不能用这里描述的技术进行映射，但仍有办法从用户空间访问它们。最常见的例子是 x86 的 ioports。在X86系统中，用户空间可以使用 <code>ioperm()</code>、<code>iopl()</code>、<code>inb()</code>、<code>outb()</code> 和类似的函数访问这些 ioports。</p>
+<p>由于这些 ioport 区域不能被映射，它们不会像上面描述的普通内存一样出现在 <code>/sys/class/uio/uioX/maps/</code> 下。如果没有硬件所提供的端口区域的信息，驱动程序的用户空间部分就很难找出哪些端口属于哪个 IO 设备。</p>
+<p>为了解决这种情况，增加了新的目录 <code>/sys/class/uio/uioX/portio/</code>。它只在驱动想把一个或多个端口区域的信息传递给用户空间时存在。如果是这种情况，名为 port0、port1 等的子目录将出现在 <code>/sys/class/uio/uioX/portio/</code> 下面。</p>
+<p>每个 portX/ 目录包含四个只读文件，它们显示端口区域的名称、开始、大小和类型：</p>
+<ul>
+<li>name：这个端口区域的一个字符串标识符。这个字符串是可选的，可以为空。驱动程序可以设置它，使用户空间更容易找到某个端口区域。</li>
+<li>start：该区域的第一个端口。</li>
+<li>size：这个区域中的端口数量。</li>
+<li>porttype：一个描述端口类型的字符串。</li>
+</ul>
+<h1 id="编写你自己的内核模块"><a class="markdownIt-Anchor" href="#编写你自己的内核模块"></a> 编写你自己的内核模块</h1>
+<p>请看一下 <code>uio_cif.c</code> 作为一个例子。下面的段落解释了这个文件的不同部分。</p>
+<h2 id="struct-uio_info"><a class="markdownIt-Anchor" href="#struct-uio_info"></a> struct uio_info</h2>
+<p>这个结构告诉框架你的驱动程序的细节，有些成员是必须的，有些是可选的。</p>
+<ul>
+<li><code>const char *name</code>: 需要。你的驱动程序的名称，它将出现在 sysfs 中。我建议使用你的模块的名称。</li>
+<li><code>const char *version</code>: 必须，这个字符串会显示在 <code>/sys/class/uio/uioX/version</code>。</li>
+<li><code>struct uio_mem mem[ MAX_UIO_MAPS ]</code>: 如果你有可以用 <code>mmap()</code> 映射的内存，则需要。对于每个映射，你需要填充一个 <code>uio_mem</code> 结构。详情见下面的描述。</li>
+<li><code>struct uio_port port[ MAX_UIO_PORTS_REGIONS ]</code>: 如果你想把 ioports 的信息传递给用户空间，就必须这样做。对于每个端口区域，你需要填充一个 <code>uio_port</code> 结构。详情见下面的描述。</li>
+<li><code>long irq</code>: 需要。如果你的硬件产生了一个中断，你的模块的任务就是在初始化过程中确定 irq 的编号。如果你没有硬件产生的中断，但想以其他方式触发中断处理程序，请将 irq 设置为  <code>UIO_IRQ_CUSTOM</code>。如果你根本就没有中断，你可以把 irq 设置为 <code>UIO_IRQ_NONE</code>，尽管这很少有意义。</li>
+<li><code>unsigned long irq_flags</code>: 如果你将 irq 设置为硬件中断号，则需要。这里给出的标志将在调用 <code>require_irq()</code> 时使用。</li>
+<li><code>int (*mmap)(struct uio_info *info, struct vm_area_struct *vma)</code>: 可选的。如果你需要一个特殊的<code>mmap()</code>函数，你可以在这里设置它。如果这个指针不是 NULL，你的 <code>mmap()</code> 将被调用，而不是内置的那个。</li>
+<li><code>int (*open)(struct uio_info *info, struct inode *inode)</code>: 可选的。你可能希望有自己的<code>open()</code>，例如，只有当你的设备被实际使用时才启用中断。</li>
+<li><code>int (*release)(struct uio_info *info, struct inode *inode)</code>: 可选的。如果你定义了自己的<code>open()</code>，你可能也需要一个自定义的 <code>release()</code> 函数。</li>
+<li><code>int (*irqcontrol)(struct uio_info *info, s32 irq_on)</code>: 可选的。如果你需要通过写到 <code>/dev/uioX</code> 来启用或禁用用户空间的中断，你可以实现这个函数。参数 <code>irq_on</code> 为 0 表示禁用中断，1 表示启用中断。</li>
+</ul>
+<p>通常，你的设备会有一个或多个内存区域可以被映射到用户空间。对于每个区域，你必须在 <code>mem[]</code> 数组中设置一个 <code>struct uio_mem</code>。下面是对 <code>struct uio_mem</code> 字段的描述。</p>
+<ul>
+<li><code>const char *name</code>: 可选的。设置它以帮助识别内存区域，它将显示在相应的 sysfs 节点中。</li>
+<li><code>int memtype</code>: 如果使用映射，则需要。如果你的卡上有要映射的物理内存，将其设置为  <code>UIO_MEM_PHYS</code>。如果是逻辑内存(例如用 <code>__get_free_pages()</code> 分配，而不是 <code>kmalloc()</code>)，则使用 <code>UIO_MEM_LOGICAL</code>。还有 <code>UIO_MEM_VIRTUAL</code> 用于虚拟内存。</li>
+<li><code>phys_addr_t addr</code>: 如果使用映射则需要。填入你的内存块的地址。这个地址会出现在 sysfs 中。</li>
+<li><code>resource_size_t size</code>: 填写 addr 指向的内存块的大小。如果 size 为 0，则认为该映射未被使用。注意你必须为所有未使用的映射初始化 size 为 0。</li>
+<li><code>void *internal_addr</code>: 如果你必须从你的内核模块中访问这个内存区域，你将希望通过使用类似 <code>ioremap()</code> 的方法来进行内部映射。这个函数返回的地址不能被映射到用户空间，所以你不能把它存储在 addr 中。使用 <code>internal_addr</code> 来记住这样一个地址。</li>
+</ul>
+<p>请不要碰 <code>uio_mem</code> 结构的 map 元素!它是由 UIO 框架用来为这个映射设置 sysfs 文件的。不要管它。</p>
+<p>有时，你的设备可能有一个或多个端口区域不能被映射到用户空间。但如果用户空间有其他的可能性来访问这些端口，那么在 sysfs 中提供这些端口的信息是有意义的。对于每个区域，你必须在 <code>port[]</code> 数组中设置一个 <code>struct uio_port</code>。下面是对 <code>struct uio_port</code> 的字段的描述。</p>
+<ul>
+<li><code>char *porttype</code>：需要。将其设置为预定义的常数之一。使用 <code>UIO_PORT_X86</code> 来表示 x86 架构中的 ioports。</li>
+<li><code>unsigned long start</code>: 如果使用端口区域，则需要。填写这个区域的第一个端口的编号。</li>
+<li><code>unsigned long size</code>: 填入该区域的端口数。如果 size 为 0，该区域将被视为未使用。注意，你必须为所有未使用的区域初始化 size 为 0。</li>
+</ul>
+<p>请不要碰 <code>uio_port</code> 结构的 <code>portio</code> 元素! 它是由 UIO 框架内部使用的，用于为这个区域设置 sysfs 文件。请不要管它。</p>
+<h2 id="添加一个中断处理程序"><a class="markdownIt-Anchor" href="#添加一个中断处理程序"></a> 添加一个中断处理程序</h2>
+<p>你需要在中断处理程序中做什么取决于你的硬件和你想如何处理它。你应该尽量减少内核中断处理程序中的代码量。如果你的硬件不需要在每次中断后执行任何操作，那么你的处理程序可以是空的。</p>
+<p>另一方面，如果你的硬件需要在每次中断后执行一些动作，那么你必须在你的内核模块中完成这些动作。注意，你不能依赖你的驱动程序的用户空间部分。你的用户空间程序可以在任何时候终止，可能会让你的硬件处于仍然需要正确处理中断的状态。</p>
+<p>也可能有这样的应用，你想在每次中断时从硬件中读取数据，并将其缓冲在你为此目的分配的一块内核内存中。通过这种技术，你可以避免在用户空间程序错过中断时的数据丢失。</p>
+<p>关于共享中断的说明：只要有可能，你的驱动程序应该支持中断共享。只有当你的驱动程序能够检测到你的硬件是否触发了中断时，它才有可能。这通常是通过查看一个中断状态寄存器来实现的。如果你的驱动程序看到 IRQ 位确实被设置了，它将执行其动作，处理程序返回 <code>IRQ_HANDLED</code>。如果驱动程序检测到不是你的硬件引起的中断，它将什么也不做，并返回 <code>IRQ_NONE</code>，允许内核调用下一个可能的中断处理程序。</p>
+<p>如果你决定不支持共享中断，你的卡就不能在没有空闲中断的计算机中工作。由于这种情况经常发生在 PC 平台上，你可以通过支持中断共享来为自己省去很多麻烦。</p>
+<h2 id="为平台设备使用-uio_pdrv"><a class="markdownIt-Anchor" href="#为平台设备使用-uio_pdrv"></a> 为平台设备使用 <code>uio_pdrv</code></h2>
+<p>在许多情况下，平台设备的 IO 驱动可以用一种通用的方式来处理。在你定义 <code>platform_device</code> 结构的同一个地方，你也可以简单地实现你的中断处理程序并填充你的 <code>uio_info</code> 结构。然后，这个结构 <code>uio_info</code> 的指针被用作你的平台设备的 <code>platform_data</code>。</p>
+<p>你还需要设置一个包含内存映射地址和大小的结构资源数组。这些信息使用 <code>struct platform_device</code> 的 <code>.resource</code> 和 <code>.num_resources</code> 元素传递给驱动。</p>
+<p>你现在必须将 <code>struct platform_device</code> 的 <code>.name</code> 元素设置为 &quot;uio_pdrv &quot;以使用通用的 IO 平台设备驱动程序。这个驱动程序将根据给定的资源填充 <code>mem[]</code> 数组，并注册该设备。</p>
+<p>这种方法的优点是，你只需要编辑一个你无论如何都需要编辑的文件。你不需要创建一个额外的驱动程序。</p>
+<h2 id="为平台设备使用-uio_pdrv_genirq"><a class="markdownIt-Anchor" href="#为平台设备使用-uio_pdrv_genirq"></a> 为平台设备使用 <code>uio_pdrv_genirq</code></h2>
+<p>特别是在嵌入式设备中，你经常会发现一些芯片的 irq 引脚被绑在自己的专用中断线上。在这种情况下，你可以非常确定中断不是共享的，我们可以进一步利用 <code>uio_pdrv</code> 的概念，使用一个通用的中断处理器。这就是 <code>uio_pdrv_genirq</code> 的作用。</p>
+<p>这个驱动程序的设置与上面描述的 <code>uio_pdrv</code> 相同，只是你没有实现一个中断处理程序。 <code>uio_info</code> 结构中的 <code>.handler</code> 元素必须保持为空。<code>.irq_flags</code> 元素必须不包含 <code>IRQF_SHARED</code>。</p>
+<p>你将把 <code>struct platform_device</code> 的 <code>.name</code> 元素设置为 “uio_pdrv_genirq” 来使用这个驱动程序。</p>
+<p><code>uio_pdrv_genirq</code> 的通用中断处理程序将简单地使用 <code>disable_irq_nosync()</code> 禁用中断线。在完成它的工作后，用户空间可以通过向 IO 设备文件写入 <code>0x00000001</code> 来重新启用中断。驱动程序已经实现了一个 <code>irq_control()</code> 来实现这个功能，你必须不实现自己的。</p>
+<p>使用 <code>uio_pdrv_genirq</code> 不仅可以节省几行中断处理程序的代码。你也不需要知道任何关于芯片内部寄存器的信息来创建驱动的内核部分。你只需要知道芯片所连接的引脚的IRQ号码。</p>
+<p>当在一个启用了设备树的系统中使用时，需要用 &quot;of_id &quot;模块参数来探测驱动程序应该处理的节点的&quot;兼容&quot;字符串。默认情况下，节点的名称（不包括单元地址）被暴露为用户空间中的 IO 设备的名称。要设置一个自定义的名称，可以在 <code>DT</code> 节点中指定一个名为 “linux,uio-name” 的属性。</p>
+<h2 id="为平台设备使用-uio_dmem_genirq"><a class="markdownIt-Anchor" href="#为平台设备使用-uio_dmem_genirq"></a> 为平台设备使用 <code>uio_dmem_genirq</code></h2>
+<p>除了静态分配的内存范围之外，他们也可能希望在用户空间驱动中使用动态分配的区域。特别是，能够访问通过 <code>dma-mapping</code> API 提供的内存，可能特别有用。<code>uio_dmem_genirq</code> 驱动提供了一种方法来实现这一目标。</p>
+<p>在中断配置和处理方面，该驱动的使用方式与 “uio_pdrv_genirq” 驱动类似。</p>
+<p>将 <code>struct platform_device</code> 的 <code>.name</code> 元素设置为 &quot;uio_dmem_genirq &quot;来使用这个驱动。</p>
+<p>当使用这个驱动时，填写 <code>struct platform_device</code> 的 <code>.platform_data</code> 元素，它的类型是 <code>struct uio_dmem_genirq_pdata</code>，它包含以下元素：</p>
+<ul>
+<li><code>struct uio_info uioinfo</code>：与 <code>uio_pdrv_genirq</code> 平台数据使用的结构相同</li>
+<li><code>unsigned int *dynamic_region_sizes</code>:指向将被映射到用户空间的动态内存区域大小列表的指针。</li>
+<li><code>unsigned int num_dynamic_regions</code>:<code>dynamic_region_sizes</code> 数组中的元素数量。</li>
+</ul>
+<p>在平台数据中定义的动态区域将被附加到平台设备资源之后的 “mem[]” 数组中，这意味着静态和动态内存区域的总数不能超过 <code>MAX_UIO_MAPS</code>。</p>
+<p>动态内存区域将在打开 UIO 设备文件 <code>/dev/uioX</code> 时被分配。类似于静态内存资源，动态区域的内存区域信息然后通过 sysfs 在 <code>/sys/class/uio/uioX/maps/mapY/*</code> 处可见。当 IO 设备文件被关闭时，动态内存区域将被释放。当没有进程保持设备文件开放时，返回给用户空间的地址是 ~0。</p>
+<h1 id="在用户态编写一个驱动"><a class="markdownIt-Anchor" href="#在用户态编写一个驱动"></a> 在用户态编写一个驱动</h1>
+<p>一旦你有一个适用于你的硬件的内核模块，你就可以编写你的驱动程序的用户空间部分。你不需要任何特殊的库，你的驱动程序可以用任何合理的语言编写，你可以使用浮点数字等等。简而言之，你可以使用所有你通常用于编写用户空间应用程序的工具和库。</p>
+<h2 id="获取有关你的-uio-设备的信息"><a class="markdownIt-Anchor" href="#获取有关你的-uio-设备的信息"></a> 获取有关你的 UIO 设备的信息</h2>
+<p>所有 IO 设备的信息都可以在 sysfs 中找到。你应该在你的驱动程序中做的第一件事是检查名称和版本，以确保你与正确的设备对话，并且其内核驱动程序具有你期望的版本。</p>
+<p>你还应该确保你需要的内存映射存在，并且有你期望的大小。</p>
+<p>有一个叫 <code>lsuio</code> 的工具，可以列出 IO 设备和它们的属性。它可以在这里找到。</p>
+<p><a href="http://www.osadl.org/projects/downloads/UIO/user/" target="_blank" rel="noopener">http://www.osadl.org/projects/downloads/UIO/user/</a></p>
+<p>用 <code>lsuio</code> 你可以快速检查你的内核模块是否被加载，以及它输出了哪些属性。详情请看 <code>manpage</code>。</p>
+<p><code>lsuio</code> 的源代码可以作为一个例子，用来获取一个 IO 设备的信息。<code>uio_helper.c</code> 文件包含了很多函数，你可以在你的用户空间驱动代码中使用。</p>
+<h2 id="mmap-设备内存"><a class="markdownIt-Anchor" href="#mmap-设备内存"></a> <code>mmap()</code> 设备内存</h2>
+<p>在你确定你已经得到了正确的设备和你需要的内存映射之后，你要做的就是调用 <code>mmap()</code> 将设备的内存映射到用户空间。</p>
+<p><code>mmap()</code> 调用的参数 offset 对于 IO 设备有特殊意义。它被用来选择你要映射的设备的映射。要映射N个映射的内存，你必须使用 N 倍的页面大小作为你的偏移量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">offset = N * getpagesize()。</span><br></pre></td></tr></table></figure>
+<p>N 从 0 开始，所以如果你只有一个内存范围要映射，就设置 <code>offset = 0</code>。这种技术的缺点是，内存总是从它的起始地址开始映射。</p>
+<h2 id="等待中断"><a class="markdownIt-Anchor" href="#等待中断"></a> 等待中断</h2>
+<p>在你成功地映射了你的设备内存后，你可以像普通的数组一样访问它。通常情况下，你会进行一些初始化。之后，你的硬件开始工作，一旦完成，有一些数据可用，或者因为发生错误而需要你的注意，就会产生一个中断。</p>
+<p><code>/dev/uioX</code> 是一个只读文件。<code>read()</code> 将总是阻塞，直到中断发生。<code>read()</code> 的 count 参数只有一个合法的值，那就是一个有符号的32位整数的大小(4)。任何其他的 count 值都会导致 <code>read()</code> 失败。读取的有符号的 32 位整数是你设备的中断计数。如果这个值比你上次读到的值多一个，则一切正常。如果差值大于 1，你就错过了中断。</p>
+<p>你也可以在 <code>/dev/uioX</code> 上使用 <code>select()</code>。</p>
+<h1 id="通用的-pci-uio-驱动"><a class="markdownIt-Anchor" href="#通用的-pci-uio-驱动"></a> 通用的 PCI UIO 驱动</h1>
+<p>通用驱动程序是一个名为 <code>uio_pci_generic</code> 的内核模块。它可以与任何符合 PCI 2.3（2002 年左右）的设备和任何符合 PCI Express 的设备一起工作。使用它，你只需要编写用户空间驱动程序，而不需要编写特定硬件的内核模块。</p>
+<h2 id="让驱动识别设备"><a class="markdownIt-Anchor" href="#让驱动识别设备"></a> 让驱动识别设备</h2>
+<p>由于驱动程序没有声明任何设备 ID，它不会被自动加载，也不会自动与任何设备绑定，你必须自己加载它并分配 ID 给驱动程序。比如说：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">modprobe uio_pci_generic</span><br><span class="line">echo &quot;8086 10f5&quot; &gt; /sys/bus/pci/drivers/uio_pci_generic/new_id</span><br></pre></td></tr></table></figure>
+<p>如果你的设备已经有一个特定硬件的内核驱动，通用驱动仍然不会与之绑定，在这种情况下，如果你想使用通用驱动（为什么要这样做？），你必须手动解除与特定硬件驱动的绑定，然后绑定通用驱动，像这样。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo -n 0000:00:19.0 &gt; /sys/bus/pci/drivers/e1000e/unbind</span><br><span class="line">echo -n 0000:00:19.0 &gt; /sys/bus/pci/drivers/uio_pci_generic/bind</span><br></pre></td></tr></table></figure>
+<p>你可以通过在 sysfs 中寻找设备来验证它是否已经被绑定到了驱动程序上，例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l /sys/bus/pci/devices/0000:00:19.0/driver</span><br></pre></td></tr></table></figure>
+<p>如果成功的话，应该可以打印出来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.../0000:00:19.0/driver -&gt; ../../../bus/pci/drivers/uio_pci_generic</span><br></pre></td></tr></table></figure>
+<p>注意，通用驱动程序不会绑定到旧的PCI 2.2设备。如果绑定设备失败，运行下面的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dmesg</span><br></pre></td></tr></table></figure>
+<p>并在输出中寻找失败的原因。</p>
+<h2 id="关于-uio_pci_generic-需要知道的事情"><a class="markdownIt-Anchor" href="#关于-uio_pci_generic-需要知道的事情"></a> 关于 <code>uio_pci_generic</code> 需要知道的事情</h2>
+<p>中断是使用 PCI 命令寄存器中的中断禁用位和 PCI 状态寄存器中的中断状态位来处理的。所有符合PCI 2.3（2002 年左右）的设备和所有符合 PCI Express 的设备都应该支持这些位。 <code>uio_pci_generic</code> 会检测这种支持，并且不会绑定不支持命令寄存器中中断禁用位的设备。</p>
+<p>在每个中断中，<code>uio_pci_generic</code> 设置中断禁用位。这将阻止设备产生进一步的中断，直到该位被清除。用户空间驱动程序应该在阻塞和等待更多的中断之前清除这个位。</p>
+<h2 id="使用-uio_pci_generic-编写用户空间驱动程序"><a class="markdownIt-Anchor" href="#使用-uio_pci_generic-编写用户空间驱动程序"></a> 使用 <code>uio_pci_generic</code> 编写用户空间驱动程序</h2>
+<p>用户空间驱动程序可以使用 PCI 的 sysfs 接口，或者包装它的 libpci 库，来与设备对话，并通过向命令寄存器写信来重新启用中断。</p>
+<h2 id="使用-uio_pci_generic-的示例代码"><a class="markdownIt-Anchor" href="#使用-uio_pci_generic-的示例代码"></a> 使用 <code>uio_pci_generic</code> 的示例代码</h2>
+<p>下面是一些使用uio_pci_generic的用户空间驱动代码示例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> uiofd;</span><br><span class="line">    <span class="keyword">int</span> configfd;</span><br><span class="line">    <span class="keyword">int</span> err;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">unsigned</span> icount;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> command_high;</span><br><span class="line"></span><br><span class="line">    uiofd = <span class="built_in">open</span>(<span class="string">"/dev/uio0"</span>, O_RDONLY);</span><br><span class="line">    <span class="keyword">if</span> (uiofd &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        perror(<span class="string">"uio open:"</span>);</span><br><span class="line">        <span class="keyword">return</span> errno;</span><br><span class="line">    &#125;</span><br><span class="line">    configfd = <span class="built_in">open</span>(<span class="string">"/sys/class/uio/uio0/device/config"</span>, O_RDWR);</span><br><span class="line">    <span class="keyword">if</span> (configfd &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        perror(<span class="string">"config open:"</span>);</span><br><span class="line">        <span class="keyword">return</span> errno;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Read and cache command value */</span></span><br><span class="line">    err = pread(configfd, &amp;command_high, <span class="number">1</span>, <span class="number">5</span>);</span><br><span class="line">    <span class="keyword">if</span> (err != <span class="number">1</span>) &#123;</span><br><span class="line">        perror(<span class="string">"command config read:"</span>);</span><br><span class="line">        <span class="keyword">return</span> errno;</span><br><span class="line">    &#125;</span><br><span class="line">    command_high &amp;= ~<span class="number">0x4</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;; ++i) &#123;</span><br><span class="line">        <span class="comment">/* Print out a message, for debugging. */</span></span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">0</span>)</span><br><span class="line">            <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Started uio test driver.\n"</span>);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Interrupts: %d\n"</span>, icount);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/****************************************/</span></span><br><span class="line">        <span class="comment">/* Here we got an interrupt from the</span></span><br><span class="line"><span class="comment">           device. Do something to it. */</span></span><br><span class="line">        <span class="comment">/****************************************/</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Re-enable interrupts. */</span></span><br><span class="line">        err = pwrite(configfd, &amp;command_high, <span class="number">1</span>, <span class="number">5</span>);</span><br><span class="line">        <span class="keyword">if</span> (err != <span class="number">1</span>) &#123;</span><br><span class="line">            perror(<span class="string">"config write:"</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Wait for next interrupt. */</span></span><br><span class="line">        err = <span class="built_in">read</span>(uiofd, &amp;icount, <span class="number">4</span>);</span><br><span class="line">        <span class="keyword">if</span> (err != <span class="number">4</span>) &#123;</span><br><span class="line">            perror(<span class="string">"uio read:"</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> errno;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="通用的-hyper-v-uio-驱动"><a class="markdownIt-Anchor" href="#通用的-hyper-v-uio-驱动"></a> 通用的 Hyper-V UIO 驱动</h1>
+<p>这个通用驱动程序是一个名为 <code>uio_hv_generic</code> 的内核模块。它支持 Hyper-V VMBus 上的设备，与 PCI 总线上的 <code>uio_pci_generic</code> 类似。</p>
+<h2 id="让驱动识别设备-2"><a class="markdownIt-Anchor" href="#让驱动识别设备-2"></a> 让驱动识别设备</h2>
+<p>由于该驱动没有声明任何设备的 GUID，它不会被自动加载，也不会自动绑定任何设备，你必须自己加载它并分配 ID 给该驱动。例如，使用网络设备类 GUID：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">modprobe uio_hv_generic</span><br><span class="line">echo &quot;f8615163-df3e-46c5-913f-f2d2f965ed0e&quot; &gt; /sys/bus/vmbus/drivers/uio_hv_generic/new_id</span><br></pre></td></tr></table></figure>
+<p>如果该设备已经有一个特定硬件的内核驱动，通用驱动仍然不会与之绑定，在这种情况下，如果你想在用户空间库中使用通用驱动，你必须手动解除对特定硬件驱动的绑定，并绑定通用驱动，像这样使用特定设备的 GUID：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo -n ed963694-e847-4b2a-85af-bc9cfc11d6f3 &gt; /sys/bus/vmbus/drivers/hv_netvsc/unbind</span><br><span class="line">echo -n ed963694-e847-4b2a-85af-bc9cfc11d6f3 &gt; /sys/bus/vmbus/drivers/uio_hv_generic/bind</span><br></pre></td></tr></table></figure>
+<p>你可以通过在sysfs中寻找设备来验证它是否已经被绑定到了驱动程序上，例如，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l /sys/bus/vmbus/devices/ed963694-e847-4b2a-85af-bc9cfc11d6f3/driver</span><br></pre></td></tr></table></figure>
+<p>如果成功的话，应该打印出来以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.../ed963694-e847-4b2a-85af-bc9cfc11d6f3/driver -&gt; ../../../bus/vmbus/drivers/uio_hv_generic</span><br></pre></td></tr></table></figure>
+<h2 id="关于-uio_hv_generic-需要知道的事"><a class="markdownIt-Anchor" href="#关于-uio_hv_generic-需要知道的事"></a> 关于 <code>uio_hv_generic</code> 需要知道的事</h2>
+<p>在每个中断中，<code>uio_hv_generic</code> 设置中断禁用位。这将阻止设备产生进一步的中断，直到该位被清除。用户空间驱动程序应该在阻塞和等待更多的中断之前清除这个位。</p>
+<p>当主机撤销一个设备时，中断文件描述符被标记下来，任何对中断文件描述符的读取将返回 <code>-EIO</code>。类似于一个关闭的套接字或断开的串行设备。</p>
+<p><strong>vmbus 设备区域被映射为 uio 设备资源</strong>：</p>
+<ul>
+<li>通道环形缓冲区：客户机到主机和主机到客户机</li>
+<li>访客到主机的中断信号页</li>
+<li>访客到主机的监控页</li>
+<li>网络接收缓冲区</li>
+<li>网络发送缓冲区</li>
+</ul>
+<p>如果一个子通道是由对主机的请求创建的，那么 <code>uio_hv_generic</code> 设备驱动将为每个通道环形缓冲区创建一个 sysfs 二进制文件。比如说</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/sys/bus/vmbus/devices/3811fe4d-0fa0-4b62-981a-74fc1084c757/channels/21/ring</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2021/12/08/uio-howto/" title="【译】Linux 内核的用户态 I/O" target="_blank" rel="external">https://blog.inoki.cc/2021/12/08/uio-howto/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Student</small></a></h3>
+        <div>Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+      <!-- Blog post bottom bar -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="9214609149" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2021/11/19/On-the-value-of-export-symbol-gpl/" title="【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2021/12/08/uio-howto/';
+        
+        this.page.identifier = 'uio-howto';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>

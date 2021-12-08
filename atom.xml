@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2021-11-19T14:23:55.310Z</updated>
+  <updated>2021-12-08T19:07:35.015Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,42 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>【译】Linux 内核的用户态 I/O</title>
+    <link href="https://blog.inoki.cc/2021/12/08/uio-howto/"/>
+    <id>https://blog.inoki.cc/2021/12/08/uio-howto/</id>
+    <published>2021-12-08T19:34:00.000Z</published>
+    <updated>2021-12-08T19:07:35.015Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://www.kernel.org/doc/html/latest/driver-api/uio-howto.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;The Userspace I/O
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
     <title>【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义</title>
     <link href="https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/"/>
     <id>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</id>
     <published>2021-11-19T15:34:00.000Z</published>
-    <updated>2021-11-19T14:23:55.310Z</updated>
+    <updated>2021-12-08T19:07:34.991Z</updated>
     
     <summary type="html">
     
@@ -52,7 +83,7 @@
     <link href="https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/"/>
     <id>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</id>
     <published>2021-11-12T15:38:00.000Z</published>
-    <updated>2021-11-19T14:23:55.310Z</updated>
+    <updated>2021-12-08T19:07:34.991Z</updated>
     
     <summary type="html">
     
@@ -87,7 +118,7 @@
     <link href="https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/"/>
     <id>https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/</id>
     <published>2021-10-24T22:48:00.000Z</published>
-    <updated>2021-11-19T14:23:55.330Z</updated>
+    <updated>2021-12-08T19:07:35.011Z</updated>
     
     <summary type="html">
     
@@ -126,7 +157,7 @@
     <link href="https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/"/>
     <id>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/</id>
     <published>2021-10-22T13:48:00.000Z</published>
-    <updated>2021-11-19T14:23:55.330Z</updated>
+    <updated>2021-12-08T19:07:35.011Z</updated>
     
     <summary type="html">
     
@@ -165,7 +196,7 @@
     <link href="https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/"/>
     <id>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/</id>
     <published>2021-10-20T19:34:00.000Z</published>
-    <updated>2021-11-19T14:23:55.334Z</updated>
+    <updated>2021-12-08T19:07:35.011Z</updated>
     
     <summary type="html">
     
@@ -200,7 +231,7 @@
     <link href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/"/>
     <id>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</id>
     <published>2021-10-18T19:48:00.000Z</published>
-    <updated>2021-11-19T14:23:55.330Z</updated>
+    <updated>2021-12-08T19:07:35.011Z</updated>
     
     <summary type="html">
     
@@ -237,7 +268,7 @@
     <link href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/"/>
     <id>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</id>
     <published>2021-10-18T19:48:00.000Z</published>
-    <updated>2021-11-19T14:23:55.330Z</updated>
+    <updated>2021-12-08T19:07:35.011Z</updated>
     
     <summary type="html">
     
@@ -276,7 +307,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</id>
     <published>2021-10-17T10:48:00.000Z</published>
-    <updated>2021-11-19T14:23:55.330Z</updated>
+    <updated>2021-12-08T19:07:35.011Z</updated>
     
     <summary type="html">
     
@@ -313,7 +344,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</id>
     <published>2021-10-17T10:48:00.000Z</published>
-    <updated>2021-11-19T14:23:55.330Z</updated>
+    <updated>2021-12-08T19:07:35.011Z</updated>
     
     <summary type="html">
     
@@ -352,7 +383,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/</id>
     <published>2021-10-17T09:40:00.000Z</published>
-    <updated>2021-11-19T14:23:55.330Z</updated>
+    <updated>2021-12-08T19:07:35.011Z</updated>
     
     <summary type="html">
     
@@ -397,7 +428,7 @@
     <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/"/>
     <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/</id>
     <published>2021-09-06T20:48:40.000Z</published>
-    <updated>2021-11-19T14:23:55.330Z</updated>
+    <updated>2021-12-08T19:07:35.011Z</updated>
     
     <summary type="html">
     
@@ -432,7 +463,7 @@
     <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/"/>
     <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/</id>
     <published>2021-09-06T20:47:40.000Z</published>
-    <updated>2021-11-19T14:23:55.330Z</updated>
+    <updated>2021-12-08T19:07:35.011Z</updated>
     
     <summary type="html">
     
@@ -467,7 +498,7 @@
     <link href="https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/"/>
     <id>https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/</id>
     <published>2021-09-05T20:47:40.000Z</published>
-    <updated>2021-11-19T14:23:55.330Z</updated>
+    <updated>2021-12-08T19:07:35.011Z</updated>
     
     <summary type="html">
     
@@ -502,7 +533,7 @@
     <link href="https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/"/>
     <id>https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/</id>
     <published>2021-09-05T09:42:00.000Z</published>
-    <updated>2021-11-19T14:23:55.314Z</updated>
+    <updated>2021-12-08T19:07:34.995Z</updated>
     
     <summary type="html">
     
@@ -529,7 +560,7 @@
     <link href="https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/"/>
     <id>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/</id>
     <published>2021-08-02T23:08:10.000Z</published>
-    <updated>2021-11-19T14:23:55.314Z</updated>
+    <updated>2021-12-08T19:07:34.995Z</updated>
     
     <summary type="html">
     
@@ -570,7 +601,7 @@
     <link href="https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/"/>
     <id>https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/</id>
     <published>2021-06-19T19:15:00.000Z</published>
-    <updated>2021-11-19T14:23:55.326Z</updated>
+    <updated>2021-12-08T19:07:35.007Z</updated>
     
     <summary type="html">
     
@@ -599,7 +630,7 @@
     <link href="https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/"/>
     <id>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</id>
     <published>2021-02-07T14:34:50.000Z</published>
-    <updated>2021-11-19T14:23:55.302Z</updated>
+    <updated>2021-12-08T19:07:34.983Z</updated>
     
     <summary type="html">
     
@@ -626,7 +657,7 @@
     <link href="https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/"/>
     <id>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/</id>
     <published>2021-01-27T15:47:40.000Z</published>
-    <updated>2021-11-19T14:23:55.330Z</updated>
+    <updated>2021-12-08T19:07:35.011Z</updated>
     
     <summary type="html">
     
@@ -661,7 +692,7 @@
     <link href="https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/"/>
     <id>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/</id>
     <published>2021-01-25T09:30:40.000Z</published>
-    <updated>2021-11-19T14:23:55.258Z</updated>
+    <updated>2021-12-08T19:07:34.939Z</updated>
     
     <summary type="html">
     
@@ -683,35 +714,6 @@ It
       <category term="KDE" scheme="https://blog.inoki.cc/tags/KDE/"/>
     
       <category term="SDDM" scheme="https://blog.inoki.cc/tags/SDDM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>滑稽、混乱、局促与 2020</title>
-    <link href="https://blog.inoki.cc/2020/12/30/My-2020/"/>
-    <id>https://blog.inoki.cc/2020/12/30/My-2020/</id>
-    <published>2020-12-30T09:41:40.000Z</published>
-    <updated>2021-11-19T14:23:55.310Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;从去年 11 月陆续收到 offer 并选择了自己最感兴趣的一个那一刻起，我想象中的 2020
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Dairy" scheme="https://blog.inoki.cc/categories/Dairy/"/>
-    
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
-      <category term="private" scheme="https://blog.inoki.cc/tags/private/"/>
     
   </entry>
   

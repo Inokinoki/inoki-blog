@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Fri, 19 Nov 2021 14:23:55 GMT</pubDate>
+    <pubDate>Wed, 08 Dec 2021 19:07:35 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】Linux 内核的用户态 I/O</title>
+      <link>https://blog.inoki.cc/2021/12/08/uio-howto/</link>
+      <guid>https://blog.inoki.cc/2021/12/08/uio-howto/</guid>
+      <pubDate>Wed, 08 Dec 2021 19:34:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.kernel.org/doc/html/latest/driver-api/uio-howto.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;The Userspace I/O
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/12/08/uio-howto/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义</title>
@@ -410,27 +431,6 @@ It
       
       
       <comments>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>滑稽、混乱、局促与 2020</title>
-      <link>https://blog.inoki.cc/2020/12/30/My-2020/</link>
-      <guid>https://blog.inoki.cc/2020/12/30/My-2020/</guid>
-      <pubDate>Wed, 30 Dec 2020 09:41:40 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;从去年 11 月陆续收到 offer 并选择了自己最感兴趣的一个那一刻起，我想象中的 2020
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2020/12/30/My-2020/#disqus_thread</comments>
     </item>
     
   </channel>
