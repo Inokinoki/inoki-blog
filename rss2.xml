@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Wed, 08 Dec 2021 19:07:35 GMT</pubDate>
+    <pubDate>Wed, 08 Dec 2021 20:18:26 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】Linux 内核的 VFIO - “Virtual Function I/O”</title>
+      <link>https://blog.inoki.cc/2021/12/08/vfio/</link>
+      <guid>https://blog.inoki.cc/2021/12/08/vfio/</guid>
+      <pubDate>Wed, 08 Dec 2021 20:34:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.kernel.org/doc/html/latest/driver-api/vfio.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;VFIO - “Virtual Function
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/12/08/vfio/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】Linux 内核的用户态 I/O</title>
@@ -181,27 +202,6 @@
     </item>
     
     <item>
-      <title>Android bootloader analysis -- Aboot</title>
-      <link>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</link>
-      <guid>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</guid>
-      <pubDate>Sun, 17 Oct 2021 10:48:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;There are already many articles that explain the boot process of Android on Qualcomm platform. From my translation of &lt;a
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/#disqus_thread</comments>
-    </item>
-    
-    <item>
       <title>Android 启动加载器分析 —— Aboot</title>
       <link>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</link>
       <guid>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</guid>
@@ -220,6 +220,27 @@
       
       
       <comments>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>Android bootloader analysis -- Aboot</title>
+      <link>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</link>
+      <guid>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</guid>
+      <pubDate>Sun, 17 Oct 2021 10:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;There are already many articles that explain the boot process of Android on Qualcomm platform. From my translation of &lt;a
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/#disqus_thread</comments>
     </item>
     
     <item>
@@ -409,28 +430,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>SDDM tips (1)</title>
-      <link>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/</link>
-      <guid>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/</guid>
-      <pubDate>Mon, 25 Jan 2021 09:30:40 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;SDDM is the abbreviation of Simple Desktop Display Manager, which is a default display manager for LXQt and KDE Plasma.&lt;br&gt;
-It
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/#disqus_thread</comments>
     </item>
     
   </channel>
