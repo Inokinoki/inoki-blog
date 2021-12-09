@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2021-12-08T20:18:26.476Z</updated>
+  <updated>2021-12-09T19:09:02.159Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,46 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>EFI 启动项管理器——双系统启动神器，安全解决你的多系统启动难题</title>
+    <link href="https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/"/>
+    <id>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/</id>
+    <published>2021-12-09T20:34:00.000Z</published>
+    <updated>2021-12-09T19:09:02.159Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;你是否遇到过这样的问题？在电脑上安装多个系统：在安装好 FreeBSD 后，发现 Windows 启动不见了；在安装好 Windows 后，发现启动 Linux 用的 Grub 启动不见了。虽然用 refind 这种启动器可以部分解决这个问题，但有时候 Windows
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Inoki Home Made" scheme="https://blog.inoki.cc/categories/Inoki-Home-Made/"/>
+    
+      <category term="Qt" scheme="https://blog.inoki.cc/categories/Inoki-Home-Made/Qt/"/>
+    
+      <category term="EFI" scheme="https://blog.inoki.cc/categories/Inoki-Home-Made/Qt/EFI/"/>
+    
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="Qt" scheme="https://blog.inoki.cc/tags/Qt/"/>
+    
+      <category term="EFI" scheme="https://blog.inoki.cc/tags/EFI/"/>
+    
+  </entry>
+  
+  <entry>
     <title>【译】Linux 内核的 VFIO - “Virtual Function I/O”</title>
     <link href="https://blog.inoki.cc/2021/12/08/vfio/"/>
     <id>https://blog.inoki.cc/2021/12/08/vfio/</id>
     <published>2021-12-08T20:34:00.000Z</published>
-    <updated>2021-12-08T20:18:26.476Z</updated>
+    <updated>2021-12-09T19:09:02.203Z</updated>
     
     <summary type="html">
     
@@ -39,9 +74,9 @@
       <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
@@ -52,7 +87,7 @@
     <link href="https://blog.inoki.cc/2021/12/08/uio-howto/"/>
     <id>https://blog.inoki.cc/2021/12/08/uio-howto/</id>
     <published>2021-12-08T19:34:00.000Z</published>
-    <updated>2021-12-08T20:18:26.476Z</updated>
+    <updated>2021-12-09T19:09:02.203Z</updated>
     
     <summary type="html">
     
@@ -70,9 +105,9 @@
       <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
@@ -83,7 +118,7 @@
     <link href="https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/"/>
     <id>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</id>
     <published>2021-11-19T15:34:00.000Z</published>
-    <updated>2021-12-08T20:18:26.452Z</updated>
+    <updated>2021-12-09T19:09:02.183Z</updated>
     
     <summary type="html">
     
@@ -101,9 +136,9 @@
       <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
@@ -114,7 +149,7 @@
     <link href="https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/"/>
     <id>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</id>
     <published>2021-11-12T15:38:00.000Z</published>
-    <updated>2021-12-08T20:18:26.452Z</updated>
+    <updated>2021-12-09T19:09:02.183Z</updated>
     
     <summary type="html">
     
@@ -136,11 +171,11 @@
       <category term="SDR" scheme="https://blog.inoki.cc/categories/SDR/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+      <category term="SDR" scheme="https://blog.inoki.cc/tags/SDR/"/>
     
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
-      <category term="SDR" scheme="https://blog.inoki.cc/tags/SDR/"/>
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
   </entry>
   
@@ -149,7 +184,7 @@
     <link href="https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/"/>
     <id>https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/</id>
     <published>2021-10-24T22:48:00.000Z</published>
-    <updated>2021-12-08T20:18:26.472Z</updated>
+    <updated>2021-12-09T19:09:02.199Z</updated>
     
     <summary type="html">
     
@@ -188,7 +223,7 @@
     <link href="https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/"/>
     <id>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/</id>
     <published>2021-10-22T13:48:00.000Z</published>
-    <updated>2021-12-08T20:18:26.472Z</updated>
+    <updated>2021-12-09T19:09:02.199Z</updated>
     
     <summary type="html">
     
@@ -227,7 +262,7 @@
     <link href="https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/"/>
     <id>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/</id>
     <published>2021-10-20T19:34:00.000Z</published>
-    <updated>2021-12-08T20:18:26.472Z</updated>
+    <updated>2021-12-09T19:09:02.203Z</updated>
     
     <summary type="html">
     
@@ -262,7 +297,7 @@
     <link href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/"/>
     <id>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</id>
     <published>2021-10-18T19:48:00.000Z</published>
-    <updated>2021-12-08T20:18:26.472Z</updated>
+    <updated>2021-12-09T19:09:02.199Z</updated>
     
     <summary type="html">
     
@@ -299,7 +334,7 @@
     <link href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/"/>
     <id>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</id>
     <published>2021-10-18T19:48:00.000Z</published>
-    <updated>2021-12-08T20:18:26.472Z</updated>
+    <updated>2021-12-09T19:09:02.199Z</updated>
     
     <summary type="html">
     
@@ -334,11 +369,48 @@
   </entry>
   
   <entry>
+    <title>Android bootloader analysis -- Aboot</title>
+    <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/"/>
+    <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</id>
+    <published>2021-10-17T10:48:00.000Z</published>
+    <updated>2021-12-09T19:09:02.203Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;There are already many articles that explain the boot process of Android on Qualcomm platform. From my translation of &lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
+    
+      <category term="Android" scheme="https://blog.inoki.cc/categories/Linux/Android/"/>
+    
+      <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
+    
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+    
+      <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
+    
+      <category term="Bootloader" scheme="https://blog.inoki.cc/tags/Bootloader/"/>
+    
+      <category term="Aboot" scheme="https://blog.inoki.cc/tags/Aboot/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android 启动加载器分析 —— Aboot</title>
     <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</id>
     <published>2021-10-17T10:48:00.000Z</published>
-    <updated>2021-12-08T20:18:26.472Z</updated>
+    <updated>2021-12-09T19:09:02.203Z</updated>
     
     <summary type="html">
     
@@ -373,48 +445,11 @@
   </entry>
   
   <entry>
-    <title>Android bootloader analysis -- Aboot</title>
-    <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/"/>
-    <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</id>
-    <published>2021-10-17T10:48:00.000Z</published>
-    <updated>2021-12-08T20:18:26.472Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;There are already many articles that explain the boot process of Android on Qualcomm platform. From my translation of &lt;a
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
-    
-      <category term="Android" scheme="https://blog.inoki.cc/categories/Linux/Android/"/>
-    
-      <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
-    
-    
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
-    
-      <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
-    
-      <category term="Bootloader" scheme="https://blog.inoki.cc/tags/Bootloader/"/>
-    
-      <category term="Aboot" scheme="https://blog.inoki.cc/tags/Aboot/"/>
-    
-  </entry>
-  
-  <entry>
     <title>【译】高通 Android 设备的启动信任链</title>
     <link href="https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/</id>
     <published>2021-10-17T09:40:00.000Z</published>
-    <updated>2021-12-08T20:18:26.472Z</updated>
+    <updated>2021-12-09T19:09:02.203Z</updated>
     
     <summary type="html">
     
@@ -436,9 +471,9 @@
       <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
@@ -459,7 +494,7 @@
     <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/"/>
     <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/</id>
     <published>2021-09-06T20:48:40.000Z</published>
-    <updated>2021-12-08T20:18:26.472Z</updated>
+    <updated>2021-12-09T19:09:02.199Z</updated>
     
     <summary type="html">
     
@@ -483,9 +518,9 @@
       <category term="Wayland" scheme="https://blog.inoki.cc/categories/Linux/Wayland/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
   </entry>
   
@@ -494,7 +529,7 @@
     <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/"/>
     <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/</id>
     <published>2021-09-06T20:47:40.000Z</published>
-    <updated>2021-12-08T20:18:26.472Z</updated>
+    <updated>2021-12-09T19:09:02.199Z</updated>
     
     <summary type="html">
     
@@ -518,9 +553,9 @@
       <category term="Wayland" scheme="https://blog.inoki.cc/categories/Linux/Wayland/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
   </entry>
   
@@ -529,7 +564,7 @@
     <link href="https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/"/>
     <id>https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/</id>
     <published>2021-09-05T20:47:40.000Z</published>
-    <updated>2021-12-08T20:18:26.472Z</updated>
+    <updated>2021-12-09T19:09:02.199Z</updated>
     
     <summary type="html">
     
@@ -553,9 +588,9 @@
       <category term="Wayland" scheme="https://blog.inoki.cc/categories/Linux/Wayland/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
   </entry>
   
@@ -564,7 +599,7 @@
     <link href="https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/"/>
     <id>https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/</id>
     <published>2021-09-05T09:42:00.000Z</published>
-    <updated>2021-12-08T20:18:26.456Z</updated>
+    <updated>2021-12-09T19:09:02.183Z</updated>
     
     <summary type="html">
     
@@ -591,7 +626,7 @@
     <link href="https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/"/>
     <id>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/</id>
     <published>2021-08-02T23:08:10.000Z</published>
-    <updated>2021-12-08T20:18:26.456Z</updated>
+    <updated>2021-12-09T19:09:02.187Z</updated>
     
     <summary type="html">
     
@@ -615,9 +650,9 @@
       <category term="Vulkan" scheme="https://blog.inoki.cc/categories/Computer-Graphics/Vulkan/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="Computer Graphics" scheme="https://blog.inoki.cc/tags/Computer-Graphics/"/>
     
@@ -632,7 +667,7 @@
     <link href="https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/"/>
     <id>https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/</id>
     <published>2021-06-19T19:15:00.000Z</published>
-    <updated>2021-12-08T20:18:26.468Z</updated>
+    <updated>2021-12-09T19:09:02.195Z</updated>
     
     <summary type="html">
     
@@ -661,7 +696,7 @@
     <link href="https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/"/>
     <id>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</id>
     <published>2021-02-07T14:34:50.000Z</published>
-    <updated>2021-12-08T20:18:26.444Z</updated>
+    <updated>2021-12-09T19:09:02.171Z</updated>
     
     <summary type="html">
     
@@ -680,41 +715,6 @@
     
     
       <category term="KDE Connect" scheme="https://blog.inoki.cc/tags/KDE-Connect/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【译】Xen 的奇妙冒险 —— RPi4 篇</title>
-    <link href="https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/"/>
-    <id>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/</id>
-    <published>2021-01-27T15:47:40.000Z</published>
-    <updated>2021-12-08T20:18:26.472Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;原文链接：&lt;a href=&quot;https://www.linux.com/featured/xen-on-raspberry-pi-4-adventures/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Xen on Raspberry Pi 4
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Translation" scheme="https://blog.inoki.cc/categories/Translation/"/>
-    
-      <category term="Embedded System" scheme="https://blog.inoki.cc/categories/Embedded-System/"/>
-    
-      <category term="Chinese" scheme="https://blog.inoki.cc/categories/Translation/Chinese/"/>
-    
-      <category term="Raspberry PI" scheme="https://blog.inoki.cc/categories/Embedded-System/Raspberry-PI/"/>
-    
-    
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
   </entry>
   

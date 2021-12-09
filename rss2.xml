@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Wed, 08 Dec 2021 20:18:26 GMT</pubDate>
+    <pubDate>Thu, 09 Dec 2021 19:09:02 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>EFI 启动项管理器——双系统启动神器，安全解决你的多系统启动难题</title>
+      <link>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/</link>
+      <guid>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/</guid>
+      <pubDate>Thu, 09 Dec 2021 20:34:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;你是否遇到过这样的问题？在电脑上安装多个系统：在安装好 FreeBSD 后，发现 Windows 启动不见了；在安装好 Windows 后，发现启动 Linux 用的 Grub 启动不见了。虽然用 refind 这种启动器可以部分解决这个问题，但有时候 Windows
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】Linux 内核的 VFIO - “Virtual Function I/O”</title>
@@ -202,27 +223,6 @@
     </item>
     
     <item>
-      <title>Android 启动加载器分析 —— Aboot</title>
-      <link>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</link>
-      <guid>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</guid>
-      <pubDate>Sun, 17 Oct 2021 10:48:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;已经有很多文章解析过 Android 在高通平台的启动流程了。从我翻译的&lt;a href=&quot;https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/&quot;&gt;【译】高通 Android
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/#disqus_thread</comments>
-    </item>
-    
-    <item>
       <title>Android bootloader analysis -- Aboot</title>
       <link>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</link>
       <guid>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</guid>
@@ -241,6 +241,27 @@
       
       
       <comments>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>Android 启动加载器分析 —— Aboot</title>
+      <link>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</link>
+      <guid>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</guid>
+      <pubDate>Sun, 17 Oct 2021 10:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;已经有很多文章解析过 Android 在高通平台的启动流程了。从我翻译的&lt;a href=&quot;https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/&quot;&gt;【译】高通 Android
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/#disqus_thread</comments>
     </item>
     
     <item>
@@ -409,27 +430,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】Xen 的奇妙冒险 —— RPi4 篇</title>
-      <link>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/</link>
-      <guid>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/</guid>
-      <pubDate>Wed, 27 Jan 2021 15:47:40 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.linux.com/featured/xen-on-raspberry-pi-4-adventures/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Xen on Raspberry Pi 4
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/#disqus_thread</comments>
     </item>
     
   </channel>
