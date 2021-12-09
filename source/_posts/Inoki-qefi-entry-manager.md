@@ -33,7 +33,7 @@ Linux 版本会有一个 AppImage 拓展名的文件，而 Windows 版本则需�
 
 打开之后，首屏显示的是你的电脑当前的启动顺序。
 
-![启动顺序](https://github.com/Inokinoki/QEFIEntryManager/blob/master/.github/entries.png)
+![启动顺序](https://github.com/Inokinoki/QEFIEntryManager/raw/master/.github/entries.png)
 
 用户可以选中一个启动项，点击 Move up 或 Move down 来改变启动顺序，最后点击 Save 来保存。
 
