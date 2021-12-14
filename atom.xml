@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2021-12-09T19:11:59.932Z</updated>
+  <updated>2021-12-14T14:51:06.353Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,44 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Linux 内核的用户态驱动框架</title>
+    <link href="https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/"/>
+    <id>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/</id>
+    <published>2021-12-14T15:49:00.000Z</published>
+    <updated>2021-12-14T14:51:06.353Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;在 Linux 的驱动模型中，存在各种驱动子系统，如 PCI 子系统、网络子系统。在开发驱动的时候，我们可以使用相应的子系统来完成，比如有人想开发一个 PCI
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
+    
+      <category term="Driver" scheme="https://blog.inoki.cc/categories/Linux/Driver/"/>
+    
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+    
+      <category term="驱动" scheme="https://blog.inoki.cc/tags/%E9%A9%B1%E5%8A%A8/"/>
+    
+  </entry>
+  
+  <entry>
     <title>EFI 启动项管理器——双系统启动神器，安全解决你的多系统启动难题</title>
     <link href="https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/"/>
     <id>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/</id>
     <published>2021-12-09T20:34:00.000Z</published>
-    <updated>2021-12-09T19:11:59.932Z</updated>
+    <updated>2021-12-14T14:51:06.309Z</updated>
     
     <summary type="html">
     
@@ -56,7 +89,7 @@
     <link href="https://blog.inoki.cc/2021/12/08/vfio/"/>
     <id>https://blog.inoki.cc/2021/12/08/vfio/</id>
     <published>2021-12-08T20:34:00.000Z</published>
-    <updated>2021-12-09T19:11:59.984Z</updated>
+    <updated>2021-12-14T14:51:06.353Z</updated>
     
     <summary type="html">
     
@@ -87,7 +120,7 @@
     <link href="https://blog.inoki.cc/2021/12/08/uio-howto/"/>
     <id>https://blog.inoki.cc/2021/12/08/uio-howto/</id>
     <published>2021-12-08T19:34:00.000Z</published>
-    <updated>2021-12-09T19:11:59.984Z</updated>
+    <updated>2021-12-14T14:51:06.353Z</updated>
     
     <summary type="html">
     
@@ -118,7 +151,7 @@
     <link href="https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/"/>
     <id>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</id>
     <published>2021-11-19T15:34:00.000Z</published>
-    <updated>2021-12-09T19:11:59.960Z</updated>
+    <updated>2021-12-14T14:51:06.329Z</updated>
     
     <summary type="html">
     
@@ -149,7 +182,7 @@
     <link href="https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/"/>
     <id>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</id>
     <published>2021-11-12T15:38:00.000Z</published>
-    <updated>2021-12-09T19:11:59.960Z</updated>
+    <updated>2021-12-14T14:51:06.329Z</updated>
     
     <summary type="html">
     
@@ -184,7 +217,7 @@
     <link href="https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/"/>
     <id>https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/</id>
     <published>2021-10-24T22:48:00.000Z</published>
-    <updated>2021-12-09T19:11:59.980Z</updated>
+    <updated>2021-12-14T14:51:06.349Z</updated>
     
     <summary type="html">
     
@@ -223,7 +256,7 @@
     <link href="https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/"/>
     <id>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/</id>
     <published>2021-10-22T13:48:00.000Z</published>
-    <updated>2021-12-09T19:11:59.980Z</updated>
+    <updated>2021-12-14T14:51:06.349Z</updated>
     
     <summary type="html">
     
@@ -262,7 +295,7 @@
     <link href="https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/"/>
     <id>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/</id>
     <published>2021-10-20T19:34:00.000Z</published>
-    <updated>2021-12-09T19:11:59.984Z</updated>
+    <updated>2021-12-14T14:51:06.349Z</updated>
     
     <summary type="html">
     
@@ -297,7 +330,7 @@
     <link href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/"/>
     <id>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</id>
     <published>2021-10-18T19:48:00.000Z</published>
-    <updated>2021-12-09T19:11:59.980Z</updated>
+    <updated>2021-12-14T14:51:06.349Z</updated>
     
     <summary type="html">
     
@@ -334,7 +367,7 @@
     <link href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/"/>
     <id>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</id>
     <published>2021-10-18T19:48:00.000Z</published>
-    <updated>2021-12-09T19:11:59.980Z</updated>
+    <updated>2021-12-14T14:51:06.349Z</updated>
     
     <summary type="html">
     
@@ -373,7 +406,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</id>
     <published>2021-10-17T10:48:00.000Z</published>
-    <updated>2021-12-09T19:11:59.980Z</updated>
+    <updated>2021-12-14T14:51:06.349Z</updated>
     
     <summary type="html">
     
@@ -410,7 +443,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</id>
     <published>2021-10-17T10:48:00.000Z</published>
-    <updated>2021-12-09T19:11:59.980Z</updated>
+    <updated>2021-12-14T14:51:06.349Z</updated>
     
     <summary type="html">
     
@@ -449,7 +482,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/</id>
     <published>2021-10-17T09:40:00.000Z</published>
-    <updated>2021-12-09T19:11:59.980Z</updated>
+    <updated>2021-12-14T14:51:06.349Z</updated>
     
     <summary type="html">
     
@@ -494,7 +527,7 @@
     <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/"/>
     <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/</id>
     <published>2021-09-06T20:48:40.000Z</published>
-    <updated>2021-12-09T19:11:59.980Z</updated>
+    <updated>2021-12-14T14:51:06.349Z</updated>
     
     <summary type="html">
     
@@ -529,7 +562,7 @@
     <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/"/>
     <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/</id>
     <published>2021-09-06T20:47:40.000Z</published>
-    <updated>2021-12-09T19:11:59.980Z</updated>
+    <updated>2021-12-14T14:51:06.349Z</updated>
     
     <summary type="html">
     
@@ -564,7 +597,7 @@
     <link href="https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/"/>
     <id>https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/</id>
     <published>2021-09-05T20:47:40.000Z</published>
-    <updated>2021-12-09T19:11:59.980Z</updated>
+    <updated>2021-12-14T14:51:06.349Z</updated>
     
     <summary type="html">
     
@@ -599,7 +632,7 @@
     <link href="https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/"/>
     <id>https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/</id>
     <published>2021-09-05T09:42:00.000Z</published>
-    <updated>2021-12-09T19:11:59.964Z</updated>
+    <updated>2021-12-14T14:51:06.333Z</updated>
     
     <summary type="html">
     
@@ -626,7 +659,7 @@
     <link href="https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/"/>
     <id>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/</id>
     <published>2021-08-02T23:08:10.000Z</published>
-    <updated>2021-12-09T19:11:59.964Z</updated>
+    <updated>2021-12-14T14:51:06.333Z</updated>
     
     <summary type="html">
     
@@ -667,7 +700,7 @@
     <link href="https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/"/>
     <id>https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/</id>
     <published>2021-06-19T19:15:00.000Z</published>
-    <updated>2021-12-09T19:11:59.976Z</updated>
+    <updated>2021-12-14T14:51:06.345Z</updated>
     
     <summary type="html">
     
@@ -688,33 +721,6 @@
       <category term="macOS" scheme="https://blog.inoki.cc/tags/macOS/"/>
     
       <category term="IME" scheme="https://blog.inoki.cc/tags/IME/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>KDE Connect iOS Develop Dairy(3) Certificate</title>
-    <link href="https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/"/>
-    <id>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</id>
-    <published>2021-02-07T14:34:50.000Z</published>
-    <updated>2021-12-09T19:11:59.948Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;As mentioned at the end of my previous post &lt;a href=&quot;https://blog.inoki.cc/2020/04/19/KDEConnect-iOS-dev-dairy-2/&quot;&gt;KDE Connect iOS
-        
-      
-    
-    </summary>
-    
-    
-      <category term="KDE Connect" scheme="https://blog.inoki.cc/categories/KDE-Connect/"/>
-    
-    
-      <category term="KDE Connect" scheme="https://blog.inoki.cc/tags/KDE-Connect/"/>
     
   </entry>
   

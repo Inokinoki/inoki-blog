@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Thu, 09 Dec 2021 19:11:59 GMT</pubDate>
+    <pubDate>Tue, 14 Dec 2021 14:51:06 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Linux 内核的用户态驱动框架</title>
+      <link>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/</link>
+      <guid>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/</guid>
+      <pubDate>Tue, 14 Dec 2021 15:49:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;在 Linux 的驱动模型中，存在各种驱动子系统，如 PCI 子系统、网络子系统。在开发驱动的时候，我们可以使用相应的子系统来完成，比如有人想开发一个 PCI
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>EFI 启动项管理器——双系统启动神器，安全解决你的多系统启动难题</title>
@@ -409,27 +430,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>KDE Connect iOS Develop Dairy(3) Certificate</title>
-      <link>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</link>
-      <guid>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</guid>
-      <pubDate>Sun, 07 Feb 2021 14:34:50 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;As mentioned at the end of my previous post &lt;a href=&quot;https://blog.inoki.cc/2020/04/19/KDEConnect-iOS-dev-dairy-2/&quot;&gt;KDE Connect iOS
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/#disqus_thread</comments>
     </item>
     
   </channel>
