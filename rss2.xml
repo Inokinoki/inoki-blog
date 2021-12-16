@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Tue, 14 Dec 2021 14:51:06 GMT</pubDate>
+    <pubDate>Thu, 16 Dec 2021 14:06:35 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】我的 C++ 20 协程的予取予求</title>
+      <link>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/</link>
+      <guid>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/</guid>
+      <pubDate>Thu, 16 Dec 2021 15:34:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.scs.stanford.edu/~dm/blog/c++-coroutines.html&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Linux 内核的用户态驱动框架</title>
@@ -409,27 +430,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>Write your own IME on macOS - 1. Create project</title>
-      <link>https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/</link>
-      <guid>https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/</guid>
-      <pubDate>Sat, 19 Jun 2021 19:15:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;On macOS, it is not so difficult to write an Input Method Engine (IME). Unlike Linux or the other Unix-like OS, macOS provides an
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/#disqus_thread</comments>
     </item>
     
   </channel>
