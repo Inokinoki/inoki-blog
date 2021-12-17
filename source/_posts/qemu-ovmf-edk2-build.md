@@ -101,3 +101,9 @@ Hello World!
 # Conclusion
 
 In this post, I noted all the steps to build an edk2 HelloWorld. I will write some interesting UEFI applications sooner.
+
+# Readings
+
+- [Boot Overview](https://github.com/tianocore/tianocore.github.io/wiki/OVMF-Boot-Overview)
+- [Run OVMF](https://github.com/tianocore/tianocore.github.io/wiki/How-to-run-OVMF)
+- [Debug using GDB](https://github.com/tianocore/tianocore.github.io/wiki/How-to-debug-OVMF-with-QEMU-using-GDB)
