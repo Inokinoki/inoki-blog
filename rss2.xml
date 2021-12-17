@@ -9,8 +9,30 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Thu, 16 Dec 2021 14:06:35 GMT</pubDate>
+    <pubDate>Fri, 17 Dec 2021 12:33:46 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Build and run Hello World on OVMF Qemu</title>
+      <link>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/</link>
+      <guid>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/</guid>
+      <pubDate>Fri, 17 Dec 2021 13:47:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;This post records how I build and run an EDK2 HelloWorld on Qemu, based on OVMF UEFI shell.&lt;/p&gt;
+&lt;h1 id=&quot;prepare-environment&quot;&gt;&lt;a
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】我的 C++ 20 协程的予取予求</title>
@@ -409,27 +431,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】 Vulkan 光线追踪</title>
-      <link>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/</link>
-      <guid>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/</guid>
-      <pubDate>Mon, 02 Aug 2021 23:08:10 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.khronos.org/blog/vulkan-ray-tracing-final-specification-release&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Vulkan Ray
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/#disqus_thread</comments>
     </item>
     
   </channel>
