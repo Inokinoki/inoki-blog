@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://c.a.segger.com/fileadmin/images/products/J-Link/J-Link_PRO/j-link_pro_500.png">
 <meta property="og:image" content="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/debugger.jpg">
 <meta property="og:image" content="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/debugging.jpg">
-<meta property="og:updated_time" content="2022-02-22T10:01:45.301Z">
+<meta property="og:updated_time" content="2022-02-22T10:12:25.538Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="My journey on Raspberry Pi JTAG debugging">
 <meta name="twitter:description" content="As an OS developer/hacker, I am recently hacking Raspberry Pi, including a project aiming at running XNU(macOS kernel) on Raspberry Pi 3 and the port of Embox to Raspberry Pi 2. I often feel disappoin">
@@ -413,7 +413,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Debug: 222 311 stlink_usb.c:1125 stlink_usb_error_check(): unknown/unexpected STLINK status code 0x4</span><br><span class="line">Error: 223 311 stlink_usb.c:3740 stlink_open(): init mode failed (unable to connect to the target)</span><br><span class="line">Debug: 224 311 stlink_usb.c:1654 stlink_usb_exit_mode(): MODE: 0x01</span><br><span class="line">Debug: 225 312 command.c:555 run_command(): Command &apos;init&apos; failed with error code -4</span><br></pre></td></tr></table></figure>
 <p>To know what happened, I tries to connect the Raspberry Pi from a JTAG debugger delivered with my first FPGA. Before that, I just validated that the debugger works well with the FPGA (in OpenOCD, using <code>cpld/xilinx-xc6s.cfg</code> target, which only uses <code>TMS</code>, <code>TDI</code>, <code>TDO</code>, <code>TCK</code> pins). With this debugger, OpenOCD can connect to the device: it does not report the USB bug anymore. However, it stops at complaining that <code>RTCK</code> signal cannot be responded.</p>
 <p>So, it is the ST-Link work which does not work in my case. The hardware debugging is painful.</p>
-<p>PS: The BCM2835 with ARM11 (Raspberry Pi 1, zero) does not seem to work with ST-Link v2 later rev/v3 direct dap API due the firmware, according to <a href="https://sourceforge.net/p/openocd/tickets/280/" target="_blank" rel="noopener">Ticket 280 of OpenOCD</a>.</p>
+<p>PS: The BCM2835 with ARM11 (Raspberry Pi 1, zero) does not seem to work with ST-Link High Level Abstraction(HLA), according to <a href="https://sourceforge.net/p/openocd/tickets/280/" target="_blank" rel="noopener">Ticket 280 of OpenOCD</a>. But it might be possible with Direct DAP, which exists in ST-Link v2 later firmware and ST-Link 3.</p>
 <h2 id="ftdi-ft232h"><a class="markdownIt-Anchor" href="#ftdi-ft232h"></a> FTDI FT232H</h2>
 <p>As I mentioned, this debugger is for my FPGA, which works fine out-of-box. The FT232H is a multi-function chip, can be configured as UART, FIFO, JTAG, I2C, SPI, etc. There seems to be an ARM 10 Pin interface. So, I connect it according to the layout of ARM 10 Pin.</p>
 <p>I did not connect <code>RTCK</code>, so the OpenOCD returns an error. However, there is no datasheet for my hardware delivered with the FPGA. I think it may be caused by the not really connected <code>RTCK</code> pin, or by the complex configuration of the multi-purpose chip.</p>
