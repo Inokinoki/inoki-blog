@@ -23,14 +23,14 @@
   
   <title>【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义 | Inoki in the world</title>
   <meta name="description" content="原文链接：On the value of EXPORT_SYMBOL_GPL 当一个可加载模块被插入时，它对内核函数和数据结构的任何引用必须与当前运行的内核链接。然而，模块加载器并不提供对所有内核符号的访问；只有那些被明确被导出的才是可用的。导出这个需求减少了模块可以看到的 API，尽管没有减少那么多：在 2.6.13 内核中有超过 6000 个符号被导出。 导出有两种形式：vanilla（EXP">
-<meta name="keywords" content="翻译,中文,Linux">
+<meta name="keywords" content="Linux,中文,翻译">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义">
 <meta property="og:url" content="https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/index.html">
 <meta property="og:site_name" content="Inoki in the world">
 <meta property="og:description" content="原文链接：On the value of EXPORT_SYMBOL_GPL 当一个可加载模块被插入时，它对内核函数和数据结构的任何引用必须与当前运行的内核链接。然而，模块加载器并不提供对所有内核符号的访问；只有那些被明确被导出的才是可用的。导出这个需求减少了模块可以看到的 API，尽管没有减少那么多：在 2.6.13 内核中有超过 6000 个符号被导出。 导出有两种形式：vanilla（EXP">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2022-02-22T06:29:31.491Z">
+<meta property="og:updated_time" content="2022-02-22T10:00:16.740Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义">
 <meta name="twitter:description" content="原文链接：On the value of EXPORT_SYMBOL_GPL 当一个可加载模块被插入时，它对内核函数和数据结构的任何引用必须与当前运行的内核链接。然而，模块加载器并不提供对所有内核符号的访问；只有那些被明确被导出的才是可用的。导出这个需求减少了模块可以看到的 API，尽管没有减少那么多：在 2.6.13 内核中有超过 6000 个符号被导出。 导出有两种形式：vanilla（EXP">
