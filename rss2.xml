@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Tue, 22 Feb 2022 04:24:19 GMT</pubDate>
+    <pubDate>Tue, 22 Feb 2022 06:29:31 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>My journey on Raspberry Pi JTAG debugging</title>
+      <link>https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/</link>
+      <guid>https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/</guid>
+      <pubDate>Tue, 22 Feb 2022 06:57:50 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;As an OS developer/hacker, I am recently hacking Raspberry Pi, including a project aiming at &lt;a
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>孑然一身的 2021</title>
@@ -410,27 +431,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】从零开始的 Wayland 合成器 —— 1. Hello wlroots</title>
-      <link>https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/</link>
-      <guid>https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/</guid>
-      <pubDate>Sun, 05 Sep 2021 20:47:40 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://drewdevault.com/2018/02/17/Writing-a-Wayland-compositor-1.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Writing a Wayland
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/#disqus_thread</comments>
     </item>
     
   </channel>
