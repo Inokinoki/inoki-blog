@@ -4,11 +4,11 @@ date: 2020-05-17 23:57:50
 tags:
 - Embedded System
 - Bare Metal
-- Raspberry PI
+- Raspberry Pi
 - Debug
 - UART
 categories:
-- [Embedded System, Raspberry PI]
+- [Embedded System, Raspberry Pi]
 ---
 
 If you want to write an OS for Raspberry Pi, you may need play with its Bare Metal mode. Thus, a UART debug serial is needed.

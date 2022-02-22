@@ -1,17 +1,17 @@
 ---
-title: Win 10 ARM Installing on Raspberry PI 3
+title: Win 10 ARM Installing on Raspberry Pi 3
 date: 2019-05-16 23:44:40
 tags:
 - Embedded System
 - Win 10 ARM
-- Raspberry PI
+- Raspberry Pi
 categories:
-- [Embedded System, Raspberry PI]
+- [Embedded System, Raspberry Pi]
 ---
 
 Since Microsoft published their Win 10 on ARM (WoA), many devices based on ARM64 get their own versions of Windows 10. The one I prefer is the Lumia 950 XL stuff by [@imbushuo](https://twitter.com/imbushuo). This gives new life to Lumia 950 and Lumia 950 XL, although WoA cannot be used in the productivity environment on these two phones.
 
-This article will show a simple step to install WoA on Raspberry PI (3rd generation or later). And the platform of your host should be Windows.
+This article will show a simple step to install WoA on Raspberry Pi (3rd generation or later). And the platform of your host should be Windows.
 
 # Preparation
 
@@ -63,9 +63,9 @@ Select the UEFI firmware you downloaded.
 
 And just flash it !
 
-# Launch Win 10 on Raspberry PI
+# Launch Win 10 on Raspberry Pi
 
-If all goes well, you can get into the activation screen of Win 10 (after a really long waiting, because Raspberry PI is not so performent).
+If all goes well, you can get into the activation screen of Win 10 (after a really long waiting, because Raspberry Pi is not so performent).
 
 Count the processor if you want, and there are many interesting things to do :)
 

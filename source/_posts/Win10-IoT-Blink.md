@@ -4,17 +4,17 @@ date: 2019-05-07 22:58:40
 tags:
 - Embedded System
 - Win 10 IoT
-- Raspberry PI
+- Raspberry Pi
 categories:
 - [Embedded System, IoT, Win 10 IoT]
-- [Embedded System, Raspberry PI]
+- [Embedded System, Raspberry Pi]
 ---
 
 Thanks to Microsoft and its UWP application, Win 10 IoT device can share the same framework of normal Win 10 application.
 In this post, we'll build a simple short blink application for Win 10 IoT platform. It assums that you've already have some knowledgements about GPIO.
 
 # Connection
-The Raspberry PI GPIO pins are defined in Win 10 IoT as following:
+The Raspberry Pi GPIO pins are defined in Win 10 IoT as following:
 
 {% asset_img rp2_pinout.png PIN Mapping %}
 

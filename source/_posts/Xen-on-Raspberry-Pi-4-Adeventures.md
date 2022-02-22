@@ -6,7 +6,7 @@ tags:
 - 翻译
 categories:
 - [Translation, Chinese]
-- [Embedded System, Raspberry PI]
+- [Embedded System, Raspberry Pi]
 ---
 
 原文链接：[Xen on Raspberry Pi 4 adventures](https://www.linux.com/featured/xen-on-raspberry-pi-4-adventures/)

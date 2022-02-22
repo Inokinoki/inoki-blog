@@ -22,7 +22,7 @@ The phenomenon is that the TLS connection cannot be established through a bridge
 
 In VirtualBox, we setuped a bridged network via the device `Edimax EU-4306`, to connect the Virtual Machine with a raspberry.
 
-2. Bridged network on Raspberry PI
+2. Bridged network on Raspberry Pi
 
 {% asset_img topology.png Topology %}
 
