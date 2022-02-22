@@ -40,11 +40,20 @@ I firstly bought a ST-Link v2 debugger, which has a SWD interface and an ARM 20 
 
 It should work well. However, I finally found that my hardware might by buggy. 
 
-I tried to connect the ST-Link from the official software, but both the software and the OpenOCD returns a wired status code during the initialization of JTAG stack through USB.
+I tried to connect the ST-Link debugger from the official software, but both ~the software and~(I found that with the official software, it is necessary to connect the debugger for the first time to be able to connect) the OpenOCD 0.11.0 returns a wired status code during the initialization of JTAG stack through USB. The debug-level log information of OpenOCD is as follows:
+
+```
+Debug: 222 311 stlink_usb.c:1125 stlink_usb_error_check(): unknown/unexpected STLINK status code 0x4
+Error: 223 311 stlink_usb.c:3740 stlink_open(): init mode failed (unable to connect to the target)
+Debug: 224 311 stlink_usb.c:1654 stlink_usb_exit_mode(): MODE: 0x01
+Debug: 225 312 command.c:555 run_command(): Command 'init' failed with error code -4
+```
 
 To know what happened, I tries to connect the Raspberry Pi from a JTAG debugger delivered with my first FPGA. Before that, I just validated that the debugger works well with the FPGA (in OpenOCD, using `cpld/xilinx-xc6s.cfg` target, which only uses `TMS`, `TDI`, `TDO`, `TCK` pins). With this debugger, OpenOCD can connect to the device: it does not report the USB bug anymore. However, it stops at complaining that `RTCK` signal cannot be responded.
 
-So, it is the ST-Link hardware which does not work. The hardware debugging is painful.
+So, it is the ST-Link work which does not work in my case. The hardware debugging is painful.
+
+PS: The BCM2835 with ARM11 (Raspberry Pi 1, zero) does not seem to work with ST-Link v2 later rev/v3 direct dap API due the firmware, according to [Ticket 280 of OpenOCD](https://sourceforge.net/p/openocd/tickets/280/).
 
 ## FTDI FT232H
 
@@ -95,6 +104,7 @@ The debug protocol is called `transport` in OpenOCD. Some possible values are:
 ```
 transport select jtag
 transport select swim
+transport select hla_jag
 transport select dapdirect_jtag
 transport select dapdirect_swd
 ```
