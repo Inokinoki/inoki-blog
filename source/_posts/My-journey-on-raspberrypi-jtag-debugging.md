@@ -53,7 +53,7 @@ To know what happened, I tries to connect the Raspberry Pi from a JTAG debugger 
 
 So, it is the ST-Link work which does not work in my case. The hardware debugging is painful.
 
-PS: The BCM2835 with ARM11 (Raspberry Pi 1, zero) does not seem to work with ST-Link v2 later rev/v3 direct dap API due the firmware, according to [Ticket 280 of OpenOCD](https://sourceforge.net/p/openocd/tickets/280/).
+PS: The BCM2835 with ARM11 (Raspberry Pi 1, zero) does not seem to work with ST-Link High Level Abstraction(HLA), according to [Ticket 280 of OpenOCD](https://sourceforge.net/p/openocd/tickets/280/). But it might be possible with Direct DAP, which exists in ST-Link v2 later firmware and ST-Link 3.
 
 ## FTDI FT232H
 
