@@ -19,7 +19,7 @@ According to [pinout Raspberry Pi JTAG](https://pinout.xyz/pinout/jtag), the GPI
 
 The Pin definitions for JTAG are as follows:
 
-{% asset_img pingout.png Raspberry Pi JTAG ALT %}
+{% asset_img pinout.png Raspberry Pi JTAG ALT %}
 
 - ALT5 on GPIOs 4, 5, 6, 12 and 13
 - ALT4 on GPIOs 22, 23, 24, 25, 26 and 27
