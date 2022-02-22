@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2022-02-22T10:00:16.736Z</updated>
+  <updated>2022-02-22T10:01:45.301Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/"/>
     <id>https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/</id>
     <published>2022-02-22T06:57:50.000Z</published>
-    <updated>2022-02-22T10:00:16.736Z</updated>
+    <updated>2022-02-22T10:01:45.301Z</updated>
     
     <summary type="html">
     
@@ -58,7 +58,7 @@
     <link href="https://blog.inoki.cc/2022/02/08/My-2021/"/>
     <id>https://blog.inoki.cc/2022/02/08/My-2021/</id>
     <published>2022-02-08T16:54:40.000Z</published>
-    <updated>2022-02-22T10:00:16.736Z</updated>
+    <updated>2022-02-22T10:01:45.301Z</updated>
     
     <summary type="html">
     
@@ -87,7 +87,7 @@
     <link href="https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/"/>
     <id>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/</id>
     <published>2021-12-17T13:47:00.000Z</published>
-    <updated>2022-02-22T10:00:16.768Z</updated>
+    <updated>2022-02-22T10:01:45.333Z</updated>
     
     <summary type="html">
     
@@ -117,7 +117,7 @@
     <link href="https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/"/>
     <id>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/</id>
     <published>2021-12-16T15:34:00.000Z</published>
-    <updated>2022-02-22T10:00:16.740Z</updated>
+    <updated>2022-02-22T10:01:45.305Z</updated>
     
     <summary type="html">
     
@@ -135,9 +135,9 @@
       <category term="Modern C++" scheme="https://blog.inoki.cc/categories/Modern-C/"/>
     
     
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
       <category term="C++" scheme="https://blog.inoki.cc/tags/C/"/>
     
@@ -148,7 +148,7 @@
     <link href="https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/"/>
     <id>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/</id>
     <published>2021-12-14T15:49:00.000Z</published>
-    <updated>2022-02-22T10:00:16.768Z</updated>
+    <updated>2022-02-22T10:01:45.333Z</updated>
     
     <summary type="html">
     
@@ -168,9 +168,9 @@
       <category term="Driver" scheme="https://blog.inoki.cc/categories/Linux/Driver/"/>
     
     
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
       <category term="驱动" scheme="https://blog.inoki.cc/tags/%E9%A9%B1%E5%8A%A8/"/>
     
@@ -181,7 +181,7 @@
     <link href="https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/"/>
     <id>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/</id>
     <published>2021-12-09T20:34:00.000Z</published>
-    <updated>2022-02-22T10:00:16.708Z</updated>
+    <updated>2022-02-22T10:01:45.277Z</updated>
     
     <summary type="html">
     
@@ -216,7 +216,7 @@
     <link href="https://blog.inoki.cc/2021/12/08/vfio/"/>
     <id>https://blog.inoki.cc/2021/12/08/vfio/</id>
     <published>2021-12-08T20:34:00.000Z</published>
-    <updated>2022-02-22T10:00:16.768Z</updated>
+    <updated>2022-02-22T10:01:45.333Z</updated>
     
     <summary type="html">
     
@@ -234,11 +234,11 @@
       <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
     
     
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
   </entry>
   
@@ -247,7 +247,7 @@
     <link href="https://blog.inoki.cc/2021/12/08/uio-howto/"/>
     <id>https://blog.inoki.cc/2021/12/08/uio-howto/</id>
     <published>2021-12-08T19:34:00.000Z</published>
-    <updated>2022-02-22T10:00:16.768Z</updated>
+    <updated>2022-02-22T10:01:45.333Z</updated>
     
     <summary type="html">
     
@@ -265,11 +265,11 @@
       <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
     
     
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
   </entry>
   
@@ -278,7 +278,7 @@
     <link href="https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/"/>
     <id>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</id>
     <published>2021-11-19T15:34:00.000Z</published>
-    <updated>2022-02-22T10:00:16.740Z</updated>
+    <updated>2022-02-22T10:01:45.305Z</updated>
     
     <summary type="html">
     
@@ -296,11 +296,11 @@
       <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
     
     
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
   </entry>
   
@@ -309,7 +309,7 @@
     <link href="https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/"/>
     <id>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</id>
     <published>2021-11-12T15:38:00.000Z</published>
-    <updated>2022-02-22T10:00:16.740Z</updated>
+    <updated>2022-02-22T10:01:45.305Z</updated>
     
     <summary type="html">
     
@@ -331,11 +331,11 @@
       <category term="SDR" scheme="https://blog.inoki.cc/categories/SDR/"/>
     
     
-      <category term="SDR" scheme="https://blog.inoki.cc/tags/SDR/"/>
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+      <category term="SDR" scheme="https://blog.inoki.cc/tags/SDR/"/>
     
   </entry>
   
@@ -344,7 +344,7 @@
     <link href="https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/"/>
     <id>https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/</id>
     <published>2021-10-24T22:48:00.000Z</published>
-    <updated>2022-02-22T10:00:16.764Z</updated>
+    <updated>2022-02-22T10:01:45.329Z</updated>
     
     <summary type="html">
     
@@ -366,9 +366,9 @@
       <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
     
     
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
       <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
     
@@ -383,7 +383,7 @@
     <link href="https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/"/>
     <id>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/</id>
     <published>2021-10-22T13:48:00.000Z</published>
-    <updated>2022-02-22T10:00:16.764Z</updated>
+    <updated>2022-02-22T10:01:45.329Z</updated>
     
     <summary type="html">
     
@@ -405,9 +405,9 @@
       <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
     
     
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
       <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
     
@@ -422,7 +422,7 @@
     <link href="https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/"/>
     <id>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/</id>
     <published>2021-10-20T19:34:00.000Z</published>
-    <updated>2022-02-22T10:00:16.764Z</updated>
+    <updated>2022-02-22T10:01:45.329Z</updated>
     
     <summary type="html">
     
@@ -442,11 +442,11 @@
       <category term="sysfs" scheme="https://blog.inoki.cc/categories/Linux/sysfs/"/>
     
     
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
       <category term="Linux Driver" scheme="https://blog.inoki.cc/tags/Linux-Driver/"/>
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
       <category term="sysfs" scheme="https://blog.inoki.cc/tags/sysfs/"/>
     
@@ -457,7 +457,7 @@
     <link href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/"/>
     <id>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</id>
     <published>2021-10-18T19:48:00.000Z</published>
-    <updated>2022-02-22T10:00:16.764Z</updated>
+    <updated>2022-02-22T10:01:45.329Z</updated>
     
     <summary type="html">
     
@@ -494,7 +494,7 @@
     <link href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/"/>
     <id>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</id>
     <published>2021-10-18T19:48:00.000Z</published>
-    <updated>2022-02-22T10:00:16.764Z</updated>
+    <updated>2022-02-22T10:01:45.329Z</updated>
     
     <summary type="html">
     
@@ -516,9 +516,9 @@
       <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
     
     
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
       <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
     
@@ -533,7 +533,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</id>
     <published>2021-10-17T10:48:00.000Z</published>
-    <updated>2022-02-22T10:00:16.764Z</updated>
+    <updated>2022-02-22T10:01:45.329Z</updated>
     
     <summary type="html">
     
@@ -570,7 +570,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</id>
     <published>2021-10-17T10:48:00.000Z</published>
-    <updated>2022-02-22T10:00:16.764Z</updated>
+    <updated>2022-02-22T10:01:45.329Z</updated>
     
     <summary type="html">
     
@@ -592,9 +592,9 @@
       <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
     
     
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
       <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
     
@@ -609,7 +609,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/</id>
     <published>2021-10-17T09:40:00.000Z</published>
-    <updated>2022-02-22T10:00:16.764Z</updated>
+    <updated>2022-02-22T10:01:45.329Z</updated>
     
     <summary type="html">
     
@@ -631,11 +631,11 @@
       <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
     
     
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
       <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
     
@@ -654,7 +654,7 @@
     <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/"/>
     <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/</id>
     <published>2021-09-06T20:48:40.000Z</published>
-    <updated>2022-02-22T10:00:16.764Z</updated>
+    <updated>2022-02-22T10:01:45.329Z</updated>
     
     <summary type="html">
     
@@ -678,9 +678,9 @@
       <category term="Wayland" scheme="https://blog.inoki.cc/categories/Linux/Wayland/"/>
     
     
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
   </entry>
   
@@ -689,7 +689,7 @@
     <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/"/>
     <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/</id>
     <published>2021-09-06T20:47:40.000Z</published>
-    <updated>2022-02-22T10:00:16.764Z</updated>
+    <updated>2022-02-22T10:01:45.329Z</updated>
     
     <summary type="html">
     
@@ -713,9 +713,9 @@
       <category term="Wayland" scheme="https://blog.inoki.cc/categories/Linux/Wayland/"/>
     
     
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
   </entry>
   

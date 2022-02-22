@@ -30,16 +30,17 @@
 <meta property="og:site_name" content="Inoki in the world">
 <meta property="og:description" content="As an OS developer/hacker, I am recently hacking Raspberry Pi, including a project aiming at running XNU(macOS kernel) on Raspberry Pi 3 and the port of Embox to Raspberry Pi 2. I often feel disappoin">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/pinout.png">
 <meta property="og:image" content="https://www.keil.com/support/man/docs/ulink2/ulink2_connector_20_16_14_10pin.png">
 <meta property="og:image" content="https://www.st.com/bin/ecommerce/api/image.PF251168.en.feature-description-include-personalized-no-cpn-medium.jpg">
 <meta property="og:image" content="https://c.a.segger.com/fileadmin/images/products/J-Link/J-Link_PRO/j-link_pro_500.png">
 <meta property="og:image" content="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/debugger.jpg">
 <meta property="og:image" content="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/debugging.jpg">
-<meta property="og:updated_time" content="2022-02-22T10:00:16.736Z">
+<meta property="og:updated_time" content="2022-02-22T10:01:45.301Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="My journey on Raspberry Pi JTAG debugging">
 <meta name="twitter:description" content="As an OS developer/hacker, I am recently hacking Raspberry Pi, including a project aiming at running XNU(macOS kernel) on Raspberry Pi 3 and the port of Embox to Raspberry Pi 2. I often feel disappoin">
-<meta name="twitter:image" content="https://www.keil.com/support/man/docs/ulink2/ulink2_connector_20_16_14_10pin.png">
+<meta name="twitter:image" content="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/pinout.png">
 <meta name="twitter:creator" content="@IIInoki">
   <!-- Canonical links -->
   <link rel="canonical" href="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/index.html">
@@ -395,7 +396,7 @@
 <p>According to <a href="https://pinout.xyz/pinout/jtag" target="_blank" rel="noopener">pinout Raspberry Pi JTAG</a>, the GPIOs on the board can be configured through the <code>config.txt</code> to use some ALT functionalities, e.g., JTAG under ALT4 or ALT5. JTAG, or Joint Test Action Group, provides a standard interface (pin definition, etc.) to debug a program on a chip. I have some experiences back to 2019, using it to debug a real-time OS on an ARM development board. And it is widely used by many board/chip manufacturers, including RISC-V, ARM, etc. If it can work, that should be a perfect option for debugging using JTAG with OpenOCD.</p>
 <h1 id="hardware"><a class="markdownIt-Anchor" href="#hardware"></a> Hardware</h1>
 <p>The Pin definitions for JTAG are as follows:</p>
-
+<img src="/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/pinout.png" title="Raspberry Pi JTAG ALT">
 <ul>
 <li>ALT5 on GPIOs 4, 5, 6, 12 and 13</li>
 <li>ALT4 on GPIOs 22, 23, 24, 25, 26 and 27</li>
