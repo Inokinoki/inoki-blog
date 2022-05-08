@@ -30,7 +30,7 @@
 <meta property="og:site_name" content="Inoki in the world">
 <meta property="og:description" content="我的前一篇文章《Android 启动加载器分析 —— ABL(1)》中分析了当代高通平台的 ABL 的整体启动流程，但并未对如何启动至 fastboot 模式和 Linux 内核进行详细的解释。本文将对 fastboot 模式的代码进行分析。  启动至 fastboot 模式的条件 在 ABL 中，当启动镜像验证失败、BootLinux (&amp;amp;Info) 函数启动失败或者接收到启动至 fas">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2022-02-22T10:12:25.578Z">
+<meta property="og:updated_time" content="2022-05-08T18:41:03.191Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 启动加载器分析 —— ABL(2)">
 <meta name="twitter:description" content="我的前一篇文章《Android 启动加载器分析 —— ABL(1)》中分析了当代高通平台的 ABL 的整体启动流程，但并未对如何启动至 fastboot 模式和 Linux 内核进行详细的解释。本文将对 fastboot 模式的代码进行分析。  启动至 fastboot 模式的条件 在 ABL 中，当启动镜像验证失败、BootLinux (&amp;amp;Info) 函数启动失败或者接收到启动至 fas">
@@ -385,7 +385,7 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>我的前一篇文章<a href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/">《Android 启动加载器分析 —— ABL(1)》</a>中分析了当代高通平台的 ABL 的整体启动流程，但并未对如何启动至 fastboot 模式和 Linux 内核进行详细的解释。本文将对 fastboot 模式的代码进行分析。</p>
+        <p>我的前一篇文章<a href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/">《Android 启动加载器分析 —— ABL(1)》</a>中分析了当代高通平台的 ABL 的整体启动流程，但并未对如何启动至 fastboot 模式和 Linux 内核进行详细的解释。本文将对 fastboot 模式的代码进行分析。</p>
 <h1 id="启动至-fastboot-模式的条件"><a class="markdownIt-Anchor" href="#启动至-fastboot-模式的条件"></a> 启动至 fastboot 模式的条件</h1>
 <p>在 ABL 中，当启动镜像验证失败、<code>BootLinux (&amp;Info)</code> 函数启动失败或者接收到启动至 fastboot 的命令（比如使用 adb 重启至 bootloader、在启动时按下了相应的组合按键）时，以下代码会被执行来初始化并执行 fastboot 模式：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fastboot:</span><br><span class="line">  DEBUG ((EFI_D_INFO, <span class="string">"Launching fastboot\n"</span>));</span><br><span class="line">  Status = FastbootInitialize ();</span><br></pre></td></tr></table></figure>
