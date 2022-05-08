@@ -11,7 +11,7 @@ categories:
 - [Linux, Android, Bootloader]
 ---
 
-我的前一篇文章[《Android 启动加载器分析 —— ABL(1)》](https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/)中分析了当代高通平台的 ABL 的整体启动流程，但并未对如何启动至 fastboot 模式和 Linux 内核进行详细的解释。本文将对 fastboot 模式的代码进行分析。
+我的前一篇文章[《Android 启动加载器分析 —— ABL(1)》](https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/)中分析了当代高通平台的 ABL 的整体启动流程，但并未对如何启动至 fastboot 模式和 Linux 内核进行详细的解释。本文将对 fastboot 模式的代码进行分析。
 
 # 启动至 fastboot 模式的条件
 
