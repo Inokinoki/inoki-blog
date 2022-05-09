@@ -30,7 +30,7 @@
 <meta property="og:site_name" content="Inoki in the world">
 <meta property="og:description" content="There are already many articles that explain the boot process of Android on Qualcomm platform. From my translation of [Translation] Qualcomm Android device boot chain of trust, it can be summarized as">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2022-05-08T18:41:03.191Z">
+<meta property="og:updated_time" content="2022-05-09T11:16:34.761Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android bootloader analysis -- Aboot">
 <meta name="twitter:description" content="There are already many articles that explain the boot process of Android on Qualcomm platform. From my translation of [Translation] Qualcomm Android device boot chain of trust, it can be summarized as">
@@ -375,7 +375,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/10/17/android-bootloader-analysis-aboot-en/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.6k(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.7k(words)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 10(minutes)</span>
@@ -398,6 +398,7 @@
 <ul>
 <li>CAF Aboot: <a href="https://source.codeaurora.org/quic/la/kernel/lk/" target="_blank" rel="noopener">https://source.codeaurora.org/quic/la/kernel/lk/</a></li>
 <li>CAF ABL: <a href="https://source.codeaurora.org/quic/la/abl/tianocore/edk2/" target="_blank" rel="noopener">https://source.codeaurora.org/quic/la/abl/tianocore/edk2/</a></li>
+<li>Note that the Qualcomm maintained projects have been hosted on <a href="https://git.codelinaro.org/" target="_blank" rel="noopener">https://git.codelinaro.org/</a> since 2022</li>
 </ul>
 <p>As you can see, the source tree of Aboot is named lk, short for LittleKernel, which is a small symmetric multiprocessing (SMP) operating system kernel, and Aboot is a device-related application built on top of this operating system. This article will briefly analyze the source code of Aboot as an application (excluding encryption and image verification), and cover some of the device-related code.</p>
 <h1 id="code-organization"><a class="markdownIt-Anchor" href="#code-organization"></a> Code Organization</h1>
