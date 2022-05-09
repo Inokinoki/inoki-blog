@@ -222,42 +222,6 @@ static void __init setup_machine_fdt(phys_addr_t dt_phys)
 
 It first get the virtual address of FDT from the physical address using the memory mapping. Then, perform a basic scan to validate the DT(`early_init_dt_scan` in `drivers/of/fdt.c`). At the end, the machine name is gotten and printed, which can also be seen in `dmesg`.
 
-<!---
-### ARM Machine FDT setuping
-
-The `of_flat_dt_match_machine` function finds one of the compatible DTs(though ABL only gives one) using the given function(`arch_get_next_mach` here).
-
-```c
-const struct machine_desc * __init setup_machine_fdt(void *dt)
-{
-	const struct machine_desc *mdesc;
-	unsigned long dt_root;
-	const void *clk;
-	int len;
-
-	if (!early_init_dt_scan(dt))
-		return NULL;
-
-	mdesc = of_flat_dt_match_machine(NULL, arch_get_next_mach);
-	if (!mdesc)
-		machine_halt();
-
-	dt_root = of_get_flat_dt_root();
-	clk = of_get_flat_dt_prop(dt_root, "clock-frequency", &len);
-	if (clk)
-		arc_set_core_freq(of_read_ulong(clk, len/4));
-
-	arc_set_early_base_baud(dt_root);
-
-	return mdesc;
-}
-```
-
-```c
-pr_info("Machine model: %s\n", of_flat_dt_get_machine_name());
-```
---->
-
 ### FDT processing
 
 Then, the FDT is parsed in `unflatten_device_tree()` to construct a tree of `device_nodes`, which can be used to probe the peripherals.

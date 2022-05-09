@@ -16,7 +16,7 @@ There are already many articles that explain the boot process of Android on Qual
 
 - XBL/ABL: After the MSM8996 (Snapdragon 820), PBL loads the new XBL, followed by a chain load of ABL, which is a bootloader built on EDK II to replace Aboot (in fact, on the MSM8996 platform, Aboot is still used because XBL and ABL are not mature enough, with XBL It can choose to boot into Android using fastboot, the system kernel and ramdisk in the system directory, or the recovery ramdisk, depending on the keystroke combination.
 
-For both boot modes, the source code for Aboot and ABL can be found on Google or at the Code Aurora Forum: CAF Aboot: [ramdisk
+For both boot modes, the source code for Aboot and ABL can be found on Google or at the Code Aurora Forum(CAF):
 
 - CAF Aboot: [https://source.codeaurora.org/quic/la/kernel/lk/](https://source.codeaurora.org/quic/la/kernel/lk/)
 - CAF ABL: [https://source.codeaurora.org/quic/la/abl/tianocore/edk2/](https://source.codeaurora.org/quic/la/abl/tianocore/edk2/)
