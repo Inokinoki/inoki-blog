@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2022-05-09T11:16:34.737Z</updated>
+  <updated>2022-05-09T18:41:39.506Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,48 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Android Bootloader and Linux Internal based on Nokia 8(NB1) —— Device Tree</title>
+    <link href="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/"/>
+    <id>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</id>
+    <published>2022-05-09T20:48:00.000Z</published>
+    <updated>2022-05-09T18:41:39.506Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;Context: I am working on porting Plasma Mobile and EDK II to my Nokia 8 (codename: NB1) device. There are many things to do and to
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
+    
+      <category term="Android" scheme="https://blog.inoki.cc/categories/Linux/Android/"/>
+    
+      <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
+    
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+    
+      <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
+    
+      <category term="ABL" scheme="https://blog.inoki.cc/tags/ABL/"/>
+    
+      <category term="Bootloader" scheme="https://blog.inoki.cc/tags/Bootloader/"/>
+    
+  </entry>
+  
+  <entry>
     <title>My journey on Raspberry Pi JTAG debugging</title>
     <link href="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/"/>
     <id>https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/</id>
     <published>2022-02-22T06:57:50.000Z</published>
-    <updated>2022-05-09T11:16:34.737Z</updated>
+    <updated>2022-05-09T18:41:39.482Z</updated>
     
     <summary type="html">
     
@@ -58,7 +95,7 @@
     <link href="https://blog.inoki.cc/2022/02/08/My-2021/"/>
     <id>https://blog.inoki.cc/2022/02/08/My-2021/</id>
     <published>2022-02-08T16:54:40.000Z</published>
-    <updated>2022-05-09T11:16:34.737Z</updated>
+    <updated>2022-05-09T18:41:39.482Z</updated>
     
     <summary type="html">
     
@@ -87,7 +124,7 @@
     <link href="https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/"/>
     <id>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/</id>
     <published>2021-12-17T13:47:00.000Z</published>
-    <updated>2022-05-09T11:16:34.765Z</updated>
+    <updated>2022-05-09T18:41:39.510Z</updated>
     
     <summary type="html">
     
@@ -117,7 +154,7 @@
     <link href="https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/"/>
     <id>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/</id>
     <published>2021-12-16T15:34:00.000Z</published>
-    <updated>2022-05-09T11:16:34.741Z</updated>
+    <updated>2022-05-09T18:41:39.486Z</updated>
     
     <summary type="html">
     
@@ -148,7 +185,7 @@
     <link href="https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/"/>
     <id>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/</id>
     <published>2021-12-14T15:49:00.000Z</published>
-    <updated>2022-05-09T11:16:34.765Z</updated>
+    <updated>2022-05-09T18:41:39.510Z</updated>
     
     <summary type="html">
     
@@ -181,7 +218,7 @@
     <link href="https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/"/>
     <id>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/</id>
     <published>2021-12-09T20:34:00.000Z</published>
-    <updated>2022-05-09T11:16:34.717Z</updated>
+    <updated>2022-05-09T18:41:39.458Z</updated>
     
     <summary type="html">
     
@@ -216,7 +253,7 @@
     <link href="https://blog.inoki.cc/2021/12/08/vfio/"/>
     <id>https://blog.inoki.cc/2021/12/08/vfio/</id>
     <published>2021-12-08T20:34:00.000Z</published>
-    <updated>2022-05-09T11:16:34.765Z</updated>
+    <updated>2022-05-09T18:41:39.510Z</updated>
     
     <summary type="html">
     
@@ -247,7 +284,7 @@
     <link href="https://blog.inoki.cc/2021/12/08/uio-howto/"/>
     <id>https://blog.inoki.cc/2021/12/08/uio-howto/</id>
     <published>2021-12-08T19:34:00.000Z</published>
-    <updated>2022-05-09T11:16:34.765Z</updated>
+    <updated>2022-05-09T18:41:39.510Z</updated>
     
     <summary type="html">
     
@@ -278,7 +315,7 @@
     <link href="https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/"/>
     <id>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</id>
     <published>2021-11-19T15:34:00.000Z</published>
-    <updated>2022-05-09T11:16:34.741Z</updated>
+    <updated>2022-05-09T18:41:39.486Z</updated>
     
     <summary type="html">
     
@@ -309,7 +346,7 @@
     <link href="https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/"/>
     <id>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</id>
     <published>2021-11-12T15:38:00.000Z</published>
-    <updated>2022-05-09T11:16:34.741Z</updated>
+    <updated>2022-05-09T18:41:39.486Z</updated>
     
     <summary type="html">
     
@@ -344,7 +381,7 @@
     <link href="https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/"/>
     <id>https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/</id>
     <published>2021-10-24T22:48:00.000Z</published>
-    <updated>2022-05-09T11:16:34.761Z</updated>
+    <updated>2022-05-09T18:41:39.506Z</updated>
     
     <summary type="html">
     
@@ -383,7 +420,7 @@
     <link href="https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/"/>
     <id>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/</id>
     <published>2021-10-22T13:48:00.000Z</published>
-    <updated>2022-05-09T11:16:34.761Z</updated>
+    <updated>2022-05-09T18:41:39.506Z</updated>
     
     <summary type="html">
     
@@ -422,7 +459,7 @@
     <link href="https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/"/>
     <id>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/</id>
     <published>2021-10-20T19:34:00.000Z</published>
-    <updated>2022-05-09T11:16:34.765Z</updated>
+    <updated>2022-05-09T18:41:39.510Z</updated>
     
     <summary type="html">
     
@@ -457,7 +494,7 @@
     <link href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/"/>
     <id>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</id>
     <published>2021-10-18T19:48:00.000Z</published>
-    <updated>2022-05-09T11:16:34.761Z</updated>
+    <updated>2022-05-09T18:41:39.506Z</updated>
     
     <summary type="html">
     
@@ -494,7 +531,7 @@
     <link href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/"/>
     <id>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</id>
     <published>2021-10-18T19:48:00.000Z</published>
-    <updated>2022-05-09T11:16:34.761Z</updated>
+    <updated>2022-05-09T18:41:39.506Z</updated>
     
     <summary type="html">
     
@@ -533,7 +570,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</id>
     <published>2021-10-17T10:48:00.000Z</published>
-    <updated>2022-05-09T11:16:34.761Z</updated>
+    <updated>2022-05-09T18:41:39.506Z</updated>
     
     <summary type="html">
     
@@ -570,7 +607,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</id>
     <published>2021-10-17T10:48:00.000Z</published>
-    <updated>2022-05-09T11:16:34.761Z</updated>
+    <updated>2022-05-09T18:41:39.506Z</updated>
     
     <summary type="html">
     
@@ -609,7 +646,7 @@
     <link href="https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/"/>
     <id>https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/</id>
     <published>2021-10-17T09:40:00.000Z</published>
-    <updated>2022-05-09T11:16:34.761Z</updated>
+    <updated>2022-05-09T18:41:39.506Z</updated>
     
     <summary type="html">
     
@@ -654,7 +691,7 @@
     <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/"/>
     <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/</id>
     <published>2021-09-06T20:48:40.000Z</published>
-    <updated>2022-05-09T11:16:34.761Z</updated>
+    <updated>2022-05-09T18:41:39.506Z</updated>
     
     <summary type="html">
     
@@ -663,41 +700,6 @@
         
         
           &lt;p&gt;原文链接：&lt;a href=&quot;https://drewdevault.com/2018/02/28/Writing-a-wayland-compositor-part-3.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Writing a
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Translation" scheme="https://blog.inoki.cc/categories/Translation/"/>
-    
-      <category term="Chinese" scheme="https://blog.inoki.cc/categories/Translation/Chinese/"/>
-    
-      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
-    
-      <category term="Wayland" scheme="https://blog.inoki.cc/categories/Linux/Wayland/"/>
-    
-    
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【译】从零开始的 Wayland 合成器 —— 2. 装配服务器</title>
-    <link href="https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/"/>
-    <id>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/</id>
-    <published>2021-09-06T20:47:40.000Z</published>
-    <updated>2022-05-09T11:16:34.761Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;原文链接：&lt;a href=&quot;https://drewdevault.com/2018/02/22/Writing-a-wayland-compositor-part-2.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Writing a
         
       
     

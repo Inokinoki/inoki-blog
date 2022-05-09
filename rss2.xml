@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Mon, 09 May 2022 11:16:34 GMT</pubDate>
+    <pubDate>Mon, 09 May 2022 18:41:39 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Android Bootloader and Linux Internal based on Nokia 8(NB1) —— Device Tree</title>
+      <link>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</link>
+      <guid>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</guid>
+      <pubDate>Mon, 09 May 2022 20:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;Context: I am working on porting Plasma Mobile and EDK II to my Nokia 8 (codename: NB1) device. There are many things to do and to
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>My journey on Raspberry Pi JTAG debugging</title>
@@ -410,27 +431,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】从零开始的 Wayland 合成器 —— 2. 装配服务器</title>
-      <link>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/</link>
-      <guid>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/</guid>
-      <pubDate>Mon, 06 Sep 2021 20:47:40 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://drewdevault.com/2018/02/22/Writing-a-wayland-compositor-part-2.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Writing a
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/#disqus_thread</comments>
     </item>
     
   </channel>

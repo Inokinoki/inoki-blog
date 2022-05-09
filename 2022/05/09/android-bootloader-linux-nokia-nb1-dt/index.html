@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <script data-ad-client="ca-pub-2713518338457470" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>Android Bootloader and Linux Internal based on Nokia 8(NB1) —— Device Tree | Inoki in the world</title>
+  <meta name="description" content="Context: I am working on porting Plasma Mobile and EDK II to my Nokia 8 (codename: NB1) device. There are many things to do and to learn. In this post, I want to write down what I have learnt from the">
+<meta name="keywords" content="Linux,Android,ABL,Bootloader">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Bootloader and Linux Internal based on Nokia 8(NB1) —— Device Tree">
+<meta property="og:url" content="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="Context: I am working on porting Plasma Mobile and EDK II to my Nokia 8 (codename: NB1) device. There are many things to do and to learn. In this post, I want to write down what I have learnt from the">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/treble_dto_partition_1.png">
+<meta property="og:image" content="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/treble_dto_partition_2.png">
+<meta property="og:updated_time" content="2022-05-09T18:41:39.506Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Bootloader and Linux Internal based on Nokia 8(NB1) —— Device Tree">
+<meta name="twitter:description" content="Context: I am working on porting Plasma Mobile and EDK II to my Nokia 8 (codename: NB1) device. There are many things to do and to learn. In this post, I want to write down what I have learnt from the">
+<meta name="twitter:image" content="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/treble_dto_partition_1.png">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="/" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Student</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2022/05/09/android-bootloader-linux-nokia-nb1-dt/" class="title">Android Bootloader and Linux Internal based on Nokia 8(NB1) —— Device Tree</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-09T20:48:00.000Z" itemprop="datePublished">2022-05-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Embedded-System/">Embedded System</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Embedded-System/Raspberry-Pi/">Raspberry Pi</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/" class="title">My journey on Raspberry Pi JTAG debugging</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-02-22T06:57:50.000Z" itemprop="datePublished">2022-02-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Dairy/">Dairy</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2022/02/08/My-2021/" class="title">孑然一身的 2021</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-02-08T16:54:40.000Z" itemprop="datePublished">2022-02-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/EDK2/">EDK2</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/12/17/qemu-ovmf-edk2-build/" class="title">Build and run Hello World on OVMF Qemu</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-12-17T13:47:00.000Z" itemprop="datePublished">2021-12-17</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Modern-C/">Modern C++</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/" class="title">【译】我的 C++ 20 协程的予取予求</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-12-16T15:34:00.000Z" itemprop="datePublished">2021-12-16</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+<!-- Blog sidebar -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="2343090796" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ABL/" style="font-size: 13.56px;">ABL</a> <a href="/tags/ASIX/" style="font-size: 13.11px;">ASIX</a> <a href="/tags/Aboot/" style="font-size: 13.22px;">Aboot</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Android/" style="font-size: 13.67px;">Android</a> <a href="/tags/Bare-Metal/" style="font-size: 13.11px;">Bare Metal</a> <a href="/tags/Bootloader/" style="font-size: 13.67px;">Bootloader</a> <a href="/tags/Bug/" style="font-size: 13.22px;">Bug</a> <a href="/tags/C/" style="font-size: 13px;">C++</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Cloud-Input/" style="font-size: 13.33px;">Cloud Input</a> <a href="/tags/Computer-Graphics/" style="font-size: 13px;">Computer Graphics</a> <a href="/tags/Craft/" style="font-size: 13.11px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.22px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13.11px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/EDK2/" style="font-size: 13px;">EDK2</a> <a href="/tags/EFI/" style="font-size: 13px;">EFI</a> <a href="/tags/Embedded-System/" style="font-size: 13.44px;">Embedded System</a> <a href="/tags/FFmpeg/" style="font-size: 13.11px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.11px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/Go/" style="font-size: 13.11px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.44px;">IBus</a> <a href="/tags/IME/" style="font-size: 13px;">IME</a> <a href="/tags/IoT/" style="font-size: 13.44px;">IoT</a> <a href="/tags/JTAG/" style="font-size: 13px;">JTAG</a> <a href="/tags/KDE/" style="font-size: 13.11px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.67px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.11px;">KDE Frameworks</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.78px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.22px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.44px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.44px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Python/" style="font-size: 13.11px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qemu/" style="font-size: 13px;">Qemu</a> <a href="/tags/Qt/" style="font-size: 13.11px;">Qt</a> <a href="/tags/Raspberry-Pi/" style="font-size: 13.44px;">Raspberry Pi</a> <a href="/tags/Ray-Tracing/" style="font-size: 13px;">Ray Tracing</a> <a href="/tags/Router/" style="font-size: 13.22px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.33px;">SDR</a> <a href="/tags/Source-Code/" style="font-size: 13.11px;">Source Code</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/Ubuntu/" style="font-size: 13.11px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/Vulkan/" style="font-size: 13px;">Vulkan</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.11px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.11px;">Windows</a> <a href="/tags/XBL/" style="font-size: 13px;">XBL</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/iOS/" style="font-size: 13px;">iOS</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.33px;">ibus-libpinyin</a> <a href="/tags/macOS/" style="font-size: 13px;">macOS</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.22px;">private</a> <a href="/tags/sysfs/" style="font-size: 13px;">sysfs</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/翻译/" style="font-size: 13.89px;">翻译</a> <a href="/tags/驱动/" style="font-size: 13px;">驱动</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABL/">ABL</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Aboot/">Aboot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bootloader/">Bootloader</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-Graphics/">Computer Graphics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EDK2/">EDK2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EFI/">EFI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IME/">IME</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JTAG/">JTAG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">16</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qemu/">Qemu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-Pi/">Raspberry Pi</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray-Tracing/">Ray Tracing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vulkan/">Vulkan</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XBL/">XBL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macOS/">macOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysfs/">sysfs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">39</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">25</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/驱动/">驱动</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/">Computer Graphics</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/Vulkan/">Vulkan</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/EDK2/">EDK2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-Pi/">Raspberry Pi</a><span class="category-list-count">6</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/IME/">IME</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/">Inoki Home Made</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/">Qt</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/EFI/">EFI</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">17</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/">Android</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/Bootloader/">Bootloader</a><span class="category-list-count">8</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Driver/">Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Wayland/">Wayland</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/sysfs/">sysfs</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Modern-C/">Modern C++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">15</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-android-bootloader-linux-nokia-nb1-dt" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android Bootloader and Linux Internal based on Nokia 8(NB1) —— Device Tree
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/05/09/android-bootloader-linux-nokia-nb1-dt/" class="article-date">
+	  <time datetime="2022-05-09T20:48:00.000Z" itemprop="datePublished">2022-05-09</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>►<a class="article-category-link" href="/categories/Linux/Android/">Android</a>►<a class="article-category-link" href="/categories/Linux/Android/Bootloader/">Bootloader</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/ABL/">ABL</a>, <a class="article-tag-link" href="/tags/Android/">Android</a>, <a class="article-tag-link" href="/tags/Bootloader/">Bootloader</a>, <a class="article-tag-link" href="/tags/Linux/">Linux</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/09/android-bootloader-linux-nokia-nb1-dt/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1.6k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 10(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>Context: I am working on porting Plasma Mobile and EDK II to my Nokia 8 (codename: NB1) device. There are many things to do and to learn.</p>
+<p>In this post, I want to write down what I have learnt from the ABL Bootloader and the Linux kernel, about how the Device Tree(DT, which describes the periphicals in an embedded device) is processed by the ABL and the kernel.</p>
+<h1 id="introduction"><a class="markdownIt-Anchor" href="#introduction"></a> Introduction</h1>
+<p>The Nokia 8 device(and its successor Nokia 8 Sirocco) uses the MSM8998 SoC platform(or say Qualcomm 835) as a base. In fact, its company HMD just owns the Nokia trademark for mobile phone manufacture. The main design and development is by FIH Mobile, which is a subsidiary of Foxconn. So, we will say some modules named by the FIH in this post.</p>
+<p>The model that I own is marked as “Qualcomm Technologies, Inc. MSM8998 v2.1 MTP, FIH NB1 PVT1 SS” in the DT. However, there are many DTs that are appended to the kernel, where it also has the ones for A1N(Nokia 8 Sirocco) and the evaluation version of these devices. These result in more than 80 different DTs, even including the different versions of MSM8998.</p>
+<p>So, I wonder how the DT is actually choosed, by the Linux kernel, or by the Bootloader. And in which stage, during the early stage, the XBL or the ABL?</p>
+<p>At very first, I thought that the DTs are appended to the kernel, so that the Bootloader(s) will not get involved very deeply. The best DT might be found and choosed by the kernel. However, I found that it is the ABL which is in charge of choosing, fixing and patching the DT after studying. Although the device is kind of outdated, this page talking about <a href="https://source.android.com/devices/architecture/dto/multiple" target="_blank" rel="noopener">“Using Mutiple DTs”</a> from Android documentation might be still helpful for someone.</p>
+<h1 id="dt-loading-in-abl-bootloader"><a class="markdownIt-Anchor" href="#dt-loading-in-abl-bootloader"></a> DT loading in ABL Bootloader</h1>
+<p>In my previous posts such as <a href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/">Android bootloader analysis – ABL(1)</a>, I analyse the Bootloader in a coarse-grained manner. As mentioned in <a href="https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/">Android bootloader analysis – Aboot</a>, ABL is actually an EFI application that loaded by the XBL. The application is a module named after LinuxLoader, which is in charge of loading Linux kernel and the related entities in an ABoot(Android Boot) image.</p>
+<h2 id="dt-in-linuxloader-efi-application"><a class="markdownIt-Anchor" href="#dt-in-linuxloader-efi-application"></a> DT in LinuxLoader EFI application</h2>
+<p>As mentioned in <a href="https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/">Android bootloader analysis – ABL(1)</a>, the EFI application entry is declared in <code>QcomModulePkg/Application/ LinuxLoader/LinuxLoader.inf</code>, as <code>LinuxLoaderEntry</code>. The application can either boot into Android fastboot mode, or boot into Linux kernel(normal boot or recovery).</p>
+<p>Normally, the ABL loads the image in the <code>boot</code> partition, in which the ANDROIDBOOT format image is used. The image usually contains a kernel and a ramdisk for basic initialization. Depending on the devices, the DTs can be appended to the kernel or stored in a standalone partition:</p>
+<img src="/2022/05/09/android-bootloader-linux-nokia-nb1-dt/treble_dto_partition_1.png" title="Appended DT">
+<img src="/2022/05/09/android-bootloader-linux-nokia-nb1-dt/treble_dto_partition_2.png" title="Standalone DT">
+<p>My Nokia 8 uses the first solution. And there are many DTs. So, before booting, the Bootloader needs to purge them.</p>
+<p>If the image is validated, <code>BootLinux (&amp;Info)</code> is called to actually try to process the image so as to boot it. In that function, <code>DTBImgCheckAndAppendDT</code> is called to choose the best DT and append it to the kernel.</p>
+<p>To do this, <code>DeviceTreeAppended</code> in <code>QcomModulePkg/Library/BootLib/LocateDeviceTree.c</code> is called. It checks all the possible DTs from the begin address of the appended DT, to the kernel end. For each DT, the <code>DeviceTreeCompatible</code> is called to find the best DT.</p>
+<p>The standard matching process contains the retrievals of <code>qcom,msm-id</code>, <code>qcom,board-id</code> and <code>qcom,pmic-id</code> properties in the DT. There is a special structure to describe such information from the hardware:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">DtInfo</span> &#123;</span></span><br><span class="line">  UINT32 DtPlatformId;</span><br><span class="line">  UINT32 DtSocRev;</span><br><span class="line">  UINT32 DtFoundryId;</span><br><span class="line">  UINT32 DtVariantId;</span><br><span class="line">  UINT32 DtVariantMajor;</span><br><span class="line">  UINT32 DtVariantMinor;</span><br><span class="line">  UINT32 DtPlatformSubtype;</span><br><span class="line">  UINT32 DtPmicModel[MAX_PMIC_IDX];</span><br><span class="line">  UINT32 DtPmicRev[MAX_PMIC_IDX];</span><br><span class="line">  UINT64 DtMatchVal;</span><br><span class="line">  VOID *Dtb;</span><br><span class="line">&#125; DtInfo;</span><br></pre></td></tr></table></figure>
+<p>The matching process is as follows:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (CurDtbInfo-&gt;DtMatchVal &amp; BIT (ExactMatch)) &#123;</span><br><span class="line">	<span class="keyword">if</span> (BestDtbInfo-&gt;DtMatchVal &lt; CurDtbInfo-&gt;DtMatchVal) &#123;</span><br><span class="line">		gBS-&gt;CopyMem (BestDtbInfo, CurDtbInfo, <span class="keyword">sizeof</span> (struct DtInfo));</span><br><span class="line">		FindBestMatch = TRUE;</span><br><span class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (BestDtbInfo-&gt;DtMatchVal == CurDtbInfo-&gt;DtMatchVal) &#123;</span><br><span class="line">		FindBestMatch = TRUE;</span><br><span class="line">		<span class="keyword">if</span> (BestDtbInfo-&gt;DtSocRev &lt; CurDtbInfo-&gt;DtSocRev) &#123;</span><br><span class="line">			gBS-&gt;CopyMem (BestDtbInfo, CurDtbInfo, <span class="keyword">sizeof</span> (struct DtInfo));</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (BestDtbInfo-&gt;DtVariantMajor &lt; CurDtbInfo-&gt;DtVariantMajor) &#123;</span><br><span class="line">			gBS-&gt;CopyMem (BestDtbInfo, CurDtbInfo, <span class="keyword">sizeof</span> (struct DtInfo));</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (BestDtbInfo-&gt;DtVariantMinor &lt; CurDtbInfo-&gt;DtVariantMinor) &#123;</span><br><span class="line">			gBS-&gt;CopyMem (BestDtbInfo, CurDtbInfo, <span class="keyword">sizeof</span> (struct DtInfo));</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (BestDtbInfo-&gt;DtPmicRev[<span class="number">0</span>] &lt; CurDtbInfo-&gt;DtPmicRev[<span class="number">0</span>]) &#123;</span><br><span class="line">			gBS-&gt;CopyMem (BestDtbInfo, CurDtbInfo, <span class="keyword">sizeof</span> (struct DtInfo));</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (BestDtbInfo-&gt;DtPmicRev[<span class="number">1</span>] &lt; CurDtbInfo-&gt;DtPmicRev[<span class="number">1</span>]) &#123;</span><br><span class="line">			gBS-&gt;CopyMem (BestDtbInfo, CurDtbInfo, <span class="keyword">sizeof</span> (struct DtInfo));</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (BestDtbInfo-&gt;DtPmicRev[<span class="number">2</span>] &lt; CurDtbInfo-&gt;DtPmicRev[<span class="number">2</span>]) &#123;</span><br><span class="line">			gBS-&gt;CopyMem (BestDtbInfo, CurDtbInfo, <span class="keyword">sizeof</span> (struct DtInfo));</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (BestDtbInfo-&gt;DtPmicRev[<span class="number">3</span>] &lt; CurDtbInfo-&gt;DtPmicRev[<span class="number">3</span>]) &#123;</span><br><span class="line">			gBS-&gt;CopyMem (BestDtbInfo, CurDtbInfo, <span class="keyword">sizeof</span> (struct DtInfo));</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			FindBestMatch = FALSE;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>However, for different models of Nokia 8, they do share the same <code>msm</code> information because they are using the same platform and the same board, which are:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">compatible = &quot;qcom,msm8998-mtp&quot;, &quot;qcom,msm8998&quot;, &quot;qcom,mtp&quot;;</span><br><span class="line">qcom,board-id = &lt;8 0&gt;, &lt;1 0&gt;;</span><br></pre></td></tr></table></figure>
+<p>I found, by mysterious way, that my phone uses a special <code>fih,hw-id</code> field to find the correct DT. I will discuss this later.</p>
+<p>Finally, a pointer named <code>tags</code> is returned and be passed as the actual DT to the kernel.</p>
+<h2 id="fih-modules"><a class="markdownIt-Anchor" href="#fih-modules"></a> FIH modules</h2>
+<p>As aforementioned, there is a special <code>fih,hw-id</code> field in addition to <code>qcom,board-id</code> and <code>compatible</code> fields to match the DT in the ABL Bootloader.</p>
+<p>Such id is stored in a special memory area, which is also declared as reseved memory in the DT:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fih_mem: fih_region@a0000000 &#123; /* for FIH feature */</span><br><span class="line">    compatible = &quot;removed-dma-pool&quot;;</span><br><span class="line">    no-map;</span><br><span class="line">    reg = &lt;0 0xa0000000 0 0xb00000&gt;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>We can see that the memory region starts at <code>0xa0000000</code> and has a size of <code>0xb00000</code>. The detailed information is not accessible here because the XBL seems not to be open-sourced.</p>
+<p>However, when I unpacked the XBL from the factory image, I saw there are <code>FIHDxe</code> EFI driver and <code>FIHHWIDApp</code> to load the hardware id into the EFI environment. So that, the <code>LinuxLoader</code> EFI application can eventually read the information and match the DT.</p>
+<p>I cannot provide more details because the reverse-engineering is performed. But the address to store the hardware id is <code>0x000160f1</code> in the EFI environment under my 5150 image. It is written by the <code>FIHHWIDApp</code> using the methods provided by the <code>FIHDxe</code>.</p>
+<p>Anyway, the DT choosed by my device is with:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">model = &quot;Qualcomm Technologies, Inc. MSM8998 v2.1 MTP, FIH NB1 PVT1 SS&quot;;</span><br><span class="line">compatible = &quot;qcom,msm8998-mtp&quot;, &quot;qcom,msm8998&quot;, &quot;qcom,mtp&quot;;</span><br><span class="line">qcom,board-id = &lt;8 0&gt;, &lt;1 0&gt;;</span><br><span class="line">fih,hw-id = &lt;1 7 4&gt;;</span><br></pre></td></tr></table></figure>
+<p>in which I guess that it is a <strong>P</strong>roduct version <strong>1</strong>, with <strong>S</strong>ingle <strong>S</strong>lot. This DT is finally the only DT passed to the Linux kernel.</p>
+<h1 id="dt-processing-in-linux-kernel"><a class="markdownIt-Anchor" href="#dt-processing-in-linux-kernel"></a> DT processing in Linux kernel</h1>
+<p>In ARM64, when kernel is loaded and executed, the address pointing to DT is passed in <code>X5</code> register. The first executable code is from <code>arch/arm64/kernel/head.S</code>, where we can see the device hardware initialization and the Flatten DT(FDT) pointer is saved from <code>X5</code> register to <code>__fdt_pointer</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str_l	x21, __fdt_pointer, x5		// Save FDT pointer</span><br></pre></td></tr></table></figure>
+<p>It is a physical address in <code>arch/arm64/kernel/setup.c</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">phys_addr_t</span> __fdt_pointer __initdata;</span><br></pre></td></tr></table></figure>
+<p>where <code>__initdata</code> indicates that it should be stored in a special section for data used during initialization.</p>
+<p>The <code>head.S</code> does not do many things and then just passes the control(without return) to <code>start_kernel</code> function. This function is usually generic for all platforms, which performs Linux initialization step-by-step. The DT-related function calls are as follows:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setup_arch(&amp;command_line);</span><br><span class="line"></span><br><span class="line">rest_init();</span><br></pre></td></tr></table></figure>
+<p>where <code>setup_arch</code> is definitly platform-related and architecture-related. And after all initializations are finished, the rest part (non-essential) of the kernel needs to be initialized.</p>
+<h2 id="dt-in-architecture-related-setup"><a class="markdownIt-Anchor" href="#dt-in-architecture-related-setup"></a> DT in architecture-related setup</h2>
+<p>Each platform/architecture has its own setup function. The one for ARM64 is <code>arch/arm64/kernel/setup.c</code>.</p>
+<p>It first print the CPU information(the information is visualized in <code>dmesg</code>) and establish the mappings of virtual addresses:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pr_info(<span class="string">"Boot CPU: AArch64 Processor [%08x]\n"</span>, read_cpuid_id());</span><br><span class="line">early_fixmap_init();</span><br><span class="line">early_ioremap_init();</span><br></pre></td></tr></table></figure>
+<p>Then the boot-related functions are:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">setup_machine_fdt(__fdt_pointer);</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">efi_init();</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">/* Parse the ACPI tables for possible boot-time configuration */</span></span><br><span class="line">acpi_boot_table_init();</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">if</span> (acpi_disabled) &#123;</span><br><span class="line">	unflatten_device_tree();</span><br><span class="line">	psci_dt_init();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	psci_acpi_init();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Note that both the DT and the EFI-ACPI boot modes are supported. In our case, we only consider the DT mode. So, the topic remains on <code>setup_machine_fdt</code>, and the <code>unflatten_device_tree</code>, <code>psci_dt_init</code> when <code>acpi_disabled</code> is true.</p>
+<h3 id="arm64-machine-fdt-setuping"><a class="markdownIt-Anchor" href="#arm64-machine-fdt-setuping"></a> ARM64 Machine FDT setuping</h3>
+<p>The <code>setup_machine_fdt</code> accepts a DT pointer. Note that now the DT has been chosen by the ABL, so we are safe to load and verify the only DT.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> __init <span class="title">setup_machine_fdt</span><span class="params">(<span class="keyword">phys_addr_t</span> dt_phys)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">void</span> *dt_virt = fixmap_remap_fdt(dt_phys);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!dt_virt || !early_init_dt_scan(dt_virt)) &#123;</span><br><span class="line">		pr_crit(<span class="string">"\n"</span></span><br><span class="line">			<span class="string">"Error: invalid device tree blob at physical address %pa (virtual address 0x%p)\n"</span></span><br><span class="line">			<span class="string">"The dtb must be 8-byte aligned and must not exceed 2 MB in size\n"</span></span><br><span class="line">			<span class="string">"\nPlease check your bootloader."</span>,</span><br><span class="line">			&amp;dt_phys, dt_virt);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">			cpu_relax();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	machine_name = of_flat_dt_get_machine_name();</span><br><span class="line">	<span class="keyword">if</span> (machine_name) &#123;</span><br><span class="line">		dump_stack_set_arch_desc(<span class="string">"%s (DT)"</span>, machine_name);</span><br><span class="line">		pr_info(<span class="string">"Machine: %s\n"</span>, machine_name);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>It first get the virtual address of FDT from the physical address using the memory mapping. Then, perform a basic scan to validate the DT(<code>early_init_dt_scan</code> in <code>drivers/of/fdt.c</code>). At the end, the machine name is gotten and printed, which can also be seen in <code>dmesg</code>.</p>
+<!---
+### ARM Machine FDT setuping
+
+The `of_flat_dt_match_machine` function finds one of the compatible DTs(though ABL only gives one) using the given function(`arch_get_next_mach` here).
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">const</span> struct machine_desc * __init <span class="title">setup_machine_fdt</span><span class="params">(<span class="keyword">void</span> *dt)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">machine_desc</span> *<span class="title">mdesc</span>;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> dt_root;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">void</span> *clk;</span><br><span class="line">	<span class="keyword">int</span> len;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!early_init_dt_scan(dt))</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">	mdesc = of_flat_dt_match_machine(<span class="literal">NULL</span>, arch_get_next_mach);</span><br><span class="line">	<span class="keyword">if</span> (!mdesc)</span><br><span class="line">		machine_halt();</span><br><span class="line"></span><br><span class="line">	dt_root = of_get_flat_dt_root();</span><br><span class="line">	clk = of_get_flat_dt_prop(dt_root, <span class="string">"clock-frequency"</span>, &amp;len);</span><br><span class="line">	<span class="keyword">if</span> (clk)</span><br><span class="line">		arc_set_core_freq(of_read_ulong(clk, len/<span class="number">4</span>));</span><br><span class="line"></span><br><span class="line">	arc_set_early_base_baud(dt_root);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> mdesc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pr_info(<span class="string">"Machine model: %s\n"</span>, of_flat_dt_get_machine_name());</span><br></pre></td></tr></table></figure>
+<p>—&gt;</p>
+<h3 id="fdt-processing"><a class="markdownIt-Anchor" href="#fdt-processing"></a> FDT processing</h3>
+<p>Then, the FDT is parsed in <code>unflatten_device_tree()</code> to construct a tree of <code>device_nodes</code>, which can be used to probe the peripherals.</p>
+<p>The first use is to discover the Power State Coordination Interface(PSCI) in <code>psci_dt_init()</code>. The interface should be compatible with one of the following values:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; .compatible = &quot;arm,psci&quot;,	.data = psci_0_1_init&#125;,</span><br><span class="line">&#123; .compatible = &quot;arm,psci-0.2&quot;,	.data = psci_0_2_init&#125;,</span><br><span class="line">&#123; .compatible = &quot;arm,psci-1.0&quot;,	.data = psci_0_2_init&#125;</span><br></pre></td></tr></table></figure>
+<p>Kernel can use the similar way to discover other devices.</p>
+<h2 id="dt-processing-in-sysfs"><a class="markdownIt-Anchor" href="#dt-processing-in-sysfs"></a> DT processing in sysfs</h2>
+<p>In an ARM Linux with sysfs, we can usually see the <code>devicetree</code> node and the <code>fdt</code> node under <code>/sysfs/firmware</code> directory. These nodes are actually the visualization of the corresponding kernel objects. The Linux kernel just adds them into the kernel object sets.</p>
+<p>Such function is implemented in <code>rest_init</code>. The kernel runs a kernel thread to start the non-critical initilization part of the kernel:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kernel_thread(kernel_init, <span class="literal">NULL</span>, CLONE_FS);</span><br></pre></td></tr></table></figure>
+<p>The <code>kernel_init</code> executes <code>kernel_init_freeable</code> and then run the <code>init</code> command. The command can be passed from the kernel commanline in <code>ramdisk_execute_command</code> or <code>execute_command</code>. Otherwise, the kernel will try <code>/sbin/init</code>, <code>/etc/init</code>, <code>/bin/init</code> and <code>/bin/sh</code>. If this still fails, the kernel is in panic.</p>
+<p>In <code>kernel_init_freeable</code>, the kernel still calls many function. The <code>do_basic_setup</code> and then <code>driver_init</code> are associated to the DT processing in sysfs.</p>
+<p>The <code>driver_init</code> calls several functions to initialize the different parts as follows:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* These are the core pieces */</span></span><br><span class="line">devtmpfs_init();</span><br><span class="line">devices_init();</span><br><span class="line">buses_init();</span><br><span class="line">classes_init();</span><br><span class="line">firmware_init();</span><br><span class="line">hypervisor_init();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* These are also core pieces, but must come after the</span></span><br><span class="line"><span class="comment"> * core core pieces.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">platform_bus_init();</span><br><span class="line">cpu_dev_init();</span><br><span class="line">memory_dev_init();</span><br><span class="line">container_dev_init();</span><br><span class="line">of_core_init();</span><br></pre></td></tr></table></figure>
+<p>In <code>firmware_init</code>, the <code>firmware_kobj</code> is created to host the firmware-related kernel objects:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> __init <span class="title">firmware_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	firmware_kobj = kobject_create_and_add(<span class="string">"firmware"</span>, <span class="literal">NULL</span>);</span><br><span class="line">	<span class="keyword">if</span> (!firmware_kobj)</span><br><span class="line">		<span class="keyword">return</span> -ENOMEM;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>At the end, <code>of_core_init</code> creates <code>/sys/firmware/devicetree</code> and the nodes under the tree:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> __init <span class="title">of_core_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">device_node</span> *<span class="title">np</span>;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Create the kset, and register existing nodes */</span></span><br><span class="line">	mutex_lock(&amp;of_mutex);</span><br><span class="line">	of_kset = kset_create_and_add(<span class="string">"devicetree"</span>, <span class="literal">NULL</span>, firmware_kobj);</span><br><span class="line">	<span class="keyword">if</span> (!of_kset) &#123;</span><br><span class="line">		mutex_unlock(&amp;of_mutex);</span><br><span class="line">		pr_err(<span class="string">"devicetree: failed to register existing nodes\n"</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	for_each_of_allnodes(np)</span><br><span class="line">		__of_attach_node_sysfs(np);</span><br><span class="line">	mutex_unlock(&amp;of_mutex);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Symlink in /proc as required by userspace ABI */</span></span><br><span class="line">	<span class="keyword">if</span> (of_root)</span><br><span class="line">		proc_symlink(<span class="string">"device-tree"</span>, <span class="literal">NULL</span>, <span class="string">"/sys/firmware/devicetree/base"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>In addtion, <code>late_initcall(of_fdt_raw_init)</code> in <code>driver/of/fdt.c</code> can create the <code>/sys/firmware/fdt</code> to host the FDT binary contents:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> __init <span class="title">of_fdt_raw_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">bin_attribute</span> <span class="title">of_fdt_raw_attr</span> =</span></span><br><span class="line"><span class="class">		__<span class="title">BIN_ATTR</span>(<span class="title">fdt</span>, <span class="title">S_IRUSR</span>, <span class="title">of_fdt_raw_read</span>, <span class="title">NULL</span>, 0);</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!initial_boot_params)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (of_fdt_crc32 != crc32_be(~<span class="number">0</span>, initial_boot_params,</span><br><span class="line">				     fdt_totalsize(initial_boot_params))) &#123;</span><br><span class="line">		pr_warn(<span class="string">"fdt: not creating '/sys/firmware/fdt': CRC check failed\n"</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	of_fdt_raw_attr.<span class="built_in">size</span> = fdt_totalsize(initial_boot_params);</span><br><span class="line">	<span class="keyword">return</span> sysfs_create_bin_file(firmware_kobj, &amp;of_fdt_raw_attr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>If we search the <code>firmware_kobj</code>, there are also many other firmware types that can be initialized, such as:</p>
+<ul>
+<li>EFI <code>kobject_create_and_add(&quot;efi&quot;, firmware_kobj);</code> under <code>drivers/firmware/efi/efi.c</code></li>
+<li>ACPI <code>kobject_create_and_add(&quot;efi&quot;, firmware_kobj);</code> under <code>drivers/acpi/bus.c</code></li>
+<li>DMI <code>kobject_create_and_add(&quot;dmi&quot;, firmware_kobj);</code> under <code>drivers/firmware/dmi_scan.c</code></li>
+</ul>
+<p>which are common for EFI system.</p>
+<p>For those who are intrested in EFI and ACPI, there are some function calls during kernel init:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">acpi_early_init();</span><br><span class="line"><span class="comment">/* ... */</span></span><br><span class="line">acpi_subsystem_init();</span><br><span class="line">sfi_init_late();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (efi_enabled(EFI_RUNTIME_SERVICES)) &#123;</span><br><span class="line">    efi_late_init();</span><br><span class="line">    efi_free_boot_services();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="fih-modules-2"><a class="markdownIt-Anchor" href="#fih-modules-2"></a> FIH modules</h2>
+<p>Some nodes in the DT are really device-wise and their drivers are not mainlined. The customized kernel provides a driver module to bring up the devices and read the related information. As mentioned before, there is also a similar close-sourced module in XBL. Here we can see the related information.</p>
+<p>The hardware id can be read by the following structure, from the reserved memory region at <code>0xA0A80000</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">st_hwid_table</span> &#123;</span></span><br><span class="line">	<span class="comment">/* mpp */</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> r1; <span class="comment">/* pin: PROJECT-ID */</span></span><br><span class="line">	<span class="keyword">char</span> r2; <span class="comment">/* pin: HW_REV-ID */</span></span><br><span class="line">	<span class="keyword">char</span> r3; <span class="comment">/* pin: RF_BAND-ID */</span></span><br><span class="line">	<span class="comment">/* info */</span></span><br><span class="line">	<span class="keyword">char</span> prj; <span class="comment">/* project */</span></span><br><span class="line">	<span class="keyword">char</span> rev; <span class="comment">/* hw_rev */</span></span><br><span class="line">	<span class="keyword">char</span> rf;  <span class="comment">/* rf_band */</span></span><br><span class="line">	<span class="comment">/* device tree */</span></span><br><span class="line">	<span class="keyword">char</span> dtm; <span class="comment">/* Major number */</span></span><br><span class="line">	<span class="keyword">char</span> dtn; <span class="comment">/* minor Number */</span></span><br><span class="line">	<span class="comment">/* driver */</span></span><br><span class="line">	<span class="keyword">char</span> btn; <span class="comment">/* button */</span></span><br><span class="line">	<span class="keyword">char</span> uart;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Such information is read and explosed to a file under procfs(<code>/proc</code> directory), which can be directly read by the userspace program:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> __init <span class="title">fih_info_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (proc_create(<span class="string">"devmodel"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, &amp;project_file_ops) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">		pr_err(<span class="string">"fail to create proc/devmodel\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (proc_create(<span class="string">"baseband"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, &amp;hw_rev_file_ops) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">		pr_err(<span class="string">"fail to create proc/baseband\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (proc_create(<span class="string">"bandinfo"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, &amp;rf_band_file_ops) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">		pr_err(<span class="string">"fail to create proc/bandinfo\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (proc_create(<span class="string">"hwmodel"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, &amp;hwmodel_file_ops) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">		pr_err(<span class="string">"fail to create proc/hwmodel\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (proc_create(<span class="string">"hwcfg"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, &amp;hwcfg_file_ops) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">		pr_err(<span class="string">"fail to create proc/hwcfg\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (proc_create(<span class="string">"SIMSlot"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, &amp;simslot_file_ops) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">		pr_err(<span class="string">"fail to create proc/SIMSlot\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (proc_create(<span class="string">"MODULE"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, &amp;module_file_ops) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">		pr_err(<span class="string">"fail to create proc/MODULE\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (proc_create(<span class="string">"fqc_xml"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, &amp;fqc_xml_file_ops) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">		pr_err(<span class="string">"fail to create proc/fqc_xml\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> (<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>There are also information of cpu, dram, battery, gpio, touch, etc. Here we can see the related information.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**************************************************************</span></span><br><span class="line"><span class="comment"> * START         | SIZE        | TARGET</span></span><br><span class="line"><span class="comment"> * -------------------------------------------------------- 0MB</span></span><br><span class="line"><span class="comment"> *   0xA000_0000 | 0x0020_0000 | modem rf_nv (2MB)</span></span><br><span class="line"><span class="comment"> *   0xA020_0000 | 0x0020_0000 | modem cust_nv (2MB)</span></span><br><span class="line"><span class="comment"> *   0xA040_0000 | 0x0040_0000 | modem default_nv (2MB)</span></span><br><span class="line"><span class="comment"> *   0xA080_0000 | 0x0010_0000 | modem log (1MB)</span></span><br><span class="line"><span class="comment"> *   -------------------------------------------------------- 7MB</span></span><br><span class="line"><span class="comment"> *   0xA090_0000 | 0x0004_0000 | last_alog_main (256KB)</span></span><br><span class="line"><span class="comment"> *   0xA094_0000 | 0x0004_0000 | last_alog_events (256KB)</span></span><br><span class="line"><span class="comment"> *   0xA098_0000 | 0x0004_0000 | last_alog_radio (256KB)</span></span><br><span class="line"><span class="comment"> *   0xA09C_0000 | 0x0004_0000 | last_alog_system (256KB)</span></span><br><span class="line"><span class="comment"> *   0xA0A0_0000 | 0x0004_0000 | last_kmsg (256KB)</span></span><br><span class="line"><span class="comment"> *   0xA0A4_0000 | 0x0002_0000 | last_blog (128KB)</span></span><br><span class="line"><span class="comment"> *   0xA0A6_0000 | 0x0002_0000 | blog (128KB)</span></span><br><span class="line"><span class="comment"> *   -------------------------------------------------------- 8.5MB</span></span><br><span class="line"><span class="comment"> *   0xA0A8_0000 | 0x0000_0040 | hwid:hwcfg (64B)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_0040 | 0x0000_0040 | secboot:devinfo (64B)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_0080 | 0x0000_0100 | secboot:unlock (256B)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_0180 | 0x0000_0080 | sutinfo (128B)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_0200 | 0x0000_0010 | no use 1 (16B)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_0210 | 0x0000_0010 | bset (16B)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_0220 | 0x0000_0010 | bat-id adc (16B)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_0230 | 0x0000_0010 | no use 2 (16B)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_0240 | 0x0000_0020 | apr (32B)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_0260 | 0x0000_0180 | no use 3 (384B)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_03E0 | 0x0000_0020 | mem (32B)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_0400 | 0x0000_0C00 | no use 4 (3KB)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_1000 | 0x0000_1000 | e2p (4KB)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_2000 | 0x0000_1000 | cda (4KB)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_3000 | 0x0000_1000 | note (4KB)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_4000 | 0x0000_1000 | hwcfg (4KB)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_5000 | 0x0000_3000 | no use 5 (12KB)</span></span><br><span class="line"><span class="comment"> *   0xA0A8_8000 | 0x0004_0000 | fver (256KB)</span></span><br><span class="line"><span class="comment"> *   0xA0AC_8000 | 0x0000_4000 | sensordata (16KB)</span></span><br><span class="line"><span class="comment"> *   0xA0AC_C000 | 0x0000_4000 | LCM data (16KB)</span></span><br><span class="line"><span class="comment"> *   0xA0AD_0000 | 0x0000_1000 | DDR CDT (4KB)</span></span><br><span class="line"><span class="comment"> *   0xA0AD_1000 | 0x0000_1000 | sensor TOF (4KB)</span></span><br><span class="line"><span class="comment"> *   0xA0AD_2000 | 0x0000_8000 | sensor SSC (32KB)</span></span><br><span class="line"><span class="comment"> *   0xA0AD_A000 | 0x0000_6400 | sensordata 2 (25KB)</span></span><br><span class="line"><span class="comment"> *   0xA0AE_0400 | 0x0001_FC00 | no use 6 (127KB)</span></span><br><span class="line"><span class="comment"> *   -------------------------------------------------------- 9MB</span></span><br><span class="line"><span class="comment"> *   0xA0B0_0000 | 0x0020_0000 | pstore (2MB)</span></span><br><span class="line"><span class="comment"> *   -------------------------------------------------------- 11MB</span></span><br><span class="line"><span class="comment"> *   0xA0D0_0000 | 0x00B0_0000 | All FIH mem (11MB)</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<h1 id="conclusion"><a class="markdownIt-Anchor" href="#conclusion"></a> Conclusion</h1>
+<p>In this post, I analyzed the how the ABL Bootloader and the Linux kernel deal with the DT. It is interesting to know some details about the exact processing on the Nokia 8(NB1) platform anyway.</p>
+-->
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/" title="Android Bootloader and Linux Internal based on Nokia 8(NB1) —— Device Tree" target="_blank" rel="external">https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Student</small></a></h3>
+        <div>Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+      <!-- Blog post bottom bar -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="9214609149" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/" title="My journey on Raspberry Pi JTAG debugging"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/';
+        
+        this.page.identifier = 'android-bootloader-linux-nokia-nb1-dt';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>
