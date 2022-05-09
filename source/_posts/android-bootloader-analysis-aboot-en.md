@@ -20,6 +20,7 @@ For both boot modes, the source code for Aboot and ABL can be found on Google or
 
 - CAF Aboot: [https://source.codeaurora.org/quic/la/kernel/lk/](https://source.codeaurora.org/quic/la/kernel/lk/)
 - CAF ABL: [https://source.codeaurora.org/quic/la/abl/tianocore/edk2/](https://source.codeaurora.org/quic/la/abl/tianocore/edk2/)
+- Note that the Qualcomm maintained projects have been hosted on [https://git.codelinaro.org/](https://git.codelinaro.org/) since 2022
 
 As you can see, the source tree of Aboot is named lk, short for LittleKernel, which is a small symmetric multiprocessing (SMP) operating system kernel, and Aboot is a device-related application built on top of this operating system. This article will briefly analyze the source code of Aboot as an application (excluding encryption and image verification), and cover some of the device-related code.
 
