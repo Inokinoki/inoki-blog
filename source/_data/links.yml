@@ -13,6 +13,15 @@ Edward:
   avatar: https://edward40.com/static/ce8bfa44d476d8e731987714a8c0b6f2/0bc1d/edward-elric.webp
   desc: "是 E哥 大强强"
 
+huige233:
+  link: https://huige233.github.io/
+  avatar: https://huige233.github.io/vuepress-theme/img/EB-logo.png
+  desc: "一个哈皮 喜欢在网上写奇奇怪怪的东西"
+
+JundeYhi:
+  link: https://www.yhi.moe/
+  desc: "In pursuit of absolute simplicity."
+
 Lovely:
   link: https://blog.dmcimi.top/
   avatar: https://cdn.jsdelivr.net/gh/dmcimi/Store@1.0/source/images/avatar.jpg
@@ -22,3 +31,8 @@ Matchy:
   link: https://matchy233.github.io/
   avatar: https://matchy233.github.io/img/avatar.jpg
   desc: "A nice person who has nothing but an empathetic heart"
+
+欧式fifty:
+  link: https://blog.ous50.moe/
+  avatar: https://blog.ous50.moe/icon.png
+  desc: "来呀，来玩呀~"
