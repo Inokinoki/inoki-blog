@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Tue, 28 Jun 2022 14:28:40 GMT</pubDate>
+    <pubDate>Tue, 25 Apr 2023 11:47:20 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】解锁摩托罗拉的引导程序</title>
+      <link>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/</link>
+      <guid>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/</guid>
+      <pubDate>Tue, 25 Apr 2023 11:20:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;在&lt;a href=&quot;http://bits-please.blogspot.com/2016/02/unlocking-motorola-bootloader.html&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Android Bootloader and Linux Internal based on Nokia 8(NB1) —— Device Tree</title>
@@ -410,27 +431,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】从零开始的 Wayland 合成器 —— 3. 渲染一个窗口</title>
-      <link>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/</link>
-      <guid>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/</guid>
-      <pubDate>Mon, 06 Sep 2021 20:48:40 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://drewdevault.com/2018/02/28/Writing-a-wayland-compositor-part-3.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Writing a
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/#disqus_thread</comments>
     </item>
     
   </channel>
