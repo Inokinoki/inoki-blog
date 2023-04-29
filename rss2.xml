@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Tue, 25 Apr 2023 11:47:20 GMT</pubDate>
+    <pubDate>Sat, 29 Apr 2023 08:53:45 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】在任何上下文中进行 TrustZone 内核中的任意代码执行</title>
+      <link>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/</link>
+      <guid>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/</guid>
+      <pubDate>Sat, 29 Apr 2023 11:20:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;在&lt;a href=&quot;http://bits-please.blogspot.com/2015/03/getting-arbitrary-code-execution-in.html&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】解锁摩托罗拉的引导程序</title>
@@ -410,27 +431,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】高通 Android 设备的启动信任链</title>
-      <link>https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/</link>
-      <guid>https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/</guid>
-      <pubDate>Sun, 17 Oct 2021 09:40:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://lineageos.org/engineering/Qualcomm-Firmware/&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/#disqus_thread</comments>
     </item>
     
   </channel>
