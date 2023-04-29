@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <script data-ad-client="ca-pub-2713518338457470" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>【译】探索高通的 TrustZone 实现 | Inoki in the world</title>
+  <meta name="description" content="在本博客中，我们将探索高通在 Snapdragon SoC 上实现的 TrustZone。如果您还没有阅读之前的博客文章，我在其中详细介绍了 TrustZone。  从哪里开始？ 首先，由于高通的 TrustZone 实现是闭源的，据我所知，没有公开的文档详细说明其架构或设计，我们可能需要对包含 TrustZone 代码的二进制文件进行逆向工程和分析。  获取TrustZone映像 我们可以尝试从">
+<meta name="keywords" content="中文,Linux,Android,ABL,Bootloader">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】探索高通的 TrustZone 实现">
+<meta property="og:url" content="https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="在本博客中，我们将探索高通在 Snapdragon SoC 上实现的 TrustZone。如果您还没有阅读之前的博客文章，我在其中详细介绍了 TrustZone。  从哪里开始？ 首先，由于高通的 TrustZone 实现是闭源的，据我所知，没有公开的文档详细说明其架构或设计，我们可能需要对包含 TrustZone 代码的二进制文件进行逆向工程和分析。  获取TrustZone映像 我们可以尝试从">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://1.bp.blogspot.com/-tezz1GKcU6I/VRaf5qqPzTI/AAAAAAAACVY/GMNPFK0ehz4/s1600/Screenshot%2Bfrom%2B2015-03-28%2B15%3A31%3A15.png">
+<meta property="og:image" content="http://1.bp.blogspot.com/-X0vwMuzPczQ/VRata-TePfI/AAAAAAAACV8/Nj5dLhT4Y_4/s1600/Screenshot%2Bfrom%2B2015-03-28%2B16%3A32%3A15.png">
+<meta property="og:image" content="http://2.bp.blogspot.com/-7F8Rf_QeBvQ/VRbMfdDbSJI/AAAAAAAACWM/4hyDRs-hF2c/s1600/Screenshot%2Bfrom%2B2015-03-28%2B18%3A44%3A47.png">
+<meta property="og:image" content="http://2.bp.blogspot.com/-rOpbW8GaW70/VRbN-yd0QyI/AAAAAAAACWc/A00epuBJWoY/s1600/Screenshot%2Bfrom%2B2015-03-28%2B18%3A51%3A08.png">
+<meta property="og:image" content="http://4.bp.blogspot.com/-kqrond4e_Zs/VRbRIq_VbaI/AAAAAAAACWo/Uukz8E-7Fvg/s1600/Screenshot%2Bfrom%2B2015-03-28%2B19%3A04%3A35.png">
+<meta property="og:image" content="http://1.bp.blogspot.com/-z0KW9EhGVeg/VRblUaiDOYI/AAAAAAAACW4/ZihHjT-bTkM/s1600/Screenshot%2Bfrom%2B2015-03-28%2B20%3A30%3A46.png">
+<meta property="og:image" content="http://1.bp.blogspot.com/-tfm2lBJbvGA/VRbmBSE9_dI/AAAAAAAACXA/E4bFUG53p38/s1600/Screenshot%2Bfrom%2B2015-03-28%2B20%3A33%3A49.png">
+<meta property="og:image" content="http://3.bp.blogspot.com/-D6XK15MgKIE/VRbn5YH-LVI/AAAAAAAACXM/P_dWt6sW4AY/s1600/Screenshot%2Bfrom%2B2015-03-28%2B20%3A41%3A03.png">
+<meta property="og:image" content="http://3.bp.blogspot.com/-Y3x12DbZHYI/VRboiukNyRI/AAAAAAAACXU/9UVajzOFd9c/s1600/Screenshot%2Bfrom%2B2015-03-28%2B20%3A44%3A34.png">
+<meta property="og:image" content="http://3.bp.blogspot.com/-0ABKwmGkAT8/VRb0a2-6PMI/AAAAAAAACXk/pQEpmLBskko/s1600/Screenshot%2Bfrom%2B2015-03-28%2B21%3A34%3A57.png">
+<meta property="og:image" content="http://4.bp.blogspot.com/-jA87CfMcNHI/VRb1SD24cfI/AAAAAAAACXs/EuvJjT2GCBI/s1600/Screenshot%2Bfrom%2B2015-03-28%2B21%3A37%3A50.png">
+<meta property="og:image" content="http://3.bp.blogspot.com/-FyzHnp8byzw/VRb5qpeDOnI/AAAAAAAACX4/Tcn9jfJyUdc/s1600/Screenshot%2Bfrom%2B2015-03-28%2B21%3A56%3A59.png">
+<meta property="og:image" content="http://3.bp.blogspot.com/-hkbU04X9dQU/VRb8Z-xrlWI/AAAAAAAACYE/GEsGMKTGID4/s1600/Screenshot%2Bfrom%2B2015-03-28%2B22%3A09%3A17.png">
+<meta property="og:image" content="http://1.bp.blogspot.com/-XkZo2OWiseE/VRb9YZaVvzI/AAAAAAAACYM/jdqWDCT4Dk4/s1600/Screenshot%2Bfrom%2B2015-03-28%2B22%3A13%3A27.png">
+<meta property="og:image" content="http://3.bp.blogspot.com/-b2JrsfhYGWs/VRcAm_PCqMI/AAAAAAAACYY/LoQ1fn_eBPk/s1600/Screenshot%2Bfrom%2B2015-03-28%2B22%3A27%3A14.png">
+<meta property="og:image" content="http://1.bp.blogspot.com/-wY6wy_88U2A/VRcGI6PUhhI/AAAAAAAACY4/uuEAifgqzOM/s1600/tzbsp_es_is_activated.png">
+<meta property="og:updated_time" content="2023-04-29T12:39:27.765Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】探索高通的 TrustZone 实现">
+<meta name="twitter:description" content="在本博客中，我们将探索高通在 Snapdragon SoC 上实现的 TrustZone。如果您还没有阅读之前的博客文章，我在其中详细介绍了 TrustZone。  从哪里开始？ 首先，由于高通的 TrustZone 实现是闭源的，据我所知，没有公开的文档详细说明其架构或设计，我们可能需要对包含 TrustZone 代码的二进制文件进行逆向工程和分析。  获取TrustZone映像 我们可以尝试从">
+<meta name="twitter:image" content="http://1.bp.blogspot.com/-tezz1GKcU6I/VRaf5qqPzTI/AAAAAAAACVY/GMNPFK0ehz4/s1600/Screenshot%2Bfrom%2B2015-03-28%2B15%3A31%3A15.png">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="/" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Student</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/04/29/exploring-qualcomms-trustzone/" class="title">【译】探索高通的 TrustZone 实现</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-29T12:20:00.000Z" itemprop="datePublished">2023-04-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/04/29/getting-arbitrary-code-execution-in/" class="title">【译】在任何上下文中进行 TrustZone 内核中的任意代码执行</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-29T11:20:00.000Z" itemprop="datePublished">2023-04-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/04/25/unlocking-motorola-bootloader/" class="title">【译】解锁摩托罗拉的引导程序</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-25T11:20:00.000Z" itemprop="datePublished">2023-04-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2022/05/09/android-bootloader-linux-nokia-nb1-dt/" class="title">Android Bootloader and Linux Internal based on Nokia 8(NB1) —— Device Tree</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-09T20:48:00.000Z" itemprop="datePublished">2022-05-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Embedded-System/">Embedded System</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Embedded-System/Raspberry-Pi/">Raspberry Pi</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/" class="title">My journey on Raspberry Pi JTAG debugging</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-02-22T06:57:50.000Z" itemprop="datePublished">2022-02-22</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+<!-- Blog sidebar -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="2343090796" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ABL/" style="font-size: 13.6px;">ABL</a> <a href="/tags/ASIX/" style="font-size: 13.1px;">ASIX</a> <a href="/tags/Aboot/" style="font-size: 13.2px;">Aboot</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Android/" style="font-size: 13.7px;">Android</a> <a href="/tags/Bare-Metal/" style="font-size: 13.1px;">Bare Metal</a> <a href="/tags/Bootloader/" style="font-size: 13.7px;">Bootloader</a> <a href="/tags/Bug/" style="font-size: 13.2px;">Bug</a> <a href="/tags/C/" style="font-size: 13px;">C++</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Cloud-Input/" style="font-size: 13.3px;">Cloud Input</a> <a href="/tags/Computer-Graphics/" style="font-size: 13px;">Computer Graphics</a> <a href="/tags/Craft/" style="font-size: 13.1px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.2px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13.1px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/EDK2/" style="font-size: 13px;">EDK2</a> <a href="/tags/EFI/" style="font-size: 13px;">EFI</a> <a href="/tags/Embedded-System/" style="font-size: 13.4px;">Embedded System</a> <a href="/tags/FFmpeg/" style="font-size: 13.1px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.1px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/Go/" style="font-size: 13.1px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.4px;">IBus</a> <a href="/tags/IME/" style="font-size: 13px;">IME</a> <a href="/tags/IoT/" style="font-size: 13.4px;">IoT</a> <a href="/tags/JTAG/" style="font-size: 13px;">JTAG</a> <a href="/tags/KDE/" style="font-size: 13.1px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.5px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.1px;">KDE Frameworks</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.8px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.2px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.4px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.4px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Python/" style="font-size: 13.1px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qemu/" style="font-size: 13px;">Qemu</a> <a href="/tags/Qt/" style="font-size: 13.1px;">Qt</a> <a href="/tags/Raspberry-Pi/" style="font-size: 13.4px;">Raspberry Pi</a> <a href="/tags/Ray-Tracing/" style="font-size: 13px;">Ray Tracing</a> <a href="/tags/Router/" style="font-size: 13.2px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.3px;">SDR</a> <a href="/tags/Source-Code/" style="font-size: 13.1px;">Source Code</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/Ubuntu/" style="font-size: 13.1px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/Vulkan/" style="font-size: 13px;">Vulkan</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.1px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.1px;">Windows</a> <a href="/tags/XBL/" style="font-size: 13px;">XBL</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/iOS/" style="font-size: 13px;">iOS</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.3px;">ibus-libpinyin</a> <a href="/tags/macOS/" style="font-size: 13px;">macOS</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.2px;">private</a> <a href="/tags/sysfs/" style="font-size: 13px;">sysfs</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/翻译/" style="font-size: 13.9px;">翻译</a> <a href="/tags/驱动/" style="font-size: 13px;">驱动</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABL/">ABL</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Aboot/">Aboot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bootloader/">Bootloader</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-Graphics/">Computer Graphics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EDK2/">EDK2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EFI/">EFI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IME/">IME</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JTAG/">JTAG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qemu/">Qemu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-Pi/">Raspberry Pi</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray-Tracing/">Ray Tracing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vulkan/">Vulkan</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XBL/">XBL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macOS/">macOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysfs/">sysfs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">42</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">25</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/驱动/">驱动</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/">Computer Graphics</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/Vulkan/">Vulkan</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/EDK2/">EDK2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-Pi/">Raspberry Pi</a><span class="category-list-count">6</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/IME/">IME</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/">Inoki Home Made</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/">Qt</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/EFI/">EFI</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">20</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/">Android</a><span class="category-list-count">11</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/Bootloader/">Bootloader</a><span class="category-list-count">9</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Driver/">Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Wayland/">Wayland</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/sysfs/">sysfs</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Modern-C/">Modern C++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">15</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-exploring-qualcomms-trustzone" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【译】探索高通的 TrustZone 实现
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/04/29/exploring-qualcomms-trustzone/" class="article-date">
+	  <time datetime="2023-04-29T12:20:00.000Z" itemprop="datePublished">2023-04-29</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>►<a class="article-category-link" href="/categories/Linux/Android/">Android</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/ABL/">ABL</a>, <a class="article-tag-link" href="/tags/Android/">Android</a>, <a class="article-tag-link" href="/tags/Bootloader/">Bootloader</a>, <a class="article-tag-link" href="/tags/Linux/">Linux</a>, <a class="article-tag-link" href="/tags/中文/">中文</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/04/29/exploring-qualcomms-trustzone/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 3.9k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 13(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>在<a href="http://bits-please.blogspot.com/2015/08/exploring-qualcomms-trustzone.html" target="_blank" rel="noopener">本博客</a>中，我们将探索高通在 Snapdragon SoC 上实现的 TrustZone。如果您还没有阅读之前的博客文章，我在其中详细介绍了 TrustZone。</p>
+<h1 id="从哪里开始"><a class="markdownIt-Anchor" href="#从哪里开始"></a> 从哪里开始？</h1>
+<p>首先，由于高通的 TrustZone 实现是闭源的，据我所知，没有公开的文档详细说明其架构或设计，我们可能需要对包含 TrustZone 代码的二进制文件进行逆向工程和分析。</p>
+<h1 id="获取trustzone映像"><a class="markdownIt-Anchor" href="#获取trustzone映像"></a> 获取TrustZone映像</h1>
+<p>我们可以尝试从两个不同的位置提取映像；要么从设备本身，要么从设备的工厂映像。</p>
+<p>我的个人 Nexus 5 设备已经获取了 root 权限，因此从设备中提取映像应该非常简单。由于映像存储在 eMMC 芯片上，而 eMMC 芯片的块和分区在“/dev/block/platform/msm_sdcc.1”下可用，我可以通过使用“dd”将相关分区复制到我的桌面。</p>
+<p>此外，这些分区在“/dev/block/platform/msm_sdcc.1/by-name”下有有意义的命名链接。</p>
+<p><img src="http://1.bp.blogspot.com/-tezz1GKcU6I/VRaf5qqPzTI/AAAAAAAACVY/GMNPFK0ehz4/s1600/Screenshot%2Bfrom%2B2015-03-28%2B15%3A31%3A15.png" alt=""></p>
+<p>这里有两个分区，一个名为“tz”（代表TrustZone），一个名为“tzb”，用作“tz”映像的备份映像，与其完全相同。</p>
+<p>但是，通过这种方式提取映像后，仍然不满意，原因有两个：</p>
+<ul>
+<li>虽然 TrustZone 映像存储在 eMMC 芯片上，但它可能很容易对“普通世界”（通过要求系统总线上的 AxPROT 位被设置）变得不可访问，或其中的几个部分可能会丢失。</li>
+<li>拉取整个分区的数据并不透露有关映像实际（逻辑）边界的信息，因此需要额外的工作才能确定映像实际上的结束位置。（实际上，“tz”映像是一个 ELF 二进制文件，其大小包含在 ELF 头中，但这只是一种特殊情况）。</li>
+</ul>
+<p>因此，提取了一个设备映像后，让我们看看出厂映像。</p>
+<p>Nexus 5 的出厂映像都可以从谷歌上下载。出厂映像包含一个 ZIP 文件，其中包含所有默认映像，此外还包含引导加载程序映像。</p>
+<p>下载出厂映像并搜索与 TrustZone 相关的字符串后，很快就可以发现引导加载程序映像包含了所需的代码。</p>
+<p>但是，在这里仍然有一个小问题要解决 - 引导加载程序映像以一种未知的格式存储（尽管也许可以通过一些 Google 技巧找到需要的答案）。无论如何，使用十六进制编辑器打开该文件并猜测其结构后发现，该格式实际上相当简单：</p>
+<p><img src="http://1.bp.blogspot.com/-X0vwMuzPczQ/VRata-TePfI/AAAAAAAACV8/Nj5dLhT4Y_4/s1600/Screenshot%2Bfrom%2B2015-03-28%2B16%3A32%3A15.png" alt=""></p>
+<p>引导加载程序文件的结构如下：</p>
+<ul>
+<li>魔数（“BOOTLDR!”）- 8个字节。</li>
+<li>镜像的数量 - 4个字节。</li>
+<li>镜像数据开头相对于文件开头的偏移量 - 4个字节。</li>
+<li>包含在镜像中的数据的总大小 - 4个字节。</li>
+<li>一个数组，其项数与上面的“镜像数量”字段相匹配。数组中的每个条目都有两个字段：镜像名称 - 64个字节（填充为零）；镜像长度 - 4个字节。</li>
+</ul>
+<p>如您在上面的图片中所看到的，引导加载程序映像包含一个名为“tz”的映像，这是我们要找的映像。为了解包此文件，我编写了一个小型 Python 脚本（在<a href="https://github.com/laginimaineb/unpack_bootloader_image" target="_blank" rel="noopener">此处</a>提供），该脚本接收引导加载程序映像并解包其中包含的所有文件。</p>
+<p>提取映像后，将其与先前从设备中提取的映像进行比较，我验证它们确实是相同的。因此，我想这意味着我们现在可以继续检查 TrustZone 映像了。</p>
+<h1 id="修复-trustzone-映像"><a class="markdownIt-Anchor" href="#修复-trustzone-映像"></a> 修复 TrustZone 映像</h1>
+<p>首先，检查文件会发现它实际上是一个 ELF 文件，这是非常好的消息！这意味着内存段及其映射的地址应该对我们可用。</p>
+<p>在使用 IDA Pro 打开文件并让自动分析运行一段时间后，我想开始反汇编文件。然而，令人惊讶的是，似乎有很多跳转到未映射地址（或者说指向不包含在“tz”二进制文件中的地址）的分支。</p>
+<p>仔细观察后，似乎所有指向无效地址的绝对分支都位于文件的第一个代码段中，并且它们指向未映射的高地址。此外，没有绝对分支指向该第一个代码段的地址。</p>
+<p>这似乎有些可疑…那么我们来看一下 ELF 文件的结构如何？执行 <code>readelf</code> 命令会显示以下内容：</p>
+<p><img src="http://2.bp.blogspot.com/-7F8Rf_QeBvQ/VRbMfdDbSJI/AAAAAAAACWM/4hyDRs-hF2c/s1600/Screenshot%2Bfrom%2B2015-03-28%2B18%3A44%3A47.png" alt=""></p>
+<p>有一个空段映射到一个更高的地址，实际上与无效绝对分支指向的地址范围相对应！高通的家伙们很聪明。</p>
+<p>无论如何，我做出了一个相当安全的猜测，即第一个代码段实际上映射到错误的地址，应该实际上映射到更高的地址-0xFE840000。因此，自然地，我想使用 IDA 的重新定位功能重新定位段，但是惊奇地发现！这会导致 IDA 崩溃：</p>
+<p><img src="http://2.bp.blogspot.com/-rOpbW8GaW70/VRbN-yd0QyI/AAAAAAAACWc/A00epuBJWoY/s1600/Screenshot%2Bfrom%2B2015-03-28%2B18%3A51%3A08.png" alt=""></p>
+<p>我其实不确定这是高通有意为之的反调试特性，还是 NULL 段只是他们内部构建过程的结果，但是这可以通过手动修复 ELF 文件来轻松规避。只需要将 NULL 段移动到未使用的地址（因为 IDA 会忽略它），并将第一个代码段从错误的地址（0xFC86000）移动到正确的地址（0xFE840000），如下所示：</p>
+<p><img src="http://4.bp.blogspot.com/-kqrond4e_Zs/VRbRIq_VbaI/AAAAAAAACWo/Uukz8E-7Fvg/s1600/Screenshot%2Bfrom%2B2015-03-28%2B19%3A04%3A35.png" alt=""></p>
+<p>现在，在 IDA 中加载镜像后，所有的绝对分支都有效！这意味着我们可以继续分析镜像！</p>
+<h1 id="分析-trustzone-镜像"><a class="markdownIt-Anchor" href="#分析-trustzone-镜像"></a> 分析 TrustZone 镜像</h1>
+<p>首先，应该注意的是，TrustZone 镜像是一个相当大的（285.5 KB）二进制文件，有相当少的字符串，而且没有公开的文档。此外，TrustZone 系统是由一个完整的内核组成的，具有执行应用程序等功能，还有更多。所以…不清楚我们应该从哪里开始，因为逆转整个二进制文件可能会花费太多时间。</p>
+<p>由于我们想从应用处理器攻击 TrustZone 内核，最大的攻击面可能是安全监控调用，它使 &quot;正常世界 &quot;能够与 &quot;安全世界 &quot;互动。</p>
+<p>当然，应该注意的是，还有其他的载体可以让我们与 TrustZone 进行交互，比如共享内存，甚至是中断处理，但是由于这些所构成的攻击面要小得多，所以从分析 SMC 调用开始可能更好。</p>
+<p>那么，我们如何找到 TrustZone 内核处理 SMC 调用的地方呢？首先，让我们回顾一下，当执行 SMC 调用时，与处理 SVC 调用（即&quot;正常世界&quot;中的常规系统调用）类似，&quot;安全世界&quot;必须注册向量的地址，当遇到这种指令时，处理器将跳转到该向量。</p>
+<p>&quot;安全世界&quot;的等价物是 MVBAR（监控向量基址寄存器），它提供了包含处理器在&quot;安全世界&quot;处理不同事件的处理功能的向量地址。</p>
+<p>访问 MVBAR 是通过 MRC/MCR 操作码完成的，其操作数如下：</p>
+<p><img src="http://1.bp.blogspot.com/-z0KW9EhGVeg/VRblUaiDOYI/AAAAAAAACW4/ZihHjT-bTkM/s1600/Screenshot%2Bfrom%2B2015-03-28%2B20%3A30%3A46.png" alt=""></p>
+<p>因此，这意味着我们可以简单地在 TrustZone 镜像中搜索具有以下操作数的 MCR 操作码，我们应该能够找到&quot;监控向量&quot;。事实上，在 IDA 中搜索该操作码会得到以下匹配结果：</p>
+<p><img src="http://1.bp.blogspot.com/-tfm2lBJbvGA/VRbmBSE9_dI/AAAAAAAACXA/E4bFUG53p38/s1600/Screenshot%2Bfrom%2B2015-03-28%2B20%3A33%3A49.png" alt=""></p>
+<p>正如你所看到的，&quot;start&quot;符号（顺便说一下，它是唯一导出的符号）的地址被加载到 MVBAR 中。根据 ARM 的文档，&quot;监控向量&quot;有以下结构：</p>
+<p><img src="http://3.bp.blogspot.com/-D6XK15MgKIE/VRbn5YH-LVI/AAAAAAAACXM/P_dWt6sW4AY/s1600/Screenshot%2Bfrom%2B2015-03-28%2B20%3A41%3A03.png" alt=""></p>
+<p>这意味着，如果我们看一下前面提到的&quot;start&quot;符号，我们可以给该表中的地址分配以下名称：</p>
+<p><img src="http://3.bp.blogspot.com/-Y3x12DbZHYI/VRboiukNyRI/AAAAAAAACXU/9UVajzOFd9c/s1600/Screenshot%2Bfrom%2B2015-03-28%2B20%3A44%3A34.png" alt=""></p>
+<p>现在，我们可以分析一下 SMC_VECTOR_HANDLER 函数。实际上，这个函数负责相当多的任务；首先，它将所有的状态寄存器和返回地址保存在一个预定义的地址中（在&quot;安全世界&quot;中），然后，它将堆栈切换到一个预先分配的区域（也在&quot;安全世界&quot;中）。最后，在进行了必要的准备工作后，它继续分析用户要求的操作并根据它进行操作。</p>
+<p>由于发布 SMC 的代码存在于 Linux 内核的高通公司 MSM 分支中，我们可以看一下&quot;正常世界&quot;可以向&quot;安全世界&quot;发布的命令格式。</p>
+<h1 id="smc-和-scm"><a class="markdownIt-Anchor" href="#smc-和-scm"></a> SMC 和 SCM</h1>
+<p>令人困惑的是，高通公司选择将&quot;正常世界&quot;通过 SMC 操作码与&quot;安全世界&quot;互动的渠道命名为 SCM（安全通道管理器）。</p>
+<p>总之，正如我在之前的博文中提到的，&quot;qseecom&quot;驱动程序用于使用 SCM 与&quot;安全世界&quot;进行通信。</p>
+<p>高通公司在相关源文件中提供的文档相当广泛，足以让我们很好地掌握 SCM 命令的格式。</p>
+<p>简而言之，SCM 命令可分为两类之一：</p>
+<h2 id="常规-scm-调用"><a class="markdownIt-Anchor" href="#常规-scm-调用"></a> 常规 SCM 调用</h2>
+<p>当有信息需要从&quot;正常世界&quot;传递到&quot;安全世界&quot;时，就会使用这些调用，这些信息需要为 SCM 调用服务。内核填充了以下结构：</p>
+<p><img src="http://3.bp.blogspot.com/-0ABKwmGkAT8/VRb0a2-6PMI/AAAAAAAACXk/pQEpmLBskko/s1600/Screenshot%2Bfrom%2B2015-03-28%2B21%3A34%3A57.png" alt=""></p>
+<p>而 TrustZone 内核在为 SCM 调用提供服务后，将响应写回&quot;scm_response&quot;结构中：</p>
+<p><img src="http://4.bp.blogspot.com/-jA87CfMcNHI/VRb1SD24cfI/AAAAAAAACXs/EuvJjT2GCBI/s1600/Screenshot%2Bfrom%2B2015-03-28%2B21%3A37%3A50.png" alt=""></p>
+<p>为了分配和填充这些结构，内核可以调用包装函数 “scm_call”，它接收指向内核空间缓冲区的指针，这些缓冲区包含要发送的数据，数据应该被返回的位置，以及最重要的，服务标识符和命令标识符。</p>
+<p>每个 SCM 调用都有一个&quot;类别&quot;，这意味着哪个 TrustZone 内核子系统负责处理该调用。这是由服务标识符表示的。命令标识符是一个代码，它指定了在一个给定的服务中，哪个命令被请求。</p>
+<p>在&quot;scm_call&quot;函数分配和填充&quot;scm_command&quot;和&quot;scm_response&quot;缓冲区之后，它调用一个内部的&quot;__scm_call&quot;函数，它刷新所有的缓冲区（内部和外部缓冲区），并调用&quot;smc&quot;函数。</p>
+<p>这最后一个函数实际上是执行 SMC 操作码，将控制权转移到 TrustZone 内核，像这样：</p>
+<p><img src="http://3.bp.blogspot.com/-FyzHnp8byzw/VRb5qpeDOnI/AAAAAAAACX4/Tcn9jfJyUdc/s1600/Screenshot%2Bfrom%2B2015-03-28%2B21%3A56%3A59.png" alt=""></p>
+<p>注意，R0 被设置为 1，R1 被设置为指向本地内核堆栈地址，它被用作该调用的&quot;上下文 ID&quot;，R2 被设置为指向分配的&quot;scm_command&quot;结构的物理地址。</p>
+<p>这个设置在 R0 中的&quot;魔法&quot;值表明这是一个常规的 SCM 调用，使用&quot;scm_command&quot;结构。然而，对于某些需要较少数据的命令，无缘无故地分配所有这些数据结构是相当浪费的。为了解决这个问题，引入了另一种形式的 SCM 调用。</p>
+<h2 id="原子-scm-调用"><a class="markdownIt-Anchor" href="#原子-scm-调用"></a> 原子 SCM 调用</h2>
+<p>对于参数数量相当少的调用（最多四个参数），存在另一种请求 SCM 调用的方式。</p>
+<p>有四个包装函数，“scm_call_atomic_[1-4]”，它们与请求的参数数量相对应。这些函数可以被调用，以便直接发出一个 SMC，用给定的服务和命令 ID，以及给定的参数进行 SCM 调用。</p>
+<p>下面是&quot;scm_call_atomic1&quot;函数的代码：</p>
+<p><img src="http://3.bp.blogspot.com/-hkbU04X9dQU/VRb8Z-xrlWI/AAAAAAAACYE/GEsGMKTGID4/s1600/Screenshot%2Bfrom%2B2015-03-28%2B22%3A09%3A17.png" alt=""></p>
+<p>其中 <code>SCM_ATOMIC</code> 被定义为：</p>
+<p><img src="http://1.bp.blogspot.com/-XkZo2OWiseE/VRb9YZaVvzI/AAAAAAAACYM/jdqWDCT4Dk4/s1600/Screenshot%2Bfrom%2B2015-03-28%2B22%3A13%3A27.png" alt=""></p>
+<p>注意，服务 ID 和命令 ID 都被编码到 R0 中，同时还有调用中的参数数（在本例中是 1）。这取代了以前用于常规 SCM 调用的&quot;神奇&quot;的 1 值。</p>
+<p>R0 中的这个不同的值向 TrustZone 内核表明，下面的 SCM 调用是一个原子调用，这意味着参数将使用 R2-R5 传递（而不是使用 R2 指向的结构）。</p>
+<h1 id="分析-scm-调用"><a class="markdownIt-Anchor" href="#分析-scm-调用"></a> 分析 SCM 调用</h1>
+<p>现在我们已经了解了 SCM 调用的工作原理，并且找到了 TrustZone 内核中用于处理这些 SCM 调用的处理函数，我们可以开始反汇编 SCM 调用，试图在其中找到一个漏洞。</p>
+<p>我将跳过对 SCM 处理函数的大部分分析，因为它的大部分是对用户输入的模板处理，等等。然而，在将堆栈切换到 TrustZone 区域并保存执行调用的原始寄存器后，处理函数继续处理服务 ID 和命令 ID，以确定应该调用哪个内部处理函数。</p>
+<p>为了方便服务和命令 ID 与相关处理函数之间的映射，一个静态列表被编译到 TrustZone 镜像的数据段，并被 SCM 处理函数引用。下面是该列表的一个简短片段：</p>
+<p><img src="http://3.bp.blogspot.com/-b2JrsfhYGWs/VRcAm_PCqMI/AAAAAAAACYY/LoQ1fn_eBPk/s1600/Screenshot%2Bfrom%2B2015-03-28%2B22%3A27%3A14.png" alt=""></p>
+<p>正如你所看到的，该列表有以下结构：</p>
+<ul>
+<li>指向包含 SCM 函数名称的字符串的指针</li>
+<li>调用的&quot;类型&quot;</li>
+<li>指向处理函数的指针</li>
+<li>参数的数量</li>
+<li>每个参数的大小（每个参数有一个 DWORD）。</li>
+<li>服务 ID 和命令 ID，串联成一个 DWORD - 例如，上面的&quot;tz_blow_sw_fuse&quot;函数，其类型为 <code>0x2002</code>，这意味着它属于服务 ID <code>0x20</code>，其命令 ID 为 <code>0x02</code>。</li>
+</ul>
+<p>现在剩下的就是开始拆解这些函数，并希望能找到一个可利用的错误。</p>
+<h1 id="漏洞"><a class="markdownIt-Anchor" href="#漏洞"></a> 漏洞!</h1>
+<p>因此，在仔细研究了上述所有的 SMC 调用（全部 69 个）后，我终于找到了以下函数：</p>
+<p><img src="http://1.bp.blogspot.com/-wY6wy_88U2A/VRcGI6PUhhI/AAAAAAAACY4/uuEAifgqzOM/s1600/tzbsp_es_is_activated.png" alt=""></p>
+<p>通常情况下，当使用常规的 SCM 调用机制调用 SCM 命令时，R0 将包含&quot;结果地址&quot;，它指向由内核分配的&quot;scm_response&quot;缓冲区，但它也被 TrustZone 内核验证，以确保它实际上是一个 &quot;允许&quot;范围内的物理地址，也就是说，一个对应于 Linux 内核内存的物理地址，而不是，例如，TrustZone 二进制中的内存位置。</p>
+<p>这个检查是通过一个内部函数进行的，我将在下一篇博文中详细介绍（请继续关注！）。</p>
+<p>但是，如果我们使用一个原子的 SCM 调用来执行一个函数，会发生什么？在这种情况下，使用的&quot;结果地址&quot;是原子调用所传递的第一个参数。</p>
+<p>现在–你能看到上面这个函数中的错误吗？</p>
+<p>相对于其他 SCM 处理函数，这个函数未能验证 R0 中的值，即&quot;结果地址&quot;，所以如果我们传入</p>
+<ul>
+<li>R1为非零值（为了传递第一个分支）</li>
+<li>第四个参数（在上面 <code>var_1C</code> 处传入）为非零值</li>
+<li>R0 为任何物理地址，包括 TrustZone 地址空间范围内的一个地址</li>
+</ul>
+<p>该函数将到达上述函数中最左边的分支，并在 R0 包含的地址处写入一个DWORD 0。</p>
+<h1 id="负责任的披露"><a class="markdownIt-Anchor" href="#负责任的披露"></a> 负责任的披露</h1>
+<p>我想指出的是，我已经在 11 个月前向高通公司负责任地披露了这个漏洞，而且这个问题已经被他们修复了（速度快得惊人！）。我将在下一篇博文中分享详细的时间表和解释，但我想指出的是，高通公司的人反应非常迅速，与他们合作非常愉快。</p>
+<h1 id="下一步是什么"><a class="markdownIt-Anchor" href="#下一步是什么"></a> 下一步是什么？</h1>
+<p>在下一篇博文中，我将分享一个针对上述漏洞的详细（而且相当复杂！）的利用方法，它可以在 TrustZone 内核内执行全部代码。我还会公布完整的漏洞代码，敬请关注</p>
+<p>另外，由于这只是我的第二篇博文，我真的希望得到一些（任何）意见，特别是：</p>
+<ul>
+<li>我应该多写（或少写）些什么？</li>
+<li>博客设计问题</li>
+<li>研究思路 😃</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/" title="【译】探索高通的 TrustZone 实现" target="_blank" rel="external">https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Student</small></a></h3>
+        <div>Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+      <!-- Blog post bottom bar -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="9214609149" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2023/04/29/getting-arbitrary-code-execution-in/" title="【译】在任何上下文中进行 TrustZone 内核中的任意代码执行"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/';
+        
+        this.page.identifier = 'exploring-qualcomms-trustzone';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>

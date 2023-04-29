@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sat, 29 Apr 2023 08:53:45 GMT</pubDate>
+    <pubDate>Sat, 29 Apr 2023 12:39:27 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】探索高通的 TrustZone 实现</title>
+      <link>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</link>
+      <guid>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</guid>
+      <pubDate>Sat, 29 Apr 2023 12:20:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;在&lt;a href=&quot;http://bits-please.blogspot.com/2015/08/exploring-qualcomms-trustzone.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;本博客&lt;/a&gt;中，我们将探索高通在
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】在任何上下文中进行 TrustZone 内核中的任意代码执行</title>
@@ -410,27 +431,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>Android 启动加载器分析 —— Aboot</title>
-      <link>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</link>
-      <guid>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</guid>
-      <pubDate>Sun, 17 Oct 2021 10:48:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;已经有很多文章解析过 Android 在高通平台的启动流程了。从我翻译的&lt;a href=&quot;https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/&quot;&gt;【译】高通 Android
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/#disqus_thread</comments>
     </item>
     
   </channel>
