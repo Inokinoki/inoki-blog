@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <script data-ad-client="ca-pub-2713518338457470" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>【译】探索高通的安全执行环境 | Inoki in the world</title>
+  <meta name="description" content="在本博客中，我们将再次深入探讨 TrustZone 的世界，并探索一系列新的漏洞和相应的利用程序，这些漏洞和利用程序将使我们能够从零权限提升特权，以在 TrustZone 内核中执行代码。 对于那些阅读过之前系列的人来说，这可能听起来很熟悉 - 但是让我向您保证;这个系列将会更加令人兴奋！ 首先，这个漏洞链具有通用性，适用于所有 Android 版本和手机（而且不需要任何权限），并且一个影响广泛的">
+<meta name="keywords" content="中文,Linux,Android,ABL,Bootloader">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】探索高通的安全执行环境">
+<meta property="og:url" content="https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="在本博客中，我们将再次深入探讨 TrustZone 的世界，并探索一系列新的漏洞和相应的利用程序，这些漏洞和利用程序将使我们能够从零权限提升特权，以在 TrustZone 内核中执行代码。 对于那些阅读过之前系列的人来说，这可能听起来很熟悉 - 但是让我向您保证;这个系列将会更加令人兴奋！ 首先，这个漏洞链具有通用性，适用于所有 Android 版本和手机（而且不需要任何权限），并且一个影响广泛的">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://4.bp.blogspot.com/--8-qxTK4nkQ/Vx5qgfd0MUI/AAAAAAAADlQ/JPi8hKxl0YI17w1vKfX0t-e4yuRTofwRACLcB/s1600/Screenshot%2Bfrom%2B2016-04-25%2B22%253A05%253A26.png">
+<meta property="og:image" content="https://4.bp.blogspot.com/-K-p4I-gLUm0/Vw-p2N5S4cI/AAAAAAAADiU/AAIWhjl0DZEQPmlO7Wcetm4ewud6GoDygCLcB/s1600/Screenshot%2Bfrom%2B2016-04-14%2B17%253A31%253A36.png">
+<meta property="og:image" content="https://4.bp.blogspot.com/-2M0MBoxXx0s/Vw_i5H1ubYI/AAAAAAAADis/0mjja9u7fLUoSTDCqv-AQF_MqC0fNt1lQCLcB/s1600/Screenshot%2Bfrom%2B2016-04-14%2B21%253A35%253A02.png">
+<meta property="og:image" content="https://2.bp.blogspot.com/-q5ISujqlZJQ/Vw_xqodDwHI/AAAAAAAADjE/5UsNb3fRqHYcpwww3yoU6D00zVhwPzPdQCLcB/s280/Screenshot%2Bfrom%2B2016-04-14%2B22%253A38%253A03.png">
+<meta property="og:image" content="https://3.bp.blogspot.com/-kCbanj5qnNI/VxoYC9hWc_I/AAAAAAAADkU/gwOYLG--NhgkHg0eo_F0ytxTkHulrBUfQCLcB/s1600/Screenshot%2Bfrom%2B2016-04-22%2B15%253A24%253A28.png">
+<meta property="og:image" content="https://3.bp.blogspot.com/-ng-lbPKtFqs/Vx6N8HqOBNI/AAAAAAAADmk/I-JQCN-w6i4vW1RoAyi7UR6PdD50PL08gCLcB/s280/Screenshot%2Bfrom%2B2016-04-26%2B00%253A36%253A37.png">
+<meta property="og:image" content="https://1.bp.blogspot.com/-xz-y61aweD8/VxoYvWqHxjI/AAAAAAAADkc/KMID90TBNsQkEEDTFC0Yz315VFbkqeUfgCLcB/s1600/Screenshot%2Bfrom%2B2016-04-22%2B15%253A26%253A11.png">
+<meta property="og:image" content="https://1.bp.blogspot.com/-sDFBSQziyeU/Vx55nxH0evI/AAAAAAAADlk/T2rZKFv5qAY9nt8xoPBugmZA5qU4RnT4ACLcB/s1600/Screenshot%2Bfrom%2B2016-04-25%2B23%253A08%253A18.png">
+<meta property="og:image" content="https://1.bp.blogspot.com/-6EU5u0TlGNQ/Vx59xMP3d-I/AAAAAAAADl0/LuQKalEin2Uf51FbXHwM40NZ7hGCzFVIgCLcB/s1600/Screenshot%2Bfrom%2B2016-04-25%2B23%253A27%253A38.png">
+<meta property="og:image" content="https://4.bp.blogspot.com/-cInoo8hdisg/Vx6FDn10xMI/AAAAAAAADmI/nfEtOGDr3d4O6jjAURpJUPi4t9PMxHfYwCLcB/s1600/Screenshot%2Bfrom%2B2016-04-25%2B23%253A58%253A43.png">
+<meta property="og:image" content="https://2.bp.blogspot.com/-krFw0Ds87PM/Vx6gn52cZwI/AAAAAAAADnM/bcXuiNpiPk4fIFF5LZUeAXso9maJpi5XQCLcB/s1600/hashes.png">
+<meta property="og:image" content="https://4.bp.blogspot.com/-1Q5f2Bdlqek/Vx6fnRC2-JI/AAAAAAAADnA/aiz2tmb2f2IhCXGLPvbN9VeUNhBsbsD8QCLcB/s1600/Screenshot%2Bfrom%2B2016-04-26%2B01%253A51%253A37.png">
+<meta property="og:image" content="https://4.bp.blogspot.com/-F25AwpsXJ4w/Vx6gAZPr5nI/AAAAAAAADnE/JjZ_H5OGObA-mCsB9l-_myEE6C2UtkcvwCLcB/s280/Screenshot%2Bfrom%2B2016-04-26%2B01%253A53%253A44.png">
+<meta property="og:image" content="https://1.bp.blogspot.com/-e4OtA8tpg-8/Vx6iL72LYuI/AAAAAAAADnc/5SJpBjFerDA2VlMYwxuwfvoxIpltOF1hwCLcB/s1600/Screenshot%2Bfrom%2B2016-04-26%2B02%253A03%253A02.png">
+<meta property="og:image" content="https://1.bp.blogspot.com/-9zGaac0jPhc/Vx8cXryW4XI/AAAAAAAADn4/H4kTTh6xyMUKObt9uEWO7Wlk4Z8J6atLwCLcB/s1600/Screenshot%2Bfrom%2B2016-04-26%2B10%253A44%253A16.png">
+<meta property="og:image" content="https://2.bp.blogspot.com/-ZjZwBYYkgwM/Vx9GZMOCgII/AAAAAAAADok/vMI6_Xjy1JAr8UGY3TpvS0eylnEk1PC8QCLcB/s1600/Screenshot%2Bfrom%2B2016-04-26%2B13%253A43%253A38.png">
+<meta property="og:image" content="https://1.bp.blogspot.com/-bQG0yqPbGe8/Vx9J-HZKjSI/AAAAAAAADow/XrU2FHfdiAUggbxdNZU9B1L-0PvEK77NQCLcB/s1600/Screenshot%2Bfrom%2B2016-04-26%2B13%253A58%253A50.png">
+<meta property="og:image" content="https://2.bp.blogspot.com/-QyQkLeGzno0/Vx9MyXz_C4I/AAAAAAAADpA/XohkYcl4K7cCtPwenb7_UFNRG0DdRSgogCLcB/s280/Screenshot%2Bfrom%2B2016-04-26%2B14%253A10%253A52.png">
+<meta property="og:updated_time" content="2023-04-30T11:33:56.512Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】探索高通的安全执行环境">
+<meta name="twitter:description" content="在本博客中，我们将再次深入探讨 TrustZone 的世界，并探索一系列新的漏洞和相应的利用程序，这些漏洞和利用程序将使我们能够从零权限提升特权，以在 TrustZone 内核中执行代码。 对于那些阅读过之前系列的人来说，这可能听起来很熟悉 - 但是让我向您保证;这个系列将会更加令人兴奋！ 首先，这个漏洞链具有通用性，适用于所有 Android 版本和手机（而且不需要任何权限），并且一个影响广泛的">
+<meta name="twitter:image" content="https://4.bp.blogspot.com/--8-qxTK4nkQ/Vx5qgfd0MUI/AAAAAAAADlQ/JPi8hKxl0YI17w1vKfX0t-e4yuRTofwRACLcB/s1600/Screenshot%2Bfrom%2B2016-04-25%2B22%253A05%253A26.png">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="/" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Student</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/04/30/exploring-qualcomms-secure-execution-env/" class="title">【译】探索高通的安全执行环境</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-30T13:20:00.000Z" itemprop="datePublished">2023-04-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/04/30/full-trustzone-exploit-for-msm8974/" class="title">【译】完整的 MSM8974 TrustZone 实现利用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-30T11:20:00.000Z" itemprop="datePublished">2023-04-30</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/04/29/exploring-qualcomms-trustzone/" class="title">【译】探索高通的 TrustZone 实现</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-29T12:20:00.000Z" itemprop="datePublished">2023-04-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/04/29/getting-arbitrary-code-execution-in/" class="title">【译】在任何上下文中进行 TrustZone 内核中的任意代码执行</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-29T11:20:00.000Z" itemprop="datePublished">2023-04-29</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/04/25/unlocking-motorola-bootloader/" class="title">【译】解锁摩托罗拉的引导程序</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-25T11:20:00.000Z" itemprop="datePublished">2023-04-25</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+<!-- Blog sidebar -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="2343090796" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ABL/" style="font-size: 13.6px;">ABL</a> <a href="/tags/ASIX/" style="font-size: 13.1px;">ASIX</a> <a href="/tags/Aboot/" style="font-size: 13.2px;">Aboot</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Android/" style="font-size: 13.7px;">Android</a> <a href="/tags/Bare-Metal/" style="font-size: 13.1px;">Bare Metal</a> <a href="/tags/Bootloader/" style="font-size: 13.7px;">Bootloader</a> <a href="/tags/Bug/" style="font-size: 13.2px;">Bug</a> <a href="/tags/C/" style="font-size: 13px;">C++</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Cloud-Input/" style="font-size: 13.3px;">Cloud Input</a> <a href="/tags/Computer-Graphics/" style="font-size: 13px;">Computer Graphics</a> <a href="/tags/Craft/" style="font-size: 13.1px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.2px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13.1px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/EDK2/" style="font-size: 13px;">EDK2</a> <a href="/tags/EFI/" style="font-size: 13px;">EFI</a> <a href="/tags/Embedded-System/" style="font-size: 13.4px;">Embedded System</a> <a href="/tags/FFmpeg/" style="font-size: 13.1px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.1px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/Go/" style="font-size: 13.1px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.4px;">IBus</a> <a href="/tags/IME/" style="font-size: 13px;">IME</a> <a href="/tags/IoT/" style="font-size: 13.4px;">IoT</a> <a href="/tags/JTAG/" style="font-size: 13px;">JTAG</a> <a href="/tags/KDE/" style="font-size: 13.1px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.5px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.1px;">KDE Frameworks</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.8px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.2px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.4px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.4px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Python/" style="font-size: 13.1px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qemu/" style="font-size: 13px;">Qemu</a> <a href="/tags/Qt/" style="font-size: 13.1px;">Qt</a> <a href="/tags/Raspberry-Pi/" style="font-size: 13.4px;">Raspberry Pi</a> <a href="/tags/Ray-Tracing/" style="font-size: 13px;">Ray Tracing</a> <a href="/tags/Router/" style="font-size: 13.2px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.3px;">SDR</a> <a href="/tags/Source-Code/" style="font-size: 13.1px;">Source Code</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/Ubuntu/" style="font-size: 13.1px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/Vulkan/" style="font-size: 13px;">Vulkan</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.1px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.1px;">Windows</a> <a href="/tags/XBL/" style="font-size: 13px;">XBL</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/iOS/" style="font-size: 13px;">iOS</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.3px;">ibus-libpinyin</a> <a href="/tags/macOS/" style="font-size: 13px;">macOS</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.2px;">private</a> <a href="/tags/sysfs/" style="font-size: 13px;">sysfs</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/翻译/" style="font-size: 13.9px;">翻译</a> <a href="/tags/驱动/" style="font-size: 13px;">驱动</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABL/">ABL</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Aboot/">Aboot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bootloader/">Bootloader</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-Graphics/">Computer Graphics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EDK2/">EDK2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EFI/">EFI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IME/">IME</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JTAG/">JTAG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qemu/">Qemu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-Pi/">Raspberry Pi</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray-Tracing/">Ray Tracing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vulkan/">Vulkan</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XBL/">XBL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macOS/">macOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysfs/">sysfs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">44</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">25</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/驱动/">驱动</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/">Computer Graphics</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/Vulkan/">Vulkan</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/EDK2/">EDK2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-Pi/">Raspberry Pi</a><span class="category-list-count">6</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/IME/">IME</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/">Inoki Home Made</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/">Qt</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/EFI/">EFI</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">22</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/">Android</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/Bootloader/">Bootloader</a><span class="category-list-count">9</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Driver/">Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Wayland/">Wayland</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/sysfs/">sysfs</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Modern-C/">Modern C++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">15</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-exploring-qualcomms-secure-execution-env" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【译】探索高通的安全执行环境
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/04/30/exploring-qualcomms-secure-execution-env/" class="article-date">
+	  <time datetime="2023-04-30T13:20:00.000Z" itemprop="datePublished">2023-04-30</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>►<a class="article-category-link" href="/categories/Linux/Android/">Android</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/ABL/">ABL</a>, <a class="article-tag-link" href="/tags/Android/">Android</a>, <a class="article-tag-link" href="/tags/Bootloader/">Bootloader</a>, <a class="article-tag-link" href="/tags/Linux/">Linux</a>, <a class="article-tag-link" href="/tags/中文/">中文</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/04/30/exploring-qualcomms-secure-execution-env/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 3.7k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 12(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>在<a href="http://bits-please.blogspot.com/2016/04/exploring-qualcomms-secure-execution.html" target="_blank" rel="noopener">本博客</a>中，我们将再次深入探讨 TrustZone 的世界，并探索一系列新的漏洞和相应的利用程序，这些漏洞和利用程序将使我们能够从零权限提升特权，以在 TrustZone 内核中执行代码。</p>
+<p>对于那些阅读过之前系列的人来说，这可能听起来很熟悉 - 但是让我向您保证;这个系列将会更加令人兴奋！</p>
+<p>首先，这个漏洞链具有通用性，适用于所有 Android 版本和手机（而且不需要任何权限），并且一个影响广泛的 TrustZone 漏洞。其次，我们将深入探讨一个尚未被探索的操作系统 - QSEE - 高通的安全执行环境。最后，我们将看到一些有趣的 TrustZone 有效载荷，例如直接从 TrustZone 的加密文件系统中提取真实指纹。</p>
+<p>如果您想跟随符号和反汇编二进制文件进行学习，我将在整个系列中使用我的Nexus 6，其指纹如下：</p>
+<p>google/shamu/shamu:5.1.1/LMY48M/2167285:user/release-keys</p>
+<p>您可以在<a href="https://dl.google.com/dl/android/aosp/shamu-lmy48m-factory-336efdae.tgz" target="_blank" rel="noopener">此处</a>找到确切的出厂镜像。</p>
+<h1 id="噢qsee-能否说得上安全"><a class="markdownIt-Anchor" href="#噢qsee-能否说得上安全"></a> 噢，QSEE 能否说得上安全？</h1>
+<p>在这篇博客文章中，我们将探索高通的安全执行环境 QSEE。</p>
+<p>正如我们之前讨论的那样，设备上包含 TrustZone 的主要原因之一是提供“可信执行环境”(TEE)——一个理论上可以允许计算而不会被常规操作系统干扰的环境，因此是“可信的”。</p>
+<p>这是通过创建一个仅在由 TrustZone 提供的“安全世界”中运行的小型操作系统来实现的。这个操作系统直接提供一些系统调用形式的少量服务，这些调用被 TrustZone 内核(TZBSP)本身处理。然而，为了允许可扩展的模型，其中可以添加“可信”的功能，TrustZone 内核还可以安全地加载和执行称为“Trustlet”的小程序，这些程序旨在为不安全的(“正常世界”)操作系统(在我们的情况下是 Android)提供安全服务。</p>
+<p><img src="https://4.bp.blogspot.com/--8-qxTK4nkQ/Vx5qgfd0MUI/AAAAAAAADlQ/JPi8hKxl0YI17w1vKfX0t-e4yuRTofwRACLcB/s1600/Screenshot%2Bfrom%2B2016-04-25%2B22%253A05%253A26.png" alt=""></p>
+<p>这些 Trustlet 在设备上通常会被广泛使用：</p>
+<ul>
+<li>keymaster：实现了由 Android 密钥库守护程序提供的密钥管理 API。它可以安全地生成和存储加密密钥，并允许用户使用这些密钥对数据进行操作。</li>
+<li>widevine：实现了 Widevine DRM，允许在设备上安全播放媒体。</li>
+</ul>
+<p>实际上，根据 OEM 和设备的不同，可能会有更多与 DRM 相关的 Trustlet，但这两个 Trustlet 被广泛使用。</p>
+<h1 id="我们从哪里开始"><a class="markdownIt-Anchor" href="#我们从哪里开始"></a> 我们从哪里开始？</h1>
+<p>自然而然的，我们可以选择一个 Trustlet 来开始，尝试理解其工作原理。由于 widevine 模块是最普遍的之一，我们将重点关注它。</p>
+<p>简要搜索设备固件中的 widevine Trustlet，可以发现以下内容：</p>
+<p><img src="https://4.bp.blogspot.com/-K-p4I-gLUm0/Vw-p2N5S4cI/AAAAAAAADiU/AAIWhjl0DZEQPmlO7Wcetm4ewud6GoDygCLcB/s1600/Screenshot%2Bfrom%2B2016-04-14%2B17%253A31%253A36.png" alt=""></p>
+<p>显然，Trustlet 被分成了几个不同的文件…打开这些文件会看到一堆混乱的东西——有些文件包含看起来像是代码的内容，而其他文件包含 ELF 头和元数据。无论如何，在我们开始反汇编 Trustlet 之前，我们需要从这种格式中理出一些意义。我们可以通过打开每个文件并猜测每个 Blob 的含义，或者通过跟踪负责加载 Trustlet 的代码路径来实现。让我们试试两种方法。</p>
+<h1 id="加载-trustlet"><a class="markdownIt-Anchor" href="#加载-trustlet"></a> 加载 Trustlet</h1>
+<p>为了从&quot;正常世界&quot;中加载 Trustlet，应用程序可以使用 <code>libQSEECom.so</code> 共享对象，该对象导出函数 <code>QSEECom_start_app</code>:</p>
+<p><img src="https://4.bp.blogspot.com/-2M0MBoxXx0s/Vw_i5H1ubYI/AAAAAAAADis/0mjja9u7fLUoSTDCqv-AQF_MqC0fNt1lQCLcB/s1600/Screenshot%2Bfrom%2B2016-04-14%2B21%253A35%253A02.png" alt=""></p>
+<p>很不幸，这个库的源代码不可用，因此我们需要反向工程实现函数以找出它的作用。这样做会发现它执行以下操作：</p>
+<ul>
+<li>打开 <code>/dev/qseecom</code> 设备并调用一些 <code>ioctl</code> 命令进行配置。</li>
+<li>打开与信任应用程序相关的 <code>.mdt</code> 文件并从中读取前 <code>0x34</code> 字节。</li>
+<li>使用 <code>.mdt</code> 的 <code>0x34</code> 字节计算 <code>.bXX</code> 文件的数量。</li>
+<li>分配一个物理连续的缓冲区（使用&quot;ion&quot;）并将 <code>.mdt</code> 和 <code>.bXX</code> 文件复制到其中。</li>
+<li>最后，使用分配的缓冲区调用 <code>ioctl</code> 来加载信任应用程序本身。</li>
+</ul>
+<p>所以，仍然没有找到镜像加载的确切方法，但我们正在接近目标。</p>
+<p>首先，数字 <code>0x34</code> 可能看起来很熟悉——这是 ELF 头的大小（32 位）。打开 MDT 文件后发现，前 <code>0x34</code> 字节确实是有效的 ELF 头：</p>
+<p><img src="https://2.bp.blogspot.com/-q5ISujqlZJQ/Vw_xqodDwHI/AAAAAAAADjE/5UsNb3fRqHYcpwww3yoU6D00zVhwPzPdQCLcB/s280/Screenshot%2Bfrom%2B2016-04-14%2B22%253A38%253A03.png" alt=""></p>
+<p>此外，我们刚刚查看的 <code>QSEECOM_start_app</code> 函数使用偏移量 <code>0x2C</code> 处的 WORD 来计算 <code>.bXX</code> 文件的数量。正如您在上面看到的那样，这对应于 ELF 标头中的 <code>e_phnum</code> 字段。</p>
+<p>由于 <code>e_phnum</code> 字段通常用于指定程序头的数量，这表明每个 <code>.bXX</code> 文件可能包含要加载的程序的单个段。实际上，打开每个文件都会显示出内容，看起来可能是正在加载的程序的段……但是为了确保，我们需要找到程序头本身（并查看它们是否与 <code>.bXX</code> 文件匹配）。</p>
+<p>进一步查看，<code>.mdt</code> 文件中的下几个块实际上是程序头本身，每个头文件对应一个存在的 <code>.bXX</code> 文件。</p>
+<p><img src="https://3.bp.blogspot.com/-kCbanj5qnNI/VxoYC9hWc_I/AAAAAAAADkU/gwOYLG--NhgkHg0eo_F0ytxTkHulrBUfQCLcB/s1600/Screenshot%2Bfrom%2B2016-04-22%2B15%253A24%253A28.png" alt=""></p>
+<p>而且，确认了我们之前的怀疑，它们的大小恰好与 <code>.bXX</code> 文件的大小匹配。太好了！</p>
+<p>请注意，上面的前两个程序头看起来有点奇怪 - 它们都是空类型的头，意味着它们是“保留”的，不应加载到结果 ELF 映像中。奇怪的是，打开相应的 <code>.bXX</code> 文件会发现，第一个块包含与 <code>.mdt</code> 中相同的 ELF 头和程序头，第二个块包含其余的 <code>.mdt</code> 文件。</p>
+<p>无论如何，这是一个简短的示意图，总结了我们目前所知道的内容：</p>
+<p><img src="https://3.bp.blogspot.com/-ng-lbPKtFqs/Vx6N8HqOBNI/AAAAAAAADmk/I-JQCN-w6i4vW1RoAyi7UR6PdD50PL08gCLcB/s280/Screenshot%2Bfrom%2B2016-04-26%2B00%253A36%253A37.png" alt=""></p>
+<p>此外，请注意由于 ELF 头文件和程序头文件都在 <code>.mdt</code> 中，因此我们可以使用 <code>readelf</code> 快速转储有关信任执行环境的程序头信息。</p>
+<p><img src="https://1.bp.blogspot.com/-xz-y61aweD8/VxoYvWqHxjI/AAAAAAAADkc/KMID90TBNsQkEEDTFC0Yz315VFbkqeUfgCLcB/s1600/Screenshot%2Bfrom%2B2016-04-22%2B15%253A26%253A11.png" alt=""></p>
+<p>在这一点上，我们已经拥有了从 <code>.mdt</code> 和 <code>.bXX</code> 文件创建完整有效的 ELF 文件所需的所有信息；我们拥有 ELF 头和程序头，以及每个段本身。我们只需要编写一个小脚本，使用这些数据创建一个 ELF 文件。</p>
+<p>我编写了一个小的 Python 脚本，正是这样做的。您可以在<a href="https://github.com/laginimaineb/unify_trustlet" target="_blank" rel="noopener">此处</a>找到它：</p>
+<h1 id="信任-trustlets-的思考"><a class="markdownIt-Anchor" href="#信任-trustlets-的思考"></a> 信任 Trustlets 的思考</h1>
+<p>对 Trustlet 的信任过程，我们现在已经有了基本的了解，但我们仍然不知道它们是如何进行验证的。然而，由于我们知道 <code>.bXX</code> 文件仅包含要加载的段，这意味着这些数据必须驻留在 <code>.mdt</code> 文件中。</p>
+<p>因此，现在是猜测的时间——如果我们要构建一个可信的加载程序，我们将如何做？</p>
+<p>一个非常常见的范式是使用哈希和签名（依赖于 CRHF 和数字签名）。基本上——我们计算要进行身份验证的数据的哈希值，并使用对于加载器已知其对应的公共密钥的私有密钥进行签名。</p>
+<p>如果情况是这样的，我们应该在 <code>.mdt</code> 中找到以下两个内容：</p>
+<ul>
+<li>证书链</li>
+<li>签名数据块</li>
+</ul>
+<p>让我们从查找证书链开始。证书有太多的格式，但由于 <code>.mdt</code> 文件仅包含二进制数据，我们可以假设它可能是一个二进制格式，其中最常见的是 DER 格式。</p>
+<p>我们可以使用一种快速的 hack 方法来查找 DER 编码的证书——它们几乎总是以 <code>ASN.1 SEQUENCE</code> 块开头，编码为：<code>0x30 0x82</code>。所以让我们在 <code>.mdt</code> 中搜索这两个字节，并将每个找到的块保存到一个文件中。现在，我们可以使用 <code>openssl</code> 检查这些块是否为格式良好的证书：</p>
+<p><img src="https://1.bp.blogspot.com/-sDFBSQziyeU/Vx55nxH0evI/AAAAAAAADlk/T2rZKFv5qAY9nt8xoPBugmZA5qU4RnT4ACLcB/s1600/Screenshot%2Bfrom%2B2016-04-25%2B23%253A08%253A18.png" alt=""></p>
+<p>是的，我们猜对了–那些是证书。</p>
+<p>事实上，该信任小程序包含三个证书，一个接一个。为了稳妥起见，我们可能还想检查一下这三个证书实际上是一个证书链，形成了一个有效的信任链。我们可以通过把证书转储到一个单一的&quot;证书链&quot;文件中，并使用  <code>openssl</code> 来验证使用这个证书链的每个证书来做到这一点：</p>
+<p><img src="https://1.bp.blogspot.com/-6EU5u0TlGNQ/Vx59xMP3d-I/AAAAAAAADl0/LuQKalEin2Uf51FbXHwM40NZ7hGCzFVIgCLcB/s1600/Screenshot%2Bfrom%2B2016-04-25%2B23%253A27%253A38.png" alt=""></p>
+<p>至于这个链的信任根–看一下链中的根证书就会发现，这个根证书与高通公司安全启动过程中用于验证启动链的所有其他部分的根证书相同。对这一机制进行了一些研究，结果表明，验证是通过比较根证书的 SHA256 和一个名为 <code>OEM_PK_HASH</code> 的特殊值进行的，该值在生产过程中被&quot;融合&quot;到设备的 QFuse 中。由于这个值在设备生产后理论上不应该被修改，这意味着伪造这样的根证书基本上需要对 SHA256 进行第二次预镜像攻击。</p>
+<p>现在，让我们回到 <code>.mdt</code>–我们已经找到了证书链，所以现在是时候寻找签名了。通常情况下，私钥是用来产生签名的，而公钥可以用来恢复签名数据。由于我们有证书链中最顶端的证书的公钥，我们可以用它来查看文件，并适时地尝试&quot;恢复&quot;每个 blob。</p>
+<p>但我们怎么知道我们是否成功了呢？</p>
+<p>回想一下，RSA 是一个陷阱门排列族–每一个具有与公共模数 N 相同位数的 blob 都被映射到另一个相同大小的 blob。</p>
+<p>然而，虽然在我们的例子中，RSA 的公共模数是 2048 位，但大多数哈希值都比这短得多（SHA1 为 160 位，SHA256 为 256 位）。这意味着，如果我们试图用我们的公钥&quot;解密&quot;一个 blob，而它恰好以大量的&quot;松弛&quot;空间结束（例如，0 字节），有一个非常好的机会，这是我们正在寻找的签名（对于一个完全随机的排列组合，连续 n 个零位的机会是 2^-n - 即使是一个中等的 n，也非常小）。</p>
+<p>为了做到这一点，我写了一个小程序，从链中最顶端的证书中加载公钥，并尝试&quot;恢复&quot; <code>.mdt</code> 中的每个 blob（使用带有 <code>PKCS #1 v1.5</code> 填充的 <code>rsa_public_decrypt</code>）。如果 “恢复的” blob 以一堆 0 字节结尾，程序就会输出它。所以…在我们的 <code>.mdt</code> 上运行它：</p>
+<p><img src="https://4.bp.blogspot.com/-cInoo8hdisg/Vx6FDn10xMI/AAAAAAAADmI/nfEtOGDr3d4O6jjAURpJUPi4t9PMxHfYwCLcB/s1600/Screenshot%2Bfrom%2B2016-04-25%2B23%253A58%253A43.png" alt=""></p>
+<p>我们已经找到了一个签名! 太好了。</p>
+<p>更重要的是，这个签名有 256 比特长，这意味着它可能是一个 SHA256 哈希值… 如果 <code>.mdt</code> 里有一个 SHA256，也许还有更多？</p>
+<p><img src="https://2.bp.blogspot.com/-krFw0Ds87PM/Vx6gn52cZwI/AAAAAAAADnM/bcXuiNpiPk4fIFF5LZUeAXso9maJpi5XQCLcB/s1600/hashes.png" alt=""></p>
+<p>再一次的幸运!</p>
+<p>我们可以看到，每个 <code>.bXX</code> 文件的 SHA256 哈希值也连续存储在 <code>.mdt</code> 中。我们也可以做一个有根据的猜测，这将是被签名的数据（或至少是部分数据），以产生我们之前发现的签名。</p>
+<p>注意，<code>.b01</code> 文件的哈希值不见了–这是为什么？记住，<code>.b01</code> 文件包含了 <code>.mdt</code> 中除 ELF 头和程序头以外的所有数据。由于这些数据也包含上面的签名，而签名（可能）是通过块文件的哈希值产生的，这将导致循环依赖（因为改变块文件将改变哈希值，这将改变签名，这将再次改变块文件，等等）。因此，这个区块的哈希值不存在是有道理的。</p>
+<p>现在我们实际上已经解码了 <code>.mdt</code> 文件中的所有数据，除了一个位于程序头之后的小结构。然而，在看了一会儿之后，我们可以看到它只是包含了我们已经解码的 <code>.mdt</code> 中各个部分的指针和长度：</p>
+<p><img src="https://4.bp.blogspot.com/-1Q5f2Bdlqek/Vx6fnRC2-JI/AAAAAAAADnA/aiz2tmb2f2IhCXGLPvbN9VeUNhBsbsD8QCLcB/s1600/Screenshot%2Bfrom%2B2016-04-26%2B01%253A51%253A37.png" alt=""></p>
+<p>所以最后，我们已经解码了 <code>.mdt</code> 中的所有信息…</p>
+<p><img src="https://4.bp.blogspot.com/-F25AwpsXJ4w/Vx6gAZPr5nI/AAAAAAAADnE/JjZ_H5OGObA-mCsB9l-_myEE6C2UtkcvwCLcB/s280/Screenshot%2Bfrom%2B2016-04-26%2B01%253A53%253A44.png" alt=""></p>
+<h1 id="摩托罗拉的高保障启动"><a class="markdownIt-Anchor" href="#摩托罗拉的高保障启动"></a> 摩托罗拉的高保障启动</h1>
+<p>尽管我们在上面看到的 <code>.mdt</code> 文件格式对所有的 OEM 来说都是通用的，但摩托罗拉决定增加一个小插曲。</p>
+<p>他们没有像我们之前看到的那样提供一个 RSA 签名，而是实际上将签名 blob 留空（事实上，我之前给你看的签名是来自 Nexus 5）。事实上，摩托罗拉的签名看起来像这样：</p>
+<p><img src="https://1.bp.blogspot.com/-e4OtA8tpg-8/Vx6iL72LYuI/AAAAAAAADnc/5SJpBjFerDA2VlMYwxuwfvoxIpltOF1hwCLcB/s1600/Screenshot%2Bfrom%2B2016-04-26%2B02%253A03%253A02.png" alt=""></p>
+<p>那么，图像是如何被验证的呢？</p>
+<p>这是通过使用摩托罗拉称之为 HAB（“高保障启动”）的机制来完成的。这个机制允许他们通过在文件末尾附加一个证书链和整个 <code>.mdt</code> 的签名来验证 <code>.mdt</code> 文件，并使用 HAB 使用的专有格式进行编码：</p>
+<p><img src="https://1.bp.blogspot.com/-9zGaac0jPhc/Vx8cXryW4XI/AAAAAAAADn4/H4kTTh6xyMUKObt9uEWO7Wlk4Z8J6atLwCLcB/s1600/Screenshot%2Bfrom%2B2016-04-26%2B10%253A44%253A16.png" alt=""></p>
+<p>关于这一机制的更多信息，你可以查看 Tal Aloni 的这项研究。简而言之，<code>.mdt</code> 使用证书链中最顶端的密钥进行散列和签名，而证书链中的根证书则使用 &quot;超级根密钥 &quot;进行验证，该密钥是在引导程序的某个阶段硬编码的。</p>
+<h1 id="trustlet-的生命周期"><a class="markdownIt-Anchor" href="#trustlet-的生命周期"></a> Trustlet 的生命周期</h1>
+<p>在我们上面看到的验证过程之后，TrustZone 内核将 Trustlet 的片段加载到&quot;正常世界&quot;无法访问的安全内存区域（<code>secapp-region</code>），并给它分配了一个 ID。</p>
+<p>然后，内核切换到&quot;安全世界&quot;的用户模式，执行 Trustlet 的入口函数：</p>
+<p><img src="https://2.bp.blogspot.com/-ZjZwBYYkgwM/Vx9GZMOCgII/AAAAAAAADok/vMI6_Xjy1JAr8UGY3TpvS0eylnEk1PC8QCLcB/s1600/Screenshot%2Bfrom%2B2016-04-26%2B13%253A43%253A38.png" alt=""></p>
+<p>正如你所看到的，Trustlet 向 TrustZone 内核注册了自己，同时还有一个&quot;处理函数&quot;。在注册完  Trustlet 后，控制权被返回到 TrustZone 内核，加载过程结束了。</p>
+<p>现在，一旦 Trustlet 被加载，&quot;正常世界&quot;可以通过发出一个特殊的 SCM 调用（称为  <code>QSEOS_CLIENT_SEND_DATA_COMMAND</code>）向 Trustlet 发送命令，其中包含加载 Trustlet 的 ID 以及请求和响应缓冲区。下面是它的样子：</p>
+<p><img src="https://1.bp.blogspot.com/-bQG0yqPbGe8/Vx9J-HZKjSI/AAAAAAAADow/XrU2FHfdiAUggbxdNZU9B1L-0PvEK77NQCLcB/s1600/Screenshot%2Bfrom%2B2016-04-26%2B13%253A58%253A50.png" alt=""></p>
+<p>TrustZone 内核（TZBSP）收到 SCM 调用，将其映射到 QSEOS，然后找到具有给定 ID 的应用程序，并调用先前注册的处理函数（来自&quot;安全世界&quot;用户模式），以便为请求服务。</p>
+<p><img src="https://2.bp.blogspot.com/-QyQkLeGzno0/Vx9MyXz_C4I/AAAAAAAADpA/XohkYcl4K7cCtPwenb7_UFNRG0DdRSgogCLcB/s280/Screenshot%2Bfrom%2B2016-04-26%2B14%253A10%253A52.png" alt=""></p>
+<h1 id="下一步是什么"><a class="markdownIt-Anchor" href="#下一步是什么"></a> 下一步是什么？</h1>
+<p>现在我们对什么是 Trustlet 以及它们是如何加载有了一些了解，我们可以继续进行攻击了！在下一篇博文中，我们将发现一个非常流行的 Trustlet 中的漏洞，并利用它在 QSEE 中执行代码。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/" title="【译】探索高通的安全执行环境" target="_blank" rel="external">https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Student</small></a></h3>
+        <div>Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+      <!-- Blog post bottom bar -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="9214609149" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2023/04/30/full-trustzone-exploit-for-msm8974/" title="【译】完整的 MSM8974 TrustZone 实现利用"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/';
+        
+        this.page.identifier = 'exploring-qualcomms-secure-execution-env';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>

@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sun, 30 Apr 2023 09:54:26 GMT</pubDate>
+    <pubDate>Sun, 30 Apr 2023 11:33:56 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】探索高通的安全执行环境</title>
+      <link>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</link>
+      <guid>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</guid>
+      <pubDate>Sun, 30 Apr 2023 13:20:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;在&lt;a href=&quot;http://bits-please.blogspot.com/2016/04/exploring-qualcomms-secure-execution.html&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】完整的 MSM8974 TrustZone 实现利用</title>
@@ -410,27 +431,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>Android 启动加载器分析 —— ABL(1)</title>
-      <link>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</link>
-      <guid>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</guid>
-      <pubDate>Mon, 18 Oct 2021 19:48:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;我的前一篇文章&lt;a href=&quot;https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/&quot;&gt;《Android 启动加载器分析 —— Aboot》&lt;/a&gt;中分析了高通平台前代的 Aboot
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/#disqus_thread</comments>
     </item>
     
   </channel>
