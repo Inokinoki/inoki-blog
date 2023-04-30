@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sat, 29 Apr 2023 12:39:27 GMT</pubDate>
+    <pubDate>Sun, 30 Apr 2023 09:54:26 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】完整的 MSM8974 TrustZone 实现利用</title>
+      <link>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</link>
+      <guid>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</guid>
+      <pubDate>Sun, 30 Apr 2023 11:20:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;在&lt;a href=&quot;http://bits-please.blogspot.com/2015/08/full-trustzone-exploit-for-msm8974.html&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】探索高通的 TrustZone 实现</title>
@@ -410,27 +431,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>Android bootloader analysis -- Aboot</title>
-      <link>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</link>
-      <guid>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</guid>
-      <pubDate>Sun, 17 Oct 2021 10:48:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;There are already many articles that explain the boot process of Android on Qualcomm platform. From my translation of &lt;a
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/#disqus_thread</comments>
     </item>
     
   </channel>
