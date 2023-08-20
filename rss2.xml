@@ -9,8 +9,32 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sun, 30 Apr 2023 11:33:56 GMT</pubDate>
+    <pubDate>Sun, 20 Aug 2023 08:29:36 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】ARM 的历史——第一部分：打造第一块芯片</title>
+      <link>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</link>
+      <guid>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</guid>
+      <pubDate>Sun, 20 Aug 2023 20:34:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原博客共分为三篇，原文链接如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://arstechnica.com/gadgets/2022/09/a-history-of-arm-part-1-building-the-first-chip/&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】探索高通的安全执行环境</title>
@@ -410,27 +434,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>Android bootloader analysis -- ABL(1)</title>
-      <link>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</link>
-      <guid>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</guid>
-      <pubDate>Mon, 18 Oct 2021 19:48:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;In my previous article &lt;a href=&quot;https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/&quot;&gt;“Android Bootloader Analysis –
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/#disqus_thread</comments>
     </item>
     
   </channel>
