@@ -9,8 +9,32 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sun, 20 Aug 2023 08:29:36 GMT</pubDate>
+    <pubDate>Mon, 21 Aug 2023 23:33:20 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】ARM 的历史——第二部分：一切开始聚在一起</title>
+      <link>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</link>
+      <guid>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</guid>
+      <pubDate>Tue, 22 Aug 2023 00:34:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原博客共分为三篇，原文链接如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://arstechnica.com/gadgets/2022/09/a-history-of-arm-part-1-building-the-first-chip/&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】ARM 的历史——第一部分：打造第一块芯片</title>
@@ -413,27 +437,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>通过 Linux sysfs 玩转硬件</title>
-      <link>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/</link>
-      <guid>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/</guid>
-      <pubDate>Wed, 20 Oct 2021 19:34:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;对于一些非嵌入式、离硬件比较远的程序员，与硬件有关的事情可能完全是一个黑匣子：我只需要插上 USB 线缆、插上 HDMI 线缆，就可以把硬件连接到计算机；我只需要按一个按键，就可以调节屏幕的亮度。作为一个程序员或者计算机爱好者，我有没有可能自己写一些代码 snippets
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/#disqus_thread</comments>
     </item>
     
   </channel>
