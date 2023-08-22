@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2023-08-21T23:33:20.782Z</updated>
+  <updated>2023-08-22T11:01:23.382Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,47 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>【译】ARM 的历史——第三部分：兜兜转转</title>
+    <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-3/"/>
+    <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/</id>
+    <published>2023-08-22T12:34:00.000Z</published>
+    <updated>2023-08-22T11:01:23.382Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原博客共分为三篇，原文链接如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://arstechnica.com/gadgets/2022/09/a-history-of-arm-part-1-building-the-first-chip/&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Hardware" scheme="https://blog.inoki.cc/categories/Hardware/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="Hardware" scheme="https://blog.inoki.cc/tags/Hardware/"/>
+    
+      <category term="ARM" scheme="https://blog.inoki.cc/tags/ARM/"/>
+    
+  </entry>
+  
+  <entry>
     <title>【译】ARM 的历史——第二部分：一切开始聚在一起</title>
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-2/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</id>
     <published>2023-08-22T00:34:00.000Z</published>
-    <updated>2023-08-21T23:33:20.782Z</updated>
+    <updated>2023-08-22T11:01:23.382Z</updated>
     
     <summary type="html">
     
@@ -57,7 +93,7 @@
     <link href="https://blog.inoki.cc/2023/08/20/History-of-ARM-1/"/>
     <id>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</id>
     <published>2023-08-20T20:34:00.000Z</published>
-    <updated>2023-08-21T23:33:20.782Z</updated>
+    <updated>2023-08-22T11:01:23.378Z</updated>
     
     <summary type="html">
     
@@ -93,7 +129,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/"/>
     <id>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</id>
     <published>2023-04-30T13:20:00.000Z</published>
-    <updated>2023-08-21T23:33:20.842Z</updated>
+    <updated>2023-08-22T11:01:23.430Z</updated>
     
     <summary type="html">
     
@@ -130,7 +166,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/"/>
     <id>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</id>
     <published>2023-04-30T11:20:00.000Z</published>
-    <updated>2023-08-21T23:33:20.842Z</updated>
+    <updated>2023-08-22T11:01:23.430Z</updated>
     
     <summary type="html">
     
@@ -167,7 +203,7 @@
     <link href="https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/"/>
     <id>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</id>
     <published>2023-04-29T12:20:00.000Z</published>
-    <updated>2023-08-21T23:33:20.842Z</updated>
+    <updated>2023-08-22T11:01:23.430Z</updated>
     
     <summary type="html">
     
@@ -204,7 +240,7 @@
     <link href="https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/"/>
     <id>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/</id>
     <published>2023-04-29T11:20:00.000Z</published>
-    <updated>2023-08-21T23:33:20.842Z</updated>
+    <updated>2023-08-22T11:01:23.430Z</updated>
     
     <summary type="html">
     
@@ -241,7 +277,7 @@
     <link href="https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/"/>
     <id>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/</id>
     <published>2023-04-25T11:20:00.000Z</published>
-    <updated>2023-08-21T23:33:20.842Z</updated>
+    <updated>2023-08-22T11:01:23.434Z</updated>
     
     <summary type="html">
     
@@ -280,7 +316,7 @@
     <link href="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/"/>
     <id>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</id>
     <published>2022-05-09T20:48:00.000Z</published>
-    <updated>2023-08-21T23:33:20.838Z</updated>
+    <updated>2023-08-22T11:01:23.430Z</updated>
     
     <summary type="html">
     
@@ -317,7 +353,7 @@
     <link href="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/"/>
     <id>https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/</id>
     <published>2022-02-22T06:57:50.000Z</published>
-    <updated>2023-08-21T23:33:20.810Z</updated>
+    <updated>2023-08-22T11:01:23.406Z</updated>
     
     <summary type="html">
     
@@ -354,7 +390,7 @@
     <link href="https://blog.inoki.cc/2022/02/08/My-2021/"/>
     <id>https://blog.inoki.cc/2022/02/08/My-2021/</id>
     <published>2022-02-08T16:54:40.000Z</published>
-    <updated>2023-08-21T23:33:20.810Z</updated>
+    <updated>2023-08-22T11:01:23.406Z</updated>
     
     <summary type="html">
     
@@ -383,7 +419,7 @@
     <link href="https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/"/>
     <id>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/</id>
     <published>2021-12-17T13:47:00.000Z</published>
-    <updated>2023-08-21T23:33:20.842Z</updated>
+    <updated>2023-08-22T11:01:23.434Z</updated>
     
     <summary type="html">
     
@@ -413,7 +449,7 @@
     <link href="https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/"/>
     <id>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/</id>
     <published>2021-12-16T15:34:00.000Z</published>
-    <updated>2023-08-21T23:33:20.814Z</updated>
+    <updated>2023-08-22T11:01:23.410Z</updated>
     
     <summary type="html">
     
@@ -444,7 +480,7 @@
     <link href="https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/"/>
     <id>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/</id>
     <published>2021-12-14T15:49:00.000Z</published>
-    <updated>2023-08-21T23:33:20.842Z</updated>
+    <updated>2023-08-22T11:01:23.430Z</updated>
     
     <summary type="html">
     
@@ -477,7 +513,7 @@
     <link href="https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/"/>
     <id>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/</id>
     <published>2021-12-09T20:34:00.000Z</published>
-    <updated>2023-08-21T23:33:20.782Z</updated>
+    <updated>2023-08-22T11:01:23.382Z</updated>
     
     <summary type="html">
     
@@ -512,7 +548,7 @@
     <link href="https://blog.inoki.cc/2021/12/08/vfio/"/>
     <id>https://blog.inoki.cc/2021/12/08/vfio/</id>
     <published>2021-12-08T20:34:00.000Z</published>
-    <updated>2023-08-21T23:33:20.842Z</updated>
+    <updated>2023-08-22T11:01:23.434Z</updated>
     
     <summary type="html">
     
@@ -543,7 +579,7 @@
     <link href="https://blog.inoki.cc/2021/12/08/uio-howto/"/>
     <id>https://blog.inoki.cc/2021/12/08/uio-howto/</id>
     <published>2021-12-08T19:34:00.000Z</published>
-    <updated>2023-08-21T23:33:20.842Z</updated>
+    <updated>2023-08-22T11:01:23.434Z</updated>
     
     <summary type="html">
     
@@ -574,7 +610,7 @@
     <link href="https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/"/>
     <id>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</id>
     <published>2021-11-19T15:34:00.000Z</published>
-    <updated>2023-08-21T23:33:20.814Z</updated>
+    <updated>2023-08-22T11:01:23.410Z</updated>
     
     <summary type="html">
     
@@ -605,7 +641,7 @@
     <link href="https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/"/>
     <id>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</id>
     <published>2021-11-12T15:38:00.000Z</published>
-    <updated>2023-08-21T23:33:20.814Z</updated>
+    <updated>2023-08-22T11:01:23.410Z</updated>
     
     <summary type="html">
     
@@ -640,46 +676,7 @@
     <link href="https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/"/>
     <id>https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/</id>
     <published>2021-10-24T22:48:00.000Z</published>
-    <updated>2023-08-21T23:33:20.838Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;我的前一篇文章&lt;a href=&quot;https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/&quot;&gt;《Android 启动加载器分析 —— ABL(1)》&lt;/a&gt;中分析了当代高通平台的 ABL
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
-    
-      <category term="Android" scheme="https://blog.inoki.cc/categories/Linux/Android/"/>
-    
-      <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
-    
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
-    
-      <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
-    
-      <category term="ABL" scheme="https://blog.inoki.cc/tags/ABL/"/>
-    
-      <category term="Bootloader" scheme="https://blog.inoki.cc/tags/Bootloader/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Android 启动加载器分析 —— ABL(2)</title>
-    <link href="https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/"/>
-    <id>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/</id>
-    <published>2021-10-22T13:48:00.000Z</published>
-    <updated>2023-08-21T23:33:20.838Z</updated>
+    <updated>2023-08-22T11:01:23.430Z</updated>
     
     <summary type="html">
     
