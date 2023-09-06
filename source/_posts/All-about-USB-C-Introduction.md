@@ -1,4 +1,4 @@
-——-
+---
 title: 【译】关于 USB-C 的一切：介绍
 date: 2023-09-06 23:22:00
 tags:
@@ -10,7 +10,7 @@ categories:
 - [Translation, Chinese]
 - USB
 - 硬件
-——-
+---
 
 原文链接：[https://hackaday.com/2022/12/06/usb-c-introduction-for-hackers/](https://hackaday.com/2022/12/06/usb-c-introduction-for-hackers/)
 
