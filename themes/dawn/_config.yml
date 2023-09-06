@@ -205,8 +205,8 @@ profile:
   avatar: images/avatar.jpg
   gravatar: # Gravatar email address, if you enable Gravatar, your avatar config will be overriden
   author: Inoki
-  author_title: Student
-  author_description: Ph.D student in Computer Science, major in Embedded System and Telecommunication. Currently doing research in LoRa IoT Protocol.
+  author_title: Computer Scientist
+  author_description: Ph.D in Computer Science, major in Embedded System and AI.
   location: Earth
   follow: /
   # Social Links
