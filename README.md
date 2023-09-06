@@ -1,4 +1,4 @@
 
 # Inoki's technical Blog
 
-![Travis-CI build status](https://travis-ci.org/Inokinoki/inoki-blog.svg?branch=hexo)
+[![Pages](https://github.com/Inokinoki/inoki-blog/actions/workflows/hexo-ghpage.yml/badge.svg)](https://github.com/Inokinoki/inoki-blog/actions/workflows/hexo-ghpage.yml)
