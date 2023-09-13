@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Wed, 06 Sep 2023 05:33:54 GMT</pubDate>
+    <pubDate>Wed, 13 Sep 2023 20:28:44 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】关于 USB-C 的一切：电阻和电子标记（E-marker）</title>
+      <link>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</link>
+      <guid>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</guid>
+      <pubDate>Wed, 13 Sep 2023 23:22:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://hackaday.com/2023/01/04/all-about-usb-c-resistors-and-emarkers/&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】关于 USB-C 的一切：介绍</title>
@@ -419,27 +440,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】三阶截点（IP3）的物理意义</title>
-      <link>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</link>
-      <guid>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</guid>
-      <pubDate>Fri, 12 Nov 2021 15:38:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.techplayon.com/physical-significance-iip3-important-receiver-chain/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;What is
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/#disqus_thread</comments>
     </item>
     
   </channel>

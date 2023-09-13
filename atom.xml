@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2023-09-06T05:33:54.633Z</updated>
+  <updated>2023-09-13T20:28:44.825Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,50 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>【译】关于 USB-C 的一切：电阻和电子标记（E-marker）</title>
+    <link href="https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/"/>
+    <id>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</id>
+    <published>2023-09-13T23:22:00.000Z</published>
+    <updated>2023-09-13T20:28:44.825Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;原文链接：&lt;a href=&quot;https://hackaday.com/2023/01/04/all-about-usb-c-resistors-and-emarkers/&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Translation" scheme="https://blog.inoki.cc/categories/Translation/"/>
+    
+      <category term="Chinese" scheme="https://blog.inoki.cc/categories/Translation/Chinese/"/>
+    
+      <category term="USB" scheme="https://blog.inoki.cc/categories/USB/"/>
+    
+      <category term="硬件" scheme="https://blog.inoki.cc/categories/%E7%A1%AC%E4%BB%B6/"/>
+    
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="硬件" scheme="https://blog.inoki.cc/tags/%E7%A1%AC%E4%BB%B6/"/>
+    
+      <category term="USB" scheme="https://blog.inoki.cc/tags/USB/"/>
+    
+  </entry>
+  
+  <entry>
     <title>【译】关于 USB-C 的一切：介绍</title>
     <link href="https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/"/>
     <id>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/</id>
     <published>2023-09-06T23:22:00.000Z</published>
-    <updated>2023-09-06T05:33:54.633Z</updated>
+    <updated>2023-09-13T20:28:44.825Z</updated>
     
     <summary type="html">
     
@@ -60,7 +99,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-3/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/</id>
     <published>2023-08-22T12:34:00.000Z</published>
-    <updated>2023-09-06T05:33:54.653Z</updated>
+    <updated>2023-09-13T20:28:44.845Z</updated>
     
     <summary type="html">
     
@@ -96,7 +135,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-2/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</id>
     <published>2023-08-22T00:34:00.000Z</published>
-    <updated>2023-09-06T05:33:54.653Z</updated>
+    <updated>2023-09-13T20:28:44.845Z</updated>
     
     <summary type="html">
     
@@ -132,7 +171,7 @@
     <link href="https://blog.inoki.cc/2023/08/20/History-of-ARM-1/"/>
     <id>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</id>
     <published>2023-08-20T20:34:00.000Z</published>
-    <updated>2023-09-06T05:33:54.653Z</updated>
+    <updated>2023-09-13T20:28:44.845Z</updated>
     
     <summary type="html">
     
@@ -168,7 +207,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/"/>
     <id>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</id>
     <published>2023-04-30T13:20:00.000Z</published>
-    <updated>2023-09-06T05:33:54.701Z</updated>
+    <updated>2023-09-13T20:28:44.893Z</updated>
     
     <summary type="html">
     
@@ -205,7 +244,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/"/>
     <id>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</id>
     <published>2023-04-30T11:20:00.000Z</published>
-    <updated>2023-09-06T05:33:54.701Z</updated>
+    <updated>2023-09-13T20:28:44.893Z</updated>
     
     <summary type="html">
     
@@ -242,7 +281,7 @@
     <link href="https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/"/>
     <id>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</id>
     <published>2023-04-29T12:20:00.000Z</published>
-    <updated>2023-09-06T05:33:54.701Z</updated>
+    <updated>2023-09-13T20:28:44.893Z</updated>
     
     <summary type="html">
     
@@ -279,7 +318,7 @@
     <link href="https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/"/>
     <id>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/</id>
     <published>2023-04-29T11:20:00.000Z</published>
-    <updated>2023-09-06T05:33:54.701Z</updated>
+    <updated>2023-09-13T20:28:44.893Z</updated>
     
     <summary type="html">
     
@@ -316,7 +355,7 @@
     <link href="https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/"/>
     <id>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/</id>
     <published>2023-04-25T11:20:00.000Z</published>
-    <updated>2023-09-06T05:33:54.705Z</updated>
+    <updated>2023-09-13T20:28:44.897Z</updated>
     
     <summary type="html">
     
@@ -355,7 +394,7 @@
     <link href="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/"/>
     <id>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</id>
     <published>2022-05-09T20:48:00.000Z</published>
-    <updated>2023-09-06T05:33:54.701Z</updated>
+    <updated>2023-09-13T20:28:44.893Z</updated>
     
     <summary type="html">
     
@@ -392,7 +431,7 @@
     <link href="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/"/>
     <id>https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/</id>
     <published>2022-02-22T06:57:50.000Z</published>
-    <updated>2023-09-06T05:33:54.677Z</updated>
+    <updated>2023-09-13T20:28:44.869Z</updated>
     
     <summary type="html">
     
@@ -429,7 +468,7 @@
     <link href="https://blog.inoki.cc/2022/02/08/My-2021/"/>
     <id>https://blog.inoki.cc/2022/02/08/My-2021/</id>
     <published>2022-02-08T16:54:40.000Z</published>
-    <updated>2023-09-06T05:33:54.677Z</updated>
+    <updated>2023-09-13T20:28:44.869Z</updated>
     
     <summary type="html">
     
@@ -458,7 +497,7 @@
     <link href="https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/"/>
     <id>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/</id>
     <published>2021-12-17T13:47:00.000Z</published>
-    <updated>2023-09-06T05:33:54.705Z</updated>
+    <updated>2023-09-13T20:28:44.897Z</updated>
     
     <summary type="html">
     
@@ -488,7 +527,7 @@
     <link href="https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/"/>
     <id>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/</id>
     <published>2021-12-16T15:34:00.000Z</published>
-    <updated>2023-09-06T05:33:54.681Z</updated>
+    <updated>2023-09-13T20:28:44.873Z</updated>
     
     <summary type="html">
     
@@ -519,7 +558,7 @@
     <link href="https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/"/>
     <id>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/</id>
     <published>2021-12-14T15:49:00.000Z</published>
-    <updated>2023-09-06T05:33:54.701Z</updated>
+    <updated>2023-09-13T20:28:44.897Z</updated>
     
     <summary type="html">
     
@@ -552,7 +591,7 @@
     <link href="https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/"/>
     <id>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/</id>
     <published>2021-12-09T20:34:00.000Z</published>
-    <updated>2023-09-06T05:33:54.653Z</updated>
+    <updated>2023-09-13T20:28:44.849Z</updated>
     
     <summary type="html">
     
@@ -587,7 +626,7 @@
     <link href="https://blog.inoki.cc/2021/12/08/vfio/"/>
     <id>https://blog.inoki.cc/2021/12/08/vfio/</id>
     <published>2021-12-08T20:34:00.000Z</published>
-    <updated>2023-09-06T05:33:54.705Z</updated>
+    <updated>2023-09-13T20:28:44.897Z</updated>
     
     <summary type="html">
     
@@ -618,7 +657,7 @@
     <link href="https://blog.inoki.cc/2021/12/08/uio-howto/"/>
     <id>https://blog.inoki.cc/2021/12/08/uio-howto/</id>
     <published>2021-12-08T19:34:00.000Z</published>
-    <updated>2023-09-06T05:33:54.705Z</updated>
+    <updated>2023-09-13T20:28:44.897Z</updated>
     
     <summary type="html">
     
@@ -649,7 +688,7 @@
     <link href="https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/"/>
     <id>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</id>
     <published>2021-11-19T15:34:00.000Z</published>
-    <updated>2023-09-06T05:33:54.681Z</updated>
+    <updated>2023-09-13T20:28:44.873Z</updated>
     
     <summary type="html">
     
@@ -672,41 +711,6 @@
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【译】三阶截点（IP3）的物理意义</title>
-    <link href="https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/"/>
-    <id>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</id>
-    <published>2021-11-12T15:38:00.000Z</published>
-    <updated>2023-09-06T05:33:54.681Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;原文链接：&lt;a href=&quot;https://www.techplayon.com/physical-significance-iip3-important-receiver-chain/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;What is
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Translation" scheme="https://blog.inoki.cc/categories/Translation/"/>
-    
-      <category term="Chinese" scheme="https://blog.inoki.cc/categories/Translation/Chinese/"/>
-    
-      <category term="SDR" scheme="https://blog.inoki.cc/categories/SDR/"/>
-    
-    
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
-      <category term="SDR" scheme="https://blog.inoki.cc/tags/SDR/"/>
     
   </entry>
   
