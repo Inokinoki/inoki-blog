@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Thu, 14 Sep 2023 21:55:04 GMT</pubDate>
+    <pubDate>Thu, 14 Sep 2023 22:15:09 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】关于 USB-C 的一切：示例电路</title>
+      <link>https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/</link>
+      <guid>https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/</guid>
+      <pubDate>Thu, 14 Sep 2023 23:42:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://hackaday.com/2023/08/07/all-about-usb-c-example-circuits/&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】关于 USB-C 的一切：高速接口</title>
@@ -419,27 +440,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/12/08/vfio/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】Linux 内核的用户态 I/O</title>
-      <link>https://blog.inoki.cc/2021/12/08/uio-howto/</link>
-      <guid>https://blog.inoki.cc/2021/12/08/uio-howto/</guid>
-      <pubDate>Wed, 08 Dec 2021 19:34:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.kernel.org/doc/html/latest/driver-api/uio-howto.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;The Userspace I/O
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/12/08/uio-howto/#disqus_thread</comments>
     </item>
     
   </channel>
