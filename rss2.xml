@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Wed, 13 Sep 2023 20:28:44 GMT</pubDate>
+    <pubDate>Thu, 14 Sep 2023 21:53:47 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】关于 USB-C 的一切：高速接口</title>
+      <link>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/</link>
+      <guid>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/</guid>
+      <pubDate>Thu, 14 Sep 2023 23:22:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文链接：&lt;a href=&quot;https://hackaday.com/2023/01/17/all-about-usb-c-high-speed-interfaces/&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】关于 USB-C 的一切：电阻和电子标记（E-marker）</title>
@@ -419,27 +440,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/12/08/uio-howto/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】Linux 内核中 EXPORT_SYMBOL_GPL 的意义</title>
-      <link>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</link>
-      <guid>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</guid>
-      <pubDate>Fri, 19 Nov 2021 15:34:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://lwn.net/Articles/154602/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;On the value of
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/#disqus_thread</comments>
     </item>
     
   </channel>
