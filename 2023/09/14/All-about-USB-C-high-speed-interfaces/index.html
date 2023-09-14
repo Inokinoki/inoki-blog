@@ -32,7 +32,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://hackaday.com/wp-content/uploads/2022/12/hadimg_usbc_highspeed_1.png">
 <meta property="og:image" content="https://hackaday.com/wp-content/uploads/2022/12/hadimg_usbc_highspeed_4.gif">
-<meta property="og:updated_time" content="2023-09-14T21:53:47.157Z">
+<meta property="og:updated_time" content="2023-09-14T21:55:04.095Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【译】关于 USB-C 的一切：高速接口">
 <meta name="twitter:description" content="原文链接：https://hackaday.com/2023/01/17/all-about-usb-c-high-speed-interfaces/ USB-C 的惊人之处在于它的高速性能。其引脚提供了四个高速差分信号线对和几个低速信号线对，让您可以通过一个比硬币还小的连接器传输大量数据。但并非所有设备都能利用这一功能，而且也不需要这样做——USB-C 的设计目的是让世界上所有便携设备都能使用。">
@@ -405,7 +405,7 @@
 <p>如果你想使用 DisplayPort，你可能需要一个支持 DP 的多路复用器，但最重要的是，你需要能够发送自定义的 PD 信息。首先，整个&quot;提供/请求 DP Altmode&quot;部分都是通过 PD 信息完成的，因此光靠电阻是不够的。另外，DisplayPort 中的一个重要信号 HPD 没有空闲的引脚，因此热插拔事件和中断都是通过 PD 通道作为信息发送的。在此之前，如果你需要从 USB-C 端口用 DP altmode 输出 DP 或 HDMI，有一些芯片（如 CYPD3120）可以让你编写固件来实现这一功能。</p>
 <p>使 DP 模式脱颖而出的一个重要因素是，USB-C 端口有四条高速通道，这种模式允许在 USB-C 端口的一侧连接 USB3，在另一侧连接双通道 DisplayPort。这就是所有&quot;USB3 端口、外设和 HDMI 输出&quot;底座的工作原理。如果双通道分辨率对你有限制，你也可以买一个四通道适配器——因为没有 USB3，所以没有数据传输，但你可以通过两个额外的 DisplayPort 通道获得更高的分辨率或帧率。</p>
 <p>我的看法是，DisplayPort altmode 是 USB-C 最棒的地方之一，虽然最便宜（或设计最糟糕）的笔记本电脑和手机都不支持它，但拥有一款支持它的设备也是一件乐事。当然，有时大公司也会直接剥夺这种乐趣，比如谷歌。</p>
-<p>译者注：更多的 DisplayPort altmode 信息可以在<a href="https://hackaday.com/2023/08/03/displayport-taming-the-altmode/" target="_blank" rel="noopener">这篇文章</a>中找到。</p>
+<p>译者注：更多的 DisplayPort altmode 信息可以在<a href="https://hackaday.com/2023/08/03/displayport-taming-the-altmode/" target="_blank" rel="noopener">这篇文章</a>和<a href="https://hackaday.com/2023/07/24/displayport-tapping-the-altmode/" target="_blank" rel="noopener">这篇文章</a>中找到。</p>
 <p>然后，让我们来谈谈其中最复杂的 altmode。</p>
 <h1 id="thunderbolt"><a class="markdownIt-Anchor" href="#thunderbolt"></a> THUNDERBOLT</h1>
 <p>具体到 USB-C，您可以使用 Thunderbolt 3，不久还可以使用 Thunderbolt 4，但现在这只是想象中的。Thunderbolt 3 最初是一种专有规范，最终由英特尔开源。显然，他们开源得还不够，或者还有其他的注意事项，因为目前市场上的 Thunderbolt 3 设备仍然完全使用英特尔芯片制造，而我的猜测是，缺乏竞争是导致价格牢牢占据三位数领域的原因。为什么首先要选择 Thunderbolt 设备？除了更高的速度，还有一个杀手锏。</p>
