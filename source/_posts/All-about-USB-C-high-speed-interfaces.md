@@ -46,7 +46,7 @@ DisplayPort (DP) 是连接高分辨率显示器的绝佳接口——它在台式
 
 我的看法是，DisplayPort altmode 是 USB-C 最棒的地方之一，虽然最便宜（或设计最糟糕）的笔记本电脑和手机都不支持它，但拥有一款支持它的设备也是一件乐事。当然，有时大公司也会直接剥夺这种乐趣，比如谷歌。
 
-译者注：更多的 DisplayPort altmode 信息可以在[这篇文章](https://hackaday.com/2023/08/03/displayport-taming-the-altmode/)中找到。
+译者注：更多的 DisplayPort altmode 信息可以在[这篇文章](https://hackaday.com/2023/08/03/displayport-taming-the-altmode/)和[这篇文章](https://hackaday.com/2023/07/24/displayport-tapping-the-altmode/)中找到。
 
 然后，让我们来谈谈其中最复杂的 altmode。
 
