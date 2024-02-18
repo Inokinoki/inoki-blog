@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Thu, 14 Sep 2023 22:15:09 GMT</pubDate>
+    <pubDate>Sun, 18 Feb 2024 02:42:15 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>【译】解释 SDXL 的隐空间</title>
+      <link>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/</link>
+      <guid>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/</guid>
+      <pubDate>Sun, 18 Feb 2024 03:57:50 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;原文地址：&lt;a href=&quot;https://huggingface.co/blog/TimothyAlexisVass/explaining-the-sdxl-latent-space&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】关于 USB-C 的一切：示例电路</title>
@@ -419,27 +440,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】Linux 内核的 VFIO - “Virtual Function I/O”</title>
-      <link>https://blog.inoki.cc/2021/12/08/vfio/</link>
-      <guid>https://blog.inoki.cc/2021/12/08/vfio/</guid>
-      <pubDate>Wed, 08 Dec 2021 20:34:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.kernel.org/doc/html/latest/driver-api/vfio.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;VFIO - “Virtual Function
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/12/08/vfio/#disqus_thread</comments>
     </item>
     
   </channel>
