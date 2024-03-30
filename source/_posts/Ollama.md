@@ -11,7 +11,9 @@ Recently, I took a chance to explore `ollama` project, because I want to enable 
 
 This feature is already merged and released in [ollama v0.1.29](https://github.com/ollama/ollama/releases/tag/v0.1.29). To avoid missing the details and the things I 've learnt, this blog is in charge of noting the architecture of `ollama` for myself. 
 
-To me, `ollama` is a thin but smart enough wrapper to [llama.cpp](https://github.com/ggerganov/llama.cpp). **It is really end-user friendly, and provides a web interface and a cli interface, in order to run and interact with a lot of Large Language Models (LLMs).** Indeed, in most cases, it's `llama.cpp` who loads and runs the models, and `ollama` just "pilots" (yes, I use a term that AI generations are famaliar with) the `llama.cpp`. I will give a talk about this part later.
+To me, `ollama` is a thin but smart enough wrapper to [llama.cpp](https://github.com/ggerganov/llama.cpp). **It is really end-user friendly, and provides a web interface and a cli interface, in order to run and interact with a lot of Large Language Models (LLMs).** Indeed, in most cases, it's `llama.cpp` who loads and runs the models, and `ollama` just "pilots" (yes, I use a term that AI generations are famaliar with) the `llama.cpp`. I will give a discussion about this part later.
+
+This post assumes that you are able to read golang code or some other C-like code. For special points in the code, I would give some brief descriptions or metaphores for better understanding.
 
 <!-- ToC -->
 In this post, I will
@@ -181,66 +183,135 @@ Let's study them one by one.
 
 ## 1. External server
 
-We first take a look at `ext_server`.
+We first take a look at `ext_server`. We already know that the dynamic libraries are built during the generation. But how will they be used?
 
-We already know that the dynamic libraries are built during the generation. But how will they be used?
+In `llm/dyn_ext_server.go`, the `newDynExtServer` is in charge of loading the dynamic libraries, initialize a `llama.cpp` instance and start the event loop to receive any requests and generate the responses.
 
-In `llm/dyn_ext_server.go`
-Call `newDynExtServer`.
+### Dynamic library loading and server starting
 
-Call `dyn_init` to load the dynamic library
+In `newDynExtServer`, the go function calls a C function named by `dyn_init` to load the dynamic library. The description and the needed functions are loaded into a `struct_dynamic_llama_server` description, and wrapped in `dynExtServer`, a go struct.
 
-the exported functions that are needed to be found are
+They are then used in a another C function, `dyn_llama_server_init`, with the parameters to run a `llama.cpp` server, for the server instance initialization.
+
+Without issue, `newDynExtServer` will call the last C function during the initialization, `dyn_llama_server_start`. The server will be running and is then able to receive requests from `ollama`.
+
+The aforementioned C functions are in `llm/dyn_ext_server.c` and declared in `llm/dyn_ext_server.h`. Let's take a quick look at `dyn_init`:
 
 ```c
-// Initialize the server once per process
-// err->id = 0 for success and err->msg[0] = NULL
-// err->id != 0 for failure, and err->msg contains error message
-void llama_server_init(ext_server_params_t *sparams, ext_server_resp_t *err);
-
-// Run the main loop, called once per init
-void llama_server_start();
-// Stop the main loop and free up resources allocated in init and start.  Init
-// must be called again to reuse
-void llama_server_stop();
-
-// json_req null terminated string, memory managed by caller
-// resp->id >= 0 on success (task ID)
-// resp->id < 0 on error, and resp->msg contains error message
-void llama_server_completion(const char *json_req, ext_server_resp_t *resp);
-
-// Caller must call llama_server_release_task_result to free resp->json_resp
-void llama_server_completion_next_result(const int task_id,
-                                         ext_server_task_result_t *result);
-void llama_server_completion_cancel(const int task_id, ext_server_resp_t *err);
-void llama_server_release_task_result(ext_server_task_result_t *result);
-
-// Caller must call llama_server_releaes_json_resp to free json_resp if err.id <
-// 0
-void llama_server_tokenize(const char *json_req, char **json_resp,
-                           ext_server_resp_t *err);
-void llama_server_detokenize(const char *json_req, char **json_resp,
-                             ext_server_resp_t *err);
-void llama_server_embedding(const char *json_req, char **json_resp,
-                            ext_server_resp_t *err);
-void llama_server_release_json_resp(char **json_resp);
+void dyn_init(const char *libPath, struct dynamic_llama_server *s,
+                       ext_server_resp_t *err);
 ```
 
-Call `dyn_llama_server_init` in the dynamic library
+It accepts a library path `libPath` as argument, and returns a `dynamic_llama_server` instance or an error through the C pointers (or memory address to those who are not familiar with C, go is able to handle them like go struct, store them and pass to the other C functions).
 
-When predict
+The `dynamic_llama_server` struct is capable of storing the address of necessary C functions, and the reference to the loaded dynamic library. Its definition is as below:
 
-`Predict`
+```c
+struct dynamic_llama_server {
+  void *handle;
+  void (*llama_server_init)(ext_server_params_t *sparams,
+                            ext_server_resp_t *err);
+  void (*llama_server_start)();
+  void (*llama_server_stop)();
+  void (*llama_server_completion)(const char *json_req,
+                                  ext_server_resp_t *resp);
+  void (*llama_server_completion_next_result)(const int task_id,
+                                              ext_server_task_result_t *result);
+  void (*llama_server_completion_cancel)(const int task_id,
+                                         ext_server_resp_t *err);
+  void (*llama_server_release_task_result)(ext_server_task_result_t *result);
+  void (*llama_server_tokenize)(const char *json_req, char **json_resp,
+                                ext_server_resp_t *err);
+  void (*llama_server_detokenize)(const char *json_req, char **json_resp,
+                                  ext_server_resp_t *err);
+  void (*llama_server_embedding)(const char *json_req, char **json_resp,
+                                 ext_server_resp_t *err);
+  void (*llama_server_release_json_resp)(char **json_resp);
+};
+```
 
-with a callback function
+The core functionality of `dyn_init` is to load a dynamic library indicated by `libPath`, read the symbol tables, find the addresses of needed C functions, and store them into an instance of `dynamic_llama_server` structure. The `libPath` could be the path of one of the built dynamic libraries with the `libext_server` prefix. So that the built libraries based on `llama.cpp` can be used by `ollama`.
 
-`dyn_llama_server_completion`
+Once loaded, the calls to `dyn_llama_server_start` and `dyn_llama_server_start` are indeed direct calls to the C functions from the dynamic libraries:
 
-`dyn_llama_server_completion_next_result`
+```c
+inline void dyn_llama_server_init(struct dynamic_llama_server s,
+                                           ext_server_params_t *sparams,
+                                           ext_server_resp_t *err) {
+  s.llama_server_init(sparams, err);
+}
 
-The other calls are similar. You can find them in `llm/dyn_ext_server.go` and `llm/dyn_ext_server.c`.
+inline void dyn_llama_server_start(struct dynamic_llama_server s) {
+  s.llama_server_start();
+}
+```
+
+After calling `dyn_llama_server_start`, the `llama.cpp` server created from a dynamic library is ready to make predictions.
+
+### Prediction
+
+When `ollama` receives a prediction request, it calls `Predict` on a `dynExtServer` instance. This function is able to formats the request into a payload (will see this later), and calls a C function, `dyn_llama_server_completion`, for start the prediction:
+
+```c
+inline void dyn_llama_server_completion(struct dynamic_llama_server s,
+                                                 const char *json_req,
+                                                 ext_server_resp_t *resp) {
+  s.llama_server_completion(json_req, resp);
+}
+```
+
+As you see, it's also a direct call to the function loaded from one of the dynamic libraries built on top of `llama.cpp`.
+
+A really good design in this part is the stream-like response, thanks to the `fn func(PredictResult)` argument in the `Predict` function. It is a callback function, which allows to send continously the responses as soon as it gets:
+
+```go
+if p.Content != "" {
+  fn(PredictResult{
+    Content: p.Content,
+  })
+}
+```
+
+It also relies on the convenient call to `dyn_llama_server_completion_next_result` (althoug it's also a direct call to a loaded C function `llama_server_completion_next_result` from a dynamic library based on `llama.cpp`).
+
+### Others
+
+The other calls are similar as well. You can find them in `llm/dyn_ext_server.go` and `llm/dyn_ext_server.c`.
 
 ## 2. `llama.cpp` as a server for `ollama`
+
+Let's next check the C parts: how `ollama` uses `llama.cpp` as an LLM server.
+
+In the beginning of `llm/dyn_ext_server.go`, there are a bench of build instructions in the comments for cgo:
+
+```c
+/*
+#cgo CFLAGS: -I${SRCDIR}/ext_server -I${SRCDIR}/llama.cpp -I${SRCDIR}/llama.cpp/common -I${SRCDIR}/llama.cpp/examples/server
+#cgo CFLAGS: -DNDEBUG -DLLAMA_SERVER_LIBRARY=1 -D_XOPEN_SOURCE=600 -DACCELERATE_NEW_LAPACK -DACCELERATE_LAPACK_ILP64
+#cgo CFLAGS: -Wmissing-noreturn -Wextra -Wcast-qual -Wno-unused-function -Wno-array-bounds
+#cgo CPPFLAGS: -Ofast -Wextra -Wno-unused-function -Wno-unused-variable -Wno-deprecated-declarations
+#cgo darwin CFLAGS: -D_DARWIN_C_SOURCE
+#cgo darwin CPPFLAGS:  -DGGML_USE_ACCELERATE
+#cgo darwin CPPFLAGS: -DGGML_USE_METAL -DGGML_METAL_NDEBUG
+#cgo darwin LDFLAGS: -lc++ -framework Accelerate
+#cgo darwin LDFLAGS: -framework Foundation -framework Metal -framework MetalKit -framework MetalPerformanceShaders
+#cgo linux CFLAGS: -D_GNU_SOURCE
+#cgo linux LDFLAGS: -lrt -ldl -lstdc++ -lm
+#cgo linux windows LDFLAGS: -lpthread
+
+#include <stdlib.h>
+#include "dyn_ext_server.h"
+
+*/
+```
+
+They are able to set different build and link flags for different platforms (`darwin` for macOS, and of course `linux` for Linux while `windows` for Windows). So that cgo is able to find the C header files (declarations of the existing types and functions) to compile and link `llm/dyn_ext_server.c` with the go parts.
+
+Let's then go to check the C functions used in `ollama`, from the dynamic library.
+
+llama_server_init
+and
+llama_server_start
 
 CMakeLists embed
 
@@ -279,7 +350,10 @@ void llama_server_start() {
 }
 ```
 
+More detailed implementations of such C functions can be found in the same file, i.e. `llm/ext_server/ext_server.cpp`.
+
 ## 3. Payloads
+
 
 
 
@@ -314,7 +388,125 @@ index 7800c6e7..be30db23 100644
 
 # Decide where to run
 
+Let's go back to
+`libPath`
 How to choose the libraries
+
+There is a call in `newDynExtServer` to `gpu.UpdatePath(filepath.Dir(library))`
+
+```go
+// getDynLibs returns an ordered list of LLM libraries to try, starting with the best
+func getDynLibs(gpuInfo gpu.GpuInfo) []string {
+	// Short circuit if we know we're using the default built-in (darwin only)
+	if gpuInfo.Library == "default" {
+		return []string{"default"}
+	}
+	// TODO - temporary until we have multiple CPU variations for Darwin
+	// Short circuit on darwin with metal only
+	if len(availableDynLibs) == 1 {
+		if _, onlyMetal := availableDynLibs["metal"]; onlyMetal {
+			return []string{availableDynLibs["metal"]}
+		}
+	}
+
+	exactMatch := ""
+	dynLibs := []string{}
+	altDynLibs := []string{}
+	requested := gpuInfo.Library
+	if gpuInfo.Variant != "" {
+		requested += "_" + gpuInfo.Variant
+	}
+	// Try to find an exact match
+	for cmp := range availableDynLibs {
+		if requested == cmp {
+			exactMatch = cmp
+			dynLibs = []string{availableDynLibs[cmp]}
+			break
+		}
+	}
+	// Then for GPUs load alternates and sort the list for consistent load ordering
+	if gpuInfo.Library != "cpu" {
+		for cmp := range availableDynLibs {
+			if gpuInfo.Library == strings.Split(cmp, "_")[0] && cmp != exactMatch {
+				altDynLibs = append(altDynLibs, cmp)
+			}
+		}
+		slices.Sort(altDynLibs)
+		for _, altDynLib := range altDynLibs {
+			dynLibs = append(dynLibs, availableDynLibs[altDynLib])
+		}
+	}
+
+	// Load up the best CPU variant if not primary requested
+	if gpuInfo.Library != "cpu" {
+		variant := gpu.GetCPUVariant()
+		// If no variant, then we fall back to default
+		// If we have a variant, try that if we find an exact match
+		// Attempting to run the wrong CPU instructions will panic the
+		// process
+		if variant != "" {
+			for cmp := range availableDynLibs {
+				if cmp == "cpu_"+variant {
+					dynLibs = append(dynLibs, availableDynLibs[cmp])
+					break
+				}
+			}
+		} else {
+			dynLibs = append(dynLibs, availableDynLibs["cpu"])
+		}
+	}
+
+	// Finally, if we didn't find any matches, LCD CPU FTW
+	if len(dynLibs) == 0 {
+		dynLibs = []string{availableDynLibs["cpu"]}
+	}
+	slog.Debug(fmt.Sprintf("ordered list of LLM libraries to try %v", dynLibs))
+	return dynLibs
+}
+```
+
+```go
+func nativeInit() error {
+	payloadsDir, err := gpu.PayloadsDir()
+	if err != nil {
+		return err
+	}
+
+	slog.Info(fmt.Sprintf("Extracting dynamic libraries to %s ...", payloadsDir))
+
+	libs, err := extractDynamicLibs(payloadsDir, "llama.cpp/build/*/*/*/lib/*")
+	if err != nil {
+		if errors.Is(err, payloadMissing) {
+			slog.Info(fmt.Sprintf("%s", payloadMissing))
+			return nil
+		}
+		return err
+	}
+	for _, lib := range libs {
+		// The last dir component is the variant name
+		variant := filepath.Base(filepath.Dir(lib))
+		availableDynLibs[variant] = lib
+	}
+
+	if err := verifyDriverAccess(); err != nil {
+		return err
+	}
+
+	// Report which dynamic libraries we have loaded to assist troubleshooting
+	variants := make([]string, len(availableDynLibs))
+	i := 0
+	for variant := range availableDynLibs {
+		variants[i] = variant
+		i++
+	}
+	slog.Info(fmt.Sprintf("Dynamic LLM libraries %v", variants))
+	slog.Debug("Override detection logic by setting OLLAMA_LLM_LIBRARY")
+
+	return nil
+}
+```
+
+
 
 ## Apple Metal
 
@@ -324,23 +516,114 @@ Apple
 
 NVIDIA
 
+```go
+func GetGPUInfo() GpuInfo {
+	// TODO - consider exploring lspci (and equivalent on windows) to check for
+	// GPUs so we can report warnings if we see Nvidia/AMD but fail to load the libraries
+	gpuMutex.Lock()
+	defer gpuMutex.Unlock()
+	if gpuHandles == nil {
+		initGPUHandles()
+	}
+
+	// All our GPU builds on x86 have AVX enabled, so fallback to CPU if we don't detect at least AVX
+	cpuVariant := GetCPUVariant()
+	if cpuVariant == "" && runtime.GOARCH == "amd64" {
+		slog.Warn("CPU does not have AVX or AVX2, disabling GPU support.")
+	}
+
+	var memInfo C.mem_info_t
+	resp := GpuInfo{}
+	if gpuHandles.nvml != nil && (cpuVariant != "" || runtime.GOARCH != "amd64") {
+		C.nvml_check_vram(*gpuHandles.nvml, &memInfo)
+		if memInfo.err != nil {
+			slog.Info(fmt.Sprintf("[nvidia-ml] error looking up NVML GPU memory: %s", C.GoString(memInfo.err)))
+			C.free(unsafe.Pointer(memInfo.err))
+		} else if memInfo.count > 0 {
+			// Verify minimum compute capability
+			var cc C.nvml_compute_capability_t
+			C.nvml_compute_capability(*gpuHandles.nvml, &cc)
+			if cc.err != nil {
+				slog.Info(fmt.Sprintf("[nvidia-ml] error looking up NVML GPU compute capability: %s", C.GoString(cc.err)))
+				C.free(unsafe.Pointer(cc.err))
+			} else if cc.major > CudaComputeMin[0] || (cc.major == CudaComputeMin[0] && cc.minor >= CudaComputeMin[1]) {
+				slog.Info(fmt.Sprintf("[nvidia-ml] NVML CUDA Compute Capability detected: %d.%d", cc.major, cc.minor))
+				resp.Library = "cuda"
+			} else {
+				slog.Info(fmt.Sprintf("[nvidia-ml] CUDA GPU is too old. Falling back to CPU mode. Compute Capability detected: %d.%d", cc.major, cc.minor))
+			}
+		}
+	} else if gpuHandles.cudart != nil && (cpuVariant != "" || runtime.GOARCH != "amd64") {
+		C.cudart_check_vram(*gpuHandles.cudart, &memInfo)
+		if memInfo.err != nil {
+			slog.Info(fmt.Sprintf("[cudart] error looking up CUDART GPU memory: %s", C.GoString(memInfo.err)))
+			C.free(unsafe.Pointer(memInfo.err))
+		} else if memInfo.count > 0 {
+			// Verify minimum compute capability
+			var cc C.cudart_compute_capability_t
+			C.cudart_compute_capability(*gpuHandles.cudart, &cc)
+			if cc.err != nil {
+				slog.Info(fmt.Sprintf("[cudart] error looking up CUDA compute capability: %s", C.GoString(cc.err)))
+				C.free(unsafe.Pointer(cc.err))
+			} else if cc.major > CudaComputeMin[0] || (cc.major == CudaComputeMin[0] && cc.minor >= CudaComputeMin[1]) {
+				slog.Info(fmt.Sprintf("[cudart] CUDART CUDA Compute Capability detected: %d.%d", cc.major, cc.minor))
+				resp.Library = "cuda"
+			} else {
+				slog.Info(fmt.Sprintf("[cudart] CUDA GPU is too old. Falling back to CPU mode. Compute Capability detected: %d.%d", cc.major, cc.minor))
+			}
+		}
+	} else {
+		AMDGetGPUInfo(&resp)
+		if resp.Library != "" {
+			return resp
+		}
+	}
+	if resp.Library == "" {
+		C.cpu_check_ram(&memInfo)
+		resp.Library = "cpu"
+		resp.Variant = cpuVariant
+	}
+	if memInfo.err != nil {
+		slog.Info(fmt.Sprintf("error looking up CPU memory: %s", C.GoString(memInfo.err)))
+		C.free(unsafe.Pointer(memInfo.err))
+		return resp
+	}
+
+	resp.DeviceCount = uint32(memInfo.count)
+	resp.FreeMemory = uint64(memInfo.free)
+	resp.TotalMemory = uint64(memInfo.total)
+	return resp
+}
+```
+
 ## AMD ROCm
 
 AMD
 
+```go
+func rocmDynLibPresent() bool {
+	for dynLibName := range availableDynLibs {
+		if strings.HasPrefix(dynLibName, "rocm") {
+			return true
+		}
+	}
+	return false
+}
+```
+
 # Web service and client
 
 In `server`, `api`
+
+## OpenAI API wrapper
+
+openai model
 
 # Other utilities
 
 auth, cmd, format, parser, progress, readline
 
 ## `format` module
-
-## OpenAI API wrapper
-
-openai model
 
 # Conclusion
 
