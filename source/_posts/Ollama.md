@@ -307,15 +307,39 @@ In the beginning of `llm/dyn_ext_server.go`, there are a bench of build instruct
 
 They are able to set different build and link flags for different platforms (`darwin` for macOS, and of course `linux` for Linux while `windows` for Windows). So that cgo is able to find the C header files (declarations of the existing types and functions) to compile and link `llm/dyn_ext_server.c` with the go parts.
 
-Let's then go to check the C functions used in `ollama`, from the dynamic library.
+Let's then go to check the C functions used in `ollama`, from the dynamic library. As two examples, we start with `llama_server_init` and `llama_server_start`.
 
-llama_server_init
-and
-llama_server_start
+Their impementations are located in `llm/ext_server/ext_server.cpp`, which is set as a library target named by `ext_server` in `llm/ext_server/CMakeLists.txt`. During the building the target, this file will be compiled with `llama.cpp` example server together. The compiled result is one of the dynamic libraries that we mentioned.
 
-CMakeLists embed
+As a result, the C functions in `ext_server.cpp` can be called from `ollama`, and are able to leverage the functions in `llama.cpp`. It actually acts as a bridge between the two projects, and **makes the example server in `llama.cpp` a server for `ollama`**.
 
-when start
+During the initialization, `llama_server_init` parses the parameters to create a context for the server, and calls the functions provided by `llama.cpp`:
+
+```c
+void llama_server_init(ext_server_params *sparams, ext_server_resp_t *err) {
+  /* ... */
+    llama = new llama_server_context;
+  /* ... */
+    llama_backend_init();
+    llama_numa_init(params.numa);
+
+  if (!llama->load_model(params)) { 
+    // an error occurred that was not thrown
+    err->id = -1;
+    snprintf(err->msg, err->msg_len, "error loading model %s", params.model.c_str());
+    return;
+  }
+
+    llama->initialize();
+  /* ... */
+}
+```
+
+For example, it calls `llama_backend_init` to initalize the backend (could be AVX, CUDA, etc), and `llama_numa_init` to initilize the NUMA (if exists). Then it calls the `load_model` function in the server context with the given parameters to load the model and finilize the initialization with `initialize` function.
+
+In case of error, the error messages are formatted to the `err` argument to return and be processed in go parts.
+
+Meanwhile in `llama_server_start`:
 
 ```c
 void llama_server_start() {
@@ -349,6 +373,8 @@ void llama_server_start() {
   });
 }
 ```
+
+It sets some callbacks for the task processing, and starts an event loop in a new thread. The event loop is in charge of the predictions. So that the call to `llama_server_start` is returned immediately.
 
 More detailed implementations of such C functions can be found in the same file, i.e. `llm/ext_server/ext_server.cpp`.
 
