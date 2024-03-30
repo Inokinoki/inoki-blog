@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <script data-ad-client="ca-pub-2713518338457470" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>On the architecture of ollama | Inoki in the world</title>
+  <meta name="description" content="Recently, I took a chance to explore ollama project, because I want to enable the support of my AMD graphic card (with a not bad VRAM - 32G!) on Windows. There is already the support on Linux, based o">
+<meta name="keywords" content="LLM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="On the architecture of ollama">
+<meta property="og:url" content="https://blog.inoki.cc/2024/03/24/Ollama/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="Recently, I took a chance to explore ollama project, because I want to enable the support of my AMD graphic card (with a not bad VRAM - 32G!) on Windows. There is already the support on Linux, based o">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://blog.inoki.cc/2024/03/24/Ollama/ollama.drawio.svg">
+<meta property="og:updated_time" content="2024-03-30T00:11:22.027Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="On the architecture of ollama">
+<meta name="twitter:description" content="Recently, I took a chance to explore ollama project, because I want to enable the support of my AMD graphic card (with a not bad VRAM - 32G!) on Windows. There is already the support on Linux, based o">
+<meta name="twitter:image" content="https://blog.inoki.cc/2024/03/24/Ollama/ollama.drawio.svg">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2024/03/24/Ollama/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="/" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Computer Scientist</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/AI/">AI</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/AI/LLM/">LLM</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2024/03/24/Ollama/" class="title">On the architecture of ollama</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-03-24T15:34:00.000Z" itemprop="datePublished">2024-03-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/AI/">AI</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/AI/Stable-Diffusion/">Stable Diffusion</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2024/02/18/Explaining-the-SDXL-latent-space/" class="title">【译】解释 SDXL 的隐空间</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-02-18T03:57:50.000Z" itemprop="datePublished">2024-02-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Translation/">Translation</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/Chinese/">Chinese</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/USB/">USB</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/硬件/">硬件</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/09/14/All-about-USB-C-example-circuits/" class="title">【译】关于 USB-C 的一切：示例电路</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-14T23:42:00.000Z" itemprop="datePublished">2023-09-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Translation/">Translation</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/Chinese/">Chinese</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/USB/">USB</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/硬件/">硬件</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/09/14/All-about-USB-C-high-speed-interfaces/" class="title">【译】关于 USB-C 的一切：高速接口</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-14T23:22:00.000Z" itemprop="datePublished">2023-09-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Translation/">Translation</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/Chinese/">Chinese</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/USB/">USB</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/硬件/">硬件</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/09/13/All-about-USB-C-resistors-and-emarkers/" class="title">【译】关于 USB-C 的一切：电阻和电子标记（E-marker）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-13T23:22:00.000Z" itemprop="datePublished">2023-09-13</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+<!-- Blog sidebar -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="2343090796" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ABL/" style="font-size: 13.6px;">ABL</a> <a href="/tags/AI/" style="font-size: 13px;">AI</a> <a href="/tags/ARM/" style="font-size: 13.2px;">ARM</a> <a href="/tags/ASIX/" style="font-size: 13.1px;">ASIX</a> <a href="/tags/Aboot/" style="font-size: 13.2px;">Aboot</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Android/" style="font-size: 13.7px;">Android</a> <a href="/tags/Bare-Metal/" style="font-size: 13.1px;">Bare Metal</a> <a href="/tags/Bootloader/" style="font-size: 13.7px;">Bootloader</a> <a href="/tags/Bug/" style="font-size: 13.2px;">Bug</a> <a href="/tags/C/" style="font-size: 13px;">C++</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Cloud-Input/" style="font-size: 13.3px;">Cloud Input</a> <a href="/tags/Computer-Graphics/" style="font-size: 13px;">Computer Graphics</a> <a href="/tags/Craft/" style="font-size: 13.1px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.2px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13.1px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/EDK2/" style="font-size: 13px;">EDK2</a> <a href="/tags/EFI/" style="font-size: 13px;">EFI</a> <a href="/tags/Embedded-System/" style="font-size: 13.4px;">Embedded System</a> <a href="/tags/FFmpeg/" style="font-size: 13.1px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.1px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/Go/" style="font-size: 13.1px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hardware/" style="font-size: 13.2px;">Hardware</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.4px;">IBus</a> <a href="/tags/IME/" style="font-size: 13px;">IME</a> <a href="/tags/IoT/" style="font-size: 13.4px;">IoT</a> <a href="/tags/JTAG/" style="font-size: 13px;">JTAG</a> <a href="/tags/KDE/" style="font-size: 13.1px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.5px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.1px;">KDE Frameworks</a> <a href="/tags/LLM/" style="font-size: 13px;">LLM</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.8px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.2px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.4px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.4px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Python/" style="font-size: 13.1px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qemu/" style="font-size: 13px;">Qemu</a> <a href="/tags/Qt/" style="font-size: 13.1px;">Qt</a> <a href="/tags/Raspberry-Pi/" style="font-size: 13.4px;">Raspberry Pi</a> <a href="/tags/Ray-Tracing/" style="font-size: 13px;">Ray Tracing</a> <a href="/tags/Router/" style="font-size: 13.2px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.3px;">SDR</a> <a href="/tags/SDXL/" style="font-size: 13px;">SDXL</a> <a href="/tags/Source-Code/" style="font-size: 13.1px;">Source Code</a> <a href="/tags/Stable-Diffusion/" style="font-size: 13px;">Stable Diffusion</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/USB/" style="font-size: 13.3px;">USB</a> <a href="/tags/Ubuntu/" style="font-size: 13.1px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/Vulkan/" style="font-size: 13px;">Vulkan</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.1px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.1px;">Windows</a> <a href="/tags/XBL/" style="font-size: 13px;">XBL</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/iOS/" style="font-size: 13px;">iOS</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.3px;">ibus-libpinyin</a> <a href="/tags/macOS/" style="font-size: 13px;">macOS</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.2px;">private</a> <a href="/tags/sysfs/" style="font-size: 13px;">sysfs</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/硬件/" style="font-size: 13.3px;">硬件</a> <a href="/tags/翻译/" style="font-size: 13.9px;">翻译</a> <a href="/tags/驱动/" style="font-size: 13px;">驱动</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABL/">ABL</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/">AI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ARM/">ARM</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Aboot/">Aboot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bootloader/">Bootloader</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-Graphics/">Computer Graphics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EDK2/">EDK2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EFI/">EFI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IME/">IME</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JTAG/">JTAG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LLM/">LLM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qemu/">Qemu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-Pi/">Raspberry Pi</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray-Tracing/">Ray Tracing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDXL/">SDXL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stable-Diffusion/">Stable Diffusion</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/USB/">USB</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vulkan/">Vulkan</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XBL/">XBL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macOS/">macOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysfs/">sysfs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">52</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬件/">硬件</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">33</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/驱动/">驱动</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/AI/">AI</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/AI/LLM/">LLM</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/AI/Stable-Diffusion/">Stable Diffusion</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/">Computer Graphics</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/Vulkan/">Vulkan</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/EDK2/">EDK2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-Pi/">Raspberry Pi</a><span class="category-list-count">6</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hardware/">Hardware</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/IME/">IME</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/">Inoki Home Made</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/">Qt</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/EFI/">EFI</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">22</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/">Android</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/Bootloader/">Bootloader</a><span class="category-list-count">9</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Driver/">Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Wayland/">Wayland</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/sysfs/">sysfs</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Modern-C/">Modern C++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">19</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">19</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/USB/">USB</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/硬件/">硬件</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Ollama" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      On the architecture of ollama
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2024/03/24/Ollama/" class="article-date">
+	  <time datetime="2024-03-24T15:34:00.000Z" itemprop="datePublished">2024-03-24</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/AI/">AI</a>►<a class="article-category-link" href="/categories/AI/LLM/">LLM</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/LLM/">LLM</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2024/03/24/Ollama/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2.1k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 13(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>Recently, I took a chance to explore <code>ollama</code> project, because I want to enable the support of my AMD graphic card (with a not bad VRAM - 32G!) on Windows. There is already the support on Linux, based on AMD ROCm. It should be kind of out-of-box on Windows, thanks to the release of ROCm on Windows. But <code>ollama</code> prevents me from using it. So, I tried both ZLUDA and modified the code of <code>ollama</code> to get what I wanted.</p>
+<p>This feature is already merged and released in <a href="https://github.com/ollama/ollama/releases/tag/v0.1.29" target="_blank" rel="noopener">ollama v0.1.29</a>. To avoid missing the details and the things I 've learnt, this blog is in charge of noting the architecture of <code>ollama</code> for myself.</p>
+<p>To me, <code>ollama</code> is a thin but smart enough wrapper to <a href="https://github.com/ggerganov/llama.cpp" target="_blank" rel="noopener">llama.cpp</a>. <strong>It is really end-user friendly, and provides a web interface and a cli interface, in order to run and interact with a lot of Large Language Models (LLMs).</strong> Indeed, in most cases, it’s <code>llama.cpp</code> who loads and runs the models, and <code>ollama</code> just “pilots” (yes, I use a term that AI generations are famaliar with) the <code>llama.cpp</code>. I will give a talk about this part later.</p>
+<!-- ToC -->
+<p>In this post, I will</p>
+<h1 id="porject-structure"><a class="markdownIt-Anchor" href="#porject-structure"></a> Porject structure</h1>
+<p>You can get <a href="https://github.com/ollama/ollama" target="_blank" rel="noopener">the source code of ollama on GitHub</a>. The project is mainly written in Golang. Here is a table of brief descriptions for each directory:</p>
+<!-- Dir structure -->
+<table>
+<thead>
+<tr>
+<th>Dir name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>api</td>
+<td>Client API lib in go</td>
+</tr>
+<tr>
+<td>app</td>
+<td>Desktop application (mainly a tray)</td>
+</tr>
+<tr>
+<td>auth</td>
+<td>Authentification</td>
+</tr>
+<tr>
+<td>cmd</td>
+<td>Commands and handlers</td>
+</tr>
+<tr>
+<td>docs</td>
+<td>Documentations</td>
+</tr>
+<tr>
+<td>examples</td>
+<td>Examples to use ollama</td>
+</tr>
+<tr>
+<td>format</td>
+<td>Utitility to format units and time</td>
+</tr>
+<tr>
+<td>gpu</td>
+<td>GPU and acceleration detection</td>
+</tr>
+<tr>
+<td>llm</td>
+<td>Implementations to run llama.cpp</td>
+</tr>
+<tr>
+<td>macapp</td>
+<td>Desktop application for Mac</td>
+</tr>
+<tr>
+<td>openai</td>
+<td>OpenAI API wrapper for ollama</td>
+</tr>
+<tr>
+<td>parser</td>
+<td>Model information and message parser</td>
+</tr>
+<tr>
+<td>progress</td>
+<td>Utility to show loading progress</td>
+</tr>
+<tr>
+<td>readline</td>
+<td>Utility to read inputs from terminal</td>
+</tr>
+<tr>
+<td>scripts</td>
+<td>Scripts for build and publish</td>
+</tr>
+<tr>
+<td>server</td>
+<td>Server implementation in go</td>
+</tr>
+<tr>
+<td>version</td>
+<td>Version information</td>
+</tr>
+</tbody>
+</table>
+<p>Notice that the directories can be changed anytime, since the project is under active development.</p>
+<h1 id="the-hero-behind-llamacpp"><a class="markdownIt-Anchor" href="#the-hero-behind-llamacpp"></a> The hero behind: llama.cpp</h1>
+<p>Let’s first start by an introduction to the core, <code>llama.cpp</code>.</p>
+<p>The <code>llama.cpp</code> is included as a submodule in <code>ollama</code>. You can find it in <code>llm</code> directory. There are also the needed files around it in the same directory. We will see them in details later.</p>
+<p>The <code>llama.cpp</code> project <a href="https://github.com/ggerganov/llama.cpp" target="_blank" rel="noopener">itself</a> is an Open Soource library for the inference of Meta’s LLaMA model in pure C/C++, at very first. And it is extended to run more models, such as Mistral, and Google Gemma (supported very recently). It leverages the capability of <a href="https://github.com/ggerganov/ggml" target="_blank" rel="noopener">ggml</a>, another project created by the same author, to run it natively on different platforms (compared to Python project).</p>
+<h2 id="supported-backends"><a class="markdownIt-Anchor" href="#supported-backends"></a> Supported backends</h2>
+<p>Currently, some of the supported inference backends in <code>llama.cpp</code> are as follows  through <code>ggml</code>:</p>
+<ul>
+<li>It can run <strong>AVX, AVX2 and AVX512</strong> on x86 for <code>llama.cpp</code>, or <strong>NEON</strong> on ARM.</li>
+<li>With MPI (e.g. MPICH and OpenMPI), <code>ggml</code> allows to run models on CPU or CPU clusters.</li>
+<li><strong>Apple Metal</strong> is integrated to support GPUs on macOS and iOS, including GPUs on Mac and Apple made GPU on iOS devices or Apple Silicon Mac.</li>
+<li>An old open standard, <strong>OpenCL</strong> is used by <code>ggml</code> based on the BLAS architecture.</li>
+<li><strong>NVIDIA GPU</strong>s are supported by <code>cuBLAS</code>.</li>
+<li>Recent <strong>AMD GPU</strong>s are supported through <code>hipBLAS</code>, which is parts of <a href="https://www.amd.com/en/products/software/rocm.html" target="_blank" rel="noopener">AMD ROCm</a> with almost same APIs as <code>cuBLAS</code>.</li>
+<li>What caught my attention recently, is the Vulkan support in <code>llama.cpp</code>. The (buggy) support was initially started by Nomic through their kompute framework. The recent progress is a <a href="https://github.com/ggerganov/llama.cpp#vulkan" target="_blank" rel="noopener">pure implementation</a> in <code>ggml</code> using the Vulkan libs directly.</li>
+</ul>
+<p>These backends allow developers to run LLMs that work across multiple platforms, from desktop computers to smartphones and beyond. Additionally, <code>llama.cpp</code> also provides native support for Linux (including Android Linux), Windows, macOS, and various other operating systems, such as iOS (see <a href="https://github.com/ggerganov/whisper.cpp/tree/master/examples/whisper.objc" target="_blank" rel="noopener">whispher.cpp on iOS</a>) and even WebAssembly (<a href="https://github.com/ggerganov/whisper.cpp/tree/master/examples/whisper.wasm" target="_blank" rel="noopener">whispher.wasm</a>).</p>
+<p>Therefore, it should be very nature that <code>ollama</code> is born with the supports of the platforms and operating systems.</p>
+<h1 id="build-system"><a class="markdownIt-Anchor" href="#build-system"></a> Build system</h1>
+<p>Next, let’s take a look at the build system to know how <code>ollama</code> plays with <code>llama.cpp</code>.</p>
+<p>C or Cpp projects usually come up with <code>cmake</code> (although there are more choices now) to handle the compilation, linking, etc. So does <code>llama.cpp</code>: it uses compile definitions (or flags) to leverage different backends. For instance:</p>
+<ul>
+<li><code>LLAMA_AVX</code>, <code>LLAMA_AVX2</code>, <code>LLAMA_AVX512</code> for the AVX supports;</li>
+<li><code>LLAMA_METAL</code> for the Apple Metal support;</li>
+<li><code>LLAMA_CUBLAS</code> for the NVIDIA CUDA support;</li>
+<li>and <code>LLAMA_HIPBLAS</code> for the AMD ROCm support.</li>
+</ul>
+<p>However, <code>ollama</code> itself is a go project leveraging the build system provided by go. Both of the two build systems co-exist to build the different parts:</p>
+<ul>
+<li><code>cmake</code> builds <code>llama.cpp</code> with a few files from <code>ollama.cpp</code>, to pilot and provide interfaces;</li>
+<li>go build systems compile, link and pack the rest parts to make an application and cli of <code>ollama</code>.</li>
+</ul>
+<p>Aparts from pure go code, the go build systems need <code>cgo</code> to build some C-family code as well. There are examples in <code>llm</code> directory (<code>dyn_ext_server.c</code> file to load and provide interfaces) and <code>gpu</code> directory (<code>gpu_info_cuda.c</code>, <code>gpu_info_rocm.c</code> and <code>gpu_info_darwin.m</code> are C or Objective-C implementations to detect GPUs).</p>
+<p>The go build system in <code>ollama</code> also run the commands to call <code>cmake</code> for the <code>llama.cpp</code> building, by leveraging <a href="https://go.dev/blog/generate" target="_blank" rel="noopener">go generate</a>. This work lays in the <code>llm/generate</code> directory, e.g. on Linux:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">package generate</span><br><span class="line"></span><br><span class="line">//go:generate bash ./gen_linux.sh</span><br></pre></td></tr></table></figure>
+<p><code>llm/generate/generate_darwin.go</code> tells go generate to run the <code>gen_linux.sh</code> script to build the <code>llama.cpp</code> part.</p>
+<h2 id="some-scripts-for-different-platforms"><a class="markdownIt-Anchor" href="#some-scripts-for-different-platforms"></a> Some scripts for different platforms</h2>
+<p>Currently, there are <code>gen_common.sh</code>, <code>gen_linux.sh</code> and <code>gen_darwin.sh</code> to build <code>llama.cpp</code> for <code>ollama</code> on Unix-like OS, such as macOS and Linux. Meanwhile, it’s <code>gen_windows.ps1</code> PowerShell script on Windows.</p>
+<p>Let’s take an example to build <code>llama.cpp</code> with AVX support on Linux:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">init_vars</span><br><span class="line">CMAKE_DEFS="$&#123;COMMON_CPU_DEFS&#125; -DLLAMA_AVX=on -DLLAMA_AVX2=off -DLLAMA_AVX512=off -DLLAMA_FMA=off -DLLAMA_F16C=off $&#123;CMAKE_DEFS&#125;"</span><br><span class="line">BUILD_DIR="$&#123;LLAMACPP_DIR&#125;/build/linux/$&#123;ARCH&#125;/cpu_avx"</span><br><span class="line">echo "Building AVX CPU"</span><br><span class="line">build</span><br><span class="line">compress_libs</span><br></pre></td></tr></table></figure>
+<p>The first three lines initialize the variables to prepare the build. The <code>init_vars</code> calls a sub-procedure in <code>gen_common.sh</code> to prepare common variables such as:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CMAKE_DEFS=""</span><br><span class="line">CMAKE_TARGETS="--target ext_server"</span><br></pre></td></tr></table></figure>
+<p>where <code>CMAKE_TARGETS</code> will set the build target to <code>ext_server</code>. This target is a library to provide interfaces and functions from <code>llama.cpp</code> to <code>ollama</code>, we will talk about it in the next section.</p>
+<p>In <code>CMAKE_DEFS</code>, only <code>LLAMA_AVX</code> is enabled. And <code>COMMON_CPU_DEFS</code> is defined as follows, to make dynamic library with position independent code (for gcc it will be converted to a <code>-fpic</code> flag):</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">COMMON_CPU_DEFS="-DCMAKE_POSITION_INDEPENDENT_CODE=on -DLLAMA_NATIVE=off"</span><br></pre></td></tr></table></figure>
+<p>It outputs “Building AVX CPU” in the terminal. The <code>build</code> sub-procedure then calls <code>cmake</code>:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">build() &#123;</span><br><span class="line">    cmake -S $&#123;LLAMACPP_DIR&#125; -B $&#123;BUILD_DIR&#125; $&#123;CMAKE_DEFS&#125;</span><br><span class="line">    cmake --build $&#123;BUILD_DIR&#125; $&#123;CMAKE_TARGETS&#125; -j8</span><br><span class="line">    mkdir -p $&#123;BUILD_DIR&#125;/lib/</span><br><span class="line">    g++ -fPIC -g -shared -o $&#123;BUILD_DIR&#125;/lib/libext_server.$&#123;LIB_EXT&#125; \</span><br><span class="line">        $&#123;GCC_ARCH&#125; \</span><br><span class="line">        $&#123;WHOLE_ARCHIVE&#125; $&#123;BUILD_DIR&#125;/examples/server/libext_server.a $&#123;NO_WHOLE_ARCHIVE&#125; \</span><br><span class="line">        $&#123;BUILD_DIR&#125;/common/libcommon.a \</span><br><span class="line">        $&#123;BUILD_DIR&#125;/libllama.a \</span><br><span class="line">        -Wl,-rpath,\$ORIGIN \</span><br><span class="line">        -lpthread -ldl -lm \</span><br><span class="line">        $&#123;EXTRA_LIBS&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>After the build by <code>cmake</code>, it will make a <code>libext_server</code> dynamic library (<code>.dll</code> on Windows, <code>.so</code> on Linux/BSD, and <code>.dylib</code> on macOS). The library contains the compiled code from <code>examples/server</code> under <code>llama.cpp</code> (<code>examples/server/libext_server.a</code>), command and core code of <code>llama.cpp</code> - <code>common/libcommoa.a</code> and <code>libllama.a</code>.</p>
+<p>Finally, it compresses the generated library:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">compress_libs() &#123;</span><br><span class="line">    echo "Compressing payloads to reduce overall binary size..."</span><br><span class="line">    pids=""</span><br><span class="line">    rm -rf $&#123;BUILD_DIR&#125;/lib/*.$&#123;LIB_EXT&#125;*.gz</span><br><span class="line">    for lib in $&#123;BUILD_DIR&#125;/lib/*.$&#123;LIB_EXT&#125;* ; do</span><br><span class="line">        gzip --best -f $&#123;lib&#125; &amp;</span><br><span class="line">        pids+=" $!"</span><br><span class="line">    done</span><br><span class="line">    echo </span><br><span class="line">    for pid in $&#123;pids&#125;; do</span><br><span class="line">        wait $pid</span><br><span class="line">    done</span><br><span class="line">    echo "Finished compression"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The dynamic library will finally reside under a <code>cpu_avx</code> directory in the build folder. If it builds for the other variants (such as GPUs), they will be in different directories in the build folder.</p>
+<h1 id="pilot-llamacpp"><a class="markdownIt-Anchor" href="#pilot-llamacpp"></a> Pilot llama.cpp</h1>
+<p>Then, let us go back to the <code>llm</code> directory, to see the implementations in <code>ollama</code> built on top of <code>llama.cpp</code>.</p>
+<p>The most important parts for <code>ollama</code> to pilot <code>llama.cpp</code> are:</p>
+<ol>
+<li>In <code>ext_server</code>, the wrapper implementations provides the functions that <code>ollama</code> can call, such as <code>llama_server_init</code> to init an <code>llama.cpp</code> instance, <code>llama_server_completion</code> to complete a chat, or <code>llama_server_embedding</code> to compute the embeddings for texts.</li>
+<li>An extra makefile (<code>CMakeLists</code>) is also contained in <code>ext_server</code>, to build the code with the <code>llama.cpp/examples/server</code> example as a library. It can then be loaded by <code>dyn_ext_server</code> code under <code>llm</code>, to serve with the <code>llama.cpp</code> instance.</li>
+<li>The calls to the functions in <code>ext_server</code> carry the “payloads”, which are defined in the <code>payload_*</code> files under <code>llm</code> directory. In general, the requests and responses are passed in JSON format, and contains more structural information. They are defined in such as <code>ggml.go</code> (decribing the models) and <code>llama.go</code> (describing the different requests and responses).</li>
+<li>To dynamically manage the <code>llama.cpp</code> instances, <code>ollama</code> provides some patches to the original <code>llama.cpp</code>.</li>
+</ol>
+<p>Let’s study them one by one.</p>
+<h2 id="1-external-server"><a class="markdownIt-Anchor" href="#1-external-server"></a> 1. External server</h2>
+<p>We first take a look at <code>ext_server</code>.</p>
+<p>We already know that the dynamic libraries are built during the generation. But how will they be used?</p>
+<p>In <code>llm/dyn_ext_server.go</code><br>
+Call <code>newDynExtServer</code>.</p>
+<p>Call <code>dyn_init</code> to load the dynamic library</p>
+<p>the exported functions that are needed to be found are</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Initialize the server once per process</span></span><br><span class="line"><span class="comment">// err-&gt;id = 0 for success and err-&gt;msg[0] = NULL</span></span><br><span class="line"><span class="comment">// err-&gt;id != 0 for failure, and err-&gt;msg contains error message</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_init</span><span class="params">(<span class="keyword">ext_server_params_t</span> *sparams, <span class="keyword">ext_server_resp_t</span> *err)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Run the main loop, called once per init</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_start</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// Stop the main loop and free up resources allocated in init and start.  Init</span></span><br><span class="line"><span class="comment">// must be called again to reuse</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_stop</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// json_req null terminated string, memory managed by caller</span></span><br><span class="line"><span class="comment">// resp-&gt;id &gt;= 0 on success (task ID)</span></span><br><span class="line"><span class="comment">// resp-&gt;id &lt; 0 on error, and resp-&gt;msg contains error message</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_completion</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *json_req, <span class="keyword">ext_server_resp_t</span> *resp)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Caller must call llama_server_release_task_result to free resp-&gt;json_resp</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_completion_next_result</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> task_id,</span></span></span><br><span class="line"><span class="function"><span class="params">                                         <span class="keyword">ext_server_task_result_t</span> *result)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_completion_cancel</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> task_id, <span class="keyword">ext_server_resp_t</span> *err)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_release_task_result</span><span class="params">(<span class="keyword">ext_server_task_result_t</span> *result)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Caller must call llama_server_releaes_json_resp to free json_resp if err.id &lt;</span></span><br><span class="line"><span class="comment">// 0</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_tokenize</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *json_req, <span class="keyword">char</span> **json_resp,</span></span></span><br><span class="line"><span class="function"><span class="params">                           <span class="keyword">ext_server_resp_t</span> *err)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_detokenize</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *json_req, <span class="keyword">char</span> **json_resp,</span></span></span><br><span class="line"><span class="function"><span class="params">                             <span class="keyword">ext_server_resp_t</span> *err)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_embedding</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *json_req, <span class="keyword">char</span> **json_resp,</span></span></span><br><span class="line"><span class="function"><span class="params">                            <span class="keyword">ext_server_resp_t</span> *err)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_release_json_resp</span><span class="params">(<span class="keyword">char</span> **json_resp)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>Call <code>dyn_llama_server_init</code> in the dynamic library</p>
+<p>When predict</p>
+<p><code>Predict</code></p>
+<p>with a callback function</p>
+<p><code>dyn_llama_server_completion</code></p>
+<p><code>dyn_llama_server_completion_next_result</code></p>
+<p>The other calls are similar. You can find them in <code>llm/dyn_ext_server.go</code> and <code>llm/dyn_ext_server.c</code>.</p>
+<h2 id="2-llamacpp-as-a-server-for-ollama"><a class="markdownIt-Anchor" href="#2-llamacpp-as-a-server-for-ollama"></a> 2. <code>llama.cpp</code> as a server for <code>ollama</code></h2>
+<p>CMakeLists embed</p>
+<p>when start</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  assert(llama != <span class="literal">NULL</span>);</span><br><span class="line">  <span class="comment">// TODO mutex to protect thread creation</span></span><br><span class="line">  ext_server_thread = <span class="built_in">std</span>::thread([&amp;]() &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      LOG_TEE(<span class="string">"llama server main loop starting\n"</span>);</span><br><span class="line">      ggml_time_init();</span><br><span class="line">      llama-&gt;queue_tasks.on_new_task(<span class="built_in">std</span>::bind(</span><br><span class="line">        &amp;llama_server_context::process_single_task, llama, <span class="built_in">std</span>::placeholders::_1));</span><br><span class="line">      llama-&gt;queue_tasks.on_finish_multitask(<span class="built_in">std</span>::bind(</span><br><span class="line">          &amp;llama_server_context::on_finish_multitask, llama, <span class="built_in">std</span>::placeholders::_1));</span><br><span class="line">      llama-&gt;queue_tasks.on_all_tasks_finished(<span class="built_in">std</span>::bind(</span><br><span class="line">          &amp;llama_server_context::run_on_all_tasks_finished, llama));</span><br><span class="line">      llama-&gt;queue_results.on_multitask_update(<span class="built_in">std</span>::bind(</span><br><span class="line">          &amp;llama_server_queue::update_multitask,</span><br><span class="line">          &amp;llama-&gt;queue_tasks,</span><br><span class="line">          <span class="built_in">std</span>::placeholders::_1,</span><br><span class="line">          <span class="built_in">std</span>::placeholders::_2,</span><br><span class="line">          <span class="built_in">std</span>::placeholders::_3</span><br><span class="line">        ));</span><br><span class="line">      llama-&gt;queue_tasks.start_loop();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (<span class="built_in">std</span>::exception &amp;e) &#123;</span><br><span class="line">      LOG_TEE(<span class="string">"caught exception in llama server main loop: %s\n"</span>, e.what());</span><br><span class="line">    &#125; <span class="keyword">catch</span> (...) &#123;</span><br><span class="line">      LOG_TEE(<span class="string">"caught unknown exception in llama server main loop\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    LOG_TEE(<span class="string">"\nllama server shutting down\n"</span>);</span><br><span class="line">    llama_backend_free();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-payloads"><a class="markdownIt-Anchor" href="#3-payloads"></a> 3. Payloads</h2>
+<h2 id="4-patches"><a class="markdownIt-Anchor" href="#4-patches"></a> 4. Patches</h2>
+<p>For example, the following patch exports <code>ggml_free_cublas</code> and call it to release the instance:</p>
+<figure class="highlight patch"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/examples/server/server.cpp b/examples/server/server.cpp</span><br><span class="line">index 7800c6e7..be30db23 100644</span><br><span class="line"><span class="comment">--- a/examples/server/server.cpp</span></span><br><span class="line"><span class="comment">+++ b/examples/server/server.cpp</span></span><br><span class="line"><span class="meta">@@ -30,6 +30,10 @@</span></span><br><span class="line"> #include &lt;atomic&gt;</span><br><span class="line"> #include &lt;signal.h&gt;</span><br><span class="line"> </span><br><span class="line"><span class="addition">+#ifdef GGML_USE_CUBLAS</span></span><br><span class="line"><span class="addition">+extern "C" GGML_CALL void ggml_free_cublas(void);</span></span><br><span class="line"><span class="addition">+#endif</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line"> using json = nlohmann::json;</span><br><span class="line"> </span><br><span class="line"> struct server_params</span><br><span class="line">@@ -353,6 +357,9 @@ struct llama_server_context</span><br><span class="line">             llama_free_model(model);</span><br><span class="line">             model = nullptr;</span><br><span class="line">         &#125;</span><br><span class="line"><span class="addition">+#ifdef GGML_USE_CUBLAS</span></span><br><span class="line"><span class="addition">+        ggml_free_cublas();</span></span><br><span class="line"><span class="addition">+#endif</span></span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+<h1 id="decide-where-to-run"><a class="markdownIt-Anchor" href="#decide-where-to-run"></a> Decide where to run</h1>
+<p>How to choose the libraries</p>
+<h2 id="apple-metal"><a class="markdownIt-Anchor" href="#apple-metal"></a> Apple Metal</h2>
+<p>Apple</p>
+<h2 id="nvidia-cuda"><a class="markdownIt-Anchor" href="#nvidia-cuda"></a> Nvidia CUDA</h2>
+<p>NVIDIA</p>
+<h2 id="amd-rocm"><a class="markdownIt-Anchor" href="#amd-rocm"></a> AMD ROCm</h2>
+<p>AMD</p>
+<h1 id="web-service-and-client"><a class="markdownIt-Anchor" href="#web-service-and-client"></a> Web service and client</h1>
+<p>In <code>server</code>, <code>api</code></p>
+<h1 id="other-utilities"><a class="markdownIt-Anchor" href="#other-utilities"></a> Other utilities</h1>
+<p>auth, cmd, format, parser, progress, readline</p>
+<h2 id="format-module"><a class="markdownIt-Anchor" href="#format-module"></a> <code>format</code> module</h2>
+<h2 id="openai-api-wrapper"><a class="markdownIt-Anchor" href="#openai-api-wrapper"></a> OpenAI API wrapper</h2>
+<p>openai model</p>
+<h1 id="conclusion"><a class="markdownIt-Anchor" href="#conclusion"></a> Conclusion</h1>
+<p>At the end, I would end up with a simple figure for the <code>ollama</code> architecture:</p>
+<img src="/2024/03/24/Ollama/ollama.drawio.svg" title="ollama arch">
+<p>I would say as well: <code>ollama</code> is a thin but smart enough wrapper of <code>llama.cpp</code>.<br>
+Although it still has a few drawbacks, we still need as many these kinds of wrappers as possible, to make the life easier for any end-users.</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2024/03/24/Ollama/" title="On the architecture of ollama" target="_blank" rel="external">https://blog.inoki.cc/2024/03/24/Ollama/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Computer Scientist</small></a></h3>
+        <div>Ph.D in Computer Science, major in Embedded System and AI.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+      <!-- Blog post bottom bar -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="9214609149" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2024/02/18/Explaining-the-SDXL-latent-space/" title="【译】解释 SDXL 的隐空间"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2024/03/24/Ollama/';
+        
+        this.page.identifier = 'Ollama';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>

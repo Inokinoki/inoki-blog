@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sun, 18 Feb 2024 02:42:15 GMT</pubDate>
+    <pubDate>Sat, 30 Mar 2024 00:11:22 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>On the architecture of ollama</title>
+      <link>https://blog.inoki.cc/2024/03/24/Ollama/</link>
+      <guid>https://blog.inoki.cc/2024/03/24/Ollama/</guid>
+      <pubDate>Sun, 24 Mar 2024 15:34:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;Recently, I took a chance to explore &lt;code&gt;ollama&lt;/code&gt; project, because I want to enable the support of my AMD graphic card (with a
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2024/03/24/Ollama/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>【译】解释 SDXL 的隐空间</title>
@@ -419,27 +440,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>EFI 启动项管理器——双系统启动神器，安全解决你的多系统启动难题</title>
-      <link>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/</link>
-      <guid>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/</guid>
-      <pubDate>Thu, 09 Dec 2021 20:34:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;你是否遇到过这样的问题？在电脑上安装多个系统：在安装好 FreeBSD 后，发现 Windows 启动不见了；在安装好 Windows 后，发现启动 Linux 用的 Grub 启动不见了。虽然用 refind 这种启动器可以部分解决这个问题，但有时候 Windows
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/#disqus_thread</comments>
     </item>
     
   </channel>
