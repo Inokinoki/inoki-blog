@@ -145,9 +145,9 @@ build() {
 }
 ```
 
-After the build by `cmake`, it will make a `libext_server` dynamic library (`.dll` on Windows, `.so` on Linux/BSD, and `.dylib` on macOS). The library contains the compiled code from `examples/server` under `llama.cpp` (`examples/server/libext_server.a`), command and core code of `llama.cpp` - `common/libcommoa.a` and `libllama.a`.
+After the build by `cmake`, it will make a `libext_server` dynamic library (`.dll` on Windows, `.so` on Linux/BSD, and `.dylib` on macOS). The library contains the compiled code from `examples/server` under `llama.cpp` (`examples/server/libext_server.a`), command and core code of `llama.cpp` - `common/libcommoa.a` and `libllama.a`. They will be embedded into the main go program to facilite the distribution, as "payloads" of the executable.
 
-Finally, it compresses the generated library:
+Finally, it compresses the payloads to make the executable smaller:
 
 ```shell
 compress_libs() {
@@ -176,8 +176,9 @@ The most important parts for `ollama` to pilot `llama.cpp` are:
 
 1. In `ext_server`, the wrapper implementations provides the functions that `ollama` can call, such as `llama_server_init` to init an `llama.cpp` instance, `llama_server_completion` to complete a chat, or `llama_server_embedding` to compute the embeddings for texts.
 2. An extra makefile (`CMakeLists`) is also contained in `ext_server`, to build the code with the `llama.cpp/examples/server` example as a library. It can then be loaded by `dyn_ext_server` code under `llm`, to serve with the `llama.cpp` instance.
-3. The calls to the functions in `ext_server` carry the "payloads", which are defined in the `payload_*` files under `llm` directory. In general, the requests and responses are passed in JSON format, and contains more structural information. They are defined in such as `ggml.go` (decribing the models) and `llama.go` (describing the different requests and responses).
-4. To dynamically manage the `llama.cpp` instances, `ollama` provides some patches to the original `llama.cpp`.
+3. The libraries are embedded into the go program using [go embed package](https://pkg.go.dev/embed), and extract during the runtime.
+4. Besides, the calls to the functions in `ext_server` carry the some parameters defined in `llm` directory. In general, the requests and responses are passed in JSON format, and contains more structural information. They are defined in such as `ggml.go` (decribing the models) and `llama.go` (describing the different requests and responses).
+5. To dynamically manage the `llama.cpp` instances, `ollama` provides some patches to the original `llama.cpp`.
 
 Let's study them one by one.
 
@@ -250,7 +251,7 @@ After calling `dyn_llama_server_start`, the `llama.cpp` server created from a dy
 
 ### Prediction
 
-When `ollama` receives a prediction request, it calls `Predict` on a `dynExtServer` instance. This function is able to formats the request into a payload (will see this later), and calls a C function, `dyn_llama_server_completion`, for start the prediction:
+When `ollama` receives a prediction request, it calls `Predict` on a `dynExtServer` instance. This function is able to formats the request (will see this later), and calls a C function, `dyn_llama_server_completion`, for start the prediction:
 
 ```c
 inline void dyn_llama_server_completion(struct dynamic_llama_server s,
@@ -276,7 +277,7 @@ It also relies on the convenient call to `dyn_llama_server_completion_next_resul
 
 ### Others
 
-The other calls are similar as well. You can find them in `llm/dyn_ext_server.go` and `llm/dyn_ext_server.c`.
+The other calls are similar as well. You can find them in `llm/dyn_ext_server.go` and `llm/dyn_ext_server.c`, such as `dyn_llama_server_tokenize`, `dyn_llama_server_detokenize` for tokenization or detokenization, and `dyn_llama_server_embedding` for computing the embeddings.
 
 ## 2. `llama.cpp` as a server for `ollama`
 
@@ -322,14 +323,14 @@ void llama_server_init(ext_server_params *sparams, ext_server_resp_t *err) {
   /* ... */
     llama_backend_init();
     llama_numa_init(params.numa);
-
+  /* ... */
   if (!llama->load_model(params)) { 
     // an error occurred that was not thrown
     err->id = -1;
     snprintf(err->msg, err->msg_len, "error loading model %s", params.model.c_str());
     return;
   }
-
+  /* ... */
     llama->initialize();
   /* ... */
 }
@@ -378,12 +379,40 @@ It sets some callbacks for the task processing, and starts an event loop in a ne
 
 More detailed implementations of such C functions can be found in the same file, i.e. `llm/ext_server/ext_server.cpp`.
 
-## 3. Payloads
+## 3. Embed libraries as payloads
 
+Then, let's explore how the payloads are done.
 
+In the go files with `payload_*` prefix, we can see the choice of `ollama`. For instance, there is two lines to embed every `ext_server` libraries with different variants in `llm/payload_linux.go`:
 
+```go
+//go:embed llama.cpp/build/linux/*/*/lib/*
+var libEmbed embed.FS
+```
 
-## 4. Patches
+All the built libraries under `llama.cpp/build/linux/*/*/lib/` are embedded as payloads using a [filesystem like interface](https://pkg.go.dev/embed#hdr-File_Systems). So that `ollama` can access them like reading and writing in a filesystem.
+
+During the initialization of `ollama`, `Init` in `llm/payload_common.go` will call `nativeInit`:
+
+```go
+func Init() error {
+	return nativeInit()
+}
+```
+
+It mainly works on extracting the dynamic libraries from the file system to a temporary location, and check driver access permission if applicable:
+
+```go
+libs, err := extractDynamicLibs(payloadsDir, "llama.cpp/build/*/*/*/lib/*")
+/* ... */
+err := verifyDriverAccess()
+```
+
+After the extraction, `ollama` is able to format the library path (`libPath` used in the `dyn_init` function in the [External server](#1-external-server) subsection). The way to choose the running environment and the matching library will be presented in the [Decide where to run](#decide-where-to-run) section.
+
+## 4. Formatted request and response
+
+## 5. Patches
 
 For example, the following patch exports `ggml_free_cublas` and call it to release the instance:
 ```patch
