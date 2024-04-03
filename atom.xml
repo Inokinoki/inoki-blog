@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2024-03-30T00:11:22.027Z</updated>
+  <updated>2024-04-03T17:39:48.075Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://blog.inoki.cc/2024/03/24/Ollama/"/>
     <id>https://blog.inoki.cc/2024/03/24/Ollama/</id>
     <published>2024-03-24T15:34:00.000Z</published>
-    <updated>2024-03-30T00:11:22.027Z</updated>
+    <updated>2024-04-03T17:39:48.075Z</updated>
     
     <summary type="html">
     
@@ -50,7 +50,7 @@
     <link href="https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/"/>
     <id>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/</id>
     <published>2024-02-18T03:57:50.000Z</published>
-    <updated>2024-03-30T00:11:21.999Z</updated>
+    <updated>2024-04-03T17:39:48.043Z</updated>
     
     <summary type="html">
     
@@ -70,9 +70,9 @@
       <category term="Stable Diffusion" scheme="https://blog.inoki.cc/categories/AI/Stable-Diffusion/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="AI" scheme="https://blog.inoki.cc/tags/AI/"/>
     
@@ -87,7 +87,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/</id>
     <published>2023-09-14T23:42:00.000Z</published>
-    <updated>2024-03-30T00:11:21.983Z</updated>
+    <updated>2024-04-03T17:39:48.023Z</updated>
     
     <summary type="html">
     
@@ -111,13 +111,13 @@
       <category term="硬件" scheme="https://blog.inoki.cc/categories/%E7%A1%AC%E4%BB%B6/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="硬件" scheme="https://blog.inoki.cc/tags/%E7%A1%AC%E4%BB%B6/"/>
     
       <category term="USB" scheme="https://blog.inoki.cc/tags/USB/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
   </entry>
   
@@ -126,7 +126,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/</id>
     <published>2023-09-14T23:22:00.000Z</published>
-    <updated>2024-03-30T00:11:21.983Z</updated>
+    <updated>2024-04-03T17:39:48.023Z</updated>
     
     <summary type="html">
     
@@ -150,13 +150,13 @@
       <category term="硬件" scheme="https://blog.inoki.cc/categories/%E7%A1%AC%E4%BB%B6/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="硬件" scheme="https://blog.inoki.cc/tags/%E7%A1%AC%E4%BB%B6/"/>
     
       <category term="USB" scheme="https://blog.inoki.cc/tags/USB/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
   </entry>
   
@@ -165,7 +165,7 @@
     <link href="https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/"/>
     <id>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</id>
     <published>2023-09-13T23:22:00.000Z</published>
-    <updated>2024-03-30T00:11:21.983Z</updated>
+    <updated>2024-04-03T17:39:48.023Z</updated>
     
     <summary type="html">
     
@@ -189,13 +189,13 @@
       <category term="硬件" scheme="https://blog.inoki.cc/categories/%E7%A1%AC%E4%BB%B6/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="硬件" scheme="https://blog.inoki.cc/tags/%E7%A1%AC%E4%BB%B6/"/>
     
       <category term="USB" scheme="https://blog.inoki.cc/tags/USB/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
   </entry>
   
@@ -204,7 +204,7 @@
     <link href="https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/"/>
     <id>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/</id>
     <published>2023-09-06T23:22:00.000Z</published>
-    <updated>2024-03-30T00:11:21.983Z</updated>
+    <updated>2024-04-03T17:39:48.023Z</updated>
     
     <summary type="html">
     
@@ -228,13 +228,13 @@
       <category term="硬件" scheme="https://blog.inoki.cc/categories/%E7%A1%AC%E4%BB%B6/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="硬件" scheme="https://blog.inoki.cc/tags/%E7%A1%AC%E4%BB%B6/"/>
     
       <category term="USB" scheme="https://blog.inoki.cc/tags/USB/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
   </entry>
   
@@ -243,7 +243,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-3/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/</id>
     <published>2023-08-22T12:34:00.000Z</published>
-    <updated>2024-03-30T00:11:22.003Z</updated>
+    <updated>2024-04-03T17:39:48.043Z</updated>
     
     <summary type="html">
     
@@ -264,9 +264,9 @@
       <category term="Hardware" scheme="https://blog.inoki.cc/categories/Hardware/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="Hardware" scheme="https://blog.inoki.cc/tags/Hardware/"/>
     
@@ -279,7 +279,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-2/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</id>
     <published>2023-08-22T00:34:00.000Z</published>
-    <updated>2024-03-30T00:11:22.003Z</updated>
+    <updated>2024-04-03T17:39:48.043Z</updated>
     
     <summary type="html">
     
@@ -300,9 +300,9 @@
       <category term="Hardware" scheme="https://blog.inoki.cc/categories/Hardware/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="Hardware" scheme="https://blog.inoki.cc/tags/Hardware/"/>
     
@@ -315,7 +315,7 @@
     <link href="https://blog.inoki.cc/2023/08/20/History-of-ARM-1/"/>
     <id>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</id>
     <published>2023-08-20T20:34:00.000Z</published>
-    <updated>2024-03-30T00:11:22.003Z</updated>
+    <updated>2024-04-03T17:39:48.043Z</updated>
     
     <summary type="html">
     
@@ -336,9 +336,9 @@
       <category term="Hardware" scheme="https://blog.inoki.cc/categories/Hardware/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="Hardware" scheme="https://blog.inoki.cc/tags/Hardware/"/>
     
@@ -351,7 +351,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/"/>
     <id>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</id>
     <published>2023-04-30T13:20:00.000Z</published>
-    <updated>2024-03-30T00:11:22.047Z</updated>
+    <updated>2024-04-03T17:39:48.095Z</updated>
     
     <summary type="html">
     
@@ -371,9 +371,9 @@
       <category term="Android" scheme="https://blog.inoki.cc/categories/Linux/Android/"/>
     
     
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
       <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
     
@@ -388,7 +388,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/"/>
     <id>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</id>
     <published>2023-04-30T11:20:00.000Z</published>
-    <updated>2024-03-30T00:11:22.047Z</updated>
+    <updated>2024-04-03T17:39:48.095Z</updated>
     
     <summary type="html">
     
@@ -408,9 +408,9 @@
       <category term="Android" scheme="https://blog.inoki.cc/categories/Linux/Android/"/>
     
     
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
       <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
     
@@ -425,7 +425,7 @@
     <link href="https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/"/>
     <id>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</id>
     <published>2023-04-29T12:20:00.000Z</published>
-    <updated>2024-03-30T00:11:22.047Z</updated>
+    <updated>2024-04-03T17:39:48.095Z</updated>
     
     <summary type="html">
     
@@ -445,9 +445,9 @@
       <category term="Android" scheme="https://blog.inoki.cc/categories/Linux/Android/"/>
     
     
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
       <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
     
@@ -462,7 +462,7 @@
     <link href="https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/"/>
     <id>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/</id>
     <published>2023-04-29T11:20:00.000Z</published>
-    <updated>2024-03-30T00:11:22.047Z</updated>
+    <updated>2024-04-03T17:39:48.095Z</updated>
     
     <summary type="html">
     
@@ -482,9 +482,9 @@
       <category term="Android" scheme="https://blog.inoki.cc/categories/Linux/Android/"/>
     
     
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
       <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
     
@@ -499,7 +499,7 @@
     <link href="https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/"/>
     <id>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/</id>
     <published>2023-04-25T11:20:00.000Z</published>
-    <updated>2024-03-30T00:11:22.051Z</updated>
+    <updated>2024-04-03T17:39:48.099Z</updated>
     
     <summary type="html">
     
@@ -521,9 +521,9 @@
       <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
     
     
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
       <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
     
@@ -538,7 +538,7 @@
     <link href="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/"/>
     <id>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</id>
     <published>2022-05-09T20:48:00.000Z</published>
-    <updated>2024-03-30T00:11:22.047Z</updated>
+    <updated>2024-04-03T17:39:48.095Z</updated>
     
     <summary type="html">
     
@@ -575,7 +575,7 @@
     <link href="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/"/>
     <id>https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/</id>
     <published>2022-02-22T06:57:50.000Z</published>
-    <updated>2024-03-30T00:11:22.023Z</updated>
+    <updated>2024-04-03T17:39:48.067Z</updated>
     
     <summary type="html">
     
@@ -612,7 +612,7 @@
     <link href="https://blog.inoki.cc/2022/02/08/My-2021/"/>
     <id>https://blog.inoki.cc/2022/02/08/My-2021/</id>
     <published>2022-02-08T16:54:40.000Z</published>
-    <updated>2024-03-30T00:11:22.023Z</updated>
+    <updated>2024-04-03T17:39:48.067Z</updated>
     
     <summary type="html">
     
@@ -641,7 +641,7 @@
     <link href="https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/"/>
     <id>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/</id>
     <published>2021-12-17T13:47:00.000Z</published>
-    <updated>2024-03-30T00:11:22.051Z</updated>
+    <updated>2024-04-03T17:39:48.099Z</updated>
     
     <summary type="html">
     
@@ -671,7 +671,7 @@
     <link href="https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/"/>
     <id>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/</id>
     <published>2021-12-16T15:34:00.000Z</published>
-    <updated>2024-03-30T00:11:22.027Z</updated>
+    <updated>2024-04-03T17:39:48.071Z</updated>
     
     <summary type="html">
     
@@ -689,9 +689,9 @@
       <category term="Modern C++" scheme="https://blog.inoki.cc/categories/Modern-C/"/>
     
     
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
     
       <category term="C++" scheme="https://blog.inoki.cc/tags/C/"/>
     
@@ -702,7 +702,7 @@
     <link href="https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/"/>
     <id>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/</id>
     <published>2021-12-14T15:49:00.000Z</published>
-    <updated>2024-03-30T00:11:22.051Z</updated>
+    <updated>2024-04-03T17:39:48.095Z</updated>
     
     <summary type="html">
     
@@ -722,9 +722,9 @@
       <category term="Driver" scheme="https://blog.inoki.cc/categories/Linux/Driver/"/>
     
     
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
     
       <category term="驱动" scheme="https://blog.inoki.cc/tags/%E9%A9%B1%E5%8A%A8/"/>
     
