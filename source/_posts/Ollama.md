@@ -494,7 +494,7 @@ index 7800c6e7..be30db23 100644
 
 With all the extra modules and modifications on `llama.cpp`, `ollama` is thus able to start a llama server as needed, dynamically choosing the hardware with the supports of different hardware in the different compiled dynamic libraries (see [Build system](#build-system)). After running the llama server, the extra modules provided by `ollama` allow to send the completion request, and retrieve the replies later.
 
-Until now, it should be clear with a global view on the `ollama` architecture behind (or we can call it backend, as usual). For the details in the backend, readers can check the source code since they are objective to be changed very often. After all, `ollama` is under active development.
+Til now, it should be clear with a global view on the `ollama` architecture behind (or we can call it backend, as usual). For the details in the backend, readers can check the source code since they are subjective to be changed very often. After all, `ollama` is under active development.
 
 There are still a few mysteries:
 
@@ -505,73 +505,149 @@ The following sections might be the answers for these questions.
 
 # Decide where to run
 
-Let's go back to
-`libPath`
-How to choose the libraries
+Let's go back to the dynamic libraries and `libPath` argument in the `dyn_init`, mentioned in [Dynamic library loading and server starting](#dynamic-library-loading-and-server-starting). We have already known in [Embed libraries as payloads](#3-embed-libraries-as-payloads), that `ollama` will extract the embedded dynamic libraries to a temporary directory, and load them by formating and passing `libPath` to `dyn_init`.
 
-There is a call in `newDynExtServer` to `gpu.UpdatePath(filepath.Dir(library))`
+The question is: how `ollama` chooses the libraries by passing the different `libPath` argument?
+
+The `libPath` is passed as the first argument `library` in the `newDynExtServer` function implemented in `llm/dyn_ext_server.go`. It is updated on Windows by a call to `gpu.UpdatePath(filepath.Dir(library))`, in order to add the parent directory to the `PATH`. So that the dynamic libraries can be loaded seamlessly. However, it's not necessary to do so on Linux or macOS.
+
+Therefore, we can know that the `libPath` here is already a full path to the dynamic library files. Let's then check where the `libPath` is generated.
+
+A simple search gives a response in the `newLlmServer` function under `llm/llm.go`:
 
 ```go
-// getDynLibs returns an ordered list of LLM libraries to try, starting with the best
-func getDynLibs(gpuInfo gpu.GpuInfo) []string {
-	// Short circuit if we know we're using the default built-in (darwin only)
-	if gpuInfo.Library == "default" {
-		return []string{"default"}
+err2 := fmt.Errorf("unable to locate suitable llm library")
+for _, dynLib := range dynLibs {
+	srv, err := newDynExtServer(dynLib, model, adapters, projectors, opts)
+	if err == nil {
+		return srv, nil
 	}
-	// TODO - temporary until we have multiple CPU variations for Darwin
-	// Short circuit on darwin with metal only
-	if len(availableDynLibs) == 1 {
-		if _, onlyMetal := availableDynLibs["metal"]; onlyMetal {
-			return []string{availableDynLibs["metal"]}
-		}
-	}
+	slog.Warn(fmt.Sprintf("Failed to load dynamic library %s  %s", dynLib, err))
+	err2 = err
+}
+```
 
-	exactMatch := ""
-	dynLibs := []string{}
-	altDynLibs := []string{}
-	requested := gpuInfo.Library
-	if gpuInfo.Variant != "" {
-		requested += "_" + gpuInfo.Variant
+It iterates the `dynLibs` to call `newDynExtServer` function. Once there is one successful loading, it returns the llama server instance.
+
+At the beginning of `newLlmServer`, the `dynLibs` are generally retrieved in `getDynLibs` function, which is a ordered list of dynamic libraries to try:
+
+```go
+func newLlmServer(gpuInfo gpu.GpuInfo, model string, adapters, projectors []string, opts api.Options) (LLM, error) {
+	dynLibs := getDynLibs(gpuInfo)
+	/* ... */
+}
+```
+
+The order is a preference, which takes the GPU information from `gpuInfo gpu.GpuInfo`. It is not forcely to be the "GPU information", it can also indicate to use a certain CPU variant. I think `ollama` team may change it very soon.
+
+In general, the returned `dynLibs` are from a key-value mapping `availableDynLibs` in `llm/payload_common.go`. It is generated in `nativeInit`, after the extraction of all the dynamic libraries:
+
+```go
+func nativeInit() error {
+	/* ... */
+	/* Extract dynamic libraries in temporary directory */
+	/* ... */
+	for _, lib := range libs {
+		// The last dir component is the variant name
+		variant := filepath.Base(filepath.Dir(lib))
+		availableDynLibs[variant] = lib
 	}
-	// Try to find an exact match
+	/* ... */
+}
+```
+
+The key is the last component of the full path, except the library file name. For example, it is be `cpu`, `cpu_avx`, `cpu_avx2`, `cuda_v11.3` and `rocm_v5.7` on my PC. And the values are certainly the full path.
+
+We can first take a look at the general processing in `getDynLibs` function(which is implemented in `llm/payload_common.go`), by ignoring some platform-specific cases.
+
+The first step is to find the exact match of the requested one from the "GPU information":
+
+```go
+exactMatch := ""
+dynLibs := []string{}
+altDynLibs := []string{}
+requested := gpuInfo.Library
+if gpuInfo.Variant != "" {
+	requested += "_" + gpuInfo.Variant
+}
+// Try to find an exact match
+for cmp := range availableDynLibs {
+	if requested == cmp {
+		exactMatch = cmp
+		dynLibs = []string{availableDynLibs[cmp]}
+		break
+	}
+}
+```
+
+It makes a `requested` string by `Library` with an appended `Variant` from the "GPU information". If there is one matched extacly to the `requested` string, the first library path in `dynLibs` would be the path to the requested library. The first library path will also be the first to try during the loading.
+
+It then tries GPU libraries with not exact matches (where there could be some version mismatches, etc.):
+
+```go
+// Then for GPUs load alternates and sort the list for consistent load ordering
+if gpuInfo.Library != "cpu" {
 	for cmp := range availableDynLibs {
-		if requested == cmp {
-			exactMatch = cmp
-			dynLibs = []string{availableDynLibs[cmp]}
-			break
+		if gpuInfo.Library == strings.Split(cmp, "_")[0] && cmp != exactMatch {
+			altDynLibs = append(altDynLibs, cmp)
 		}
 	}
-	// Then for GPUs load alternates and sort the list for consistent load ordering
-	if gpuInfo.Library != "cpu" {
-		for cmp := range availableDynLibs {
-			if gpuInfo.Library == strings.Split(cmp, "_")[0] && cmp != exactMatch {
-				altDynLibs = append(altDynLibs, cmp)
-			}
-		}
-		slices.Sort(altDynLibs)
-		for _, altDynLib := range altDynLibs {
-			dynLibs = append(dynLibs, availableDynLibs[altDynLib])
-		}
+	slices.Sort(altDynLibs)
+	for _, altDynLib := range altDynLibs {
+		dynLibs = append(dynLibs, availableDynLibs[altDynLib])
 	}
+}
+```
 
-	// Load up the best CPU variant if not primary requested
-	if gpuInfo.Library != "cpu" {
-		variant := gpu.GetCPUVariant()
-		// If no variant, then we fall back to default
-		// If we have a variant, try that if we find an exact match
-		// Attempting to run the wrong CPU instructions will panic the
-		// process
-		if variant != "" {
-			for cmp := range availableDynLibs {
-				if cmp == "cpu_"+variant {
-					dynLibs = append(dynLibs, availableDynLibs[cmp])
-					break
-				}
+Next, it tries to prioritize the fastest (maybe) CPU variant by calling another utility function `GetCPUVariant`:
+
+```go
+// Load up the best CPU variant if not primary requested
+if gpuInfo.Library != "cpu" {
+	variant := gpu.GetCPUVariant()
+	// If no variant, then we fall back to default
+	// If we have a variant, try that if we find an exact match
+	// Attempting to run the wrong CPU instructions will panic the
+	// process
+	if variant != "" {
+		for cmp := range availableDynLibs {
+			if cmp == "cpu_"+variant {
+				dynLibs = append(dynLibs, availableDynLibs[cmp])
+				break
 			}
-		} else {
-			dynLibs = append(dynLibs, availableDynLibs["cpu"])
 		}
+	} else {
+		dynLibs = append(dynLibs, availableDynLibs["cpu"])
 	}
+}
+```
+
+This utility is defined in `gpu/cpu_common.go`. It detects the CPU extensions on x86 platform:
+
+```go
+func GetCPUVariant() string {
+	if cpu.X86.HasAVX2 {
+		slog.Info("CPU has AVX2")
+		return "avx2"
+	}
+	if cpu.X86.HasAVX {
+		slog.Info("CPU has AVX")
+		return "avx"
+	}
+	slog.Info("CPU does not have vector extensions")
+	// else LCD
+	return ""
+}
+```
+
+The order will give `avx2` as the highest preference, then `avx`, and finally the pure CPU variant.
+
+Finally, it fallbacks to CPU variant if none of the above methods work:
+
+```go
+func getDynLibs(gpuInfo gpu.GpuInfo) []string {
+	/* Apple specific loading */
+	/* ... */
 
 	// Finally, if we didn't find any matches, LCD CPU FTW
 	if len(dynLibs) == 0 {
@@ -582,52 +658,40 @@ func getDynLibs(gpuInfo gpu.GpuInfo) []string {
 }
 ```
 
+The `dynLibs` are then returned for the loading tries.
+
+We can now explore how the "GPU information" `gpuInfo` is generated to make the preference possible. The `New` function in `llm/llm.go` calls `newLlmServer` with the "GPU information" as the first argument. It completes many important works:
+
+1. Open, load and detect the parameters of an LLM.
+2. Load "GPU information": `info := gpu.GetGPUInfo()`.
+3. Check the VRAM and the compatibility of the model to the hardware.
+
+The initial detection is performed in 2. However, it is also possible that the model is marked as incompatible to the model. In this case, it will fallback to the CPU with the fastest variant:
+
 ```go
-func nativeInit() error {
-	payloadsDir, err := gpu.PayloadsDir()
-	if err != nil {
-		return err
-	}
-
-	slog.Info(fmt.Sprintf("Extracting dynamic libraries to %s ...", payloadsDir))
-
-	libs, err := extractDynamicLibs(payloadsDir, "llama.cpp/build/*/*/*/lib/*")
-	if err != nil {
-		if errors.Is(err, payloadMissing) {
-			slog.Info(fmt.Sprintf("%s", payloadMissing))
-			return nil
-		}
-		return err
-	}
-	for _, lib := range libs {
-		// The last dir component is the variant name
-		variant := filepath.Base(filepath.Dir(lib))
-		availableDynLibs[variant] = lib
-	}
-
-	if err := verifyDriverAccess(); err != nil {
-		return err
-	}
-
-	// Report which dynamic libraries we have loaded to assist troubleshooting
-	variants := make([]string, len(availableDynLibs))
-	i := 0
-	for variant := range availableDynLibs {
-		variants[i] = variant
-		i++
-	}
-	slog.Info(fmt.Sprintf("Dynamic LLM libraries %v", variants))
-	slog.Debug("Override detection logic by setting OLLAMA_LLM_LIBRARY")
-
-	return nil
-}
+info.Library = "cpu"
+info.Variant = gpu.GetCPUVariant()
 ```
 
-
+Let's only concentrate on 2, to see what happened in the `GetGPUInfo` function.
 
 ## Apple Metal
 
-Apple
+Let's start with the most special platform. Apple macOS platform, including the XNU kernel and the userspace, is usually called `darwin`.
+
+```go
+// Short circuit if we know we're using the default built-in (darwin only)
+if gpuInfo.Library == "default" {
+	return []string{"default"}
+}
+// TODO - temporary until we have multiple CPU variations for Darwin
+// Short circuit on darwin with metal only
+if len(availableDynLibs) == 1 {
+	if _, onlyMetal := availableDynLibs["metal"]; onlyMetal {
+		return []string{availableDynLibs["metal"]}
+	}
+}
+```
 
 ## Nvidia CUDA
 
