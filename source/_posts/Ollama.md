@@ -529,7 +529,7 @@ for _, dynLib := range dynLibs {
 
 It iterates the `dynLibs` to call `newDynExtServer` function. Once there is one successful loading, it returns the llama server instance.
 
-At the beginning of `newLlmServer`, the `dynLibs` are generally retrieved in `getDynLibs` function, which is a ordered list of dynamic libraries to try:
+At the beginning of `newLlmServer`, the `dynLibs` are generally retrieved in `getDynLibs` function, which is an ordered list of dynamic libraries to try:
 
 ```go
 func newLlmServer(gpuInfo gpu.GpuInfo, model string, adapters, projectors []string, opts api.Options) (LLM, error) {
@@ -794,21 +794,91 @@ func rocmDynLibPresent() bool {
 
 # Web service and client
 
-In `server`, `api`
+Let's then take a look at the "frontend"! There is indeed no so-called frontend in `ollama`. Instead, it provides a bench of Web APIs, just like most of the other LLM services.
+
+The basic Web APIs are implemented in `server`, mostly in the `server/routes.go` module. The full API endpoints are avaialble at [GitHub](https://github.com/ollama/ollama/blob/main/docs/api.md). Here, we also just take the chat completion endpoint as a quick example to build the view from the API endpoint to what we have seen above. The endpoint is defined as:
+
+```
+r.POST("/api/chat", ChatHandler)
+```
+
+where `ChatHandler` is a callback to handle the request. It creates and parses the request in a `var req api.ChatRequest` struct. The handler will do a lot of things such as loading the model, to make sure that the prediction is possible.
+
+When everything is ready, the most important thing is here:
+
+```go
+// Start prediction
+predictReq := llm.PredictOpts{
+	Prompt:  prompt,
+	Format:  req.Format,
+	Images:  images,
+	Options: opts,
+}
+if err := loaded.runner.Predict(c.Request.Context(), predictReq, fn); err != nil {
+	ch <- gin.H{"error": err.Error()}
+}
+```
+
+It prepares the prediction request with the prompt (user inputs, prompts, etc.), images, and other options. Then it calls the `Prediction` function of runner, where the runner needs to implement the `LLM` interface under the `llm` module:
+
+```go
+var loaded struct {
+	mu sync.Mutex
+
+	runner llm.LLM
+
+	expireAt    time.Time
+	expireTimer *time.Timer
+
+	*Model
+	*api.Options
+}
+```
+
+The `LLM` interface is:
+
+```go
+type LLM interface {
+	Predict(context.Context, PredictOpts, func(PredictResult)) error
+	Embedding(context.Context, string) ([]float64, error)
+	Encode(context.Context, string) ([]int, error)
+	Decode(context.Context, []int) (string, error)
+	Close()
+}
+```
+
+And the implementation of `Predict` is from `dynExtServer` described in [Prediction](#prediction) section. It will then call `dyn_llama_server_completion` and thus request the started llama server from one of the dynamic libraries.
+
+So, we have the link now.
+
+## Go API of Ollama
+
+Intrinsically, `ollama` provides a wrapper in Go under `api`. Users can leverage it to call the Web APIs easier. Indeed, `ollama` itself also uses the Go wrapper to provide the actual frontend - a terminal UI.
+
+There are also Python and JavaScript/TypeScript bindings:
+- [https://github.com/ollama/ollama-python](https://github.com/ollama/ollama-python)
+- [https://github.com/ollama/ollama-js](https://github.com/ollama/ollama-js)
 
 ## OpenAI API wrapper
 
-openai model
+Desipte of the native API endpoints, `ollama` also provides an OpenAI API-compatible (well, partially compatible) endpoint in `server/routes.go`:
+
+```
+// Compatibility endpoints
+r.POST("/v1/chat/completions", openai.Middleware(), ChatHandler)
+```
+
+It's indeed a convertor from OpenAI requests to `ollama` native requests, and vice-versa for responses. You can check `openai/openai.go` if it's interesting to you.
 
 # Other utilities
 
-auth, cmd, format, parser, progress, readline
+The terminal UI leverages the Go wrapper of the Web API endpoints to provide a terminal-based conversations. It needs some utilities such as `readline` to interact with the user inputs in the terminal, and `progress` to show the progress.
 
-## `format` module
+There are also the `auth` for API endpoint authentification, `cmd` for cli commands provider, `format` for unit conversion, `parser` for model file parsing, etc. Check them in detail as your wish. This post has been long enough and just concentrate on the overall architecture of `ollama`. I am also eager to seeing the other posts about it ;)
 
 # Conclusion
 
-At the end, I would end up with a simple figure for the `ollama` architecture:
+Finally, I would end up with a simple figure for the `ollama` architecture before runtime:
 
 {% asset_img ollama.drawio.svg ollama arch %}
 
