@@ -1,8 +1,9 @@
 ---
 title: On the architecture of ollama
-date: 2024-03-24 15:34:00
+date: 2024-04-15 15:34:00
 tags:
 - LLM
+- ollama
 categories:
 - [AI, LLM]
 ---
@@ -679,6 +680,8 @@ Let's only concentrate on 2, to see what happened in the `GetGPUInfo` function.
 
 Let's start with the most special platform. Apple macOS platform, including the XNU kernel and the userspace, is usually called `darwin`.
 
+In the aformentioned `getDynLibs`, the Darwin detection is very simple:
+
 ```go
 // Short circuit if we know we're using the default built-in (darwin only)
 if gpuInfo.Library == "default" {
@@ -693,9 +696,34 @@ if len(availableDynLibs) == 1 {
 }
 ```
 
-## Nvidia CUDA
+It uses `default` library according to the "GPU information", or just use `metal`. The `gpu.GetGPUInfo()` is in `gpu/gpu_darwin.go`, as simple as possible:
 
-NVIDIA
+```go
+func GetGPUInfo() GpuInfo {
+	mem, _ := getCPUMem()
+	if runtime.GOARCH == "amd64" {
+		return GpuInfo{
+			Library: "cpu",
+			Variant: GetCPUVariant(),
+			memInfo: mem,
+		}
+	}
+	return GpuInfo{
+		Library: "metal",
+		memInfo: mem,
+	}
+}
+```
+
+We can see that, it gets the memory information and detects whether `ollama` is running on the Intel x86_64/amd64 platform. If so, it just uses the CPU with the fastest extension. Otherwise, only ARM Mac can leverage the Metal API to accelerate.
+
+From my best know, the AMD graphic cards on Intel Mac should also have Metal support. But it will not be used on Intel Mac by `ollama`. Probably, it's just due to the outdated drivers or the outdated graphic cards itself.
+
+## Nvidia CUDA and AMD ROCm
+
+We then check the general detection of Nvidia and AMD GPUs, since they are kind of coupled together in `ollama`.
+
+The implementation is in `gpu/gpu.go`:
 
 ```go
 func GetGPUInfo() GpuInfo {
@@ -715,60 +743,10 @@ func GetGPUInfo() GpuInfo {
 
 	var memInfo C.mem_info_t
 	resp := GpuInfo{}
-	if gpuHandles.nvml != nil && (cpuVariant != "" || runtime.GOARCH != "amd64") {
-		C.nvml_check_vram(*gpuHandles.nvml, &memInfo)
-		if memInfo.err != nil {
-			slog.Info(fmt.Sprintf("[nvidia-ml] error looking up NVML GPU memory: %s", C.GoString(memInfo.err)))
-			C.free(unsafe.Pointer(memInfo.err))
-		} else if memInfo.count > 0 {
-			// Verify minimum compute capability
-			var cc C.nvml_compute_capability_t
-			C.nvml_compute_capability(*gpuHandles.nvml, &cc)
-			if cc.err != nil {
-				slog.Info(fmt.Sprintf("[nvidia-ml] error looking up NVML GPU compute capability: %s", C.GoString(cc.err)))
-				C.free(unsafe.Pointer(cc.err))
-			} else if cc.major > CudaComputeMin[0] || (cc.major == CudaComputeMin[0] && cc.minor >= CudaComputeMin[1]) {
-				slog.Info(fmt.Sprintf("[nvidia-ml] NVML CUDA Compute Capability detected: %d.%d", cc.major, cc.minor))
-				resp.Library = "cuda"
-			} else {
-				slog.Info(fmt.Sprintf("[nvidia-ml] CUDA GPU is too old. Falling back to CPU mode. Compute Capability detected: %d.%d", cc.major, cc.minor))
-			}
-		}
-	} else if gpuHandles.cudart != nil && (cpuVariant != "" || runtime.GOARCH != "amd64") {
-		C.cudart_check_vram(*gpuHandles.cudart, &memInfo)
-		if memInfo.err != nil {
-			slog.Info(fmt.Sprintf("[cudart] error looking up CUDART GPU memory: %s", C.GoString(memInfo.err)))
-			C.free(unsafe.Pointer(memInfo.err))
-		} else if memInfo.count > 0 {
-			// Verify minimum compute capability
-			var cc C.cudart_compute_capability_t
-			C.cudart_compute_capability(*gpuHandles.cudart, &cc)
-			if cc.err != nil {
-				slog.Info(fmt.Sprintf("[cudart] error looking up CUDA compute capability: %s", C.GoString(cc.err)))
-				C.free(unsafe.Pointer(cc.err))
-			} else if cc.major > CudaComputeMin[0] || (cc.major == CudaComputeMin[0] && cc.minor >= CudaComputeMin[1]) {
-				slog.Info(fmt.Sprintf("[cudart] CUDART CUDA Compute Capability detected: %d.%d", cc.major, cc.minor))
-				resp.Library = "cuda"
-			} else {
-				slog.Info(fmt.Sprintf("[cudart] CUDA GPU is too old. Falling back to CPU mode. Compute Capability detected: %d.%d", cc.major, cc.minor))
-			}
-		}
-	} else {
-		AMDGetGPUInfo(&resp)
-		if resp.Library != "" {
-			return resp
-		}
-	}
-	if resp.Library == "" {
-		C.cpu_check_ram(&memInfo)
-		resp.Library = "cpu"
-		resp.Variant = cpuVariant
-	}
-	if memInfo.err != nil {
-		slog.Info(fmt.Sprintf("error looking up CPU memory: %s", C.GoString(memInfo.err)))
-		C.free(unsafe.Pointer(memInfo.err))
-		return resp
-	}
+	/* Getting the actual GPU information */
+	/* ... */
+	/* Fallback to CPU if no GPU detected */
+	/* ... */
 
 	resp.DeviceCount = uint32(memInfo.count)
 	resp.FreeMemory = uint64(memInfo.free)
@@ -777,20 +755,60 @@ func GetGPUInfo() GpuInfo {
 }
 ```
 
-## AMD ROCm
+The first block calls `initGPUHandles` to define the GPU libraries to search, in order to use them to get the GPU information. For Nvidia, it detects `nvml.dll` for discrete graphic cards on Windows, `libnvidia-ml.so` on Linux, and `libcudart.so*` on some special devices, such as [Jetson family](https://www.nvidia.com/fr-fr/autonomous-machines/embedded-systems/) (thanks to [a recent PR](https://github.com/ollama/ollama/pull/2279)).
 
-AMD
+The second block detects the CPU variant, it somehow requires at least `AVX` variant from the CPU to enable the GPU support.
+
+It then checks the handles and uses the libraries to lookup GPUs accordingly.
+
+For Nvidia discrete GPUs:
 
 ```go
-func rocmDynLibPresent() bool {
-	for dynLibName := range availableDynLibs {
-		if strings.HasPrefix(dynLibName, "rocm") {
-			return true
+if gpuHandles.nvml != nil && (cpuVariant != "" || runtime.GOARCH != "amd64") {
+	C.nvml_check_vram(*gpuHandles.nvml, &memInfo)
+	if memInfo.err != nil {
+		slog.Info(fmt.Sprintf("[nvidia-ml] error looking up NVML GPU memory: %s", C.GoString(memInfo.err)))
+		C.free(unsafe.Pointer(memInfo.err))
+	} else if memInfo.count > 0 {
+		// Verify minimum compute capability
+		var cc C.nvml_compute_capability_t
+		C.nvml_compute_capability(*gpuHandles.nvml, &cc)
+		if cc.err != nil {
+			slog.Info(fmt.Sprintf("[nvidia-ml] error looking up NVML GPU compute capability: %s", C.GoString(cc.err)))
+			C.free(unsafe.Pointer(cc.err))
+		} else if cc.major > CudaComputeMin[0] || (cc.major == CudaComputeMin[0] && cc.minor >= CudaComputeMin[1]) {
+			slog.Info(fmt.Sprintf("[nvidia-ml] NVML CUDA Compute Capability detected: %d.%d", cc.major, cc.minor))
+			resp.Library = "cuda"
+		} else {
+			slog.Info(fmt.Sprintf("[nvidia-ml] CUDA GPU is too old. Falling back to CPU mode. Compute Capability detected: %d.%d", cc.major, cc.minor))
 		}
 	}
-	return false
 }
 ```
+
+It calls a C function `nvml_check_vram` implemented in `gpu/gpu_info_nvml.c` to get the VRAM. If found one usable device, it will also check the compute capability through `nvml_compute_capability`, to make sure that the device is usable.
+
+This design has prevented me from using ZLUDA to run an LLM through `ollama` on my AMD graphic card on Windows. Because ZLUDA was marking this function as unimplemented at that time. However, there is already the support to my AMD graphic card. I do not need the ZLUDA anymore now.
+
+I just would just skip the `Cudart` support because it's not a common case. Let's go through the recent exciting AMD support now!
+
+The code in `GetGPUInfo` for AMD is very short:
+
+```go
+else {
+	AMDGetGPUInfo(&resp)
+	if resp.Library != "" {
+		return resp
+	}
+}
+```
+
+You may notice that it is an "else". So, along with the "if" clause, AMD will be tried, only if Nvidia handle is not detected. This would cause an issue: when there are Nvidia GPU libraries installed, however no GPU detected or the detected GPUs are not compatible, AMD graphic cards would never be detected as well. I opened an [issue for this](https://github.com/ollama/ollama/issues/3172).
+
+OK, let go back to the `GetGPUInfo`. If Nvidia graphic card is detected, the `Library` in the "GPU information" will be set to `cuda`. For AMD, it will be `rocm`.
+
+So, if the detection succeeded, the "GPU information" will work with the `availableDynLibs` to prioritize the library paths for `cuda_*` or `rocm_*` variants.
+That unveils how the GPUs are detected and potentially used when creating the llama servers from a bunch of dynamic libraries.
 
 # Web service and client
 
