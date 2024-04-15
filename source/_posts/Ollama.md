@@ -412,9 +412,58 @@ After the extraction, `ollama` is able to format the library path (`libPath` use
 
 ## 4. Formatted request and response
 
+Let's then go back to the function arguments used in the C functions.
+
+```go
+inline void dyn_llama_server_init(struct dynamic_llama_server s,
+                                           ext_server_params_t *sparams,
+                                           ext_server_resp_t *err) {
+  s.llama_server_init(sparams, err);
+}
+
+inline void dyn_llama_server_completion(struct dynamic_llama_server s,
+                                                 const char *json_req,
+                                                 ext_server_resp_t *resp) {
+  s.llama_server_completion(json_req, resp);
+}
+```
+
+In their function signatures, we can see the function arguments they use: `ext_server_params_t` in `dyn_llama_server_init`, and a `json_req` byte array in `dyn_llama_server_completion`.
+
+The `ext_server_params_t` argument is a C struct carrying the configurations to launch the llama server, which will be interpreted later in `llm/ext_server/server.cpp`(We do not expand this part due to shortage of pages).
+
+Meanwhile, the `json_req` for the completion call is used as follows, in `llm/ext_server/ext_server.cpp`:
+
+```c
+void llama_server_completion(const char *json_req, ext_server_resp_t *resp) {
+  assert(llama != NULL && json_req != NULL && resp != NULL);
+  resp->id = -1;
+  resp->msg[0] = '\0';
+  try {
+    if (shutting_down) {
+      throw std::runtime_error("server shutting down");
+    }
+    json data = json::parse(json_req);
+    resp->id = llama->queue_tasks.get_new_id();
+    llama->queue_results.add_waiting_task_id(resp->id);
+    llama->request_completion(resp->id, data, false, false, -1);
+  } catch (std::exception &e) {
+    snprintf(resp->msg, resp->msg_len, "exception %s", e.what());
+  } catch (...) {
+    snprintf(resp->msg, resp->msg_len, "Unknown exception during completion");
+  }
+}
+```
+
+Indeed, it contains the completion request in json format, including the prompt, temperature, etc. We can see that `llama_server_completion` creates a task for it and return the task ID through `resp` in the normal path. Otherwise, it formats the error information for returning.
+
+If you are interested in its detailed format, please check `llm/dyn_ext_server.go` file.
+
 ## 5. Patches
 
-For example, the following patch exports `ggml_free_cublas` and call it to release the instance:
+There are a few extra modifications on the original version of `llama.cpp`, to adapt the usage of multiple llama servers in `ollama`.
+
+For example, the following patch exports `ggml_free_cublas` and call it to release an instance of llama server:
 ```patch
 diff --git a/examples/server/server.cpp b/examples/server/server.cpp
 index 7800c6e7..be30db23 100644
@@ -440,6 +489,19 @@ index 7800c6e7..be30db23 100644
 +#endif
      }
 ```
+
+## Wrap them up
+
+With all the extra modules and modifications on `llama.cpp`, `ollama` is thus able to start a llama server as needed, dynamically choosing the hardware with the supports of different hardware in the different compiled dynamic libraries (see [Build system](#build-system)). After running the llama server, the extra modules provided by `ollama` allow to send the completion request, and retrieve the replies later.
+
+Until now, it should be clear with a global view on the `ollama` architecture behind (or we can call it backend, as usual). For the details in the backend, readers can check the source code since they are objective to be changed very often. After all, `ollama` is under active development.
+
+There are still a few mysteries:
+
+- backend side: how `ollama` knows which hardware and which dynamic libraries to choose?
+- frontend side: which kind of frontend does it provide?
+
+The following sections might be the answers for these questions.
 
 # Decide where to run
 
@@ -686,5 +748,5 @@ At the end, I would end up with a simple figure for the `ollama` architecture:
 
 {% asset_img ollama.drawio.svg ollama arch %}
 
-I would say as well: `ollama` is a thin but smart enough wrapper of `llama.cpp`.
-Although it still has a few drawbacks, we still need as many these kinds of wrappers as possible, to make the life easier for any end-users.
+I would say as well: `ollama` is a thin (maybe not so thin) but smart enough wrapper of `llama.cpp`.
+Although it still has a few drawbacks, we really need as many these kinds of wrappers as possible, to make the life easier for any end-users.
