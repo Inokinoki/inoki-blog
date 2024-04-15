@@ -16,7 +16,7 @@ To me, `ollama` is a thin but smart enough wrapper to [llama.cpp](https://github
 This post assumes that you are able to read golang code or some other C-like code. For special points in the code, I would give some brief descriptions or metaphores for better understanding.
 
 <!-- ToC -->
-In this post, I will
+In this post, I will first give the project structure of `ollama`. Then, the core architecture and implementations around `llama.cpp` along with the build systems will be decipted. Next, I will describe how `ollama` chooses the device (hardware in general) to run an LLM. Finally, the web service, client and the utilities along with the other parts will be introduced, to finish the post.
 
 # Porject structure
 
