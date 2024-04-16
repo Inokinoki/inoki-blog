@@ -12,14 +12,14 @@ Recently, I took a chance to explore `ollama` project, because I want to enable 
 
 This feature is already merged and released in [ollama v0.1.29](https://github.com/ollama/ollama/releases/tag/v0.1.29). To avoid missing the details and the things I 've learnt, this blog is in charge of noting the architecture of `ollama` for myself. 
 
-To me, `ollama` is a thin but smart enough wrapper to [llama.cpp](https://github.com/ggerganov/llama.cpp). **It is really end-user friendly, and provides a web interface and a cli interface, in order to run and interact with a lot of Large Language Models (LLMs).** Indeed, in most cases, it's `llama.cpp` who loads and runs the models, and `ollama` just "pilots" (yes, I use a term that AI generations are famaliar with) the `llama.cpp`. I will give a discussion about this part later.
+To me, `ollama` is a thin but smart enough wrapper to [llama.cpp](https://github.com/ggerganov/llama.cpp). **It is really end-user friendly, and provides a web interface and a cli interface, in order to run and interact with a lot of Large Language Models (LLMs).** Indeed, in most cases, it's `llama.cpp` who loads and runs the models, and `ollama` just "pilots" (yes, I use a term that AI generations are familiar with) the `llama.cpp`. I will give a discussion about this part later.
 
-This post assumes that you are able to read golang code or some other C-like code. For special points in the code, I would give some brief descriptions or metaphores for better understanding.
+This post assumes that you are able to read golang code or some other C-like code. For special points in the code, I would give some brief descriptions or metaphors for better understanding.
 
 <!-- ToC -->
-In this post, I will first give the project structure of `ollama`. Then, the core architecture and implementations around `llama.cpp` along with the build systems will be decipted. Next, I will describe how `ollama` chooses the device (hardware in general) to run an LLM. Finally, the web service, client and the utilities along with the other parts will be introduced, to finish the post.
+In this post, I will first give the project structure of `ollama`. Then, the core architecture and implementations around `llama.cpp` along with the build systems will be described. Next, I will describe how `ollama` chooses the device (hardware in general) to run an LLM. Finally, the web service, client and the utilities along with the other parts will be introduced, to finish the post.
 
-# Porject structure
+# Project structure
 
 You can get [the source code of ollama on GitHub](https://github.com/ollama/ollama). The project is mainly written in Golang. Here is a table of brief descriptions for each directory:
 
@@ -28,11 +28,11 @@ You can get [the source code of ollama on GitHub](https://github.com/ollama/olla
 | ----------- | ------------------------------------ |
 | api         | Client API lib in go                 |
 | app         | Desktop application (mainly a tray)  |
-| auth        | Authentification                     |
+| auth        | Authentication                       |
 | cmd         | Commands and handlers                |
 | docs        | Documentations                       |
 | examples    | Examples to use ollama               |
-| format      | Utitility to format units and time   |
+| format      | Utility to format units and time     |
 | gpu         | GPU and acceleration detection       |
 | llm         | Implementations to run llama.cpp     |
 | macapp      | Desktop application for Mac          |
@@ -52,7 +52,7 @@ Let's first start by an introduction to the core, `llama.cpp`.
 
 The `llama.cpp` is included as a submodule in `ollama`. You can find it in `llm` directory. There are also the needed files around it in the same directory. We will see them in details later.
 
-The `llama.cpp` project [itself](https://github.com/ggerganov/llama.cpp) is an Open Soource library for the inference of Meta's LLaMA model in pure C/C++, at very first. And it is extended to run more models, such as Mistral, and Google Gemma (supported very recently). It leverages the capability of [ggml](https://github.com/ggerganov/ggml), another project created by the same author, to run it natively on different platforms (compared to Python project).
+The `llama.cpp` project [itself](https://github.com/ggerganov/llama.cpp) is an Open Source library for the inference of Meta's LLaMA model in pure C/C++, at very first. And it is extended to run more models, such as Mistral, and Google Gemma (supported very recently). It leverages the capability of [ggml](https://github.com/ggerganov/ggml), another project created by the same author, to run it natively on different platforms (compared to Python project).
 
 ## Supported backends
 
@@ -86,7 +86,7 @@ However, `ollama` itself is a go project leveraging the build system provided by
 - `cmake` builds `llama.cpp` with a few files from `ollama.cpp`, to pilot and provide interfaces;
 - go build systems compile, link and pack the rest parts to make an application and cli of `ollama`.
 
-Aparts from pure go code, the go build systems need `cgo` to build some C-family code as well. There are examples in `llm` directory (`dyn_ext_server.c` file to load and provide interfaces) and `gpu` directory (`gpu_info_cuda.c`, `gpu_info_rocm.c` and `gpu_info_darwin.m` are C or Objective-C implementations to detect GPUs).
+Apart from pure go code, the go build systems need `cgo` to build some C-family code as well. There are examples in `llm` directory (`dyn_ext_server.c` file to load and provide interfaces) and `gpu` directory (`gpu_info_cuda.c`, `gpu_info_rocm.c` and `gpu_info_darwin.m` are C or Objective-C implementations to detect GPUs).
 
 The go build system in `ollama` also run the commands to call `cmake` for the `llama.cpp` building, by leveraging [go generate](https://go.dev/blog/generate). This work lays in the `llm/generate` directory, e.g. on Linux:
 
@@ -146,7 +146,7 @@ build() {
 }
 ```
 
-After the build by `cmake`, it will make a `libext_server` dynamic library (`.dll` on Windows, `.so` on Linux/BSD, and `.dylib` on macOS). The library contains the compiled code from `examples/server` under `llama.cpp` (`examples/server/libext_server.a`), command and core code of `llama.cpp` - `common/libcommoa.a` and `libllama.a`. They will be embedded into the main go program to facilite the distribution, as "payloads" of the executable.
+After the build by `cmake`, it will make a `libext_server` dynamic library (`.dll` on Windows, `.so` on Linux/BSD, and `.dylib` on macOS). The library contains the compiled code from `examples/server` under `llama.cpp` (`examples/server/libext_server.a`), command and core code of `llama.cpp` - `common/libcommoa.a` and `libllama.a`. They will be embedded into the main go program to facilitate the distribution, as "payloads" of the executable.
 
 Finally, it compresses the payloads to make the executable smaller:
 
@@ -178,7 +178,7 @@ The most important parts for `ollama` to pilot `llama.cpp` are:
 1. In `ext_server`, the wrapper implementations provides the functions that `ollama` can call, such as `llama_server_init` to init an `llama.cpp` instance, `llama_server_completion` to complete a chat, or `llama_server_embedding` to compute the embeddings for texts.
 2. An extra makefile (`CMakeLists`) is also contained in `ext_server`, to build the code with the `llama.cpp/examples/server` example as a library. It can then be loaded by `dyn_ext_server` code under `llm`, to serve with the `llama.cpp` instance.
 3. The libraries are embedded into the go program using [go embed package](https://pkg.go.dev/embed), and extract during the runtime.
-4. Besides, the calls to the functions in `ext_server` carry the some parameters defined in `llm` directory. In general, the requests and responses are passed in JSON format, and contains more structural information. They are defined in such as `ggml.go` (decribing the models) and `llama.go` (describing the different requests and responses).
+4. Besides, the calls to the functions in `ext_server` carry the some parameters defined in `llm` directory. In general, the requests and responses are passed in JSON format, and contains more structural information. They are defined in such as `ggml.go` (describing the models) and `llama.go` (describing the different requests and responses).
 5. To dynamically manage the `llama.cpp` instances, `ollama` provides some patches to the original `llama.cpp`.
 
 Let's study them one by one.
@@ -264,7 +264,7 @@ inline void dyn_llama_server_completion(struct dynamic_llama_server s,
 
 As you see, it's also a direct call to the function loaded from one of the dynamic libraries built on top of `llama.cpp`.
 
-A really good design in this part is the stream-like response, thanks to the `fn func(PredictResult)` argument in the `Predict` function. It is a callback function, which allows to send continously the responses as soon as it gets:
+A really good design in this part is the stream-like response, thanks to the `fn func(PredictResult)` argument in the `Predict` function. It is a callback function, which allows to send continuously the responses as soon as it gets:
 
 ```go
 if p.Content != "" {
@@ -311,7 +311,7 @@ They are able to set different build and link flags for different platforms (`da
 
 Let's then go to check the C functions used in `ollama`, from the dynamic library. As two examples, we start with `llama_server_init` and `llama_server_start`.
 
-Their impementations are located in `llm/ext_server/ext_server.cpp`, which is set as a library target named by `ext_server` in `llm/ext_server/CMakeLists.txt`. During the building the target, this file will be compiled with `llama.cpp` example server together. The compiled result is one of the dynamic libraries that we mentioned.
+Their implementations are located in `llm/ext_server/ext_server.cpp`, which is set as a library target named by `ext_server` in `llm/ext_server/CMakeLists.txt`. During the building the target, this file will be compiled with `llama.cpp` example server together. The compiled result is one of the dynamic libraries that we mentioned.
 
 As a result, the C functions in `ext_server.cpp` can be called from `ollama`, and are able to leverage the functions in `llama.cpp`. It actually acts as a bridge between the two projects, and **makes the example server in `llama.cpp` a server for `ollama`**.
 
@@ -337,7 +337,7 @@ void llama_server_init(ext_server_params *sparams, ext_server_resp_t *err) {
 }
 ```
 
-For example, it calls `llama_backend_init` to initalize the backend (could be AVX, CUDA, etc), and `llama_numa_init` to initilize the NUMA (if exists). Then it calls the `load_model` function in the server context with the given parameters to load the model and finilize the initialization with `initialize` function.
+For example, it calls `llama_backend_init` to initialize the backend (could be AVX, CUDA, etc), and `llama_numa_init` to initialize the NUMA (if exists). Then it calls the `load_model` function in the server context with the given parameters to load the model and finalize the initialization with `initialize` function.
 
 In case of error, the error messages are formatted to the `err` argument to return and be processed in go parts.
 
@@ -539,7 +539,7 @@ func newLlmServer(gpuInfo gpu.GpuInfo, model string, adapters, projectors []stri
 }
 ```
 
-The order is a preference, which takes the GPU information from `gpuInfo gpu.GpuInfo`. It is not forcely to be the "GPU information", it can also indicate to use a certain CPU variant. I think `ollama` team may change it very soon.
+The order is a preference, which takes the GPU information from `gpuInfo gpu.GpuInfo`. It is not forced to be the "GPU information", it can also indicate to use a certain CPU variant. I think `ollama` team may change it very soon.
 
 In general, the returned `dynLibs` are from a key-value mapping `availableDynLibs` in `llm/payload_common.go`. It is generated in `nativeInit`, after the extraction of all the dynamic libraries:
 
@@ -680,7 +680,7 @@ Let's only concentrate on 2, to see what happened in the `GetGPUInfo` function.
 
 Let's start with the most special platform. Apple macOS platform, including the XNU kernel and the userspace, is usually called `darwin`.
 
-In the aformentioned `getDynLibs`, the Darwin detection is very simple:
+In the aforementioned `getDynLibs`, the Darwin detection is very simple:
 
 ```go
 // Short circuit if we know we're using the default built-in (darwin only)
@@ -814,7 +814,7 @@ That unveils how the GPUs are detected and potentially used when creating the ll
 
 Let's then take a look at the "frontend"! There is indeed no so-called frontend in `ollama`. Instead, it provides a bench of Web APIs, just like most of the other LLM services.
 
-The basic Web APIs are implemented in `server`, mostly in the `server/routes.go` module. The full API endpoints are avaialble at [GitHub](https://github.com/ollama/ollama/blob/main/docs/api.md). Here, we also just take the chat completion endpoint as a quick example to build the view from the API endpoint to what we have seen above. The endpoint is defined as:
+The basic Web APIs are implemented in `server`, mostly in the `server/routes.go` module. The full API endpoints are available at [GitHub](https://github.com/ollama/ollama/blob/main/docs/api.md). Here, we also just take the chat completion endpoint as a quick example to build the view from the API endpoint to what we have seen above. The endpoint is defined as:
 
 ```
 r.POST("/api/chat", ChatHandler)
@@ -879,7 +879,7 @@ There are also Python and JavaScript/TypeScript bindings:
 
 ## OpenAI API wrapper
 
-Desipte of the native API endpoints, `ollama` also provides an OpenAI API-compatible (well, partially compatible) endpoint in `server/routes.go`:
+Despite of the native API endpoints, `ollama` also provides an OpenAI API-compatible (well, partially compatible) endpoint in `server/routes.go`:
 
 ```
 // Compatibility endpoints
@@ -892,7 +892,7 @@ It's indeed a convertor from OpenAI requests to `ollama` native requests, and vi
 
 The terminal UI leverages the Go wrapper of the Web API endpoints to provide a terminal-based conversations. It needs some utilities such as `readline` to interact with the user inputs in the terminal, and `progress` to show the progress.
 
-There are also the `auth` for API endpoint authentification, `cmd` for cli commands provider, `format` for unit conversion, `parser` for model file parsing, etc. Check them in detail as your wish. This post has been long enough and just concentrate on the overall architecture of `ollama`. I am also eager to seeing the other posts about it ;)
+There are also the `auth` for API endpoint authentication, `cmd` for cli commands provider, `format` for unit conversion, `parser` for model file parsing, etc. Check them in detail as your wish. This post has been long enough and just concentrate on the overall architecture of `ollama`. I am also eager to seeing the other posts about it ;)
 
 # Conclusion
 
