@@ -892,13 +892,13 @@ r.POST("/v1/chat/completions", openai.Middleware(), ChatHandler)
 
 # 其他实用程序
 
-终端 UI 利用 Web API 端点的 Go 包装器来提供基于终端的对话。 它需要一些实用程序，例如 `readline` 来与终端中的用户输入进行交互，以及 `progress`来显示进度。
+终端 UI 利用 Web API 端点的 Go 包装器来提供基于终端的对话。 它需要一些实用程序，例如 `readline` 来与终端中的用户输入进行交互，以及 `progress` 来显示进度。
 
-此外，还有用于 API 端点认证的 `auth`，用于cli命令提供者的 `cmd`，用于单位转换的 `format`，用于模型文件解析的 `parser` 等。可以根据您的意愿详细查看源代码。这篇文章已经足够长了，并且只关注 `ollama` 的整体架构。我也希望看到有关它的其他帖子 ;)
+此外，还有用于 API 端点认证的 `auth`，用于cli命令提供者的 `cmd`，用于单位转换的 `format`，用于模型文件解析的 `parser` 等。可以根据您的意愿详细查看源代码。这篇文章已经足够长了，并且只关注 `ollama` 的整体架构。我也希望看到更多的有关它的其他文章 ;)
 
 # 结论
 
-最后，我会在运行前得到一个关于 `ollama` 架构的简单图：
+最后，在结束前，这里给出一个关于 `ollama` 架构的简单图：
 
 {% asset_img ollama.drawio.svg ollama 架构 %}
 
