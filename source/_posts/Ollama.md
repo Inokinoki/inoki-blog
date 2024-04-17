@@ -274,7 +274,7 @@ if p.Content != "" {
 }
 ```
 
-It also relies on the convenient call to `dyn_llama_server_completion_next_result` (althoug it's also a direct call to a loaded C function `llama_server_completion_next_result` from a dynamic library based on `llama.cpp`).
+It also relies on the convenient call to `dyn_llama_server_completion_next_result` (although it's also a direct call to a loaded C function `llama_server_completion_next_result` from a dynamic library based on `llama.cpp`).
 
 ### Others
 
@@ -506,7 +506,7 @@ The following sections might be the answers for these questions.
 
 # Decide where to run
 
-Let's go back to the dynamic libraries and `libPath` argument in the `dyn_init`, mentioned in [Dynamic library loading and server starting](#dynamic-library-loading-and-server-starting). We have already known in [Embed libraries as payloads](#3-embed-libraries-as-payloads), that `ollama` will extract the embedded dynamic libraries to a temporary directory, and load them by formating and passing `libPath` to `dyn_init`.
+Let's go back to the dynamic libraries and `libPath` argument in the `dyn_init`, mentioned in [Dynamic library loading and server starting](#dynamic-library-loading-and-server-starting). We have already known in [Embed libraries as payloads](#3-embed-libraries-as-payloads), that `ollama` will extract the embedded dynamic libraries to a temporary directory, and load them by formatting and passing `libPath` to `dyn_init`.
 
 The question is: how `ollama` chooses the libraries by passing the different `libPath` argument?
 
@@ -581,7 +581,7 @@ for cmp := range availableDynLibs {
 }
 ```
 
-It makes a `requested` string by `Library` with an appended `Variant` from the "GPU information". If there is one matched extacly to the `requested` string, the first library path in `dynLibs` would be the path to the requested library. The first library path will also be the first to try during the loading.
+It makes a `requested` string by `Library` with an appended `Variant` from the "GPU information". If there is one matched exactly to the `requested` string, the first library path in `dynLibs` would be the path to the requested library. The first library path will also be the first to try during the loading.
 
 It then tries GPU libraries with not exact matches (where there could be some version mismatches, etc.):
 
