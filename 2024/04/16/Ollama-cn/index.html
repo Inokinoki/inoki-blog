@@ -31,7 +31,7 @@
 <meta property="og:description" content="最近，我偶然探索了一个名为 ollama 的项目，因为我想让我的 AMD 显卡（拥有不俗的 VRAM - 32G！）在 Windows 上获得支持。Linux 上已经有了基于 AMD ROCm 的支持。由于 ROCm 在 Windows 上的发布，它在 Windows 上也应该是开箱即用的。但是，ollama 阻止我使用它。因此，我尝试了 ZLUDA 和修改 ollama 的代码，以达到我的目的。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://blog.inoki.cc/2024/04/16/Ollama-cn/ollama.drawio.svg">
-<meta property="og:updated_time" content="2024-04-17T00:04:26.387Z">
+<meta property="og:updated_time" content="2024-04-17T00:14:16.307Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ollama 架构解析">
 <meta name="twitter:description" content="最近，我偶然探索了一个名为 ollama 的项目，因为我想让我的 AMD 显卡（拥有不俗的 VRAM - 32G！）在 Windows 上获得支持。Linux 上已经有了基于 AMD ROCm 的支持。由于 ROCm 在 Windows 上的发布，它在 Windows 上也应该是开箱即用的。但是，ollama 阻止我使用它。因此，我尝试了 ZLUDA 和修改 ollama 的代码，以达到我的目的。">
@@ -380,7 +380,7 @@
 		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 8.2k(words)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 34(minutes)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 35(minutes)</span>
 	
 
       </div>
@@ -696,10 +696,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// Compatibility endpoints</span><br><span class="line">r.POST(&quot;/v1/chat/completions&quot;, openai.Middleware(), ChatHandler)</span><br></pre></td></tr></table></figure>
 <p>它实际上是从 OpenAI 请求到 <code>ollama</code> 本机请求的转换器，反之亦然。 如果您感兴趣，可以查看 <code>openai/openai.go</code>。</p>
 <h1 id="其他实用程序"><a class="markdownIt-Anchor" href="#其他实用程序"></a> 其他实用程序</h1>
-<p>终端 UI 利用 Web API 端点的 Go 包装器来提供基于终端的对话。 它需要一些实用程序，例如 <code>readline</code> 来与终端中的用户输入进行交互，以及 <code>progress</code>来显示进度。</p>
-<p>此外，还有用于 API 端点认证的 <code>auth</code>，用于cli命令提供者的 <code>cmd</code>，用于单位转换的 <code>format</code>，用于模型文件解析的 <code>parser</code> 等。可以根据您的意愿详细查看源代码。这篇文章已经足够长了，并且只关注 <code>ollama</code> 的整体架构。我也希望看到有关它的其他帖子 😉</p>
+<p>终端 UI 利用 Web API 端点的 Go 包装器来提供基于终端的对话。 它需要一些实用程序，例如 <code>readline</code> 来与终端中的用户输入进行交互，以及 <code>progress</code> 来显示进度。</p>
+<p>此外，还有用于 API 端点认证的 <code>auth</code>，用于cli命令提供者的 <code>cmd</code>，用于单位转换的 <code>format</code>，用于模型文件解析的 <code>parser</code> 等。可以根据您的意愿详细查看源代码。这篇文章已经足够长了，并且只关注 <code>ollama</code> 的整体架构。我也希望看到更多的有关它的其他文章 😉</p>
 <h1 id="结论"><a class="markdownIt-Anchor" href="#结论"></a> 结论</h1>
-<p>最后，我会在运行前得到一个关于 <code>ollama</code> 架构的简单图：</p>
+<p>最后，在结束前，这里给出一个关于 <code>ollama</code> 架构的简单图：</p>
 <img src="/2024/04/16/Ollama-cn/ollama.drawio.svg" title="ollama 架构">
 <p>我仍要说：<code>ollama</code> 是 <code>llama.cpp</code> 的一个薄（也许不是那么薄）但足够智能的封装。<br>
 尽管它仍然有一些缺点，但我们确实需要尽可能多的此类封装，以使最终用户的生活更轻松。</p>
