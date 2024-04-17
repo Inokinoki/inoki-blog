@@ -31,7 +31,7 @@
 <meta property="og:description" content="最近，我偶然探索了一个名为 ollama 的项目，因为我想让我的 AMD 显卡（拥有不俗的 VRAM - 32G！）在 Windows 上获得支持。Linux 上已经有了基于 AMD ROCm 的支持。由于 ROCm 在 Windows 上的发布，它在 Windows 上也应该是开箱即用的。但是，ollama 阻止我使用它。因此，我尝试了 ZLUDA 和修改 ollama 的代码，以达到我的目的。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://blog.inoki.cc/2024/04/16/Ollama-cn/ollama.drawio.svg">
-<meta property="og:updated_time" content="2024-04-17T00:14:16.307Z">
+<meta property="og:updated_time" content="2024-04-17T00:15:14.528Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ollama 架构解析">
 <meta name="twitter:description" content="最近，我偶然探索了一个名为 ollama 的项目，因为我想让我的 AMD 显卡（拥有不俗的 VRAM - 32G！）在 Windows 上获得支持。Linux 上已经有了基于 AMD ROCm 的支持。由于 ROCm 在 Windows 上的发布，它在 Windows 上也应该是开箱即用的。但是，ollama 阻止我使用它。因此，我尝试了 ZLUDA 和修改 ollama 的代码，以达到我的目的。">
@@ -380,7 +380,7 @@
 		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 8.2k(words)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 35(minutes)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 34(minutes)</span>
 	
 
       </div>
@@ -523,7 +523,6 @@
 <p>通过 <code>cmake</code> 编译后，它将生成一个 <code>libext_server</code> 动态链接库（Windows 下为 <code>.dll</code>，Linux/BSD 下为 <code>.so</code>，macOS 下为 <code>.dylib</code>）。该库包含 <code>llama.cpp</code> 下 <code>examples/server</code> 的编译代码（<code>examples/server/libext_server.a</code>）、命令代码和 <code>llama.cpp</code> 的核心代码—— <code>common/libcommoa.a</code> 和 <code>libllama.a</code>。它们将作为可执行文件的&quot;载荷&quot;嵌入主 go 程序，以方便分发。</p>
 <p>最后，它会压缩载荷，使可执行文件更小：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">compress_libs() &#123;</span><br><span class="line">    echo "Compressing payloads to reduce overall binary size..."</span><br><span class="line">    pids=""</span><br><span class="line">    rm -rf $&#123;BUILD_DIR&#125;/lib/*.$&#123;LIB_EXT&#125;*.gz</span><br><span class="line">    for lib in $&#123;BUILD_DIR&#125;/lib/*.$&#123;LIB_EXT&#125;* ; do</span><br><span class="line">        gzip --best -f $&#123;lib&#125; &amp;</span><br><span class="line">        pids+=" $!"</span><br><span class="line">    done</span><br><span class="line">    echo </span><br><span class="line">    for pid in $&#123;pids&#125;; do</span><br><span class="line">        wait $pid</span><br><span class="line">    done</span><br><span class="line">    echo "Finished compression"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>The dynamic library will finally reside under a <code>cpu_avx</code> directory in the build folder. If it builds for the other variants (such as GPUs), they will be in different directories in the build folder.</p>
 <p>动态链接库最终将位于构建文件夹中的 “cpu_avx” 目录下。如果为其他变体（如 GPU）构建，它们将位于构建文件夹中的不同目录下。</p>
 <h1 id="为-llamacpp-领航"><a class="markdownIt-Anchor" href="#为-llamacpp-领航"></a> 为 llama.cpp 领航</h1>
 <p>然后，让我们回到 <code>llm</code> 目录，看看 <code>ollama</code> 中建立在 <code>llama.cpp</code> 基础上的实现。对于 <code>ollama</code> 来说，引导 <code>llama.cpp</code> 的最重要部分是：</p>
