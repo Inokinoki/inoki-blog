@@ -168,8 +168,6 @@ compress_libs() {
 }
 ```
 
-The dynamic library will finally reside under a `cpu_avx` directory in the build folder. If it builds for the other variants (such as GPUs), they will be in different directories in the build folder.
-
 动态链接库最终将位于构建文件夹中的 "cpu_avx" 目录下。如果为其他变体（如 GPU）构建，它们将位于构建文件夹中的不同目录下。
 
 # 为 llama.cpp 领航
