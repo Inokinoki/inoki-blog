@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <script data-ad-client="ca-pub-2713518338457470" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>Ollama 架构解析 | Inoki in the world</title>
+  <meta name="description" content="最近，我偶然探索了一个名为 ollama 的项目，因为我想让我的 AMD 显卡（拥有不俗的 VRAM - 32G！）在 Windows 上获得支持。Linux 上已经有了基于 AMD ROCm 的支持。由于 ROCm 在 Windows 上的发布，它在 Windows 上也应该是开箱即用的。但是，ollama 阻止我使用它。因此，我尝试了 ZLUDA 和修改 ollama 的代码，以达到我的目的。">
+<meta name="keywords" content="翻译,中文,LLM,ollama">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ollama 架构解析">
+<meta property="og:url" content="https://blog.inoki.cc/2024/04/16/Ollama-cn/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="最近，我偶然探索了一个名为 ollama 的项目，因为我想让我的 AMD 显卡（拥有不俗的 VRAM - 32G！）在 Windows 上获得支持。Linux 上已经有了基于 AMD ROCm 的支持。由于 ROCm 在 Windows 上的发布，它在 Windows 上也应该是开箱即用的。但是，ollama 阻止我使用它。因此，我尝试了 ZLUDA 和修改 ollama 的代码，以达到我的目的。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://blog.inoki.cc/2024/04/16/Ollama-cn/ollama.drawio.svg">
+<meta property="og:updated_time" content="2024-04-17T00:04:26.387Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ollama 架构解析">
+<meta name="twitter:description" content="最近，我偶然探索了一个名为 ollama 的项目，因为我想让我的 AMD 显卡（拥有不俗的 VRAM - 32G！）在 Windows 上获得支持。Linux 上已经有了基于 AMD ROCm 的支持。由于 ROCm 在 Windows 上的发布，它在 Windows 上也应该是开箱即用的。但是，ollama 阻止我使用它。因此，我尝试了 ZLUDA 和修改 ollama 的代码，以达到我的目的。">
+<meta name="twitter:image" content="https://blog.inoki.cc/2024/04/16/Ollama-cn/ollama.drawio.svg">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2024/04/16/Ollama-cn/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="/" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Computer Scientist</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/AI/">AI</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/AI/LLM/">LLM</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2024/04/16/Ollama-cn/" class="title">Ollama 架构解析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-04-16T18:03:00.000Z" itemprop="datePublished">2024-04-16</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/AI/">AI</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/AI/LLM/">LLM</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2024/04/15/Ollama/" class="title">On the architecture of ollama</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-04-15T15:34:00.000Z" itemprop="datePublished">2024-04-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/AI/">AI</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/AI/Stable-Diffusion/">Stable Diffusion</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2024/02/18/Explaining-the-SDXL-latent-space/" class="title">【译】解释 SDXL 的隐空间</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-02-18T03:57:50.000Z" itemprop="datePublished">2024-02-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Translation/">Translation</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/Chinese/">Chinese</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/USB/">USB</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/硬件/">硬件</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/09/14/All-about-USB-C-example-circuits/" class="title">【译】关于 USB-C 的一切：示例电路</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-14T23:42:00.000Z" itemprop="datePublished">2023-09-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Translation/">Translation</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Translation/Chinese/">Chinese</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/USB/">USB</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/硬件/">硬件</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2023/09/14/All-about-USB-C-high-speed-interfaces/" class="title">【译】关于 USB-C 的一切：高速接口</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-14T23:22:00.000Z" itemprop="datePublished">2023-09-14</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+<!-- Blog sidebar -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="2343090796" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ABL/" style="font-size: 13.6px;">ABL</a> <a href="/tags/AI/" style="font-size: 13px;">AI</a> <a href="/tags/ARM/" style="font-size: 13.2px;">ARM</a> <a href="/tags/ASIX/" style="font-size: 13.1px;">ASIX</a> <a href="/tags/Aboot/" style="font-size: 13.2px;">Aboot</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Android/" style="font-size: 13.7px;">Android</a> <a href="/tags/Bare-Metal/" style="font-size: 13.1px;">Bare Metal</a> <a href="/tags/Bootloader/" style="font-size: 13.7px;">Bootloader</a> <a href="/tags/Bug/" style="font-size: 13.2px;">Bug</a> <a href="/tags/C/" style="font-size: 13px;">C++</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Cloud-Input/" style="font-size: 13.3px;">Cloud Input</a> <a href="/tags/Computer-Graphics/" style="font-size: 13px;">Computer Graphics</a> <a href="/tags/Craft/" style="font-size: 13.1px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.2px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13.1px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/EDK2/" style="font-size: 13px;">EDK2</a> <a href="/tags/EFI/" style="font-size: 13px;">EFI</a> <a href="/tags/Embedded-System/" style="font-size: 13.4px;">Embedded System</a> <a href="/tags/FFmpeg/" style="font-size: 13.1px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.1px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/Go/" style="font-size: 13.1px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hardware/" style="font-size: 13.2px;">Hardware</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.4px;">IBus</a> <a href="/tags/IME/" style="font-size: 13px;">IME</a> <a href="/tags/IoT/" style="font-size: 13.4px;">IoT</a> <a href="/tags/JTAG/" style="font-size: 13px;">JTAG</a> <a href="/tags/KDE/" style="font-size: 13.1px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.5px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.1px;">KDE Frameworks</a> <a href="/tags/LLM/" style="font-size: 13.1px;">LLM</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.8px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.2px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.4px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.4px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Python/" style="font-size: 13.1px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qemu/" style="font-size: 13px;">Qemu</a> <a href="/tags/Qt/" style="font-size: 13.1px;">Qt</a> <a href="/tags/Raspberry-Pi/" style="font-size: 13.4px;">Raspberry Pi</a> <a href="/tags/Ray-Tracing/" style="font-size: 13px;">Ray Tracing</a> <a href="/tags/Router/" style="font-size: 13.2px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.3px;">SDR</a> <a href="/tags/SDXL/" style="font-size: 13px;">SDXL</a> <a href="/tags/Source-Code/" style="font-size: 13.1px;">Source Code</a> <a href="/tags/Stable-Diffusion/" style="font-size: 13px;">Stable Diffusion</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/USB/" style="font-size: 13.3px;">USB</a> <a href="/tags/Ubuntu/" style="font-size: 13.1px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/Vulkan/" style="font-size: 13px;">Vulkan</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.1px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.1px;">Windows</a> <a href="/tags/XBL/" style="font-size: 13px;">XBL</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/iOS/" style="font-size: 13px;">iOS</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.3px;">ibus-libpinyin</a> <a href="/tags/macOS/" style="font-size: 13px;">macOS</a> <a href="/tags/ollama/" style="font-size: 13.1px;">ollama</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.2px;">private</a> <a href="/tags/sysfs/" style="font-size: 13px;">sysfs</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/硬件/" style="font-size: 13.3px;">硬件</a> <a href="/tags/翻译/" style="font-size: 13.9px;">翻译</a> <a href="/tags/驱动/" style="font-size: 13px;">驱动</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABL/">ABL</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/">AI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ARM/">ARM</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Aboot/">Aboot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bootloader/">Bootloader</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-Graphics/">Computer Graphics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EDK2/">EDK2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EFI/">EFI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IME/">IME</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JTAG/">JTAG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LLM/">LLM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qemu/">Qemu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-Pi/">Raspberry Pi</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray-Tracing/">Ray Tracing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDXL/">SDXL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stable-Diffusion/">Stable Diffusion</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/USB/">USB</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vulkan/">Vulkan</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XBL/">XBL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macOS/">macOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ollama/">ollama</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysfs/">sysfs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">53</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬件/">硬件</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/驱动/">驱动</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/AI/">AI</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/AI/LLM/">LLM</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/AI/Stable-Diffusion/">Stable Diffusion</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/">Computer Graphics</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/Vulkan/">Vulkan</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/EDK2/">EDK2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-Pi/">Raspberry Pi</a><span class="category-list-count">6</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hardware/">Hardware</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/IME/">IME</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/">Inoki Home Made</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/">Qt</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/EFI/">EFI</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">22</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/">Android</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/Bootloader/">Bootloader</a><span class="category-list-count">9</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Driver/">Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Wayland/">Wayland</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/sysfs/">sysfs</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Modern-C/">Modern C++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">19</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">19</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/USB/">USB</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/硬件/">硬件</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Ollama-cn" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Ollama 架构解析
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2024/04/16/Ollama-cn/" class="article-date">
+	  <time datetime="2024-04-16T18:03:00.000Z" itemprop="datePublished">2024-04-16</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/AI/">AI</a>►<a class="article-category-link" href="/categories/AI/LLM/">LLM</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/LLM/">LLM</a>, <a class="article-tag-link" href="/tags/ollama/">ollama</a>, <a class="article-tag-link" href="/tags/中文/">中文</a>, <a class="article-tag-link" href="/tags/翻译/">翻译</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2024/04/16/Ollama-cn/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 8.2k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 34(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>最近，我偶然探索了一个名为 <code>ollama</code> 的项目，因为我想让我的 AMD 显卡（拥有不俗的 VRAM - 32G！）在 Windows 上获得支持。Linux 上已经有了基于 AMD ROCm 的支持。由于 ROCm 在 Windows 上的发布，它在 Windows 上也应该是开箱即用的。但是，<code>ollama</code> 阻止我使用它。因此，我尝试了 ZLUDA 和修改 <code>ollama</code> 的代码，以达到我的目的。</p>
+<p>这个功能已经在 <a href="https://github.com/ollama/ollama/releases/tag/v0.1.29" target="_blank" rel="noopener">ollama v0.1.29</a> 中合并并发布了。为了避免遗漏细节和我学到的东西，本博客负责记录我自己的 <code>ollama</code> 架构。</p>
+<p>在我看来，<code>ollama</code>是<a href="https://github.com/ggerganov/llama.cpp" target="_blank" rel="noopener">llama.cpp</a>的一个精简但足够智能的封装。**它对终端用户非常友好，提供了网络接口和 cli，以便运行多个大型语言模型 (LLM) 并与之交互。**事实上，在大多数情况下，是由<code>llama.cpp</code>加载并运行模型，而<code>ollama</code>只是<code>llama.cpp</code>的&quot;领航员&quot;（是的，我用了熟悉生成式人工智能的人都熟悉的一个词）。稍后会对这部分内容进行讨论。</p>
+<p>这篇文章假定你能够阅读 golang 代码或其他类似 C 语言的代码。对于代码中的关键点，我会给出一些简短的描述或类比，以便帮助更好地理解。</p>
+<p>在这篇文章中，我将首先介绍<code>ollama</code>的项目结构。然后，将介绍围绕<code>llama.cpp</code>的核心架构和实现，以及构建系统。接下来，我将介绍<code>ollama</code>如何选择运行 LLM 的设备（一般指硬件）。最后，将介绍 Web 服务、客户端和实用程序以及其他部分，作为本篇文章的结束。</p>
+<h1 id="项目结构"><a class="markdownIt-Anchor" href="#项目结构"></a> 项目结构</h1>
+<p>你可以在 GitHub 上获取 <a href="https://github.com/ollama/ollama" target="_blank" rel="noopener">ollama 的源代码</a>。该项目主要使用 Golang 编写，下表是每个目录的简要说明：</p>
+<!-- Dir structure -->
+<table>
+<thead>
+<tr>
+<th>目录名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>api</td>
+<td>Go 编写的的客户端 API 库</td>
+</tr>
+<tr>
+<td>app</td>
+<td>桌面应用程序（主要是一个托盘）</td>
+</tr>
+<tr>
+<td>auth</td>
+<td>验证</td>
+</tr>
+<tr>
+<td>cmd</td>
+<td>命令和相关的处理程序</td>
+</tr>
+<tr>
+<td>docs</td>
+<td>文档</td>
+</tr>
+<tr>
+<td>examples</td>
+<td>使用 ollama 的示例</td>
+</tr>
+<tr>
+<td>format</td>
+<td>用于单位和时间的格式处理的工具</td>
+</tr>
+<tr>
+<td>gpu</td>
+<td>GPU 和加速设备的检测</td>
+</tr>
+<tr>
+<td>llm</td>
+<td>用于运行 llama.cpp 的实现</td>
+</tr>
+<tr>
+<td>macapp</td>
+<td>Mac 桌面应用程序</td>
+</tr>
+<tr>
+<td>openai</td>
+<td>用于 ollama 的 OpenAI API 兼容封装</td>
+</tr>
+<tr>
+<td>parser</td>
+<td>模型信息和消息的解析器</td>
+</tr>
+<tr>
+<td>progress</td>
+<td>显示加载进度的实用程序</td>
+</tr>
+<tr>
+<td>readline</td>
+<td>从终端读取输入的实用程序</td>
+</tr>
+<tr>
+<td>scripts</td>
+<td>用于构建和发布的脚本</td>
+</tr>
+<tr>
+<td>server</td>
+<td>Go 编写的 Web 服务实现</td>
+</tr>
+<tr>
+<td>version</td>
+<td>版本信息</td>
+</tr>
+</tbody>
+</table>
+<p>请注意，由于项目正在开发中，这些目录可能随时被更改。</p>
+<h1 id="幕后英雄llamacpp"><a class="markdownIt-Anchor" href="#幕后英雄llamacpp"></a> 幕后英雄：llama.cpp</h1>
+<p>让我们先来介绍一下在 <code>ollama</code> 中运行 LLM 的核心 <code>llama.cpp</code>。</p>
+<p><code>llama.cpp</code> 作为 git 子模块包含在 <code>ollama</code> 中。您可以在 <code>llm</code> 目录中找到它。在同一目录下还有围绕它所需的文件，稍后我们将详细介绍它们。</p>
+<p><code>llama.cpp</code> 项目<a href="https://github.com/ggerganov/llama.cpp" target="_blank" rel="noopener">本身</a>是一个开源库，最开始是用于推断纯 C/C++ 的 Meta LLaMA 模型。它后来被扩展用于运行更多模型，比如 Mistral 和 Google Gemma（最近才支持）。它利用同一作者创建的另一个项目 <a href="https://github.com/ggerganov/ggml" target="_blank" rel="noopener">ggml</a> 的功能，可在不同平台上原生运行（与 Python 项目相比）。</p>
+<h2 id="支持的后端"><a class="markdownIt-Anchor" href="#支持的后端"></a> 支持的后端</h2>
+<p>目前，<code>llama.cpp</code> 通过 <code>ggml</code> 支持的一些推理后端如下：</p>
+<ul>
+<li><code>llama.cpp</code>可运行 x86 上的 <strong>AVX、AVX2 和 AVX512</strong>，或 ARM 上的 <strong>NEON</strong>。</li>
+<li>通过 MPI（如 MPICH 和 OpenMPI），<code>ggml</code> 可以在 CPU 或 CPU 集群上运行模型。</li>
+<li><strong>Apple Metal</strong>集成支持macOS和iOS上的GPU，包括Mac上的GPU和iOS设备或Apple Silicon Mac上的Apple制造的GPU。</li>
+<li>基于BLAS架构的<code>ggml</code>使用了一个古老的开放标准<strong>OpenCL</strong>。</li>
+<li>cuBLAS &quot;支持英伟达™（NVIDIA®）公司的<strong>GPU</strong>。</li>
+<li>最近的<strong>AMD GPU</strong>通过<code>hipBLAS</code>支持，它是<a href="https://www.amd.com/en/products/software/rocm.html" target="_blank" rel="noopener">AMD ROCm</a>的一部分，与<code>cuBLAS</code>的应用程序接口几乎相同。</li>
+<li>最近引起我注意的是 <code>llama.cpp</code> 中的 Vulkan 支持。这项（有些漏洞）支持最初是由 Nomic 通过其 kompute 框架启动的。最近的进展是在 <code>ggml</code> 中直接使用 Vulkan 库的<a href="https://github.com/ggerganov/llama.cpp#vulkan" target="_blank" rel="noopener">实现</a>。</li>
+</ul>
+<p>这些后端允许开发人员运行可在从台式电脑到智能手机等多个平台上运行的 LLM。此外，<code>llama.cpp</code> 还为 Linux（包括 Android Linux）、Windows、macOS 和其他各种操作系统（如 iOS，参见 <a href="https://github.com/ggerganov/whisper.cpp/tree/master/examples/whisper.objc" target="_blank" rel="noopener">whispher.cpp on iOS</a>）甚至 WebAssembly（<a href="https://github.com/ggerganov/whisper.cpp/tree/master/examples/whisper.wasm" target="_blank" rel="noopener">whispher.wasm</a>）提供原生支持。</p>
+<p>因此，<code>ollama</code> 在诞生之初就应支持各种平台和操作系统。</p>
+<h1 id="构建系统"><a class="markdownIt-Anchor" href="#构建系统"></a> 构建系统</h1>
+<p>接下来，让我们看看构建系统，了解 <code>ollama</code> 如何与 <code>llama.cpp</code> 协作。</p>
+<p>C 或 C++ 项目通常使用 <code>cmake</code>（尽管现在有了更多选择）来处理编译、链接等工作。<code>llama.cpp</code> 也是如此：它使用编译定义（或者说 flag）来利用不同的后端。例如</p>
+<ul>
+<li><code>LLAMA_AVX</code>、<code>LLAMA_AVX2</code>、<code>LLAMA_AVX512</code>用于支持 AVX；</li>
+<li>用于 Apple Metal 支持的 <code>LLAMA_METAL</code>；</li>
+<li>用于 NVIDIA CUDA 支持的 <code>LLAMA_CUBLAS</code>；</li>
+<li>以及 <code>LLAMA_HIPBLAS</code> 用于 AMD ROCm 支持。</li>
+</ul>
+<p>不过，<code>ollama</code> 本身是一个 go 项目，利用的是 go 提供的构建系统。这两个构建系统共存，以构建不同的部分：</p>
+<ul>
+<li><code>cmake</code> 用 <code>ollama.cpp</code> 中的一些文件构建 <code>llama.cpp</code>，以进行“领航”并提供接口；</li>
+<li>go 构建系统编译、链接和打包其余部分，以生成 <code>ollama</code> 的应用程序和 cli。</li>
+</ul>
+<p>除了纯 go 代码，go 编译系统还需要 <code>cgo</code> 来编译一些 C 语言代码。在 <code>llm</code> 目录（用于加载和提供接口的 <code>dyn_ext_server.c</code> 文件）和 <code>gpu</code> 目录（用于检测 GPU 的 C 或 Objective-C 实现 <code>gpu_info_cuda.c</code>、<code>gpu_info_rocm.c</code> 和 <code>gpu_info_darwin.m</code>）中有一些例子。</p>
+<p>通过利用 <a href="https://go.dev/blog/generate" target="_blank" rel="noopener">go generate</a>，<code>ollama</code> 中的 go 编译系统还可以运行调用 <code>cmake</code> 的命令来构建 <code>llama.cpp</code>。这项工作位于 <code>llm/generate</code> 目录中，例如在 Linux 上：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">package generate</span><br><span class="line"></span><br><span class="line">//go:generate bash ./gen_linux.sh</span><br></pre></td></tr></table></figure>
+<p><code>llm/generate/generate_darwin.go</code> 告诉 go generate 运行 <code>gen_linux.sh</code> 脚本来构建 <code>llama.cpp</code> 的部分。</p>
+<h2 id="一些适用于不同平台的脚本"><a class="markdownIt-Anchor" href="#一些适用于不同平台的脚本"></a> 一些适用于不同平台的脚本</h2>
+<p>目前有 <code>gen_common.sh</code>、<code>gen_linux.sh</code> 和 <code>gen_darwin.sh</code>，用于在类 Unix 操作系统（如 macOS 和 Linux）上为 <code>ollama</code> 创建 <code>llama.cpp</code>。同时，在 Windows 上使用的是 <code>gen_windows.ps1</code> PowerShell 脚本。</p>
+<p>让我们以在 Linux 上构建支持 AVX 的 <code>llama.cpp</code> 为例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">init_vars</span><br><span class="line">CMAKE_DEFS="$&#123;COMMON_CPU_DEFS&#125; -DLLAMA_AVX=on -DLLAMA_AVX2=off -DLLAMA_AVX512=off -DLLAMA_FMA=off -DLLAMA_F16C=off $&#123;CMAKE_DEFS&#125;"</span><br><span class="line">BUILD_DIR="$&#123;LLAMACPP_DIR&#125;/build/linux/$&#123;ARCH&#125;/cpu_avx"</span><br><span class="line">echo "Building AVX CPU"</span><br><span class="line">build</span><br><span class="line">compress_libs</span><br></pre></td></tr></table></figure>
+<p>前三行初始化变量，为编译做准备。<code>init_vars</code> 调用了 <code>gen_common.sh</code> 中的一个子程序来准备常用变量，例如</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CMAKE_DEFS=""</span><br><span class="line">CMAKE_TARGETS="--target ext_server"</span><br></pre></td></tr></table></figure>
+<p>其中 <code>CMAKE_TARGETS</code> 将把构建目标设置为 <code>ext_server</code>。该目标是一个库，用于从 <code>llama.cpp</code> 为 <code>ollama</code> 提供接口和函数，我们将在下一节讨论它。</p>
+<p>在 <code>CMAKE_DEFS</code> 中，只有 <code>LLAMA_AVX</code> 是启用的。而   <code>COMMON_CPU_DEFS</code> 的定义如下，以构建独立于位置代码的动态库（对于 gcc，它将被转换为 <code>-fpic</code> 标志）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">COMMON_CPU_DEFS="-DCMAKE_POSITION_INDEPENDENT_CODE=on -DLLAMA_NATIVE=off"</span><br></pre></td></tr></table></figure>
+<p>它在终端输出 “Building AVX CPU” 之后，由 <code>build</code> 子程序调用 <code>cmake</code>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">build() &#123;</span><br><span class="line">    cmake -S $&#123;LLAMACPP_DIR&#125; -B $&#123;BUILD_DIR&#125; $&#123;CMAKE_DEFS&#125;</span><br><span class="line">    cmake --build $&#123;BUILD_DIR&#125; $&#123;CMAKE_TARGETS&#125; -j8</span><br><span class="line">    mkdir -p $&#123;BUILD_DIR&#125;/lib/</span><br><span class="line">    g++ -fPIC -g -shared -o $&#123;BUILD_DIR&#125;/lib/libext_server.$&#123;LIB_EXT&#125; \</span><br><span class="line">        $&#123;GCC_ARCH&#125; \</span><br><span class="line">        $&#123;WHOLE_ARCHIVE&#125; $&#123;BUILD_DIR&#125;/examples/server/libext_server.a $&#123;NO_WHOLE_ARCHIVE&#125; \</span><br><span class="line">        $&#123;BUILD_DIR&#125;/common/libcommon.a \</span><br><span class="line">        $&#123;BUILD_DIR&#125;/libllama.a \</span><br><span class="line">        -Wl,-rpath,\$ORIGIN \</span><br><span class="line">        -lpthread -ldl -lm \</span><br><span class="line">        $&#123;EXTRA_LIBS&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过 <code>cmake</code> 编译后，它将生成一个 <code>libext_server</code> 动态链接库（Windows 下为 <code>.dll</code>，Linux/BSD 下为 <code>.so</code>，macOS 下为 <code>.dylib</code>）。该库包含 <code>llama.cpp</code> 下 <code>examples/server</code> 的编译代码（<code>examples/server/libext_server.a</code>）、命令代码和 <code>llama.cpp</code> 的核心代码—— <code>common/libcommoa.a</code> 和 <code>libllama.a</code>。它们将作为可执行文件的&quot;载荷&quot;嵌入主 go 程序，以方便分发。</p>
+<p>最后，它会压缩载荷，使可执行文件更小：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">compress_libs() &#123;</span><br><span class="line">    echo "Compressing payloads to reduce overall binary size..."</span><br><span class="line">    pids=""</span><br><span class="line">    rm -rf $&#123;BUILD_DIR&#125;/lib/*.$&#123;LIB_EXT&#125;*.gz</span><br><span class="line">    for lib in $&#123;BUILD_DIR&#125;/lib/*.$&#123;LIB_EXT&#125;* ; do</span><br><span class="line">        gzip --best -f $&#123;lib&#125; &amp;</span><br><span class="line">        pids+=" $!"</span><br><span class="line">    done</span><br><span class="line">    echo </span><br><span class="line">    for pid in $&#123;pids&#125;; do</span><br><span class="line">        wait $pid</span><br><span class="line">    done</span><br><span class="line">    echo "Finished compression"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The dynamic library will finally reside under a <code>cpu_avx</code> directory in the build folder. If it builds for the other variants (such as GPUs), they will be in different directories in the build folder.</p>
+<p>动态链接库最终将位于构建文件夹中的 “cpu_avx” 目录下。如果为其他变体（如 GPU）构建，它们将位于构建文件夹中的不同目录下。</p>
+<h1 id="为-llamacpp-领航"><a class="markdownIt-Anchor" href="#为-llamacpp-领航"></a> 为 llama.cpp 领航</h1>
+<p>然后，让我们回到 <code>llm</code> 目录，看看 <code>ollama</code> 中建立在 <code>llama.cpp</code> 基础上的实现。对于 <code>ollama</code> 来说，引导 <code>llama.cpp</code> 的最重要部分是：</p>
+<ol>
+<li>在 <code>ext_server</code> 中，包装器实现提供了 <code>ollama</code> 可以调用的函数，例如 <code>llama_server_init</code> 来初始化一个 <code>llama.cpp</code> 实例，<code>llama_server_completion</code> 来完成一次聊天，或者 <code>llama_server_embedding</code> 来计算文本的嵌入。</li>
+<li><code>ext_server</code> 中还包含一个额外的 makefile (<code>CMakeLists</code>)，用于将 <code>llama.cpp/examples/server</code> 示例作为库来构建代码。然后，它可以被 <code>llm</code> 下的 <code>dyn_ext_server</code> 代码加载，与 <code>llama.cpp</code> 实例一起提供服务。</li>
+<li>使用 <a href="https://pkg.go.dev/embed" target="_blank" rel="noopener">go embed package</a> 将库嵌入 go 程序，并在运行时提取。</li>
+<li>此外，调用 <code>ext_server</code> 中的函数时会携带 <code>llm</code> 目录中定义的一些参数。一般来说，请求和响应都以 JSON 格式传递，并包含更多结构信息。它们定义在 <code>ggml.go</code>（描述模型）和 <code>llama.go</code>（描述不同的请求和响应）中。</li>
+<li>为了动态管理 <code>llama.cpp</code> 实例，<code>ollama</code> 为原始的 <code>llama.cpp</code> 提供了一些补丁。</li>
+</ol>
+<p>让我们逐一研究它们。</p>
+<h2 id="1-外部服务器"><a class="markdownIt-Anchor" href="#1-外部服务器"></a> 1. 外部服务器</h2>
+<p>我们首先来看看 <code>ext_server</code>。我们已经知道，动态库是在生成过程中构建的。但如何使用它们呢？</p>
+<p>在 <code>llm/dyn_ext_server.go</code> 中，<code>newDynExtServer</code> 负责加载动态库、初始化 <code>llama.cpp</code> 实例并启动事件循环以接收任何请求并生成响应。</p>
+<h3 id="动态链接库的加载和服务器的启动"><a class="markdownIt-Anchor" href="#动态链接库的加载和服务器的启动"></a> 动态链接库的加载和服务器的启动</h3>
+<p>在 <code>newDynExtServer</code> 中，go 函数会调用一个以 <code>dyn_init</code> 命名的 C 函数来加载动态库。描述和所需函数被加载到 <code>struct_dynamic_llama_server</code> 描述中，并封装在 <code>dynExtServer</code>（一个 go 结构）中。</p>
+<p>然后，它们会被用于另一个 C 函数 <code>dyn_llama_server_init</code>，其中包含运行 <code>llama.cpp</code> 服务器的参数，用于服务器实例初始化。</p>
+<p>如果没有问题，<code>newDynExtServer</code> 将调用初始化过程中的最后一个 C 函数 <code>dyn_llama_server_start</code>。服务器将开始运行，并能接收来自 <code>ollama</code> 的请求。</p>
+<p>上述 C 函数位于 <code>llm/dyn_ext_server.c</code> 中，并在 <code>llm/dyn_ext_server.h</code> 中声明。让我们快速了解一下 <code>dyn_init</code>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dyn_init</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *libPath, struct dynamic_llama_server *s,</span></span></span><br><span class="line"><span class="function"><span class="params">                       <span class="keyword">ext_server_resp_t</span> *err)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>它接收库路径 <code>libPath</code> 作为参数，并通过 C 指针（对于不熟悉 C 的人来说就是内存地址，go 能够像 go 结构体一样处理它们，存储它们并传递给其他 C 函数）返回一个 <code>dynamic_llama_server</code> 实例或一个错误。</p>
+<p><code>dynamic_llama_server</code> 结构能够存储必要的 C 函数地址，以及加载的动态链接库的引用。其定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">dynamic_llama_server</span> &#123;</span></span><br><span class="line">  <span class="keyword">void</span> *handle;</span><br><span class="line">  <span class="keyword">void</span> (*llama_server_init)(<span class="keyword">ext_server_params_t</span> *sparams,</span><br><span class="line">                            <span class="keyword">ext_server_resp_t</span> *err);</span><br><span class="line">  <span class="keyword">void</span> (*llama_server_start)();</span><br><span class="line">  <span class="keyword">void</span> (*llama_server_stop)();</span><br><span class="line">  <span class="keyword">void</span> (*llama_server_completion)(<span class="keyword">const</span> <span class="keyword">char</span> *json_req,</span><br><span class="line">                                  <span class="keyword">ext_server_resp_t</span> *resp);</span><br><span class="line">  <span class="keyword">void</span> (*llama_server_completion_next_result)(<span class="keyword">const</span> <span class="keyword">int</span> task_id,</span><br><span class="line">                                              <span class="keyword">ext_server_task_result_t</span> *result);</span><br><span class="line">  <span class="keyword">void</span> (*llama_server_completion_cancel)(<span class="keyword">const</span> <span class="keyword">int</span> task_id,</span><br><span class="line">                                         <span class="keyword">ext_server_resp_t</span> *err);</span><br><span class="line">  <span class="keyword">void</span> (*llama_server_release_task_result)(<span class="keyword">ext_server_task_result_t</span> *result);</span><br><span class="line">  <span class="keyword">void</span> (*llama_server_tokenize)(<span class="keyword">const</span> <span class="keyword">char</span> *json_req, <span class="keyword">char</span> **json_resp,</span><br><span class="line">                                <span class="keyword">ext_server_resp_t</span> *err);</span><br><span class="line">  <span class="keyword">void</span> (*llama_server_detokenize)(<span class="keyword">const</span> <span class="keyword">char</span> *json_req, <span class="keyword">char</span> **json_resp,</span><br><span class="line">                                  <span class="keyword">ext_server_resp_t</span> *err);</span><br><span class="line">  <span class="keyword">void</span> (*llama_server_embedding)(<span class="keyword">const</span> <span class="keyword">char</span> *json_req, <span class="keyword">char</span> **json_resp,</span><br><span class="line">                                 <span class="keyword">ext_server_resp_t</span> *err);</span><br><span class="line">  <span class="keyword">void</span> (*llama_server_release_json_resp)(<span class="keyword">char</span> **json_resp);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>dyn_init</code> 的核心功能是加载由 <code>libPath</code> 指示的动态链接库，读取符号表，找到所需的 C 函数地址，并将其存储到 <code>dynamic_llama_server</code> 结构的实例中。<code>libPath</code> 可以是以 <code>libext_server</code> 为前缀的已构建动态链接库的路径。这样，基于 <code>llama.cpp</code> 的内置库就可以被 <code>ollama</code> 使用。</p>
+<p>加载后，对 <code>dyn_llama_server_start</code> 和 <code>dyn_llama_server_start</code> 的调用实际上是直接调用动态库中的 C 函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">dyn_llama_server_init</span><span class="params">(struct dynamic_llama_server s,</span></span></span><br><span class="line"><span class="function"><span class="params">                                           <span class="keyword">ext_server_params_t</span> *sparams,</span></span></span><br><span class="line"><span class="function"><span class="params">                                           <span class="keyword">ext_server_resp_t</span> *err)</span> </span>&#123;</span><br><span class="line">  s.llama_server_init(sparams, err);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">dyn_llama_server_start</span><span class="params">(struct dynamic_llama_server s)</span> </span>&#123;</span><br><span class="line">  s.llama_server_start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用 <code>dyn_llama_server_start</code> 后，从动态库创建的 <code>llama.cpp</code> 服务器就可以进行预测了。</p>
+<h3 id="预测"><a class="markdownIt-Anchor" href="#预测"></a> 预测</h3>
+<p>当 <code>ollama</code> 收到预测请求时，它会调用 <code>dynExtServer</code> 实例上的 <code>Predict</code>。该函数能够格式化请求（稍后会看到），并调用 C 函数 <code>dyn_llama_server_completion</code> 开始预测：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">dyn_llama_server_completion</span><span class="params">(struct dynamic_llama_server s,</span></span></span><br><span class="line"><span class="function"><span class="params">                                                 <span class="keyword">const</span> <span class="keyword">char</span> *json_req,</span></span></span><br><span class="line"><span class="function"><span class="params">                                                 <span class="keyword">ext_server_resp_t</span> *resp)</span> </span>&#123;</span><br><span class="line">  s.llama_server_completion(json_req, resp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>正如你所看到的，它也是直接调用从构建在 <code>llama.cpp</code> 上的动态库中加载的函数。</p>
+<p>由于在 <code>Predict</code> 函数中使用了 <code>fn func(PredictResult)</code>参数，这部分的一个非常好的设计就是流式响应。这是一个回调函数，可以在收到响应后立即连续发送：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> p.Content != <span class="string">""</span> &#123;</span><br><span class="line">  fn(PredictResult&#123;</span><br><span class="line">    Content: p.Content,</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它还依赖于对 <code>dyn_llama_server_completion_next_result</code> 的便捷调用（尽管它也是直接调用基于 <code>llama.cpp</code> 的动态库中加载的 C 函数 <code>llama_server_completion_next_result</code>）。</p>
+<h3 id="其他"><a class="markdownIt-Anchor" href="#其他"></a> 其他</h3>
+<p>其他调用也类似。您可以在 <code>llm/dyn_ext_server.go</code> 和 <code>llm/dyn_ext_server.c</code> 中找到它们，例如 <code>dyn_llama_server_tokenize</code>, <code>dyn_llama_server_detokenize</code> 用于 token 化或去 token 化，以及 <code>dyn_llama_server_embedding</code> 用于计算嵌入（embedding）。</p>
+<h2 id="2-llamacpp-作为-ollama-的服务器"><a class="markdownIt-Anchor" href="#2-llamacpp-作为-ollama-的服务器"></a> 2. <code>llama.cpp</code> 作为 <code>ollama</code> 的服务器</h2>
+<p>接下来让我们看一下 C 部分：<code>ollama</code> 说如何使用 <code>llama.cpp</code> 作为 LLM 服务器的。</p>
+<p>在 <code>llm/dyn_ext_server.go</code> 的开头，cgo 的注释中有一些构建注释：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">#cgo CFLAGS: -I$&#123;SRCDIR&#125;/ext_server -I$&#123;SRCDIR&#125;/llama.cpp -I$&#123;SRCDIR&#125;/llama.cpp/common -I$&#123;SRCDIR&#125;/llama.cpp/examples/server</span></span><br><span class="line"><span class="comment">#cgo CFLAGS: -DNDEBUG -DLLAMA_SERVER_LIBRARY=1 -D_XOPEN_SOURCE=600 -DACCELERATE_NEW_LAPACK -DACCELERATE_LAPACK_ILP64</span></span><br><span class="line"><span class="comment">#cgo CFLAGS: -Wmissing-noreturn -Wextra -Wcast-qual -Wno-unused-function -Wno-array-bounds</span></span><br><span class="line"><span class="comment">#cgo CPPFLAGS: -Ofast -Wextra -Wno-unused-function -Wno-unused-variable -Wno-deprecated-declarations</span></span><br><span class="line"><span class="comment">#cgo darwin CFLAGS: -D_DARWIN_C_SOURCE</span></span><br><span class="line"><span class="comment">#cgo darwin CPPFLAGS:  -DGGML_USE_ACCELERATE</span></span><br><span class="line"><span class="comment">#cgo darwin CPPFLAGS: -DGGML_USE_METAL -DGGML_METAL_NDEBUG</span></span><br><span class="line"><span class="comment">#cgo darwin LDFLAGS: -lc++ -framework Accelerate</span></span><br><span class="line"><span class="comment">#cgo darwin LDFLAGS: -framework Foundation -framework Metal -framework MetalKit -framework MetalPerformanceShaders</span></span><br><span class="line"><span class="comment">#cgo linux CFLAGS: -D_GNU_SOURCE</span></span><br><span class="line"><span class="comment">#cgo linux LDFLAGS: -lrt -ldl -lstdc++ -lm</span></span><br><span class="line"><span class="comment">#cgo linux windows LDFLAGS: -lpthread</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">#include &lt;stdlib.h&gt;</span></span><br><span class="line"><span class="comment">#include "dyn_ext_server.h"</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p>它们可以为不同的平台设置不同的编译和链接标志（<code>darwin</code> 用于 macOS，当然 <code>linux</code> 用于 Linux，而 <code>windows</code> 用于 Windows）。这样，cgo 就能找到 C 头文件（现有类型和函数的声明），将 <code>llm/dyn_ext_server.c</code> 与 go 部分编译和链接。</p>
+<p>然后，让我们从动态库中查看 <code>ollama</code> 中使用的 C 函数。作为两个例子，我们从 <code>llama_server_init</code> 和 <code>llama_server_start</code> 开始。</p>
+<p>它们的实现位于 <code>llm/ext_server/ext_server.cpp</code>，在 <code>llm/ext_server/CMakeLists.txt</code>中被设置为以 <code>ext_server</code> 命名的目标库。在构建目标时，该文件将与 <code>llama.cpp</code> 示例服务器一起编译。编译结果就是我们提到的动态链接库之一。</p>
+<p>因此，<code>ext_server.cpp</code> 中的 C 函数可以从 <code>ollama</code> 中调用，并能利用 <code>llama.cpp</code> 中的函数。它实际上是两个项目之间的桥梁，<strong>使 <code>llama.cpp</code> 中的示例服务器成为 <code>ollama</code> 的 LLM 服务器（或称 llama 服务器）</strong>。</p>
+<p>在初始化过程中，<code>llama_server_init</code> 会解析参数，为服务器创建上下文，并调用 <code>llama.cpp</code> 提供的函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_init</span><span class="params">(ext_server_params *sparams, <span class="keyword">ext_server_resp_t</span> *err)</span> </span>&#123;</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">    llama = <span class="keyword">new</span> llama_server_context;</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">    llama_backend_init();</span><br><span class="line">    llama_numa_init(params.numa);</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">  <span class="keyword">if</span> (!llama-&gt;load_model(params)) &#123; </span><br><span class="line">    <span class="comment">// an error occurred that was not thrown</span></span><br><span class="line">    err-&gt;id = <span class="number">-1</span>;</span><br><span class="line">    <span class="built_in">snprintf</span>(err-&gt;msg, err-&gt;msg_len, <span class="string">"error loading model %s"</span>, params.model.c_str());</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">    llama-&gt;initialize();</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>例如，它会调用 <code>llama_backend_init</code> 来初始化后端（可以是 AVX、CUDA 等），调用 <code>llama_numa_init</code> 来初始化 NUMA（如果存在）。然后，它会调用服务器上下文中的 <code>load_model</code> 函数，使用给定参数加载模型，并使用 <code>initialize</code> 函数完成初始化。</p>
+<p>如果出现错误，错误信息将被格式化为 <code>err</code> 参数返回，并在 go 部分进行处理。</p>
+<p>同时，在 <code>llama_server_start</code> 中：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  assert(llama != <span class="literal">NULL</span>);</span><br><span class="line">  <span class="comment">// TODO mutex to protect thread creation</span></span><br><span class="line">  ext_server_thread = <span class="built_in">std</span>::thread([&amp;]() &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      LOG_TEE(<span class="string">"llama server main loop starting\n"</span>);</span><br><span class="line">      ggml_time_init();</span><br><span class="line">      llama-&gt;queue_tasks.on_new_task(<span class="built_in">std</span>::bind(</span><br><span class="line">        &amp;llama_server_context::process_single_task, llama, <span class="built_in">std</span>::placeholders::_1));</span><br><span class="line">      llama-&gt;queue_tasks.on_finish_multitask(<span class="built_in">std</span>::bind(</span><br><span class="line">          &amp;llama_server_context::on_finish_multitask, llama, <span class="built_in">std</span>::placeholders::_1));</span><br><span class="line">      llama-&gt;queue_tasks.on_all_tasks_finished(<span class="built_in">std</span>::bind(</span><br><span class="line">          &amp;llama_server_context::run_on_all_tasks_finished, llama));</span><br><span class="line">      llama-&gt;queue_results.on_multitask_update(<span class="built_in">std</span>::bind(</span><br><span class="line">          &amp;llama_server_queue::update_multitask,</span><br><span class="line">          &amp;llama-&gt;queue_tasks,</span><br><span class="line">          <span class="built_in">std</span>::placeholders::_1,</span><br><span class="line">          <span class="built_in">std</span>::placeholders::_2,</span><br><span class="line">          <span class="built_in">std</span>::placeholders::_3</span><br><span class="line">        ));</span><br><span class="line">      llama-&gt;queue_tasks.start_loop();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (<span class="built_in">std</span>::exception &amp;e) &#123;</span><br><span class="line">      LOG_TEE(<span class="string">"caught exception in llama server main loop: %s\n"</span>, e.what());</span><br><span class="line">    &#125; <span class="keyword">catch</span> (...) &#123;</span><br><span class="line">      LOG_TEE(<span class="string">"caught unknown exception in llama server main loop\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    LOG_TEE(<span class="string">"\nllama server shutting down\n"</span>);</span><br><span class="line">    llama_backend_free();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它为任务处理设置一些回调，并在一个新线程中启动一个事件循环。事件循环负责预测。这样，对 <code>llama_server_start</code> 的调用就会立即返回。</p>
+<p>此类 C 函数的更详细实现可以在同一文件中找到，即 <code>llm/ext_server/ext_server.cpp</code>。</p>
+<h2 id="3-将库作为载荷嵌入"><a class="markdownIt-Anchor" href="#3-将库作为载荷嵌入"></a> 3. 将库作为载荷嵌入</h2>
+<p>然后，让我们来探究一下载荷是如何完成的。</p>
+<p>在以 <code>payload_*</code> 为前缀的 go 文件中，我们可以看到 <code>ollama</code> 的选择。例如，在<code>llm/payload_linux.go</code>中，有两行嵌入了每个<code>ext_server</code>库的不同变体：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//go:embed llama.cpp/build/linux/*/*/lib/*</span></span><br><span class="line"><span class="keyword">var</span> libEmbed embed.FS</span><br></pre></td></tr></table></figure>
+<p><code>llama.cpp/build/linux/*/*/lib/</code> 下的所有内置库都使用<a href="https://pkg.go.dev/embed#hdr-File_Systems" target="_blank" rel="noopener">类文件系统接口</a>作为载荷嵌入。这样，<code>ollama</code> 就可以像在文件系统中读写一样访问它们。</p>
+<p>在初始化 <code>ollama</code> 的过程中，<code>llm/payload_common.go</code> 中的 <code>Init</code> 将调用 <code>nativeInit</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Init</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> nativeInit()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它的主要工作是将动态库从文件系统提取到临时位置，并检查驱动程序的访问权限（如适用）：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libs, err := extractDynamicLibs(payloadsDir, <span class="string">"llama.cpp/build/*/*/*/lib/*"</span>)</span><br><span class="line"><span class="comment">/* ... */</span></span><br><span class="line">err := verifyDriverAccess()</span><br></pre></td></tr></table></figure>
+<p>提取完成后，<code>ollama</code> 可以格式化库路径（<a href="#1-%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1%E5%99%A8">外部服务器</a>小节中的 <code>dyn_init</code> 函数中使用的 <code>libPath</code>）。选择运行环境和匹配库的方法将在<a href="#%E5%86%B3%E5%AE%9A%E8%BF%90%E8%A1%8C%E4%BD%8D%E7%BD%AE">决定运行位置</a> 小节中介绍。</p>
+<h2 id="4-格式化请求和响应"><a class="markdownIt-Anchor" href="#4-格式化请求和响应"></a> 4. 格式化请求和响应</h2>
+<p>我们再来看看 C 语言函数中使用的函数参数。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">inline void dyn_llama_server_init(<span class="keyword">struct</span> dynamic_llama_server s,</span><br><span class="line">                                           ext_server_params_t *sparams,</span><br><span class="line">                                           ext_server_resp_t *err) &#123;</span><br><span class="line">  s.llama_server_init(sparams, err);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">inline void dyn_llama_server_completion(<span class="keyword">struct</span> dynamic_llama_server s,</span><br><span class="line">                                                 <span class="keyword">const</span> char *json_req,</span><br><span class="line">                                                 ext_server_resp_t *resp) &#123;</span><br><span class="line">  s.llama_server_completion(json_req, resp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在它们的函数签名中，我们可以看到它们使用的函数参数： 在 <code>dyn_llama_server_init</code> 中使用了 <code>ext_server_params_t</code> 参数，在 <code>dyn_llama_server_completion</code> 中使用了 <code>json_req</code> 字节数组。</p>
+<p><code>ext_server_params_t</code> 参数是一个 C 结构，包含启动 llama 服务器的配置，稍后将在 <code>llm/ext_server/server.cpp</code> 中解释（由于篇幅有限，我们不展开这部分内容）。</p>
+<p>同时，完成调用的 <code>json_req</code> 在 <code>llm/ext_server/ext_server.cpp</code> 中使用如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">llama_server_completion</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *json_req, <span class="keyword">ext_server_resp_t</span> *resp)</span> </span>&#123;</span><br><span class="line">  assert(llama != <span class="literal">NULL</span> &amp;&amp; json_req != <span class="literal">NULL</span> &amp;&amp; resp != <span class="literal">NULL</span>);</span><br><span class="line">  resp-&gt;id = <span class="number">-1</span>;</span><br><span class="line">  resp-&gt;msg[<span class="number">0</span>] = <span class="string">'\0'</span>;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (shutting_down) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="built_in">std</span>::runtime_error(<span class="string">"server shutting down"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    json data = json::parse(json_req);</span><br><span class="line">    resp-&gt;id = llama-&gt;queue_tasks.get_new_id();</span><br><span class="line">    llama-&gt;queue_results.add_waiting_task_id(resp-&gt;id);</span><br><span class="line">    llama-&gt;request_completion(resp-&gt;id, data, <span class="literal">false</span>, <span class="literal">false</span>, <span class="number">-1</span>);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (<span class="built_in">std</span>::exception &amp;e) &#123;</span><br><span class="line">    <span class="built_in">snprintf</span>(resp-&gt;msg, resp-&gt;msg_len, <span class="string">"exception %s"</span>, e.what());</span><br><span class="line">  &#125; <span class="keyword">catch</span> (...) &#123;</span><br><span class="line">    <span class="built_in">snprintf</span>(resp-&gt;msg, resp-&gt;msg_len, <span class="string">"Unknown exception during completion"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>事实上，它包含 json 格式的完成请求，包括提示词、温度等。我们可以看到 <code>llama_server_completion</code> 为其创建了一个任务，并通过正常路径中的 <code>resp</code> 返回任务 ID。否则，它将格式化错误信息并返回。</p>
+<p>如果您对其详细格式感兴趣，请查看 <code>llm/dyn_ext_server.go</code> 文件。</p>
+<h2 id="5-补丁"><a class="markdownIt-Anchor" href="#5-补丁"></a> 5. 补丁</h2>
+<p>为了适应在 <code>ollama</code> 中使用多个 llama 服务器，它还对原始版本的 <code>llama.cpp</code> 做了一些额外的修改。</p>
+<p>例如，以下补丁导出了 <code>ggml_free_cublas</code> 并调用它来释放一个 llama 服务器实例：</p>
+<figure class="highlight patch"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/examples/server/server.cpp b/examples/server/server.cpp</span><br><span class="line">index 7800c6e7..be30db23 100644</span><br><span class="line"><span class="comment">--- a/examples/server/server.cpp</span></span><br><span class="line"><span class="comment">+++ b/examples/server/server.cpp</span></span><br><span class="line"><span class="meta">@@ -30,6 +30,10 @@</span></span><br><span class="line"> #include &lt;atomic&gt;</span><br><span class="line"> #include &lt;signal.h&gt;</span><br><span class="line"> </span><br><span class="line"><span class="addition">+#ifdef GGML_USE_CUBLAS</span></span><br><span class="line"><span class="addition">+extern "C" GGML_CALL void ggml_free_cublas(void);</span></span><br><span class="line"><span class="addition">+#endif</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line"> using json = nlohmann::json;</span><br><span class="line"> </span><br><span class="line"> struct server_params</span><br><span class="line">@@ -353,6 +357,9 @@ struct llama_server_context</span><br><span class="line">             llama_free_model(model);</span><br><span class="line">             model = nullptr;</span><br><span class="line">         &#125;</span><br><span class="line"><span class="addition">+#ifdef GGML_USE_CUBLAS</span></span><br><span class="line"><span class="addition">+        ggml_free_cublas();</span></span><br><span class="line"><span class="addition">+#endif</span></span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="做个小总结"><a class="markdownIt-Anchor" href="#做个小总结"></a> 做个小总结</h2>
+<p>通过对 <code>llama.cpp</code> 的所有额外模块和修改，<code>ollama</code> 能够根据需要启动 llama 服务器，通过不同编译动态库中对不同硬件的支持动态选择硬件（参见 <a href="#%E6%9E%84%E5%BB%BA%E7%B3%BB%E7%BB%9F">构建系统</a>）。运行 llama 服务器后，<code>ollama</code> 提供的额外模块允许发送完成请求，并在稍后检索回复。</p>
+<p>现在，我们应该清楚地了解了后面的 <code>ollama</code> 架构（我们也可以称其为后端）。关于后端的更多细节，读者可以查看源代码，因为它们上会经常更改。毕竟，<code>ollama</code> 正在积极开发中。</p>
+<p>但是，此时还有一些谜团：</p>
+<ul>
+<li>在后端方面：<code>ollama</code> 如何知道选择哪种硬件和动态库？</li>
+<li>在前端方面：它提供哪种前端？</li>
+</ul>
+<p>下面的章节可能就是这些问题的答案。</p>
+<h1 id="决定运行位置"><a class="markdownIt-Anchor" href="#决定运行位置"></a> 决定运行位置</h1>
+<p>让我们回到动态库和 <code>dyn_init</code> 中的 <code>libPath</code> 参数，在 <a href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%90%AF%E5%8A%A8">动态链接库的加载和服务器的启动</a> 中提到过。我们在 <a href="#3-%E5%B0%86%E5%BA%93%E4%BD%9C%E4%B8%BA%E8%BD%BD%E8%8D%B7%E5%B5%8C%E5%85%A5">Embed libraries as payloads</a>中已经知道，<code>ollama</code> 会将嵌入的动态库提取到一个临时目录，并通过格式化和传递 <code>libPath</code> 到 <code>dyn_init</code> 来加载它们。</p>
+<p>问题是： <code>ollama</code> 如何通过传递不同的 <code>libPath</code> 参数来选择库？</p>
+<p>在<code>llm/dyn_ext_server.go</code>中实现的<code>newDynExtServer</code>函数中，<code>libPath</code>作为第一个参数<code>library</code>被传递。在 Windows 环境下，它通过调用 <code>gpu.UpdatePath(filepath.Dir(library))</code> 进行更新，以便在 <code>PATH</code> 中添加父目录。这样就可以无缝加载动态链接库。不过，在 Linux 或 macOS 上不必这样做。</p>
+<p>因此，我们可以知道这里的 <code>libPath</code> 已经是动态链接库文件的完整路径。然后，让我们检查生成 <code>libPath</code> 的位置。</p>
+<p>通过简单搜索，我们可以在 <code>llm/llm.go</code> 下的 <code>newLlmServer</code> 函数中找到答案：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">err2 := fmt.Errorf(<span class="string">"unable to locate suitable llm library"</span>)</span><br><span class="line"><span class="keyword">for</span> _, dynLib := <span class="keyword">range</span> dynLibs &#123;</span><br><span class="line">	srv, err := newDynExtServer(dynLib, model, adapters, projectors, opts)</span><br><span class="line">	<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> srv, <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	slog.Warn(fmt.Sprintf(<span class="string">"Failed to load dynamic library %s  %s"</span>, dynLib, err))</span><br><span class="line">	err2 = err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它会遍历 <code>dynLibs</code> 以调用 <code>newDynExtServer</code> 函数。一旦加载成功，它就会返回 llama 服务器实例。</p>
+<p>在 <code>newLlmServer</code> 开始的地方，<code>dynLibs</code> 一般在 <code>getDynLibs</code> 函数中检索，这是一个要尝试的动态链接库的有序列表：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newLlmServer</span><span class="params">(gpuInfo gpu.GpuInfo, model <span class="keyword">string</span>, adapters, projectors []<span class="keyword">string</span>, opts api.Options)</span> <span class="params">(LLM, error)</span></span> &#123;</span><br><span class="line">	dynLibs := getDynLibs(gpuInfo)</span><br><span class="line">	<span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>顺序是一种偏好，它从 <code>gpuInfo gpu.GpuInfo</code> 中获取 GPU 信息。它并不强制是 “GPU 信息”，它也可以指示使用某个 CPU 变体。我想 <code>ollama</code> 团队可能很快就会修改它。</p>
+<p>一般来说，返回的 <code>dynLibs</code> 来自 <code>llm/payload_common.go</code> 中的键值映射 <code>availableDynLibs</code>。它是在提取所有动态库之后在 <code>nativeInit</code> 中生成的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">nativeInit</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="comment">/* ... */</span></span><br><span class="line">	<span class="comment">/* Extract dynamic libraries in temporary directory */</span></span><br><span class="line">	<span class="comment">/* ... */</span></span><br><span class="line">	<span class="keyword">for</span> _, lib := <span class="keyword">range</span> libs &#123;</span><br><span class="line">		<span class="comment">// The last dir component is the variant name</span></span><br><span class="line">		variant := filepath.Base(filepath.Dir(lib))</span><br><span class="line">		availableDynLibs[variant] = lib</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它的关键字是全路径中除库文件名之外的最后一个组成部分。例如，在我的电脑上是 <code>cpu</code>、<code>cpu_avx</code>、<code>cpu_avx2</code>、<code>cuda_v11.3</code> 和 <code>rocm_v5.7</code>。而对应值当然是完整路径。</p>
+<p>我们可以先看看 <code>getDynLibs</code> 函数（在 <code>llm/payload_common.go</code> 中实现）的一般处理过程，忽略一些特定平台的情况。</p>
+<p>第一步是从 “GPU 信息” 中找到与请求完全匹配的内容：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">exactMatch := <span class="string">""</span></span><br><span class="line">dynLibs := []<span class="keyword">string</span>&#123;&#125;</span><br><span class="line">altDynLibs := []<span class="keyword">string</span>&#123;&#125;</span><br><span class="line">requested := gpuInfo.Library</span><br><span class="line"><span class="keyword">if</span> gpuInfo.Variant != <span class="string">""</span> &#123;</span><br><span class="line">	requested += <span class="string">"_"</span> + gpuInfo.Variant</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Try to find an exact match</span></span><br><span class="line"><span class="keyword">for</span> cmp := <span class="keyword">range</span> availableDynLibs &#123;</span><br><span class="line">	<span class="keyword">if</span> requested == cmp &#123;</span><br><span class="line">		exactMatch = cmp</span><br><span class="line">		dynLibs = []<span class="keyword">string</span>&#123;availableDynLibs[cmp]&#125;</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它会根据 “GPU 信息” 中的 <code>Library</code> 字段生成一个 <code>requested</code> 字符串变量，并附加一个 <code>变体（Variant）</code>。如果有一个与 <code>requested</code> 字符串完全匹配的库，<code>dynLibs</code> 中的第一个库路径将是所请求库的路径。第一个库路径也将是加载过程中首先尝试的路径。</p>
+<p>然后，它会尝试不完全匹配的 GPU 库（可能存在版本不匹配等情况）：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Then for GPUs load alternates and sort the list for consistent load ordering</span></span><br><span class="line"><span class="keyword">if</span> gpuInfo.Library != <span class="string">"cpu"</span> &#123;</span><br><span class="line">	<span class="keyword">for</span> cmp := <span class="keyword">range</span> availableDynLibs &#123;</span><br><span class="line">		<span class="keyword">if</span> gpuInfo.Library == strings.Split(cmp, <span class="string">"_"</span>)[<span class="number">0</span>] &amp;&amp; cmp != exactMatch &#123;</span><br><span class="line">			altDynLibs = <span class="built_in">append</span>(altDynLibs, cmp)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	slices.Sort(altDynLibs)</span><br><span class="line">	<span class="keyword">for</span> _, altDynLib := <span class="keyword">range</span> altDynLibs &#123;</span><br><span class="line">		dynLibs = <span class="built_in">append</span>(dynLibs, availableDynLibs[altDynLib])</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来，它会调用另一个实用程序 <code>GetCPUVariant</code>，尝试优先选择最快（可能）的 CPU 变体：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Load up the best CPU variant if not primary requested</span></span><br><span class="line"><span class="keyword">if</span> gpuInfo.Library != <span class="string">"cpu"</span> &#123;</span><br><span class="line">	variant := gpu.GetCPUVariant()</span><br><span class="line">	<span class="comment">// If no variant, then we fall back to default</span></span><br><span class="line">	<span class="comment">// If we have a variant, try that if we find an exact match</span></span><br><span class="line">	<span class="comment">// Attempting to run the wrong CPU instructions will panic the</span></span><br><span class="line">	<span class="comment">// process</span></span><br><span class="line">	<span class="keyword">if</span> variant != <span class="string">""</span> &#123;</span><br><span class="line">		<span class="keyword">for</span> cmp := <span class="keyword">range</span> availableDynLibs &#123;</span><br><span class="line">			<span class="keyword">if</span> cmp == <span class="string">"cpu_"</span>+variant &#123;</span><br><span class="line">				dynLibs = <span class="built_in">append</span>(dynLibs, availableDynLibs[cmp])</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		dynLibs = <span class="built_in">append</span>(dynLibs, availableDynLibs[<span class="string">"cpu"</span>])</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该实用程序在 <code>gpu/cpu_common.go</code> 中定义。它能检测 x86 平台上的 CPU 扩展：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetCPUVariant</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> cpu.X86.HasAVX2 &#123;</span><br><span class="line">		slog.Info(<span class="string">"CPU has AVX2"</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"avx2"</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> cpu.X86.HasAVX &#123;</span><br><span class="line">		slog.Info(<span class="string">"CPU has AVX"</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"avx"</span></span><br><span class="line">	&#125;</span><br><span class="line">	slog.Info(<span class="string">"CPU does not have vector extensions"</span>)</span><br><span class="line">	<span class="comment">// else LCD</span></span><br><span class="line">	<span class="keyword">return</span> <span class="string">""</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该顺序将把 <code>avx2</code> 作为最高优先级，然后是 <code>avx</code>，最后是纯 CPU 变体。最后，如果上述方法都不奏效，它将回退到 CPU 变体：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getDynLibs</span><span class="params">(gpuInfo gpu.GpuInfo)</span> []<span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="comment">/* Apple specific loading */</span></span><br><span class="line">	<span class="comment">/* ... */</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Finally, if we didn't find any matches, LCD CPU FTW</span></span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(dynLibs) == <span class="number">0</span> &#123;</span><br><span class="line">		dynLibs = []<span class="keyword">string</span>&#123;availableDynLibs[<span class="string">"cpu"</span>]&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	slog.Debug(fmt.Sprintf(<span class="string">"ordered list of LLM libraries to try %v"</span>, dynLibs))</span><br><span class="line">	<span class="keyword">return</span> dynLibs</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后，<code>dynLibs</code> 将被返回以进行加载尝试。</p>
+<p>现在我们可以探讨一下如何生成 “GPU 信息” <code>gpuInfo</code>，从而使偏好成为可能。<code>llm/llm.go</code>中的 <code>New</code> 函数以 “GPU 信息” 为第一个参数调用 <code>newLlmServer</code>。它完成了许多重要工作：</p>
+<ol>
+<li>打开、加载并检测 LLM 的参数。</li>
+<li>加载 “GPU 信息”：<code>info := gpu.GetGPUInfo()</code>。</li>
+<li>检查 VRAM 和模型与硬件的兼容性。</li>
+</ol>
+<p>初始检测在 2 中进行。不过，也有可能模型被标记为与模型不兼容。在这种情况下，它将回退到具有最快变体的 CPU：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">info.Library = <span class="string">"cpu"</span></span><br><span class="line">info.Variant = gpu.GetCPUVariant()</span><br></pre></td></tr></table></figure>
+<p>让我们重点关注 2，看看在 <code>GetGPUInfo</code> 函数中发生了什么。</p>
+<h2 id="apple-metal"><a class="markdownIt-Anchor" href="#apple-metal"></a> Apple Metal</h2>
+<p>让我们从最特殊的平台开始。苹果 macOS 平台，包括 XNU 内核和用户空间，通常被称为 “Darwin”。</p>
+<p>在前面提到的 <code>getDynLibs</code> 中，Darwin 平台上的检测非常简单：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Short circuit if we know we're using the default built-in (darwin only)</span></span><br><span class="line"><span class="keyword">if</span> gpuInfo.Library == <span class="string">"default"</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> []<span class="keyword">string</span>&#123;<span class="string">"default"</span>&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// TODO - temporary until we have multiple CPU variations for Darwin</span></span><br><span class="line"><span class="comment">// Short circuit on darwin with metal only</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(availableDynLibs) == <span class="number">1</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> _, onlyMetal := availableDynLibs[<span class="string">"metal"</span>]; onlyMetal &#123;</span><br><span class="line">		<span class="keyword">return</span> []<span class="keyword">string</span>&#123;availableDynLibs[<span class="string">"metal"</span>]&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>It uses <code>default</code> library according to the “GPU information”, or just use <code>metal</code>. The <code>gpu.GetGPUInfo()</code> is in <code>gpu/gpu_darwin.go</code>, as simple as possible:</p>
+<p>它会根据 “GPU 信息” 使用 <code>default</code> 库，或者直接使用 <code>metal</code>。<code>gpu.GetGPUInfo()</code> 在 <code>gpu/gpu_darwin.go</code> 中，非常简单：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetGPUInfo</span><span class="params">()</span> <span class="title">GpuInfo</span></span> &#123;</span><br><span class="line">	mem, _ := getCPUMem()</span><br><span class="line">	<span class="keyword">if</span> runtime.GOARCH == <span class="string">"amd64"</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> GpuInfo&#123;</span><br><span class="line">			Library: <span class="string">"cpu"</span>,</span><br><span class="line">			Variant: GetCPUVariant(),</span><br><span class="line">			memInfo: mem,</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> GpuInfo&#123;</span><br><span class="line">		Library: <span class="string">"metal"</span>,</span><br><span class="line">		memInfo: mem,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，它获取内存信息，并检测 <code>ollama</code> 是否运行在英特尔 x86_64/amd64 平台上。如果是，它就会使用扩展速度最快的 CPU。否则，只有 ARM Mac 才能利用 Metal API 加速。</p>
+<p>据我所知，英特尔 Mac 上的 AMD 显卡应该也支持 Metal。但 <code>ollama</code> 不会在英特尔 Mac 上使用它。可能只是因为驱动程序或显卡本身过时了。</p>
+<h2 id="nvidia-cuda-和-amd-rocm"><a class="markdownIt-Anchor" href="#nvidia-cuda-和-amd-rocm"></a> Nvidia CUDA 和 AMD ROCm</h2>
+<p>然后，我们看一下 Nvidia 和 AMD GPU 的通用检测，因为它们在 <code>ollama</code> 中是耦合在一起的。</p>
+<p>实现方法在 <code>gpu/gpu.go</code>中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetGPUInfo</span><span class="params">()</span> <span class="title">GpuInfo</span></span> &#123;</span><br><span class="line">	<span class="comment">// TODO - consider exploring lspci (and equivalent on windows) to check for</span></span><br><span class="line">	<span class="comment">// GPUs so we can report warnings if we see Nvidia/AMD but fail to load the libraries</span></span><br><span class="line">	gpuMutex.Lock()</span><br><span class="line">	<span class="keyword">defer</span> gpuMutex.Unlock()</span><br><span class="line">	<span class="keyword">if</span> gpuHandles == <span class="literal">nil</span> &#123;</span><br><span class="line">		initGPUHandles()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// All our GPU builds on x86 have AVX enabled, so fallback to CPU if we don't detect at least AVX</span></span><br><span class="line">	cpuVariant := GetCPUVariant()</span><br><span class="line">	<span class="keyword">if</span> cpuVariant == <span class="string">""</span> &amp;&amp; runtime.GOARCH == <span class="string">"amd64"</span> &#123;</span><br><span class="line">		slog.Warn(<span class="string">"CPU does not have AVX or AVX2, disabling GPU support."</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> memInfo C.mem_info_t</span><br><span class="line">	resp := GpuInfo&#123;&#125;</span><br><span class="line">	<span class="comment">/* Getting the actual GPU information */</span></span><br><span class="line">	<span class="comment">/* ... */</span></span><br><span class="line">	<span class="comment">/* Fallback to CPU if no GPU detected */</span></span><br><span class="line">	<span class="comment">/* ... */</span></span><br><span class="line"></span><br><span class="line">	resp.DeviceCount = <span class="keyword">uint32</span>(memInfo.count)</span><br><span class="line">	resp.FreeMemory = <span class="keyword">uint64</span>(memInfo.free)</span><br><span class="line">	resp.TotalMemory = <span class="keyword">uint64</span>(memInfo.total)</span><br><span class="line">	<span class="keyword">return</span> resp</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一个程序块调用 <code>initGPUHandles</code> 来定义要搜索的 GPU 库，以便使用它们获取 GPU 信息。对于 Nvidia，它会检测 Windows 上独立显卡的 <code>nvml.dll</code>，Linux 上的 <code>libnvidia-ml.so</code>，以及某些特殊设备上的 <code>libcudart.so*</code>，例如 <a href="https://www.nvidia.com/fr-fr/autonomous-machines/embedded-systems/" target="_blank" rel="noopener">Jetson 系列</a>（感谢 <a href="https://github.com/ollama/ollama/pull/2279" target="_blank" rel="noopener">最近的 PR</a>）。</p>
+<p>第二个程序块检测 CPU 变体，它要求 CPU 至少有 <code>AVX</code> 变体才能支持 GPU。</p>
+<p>然后，它会检查句柄，并使用相关库查找相应的 GPU。</p>
+<p>对于 Nvidia 独立 GPU：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> gpuHandles.nvml != <span class="literal">nil</span> &amp;&amp; (cpuVariant != <span class="string">""</span> || runtime.GOARCH != <span class="string">"amd64"</span>) &#123;</span><br><span class="line">	C.nvml_check_vram(*gpuHandles.nvml, &amp;memInfo)</span><br><span class="line">	<span class="keyword">if</span> memInfo.err != <span class="literal">nil</span> &#123;</span><br><span class="line">		slog.Info(fmt.Sprintf(<span class="string">"[nvidia-ml] error looking up NVML GPU memory: %s"</span>, C.GoString(memInfo.err)))</span><br><span class="line">		C.free(unsafe.Pointer(memInfo.err))</span><br><span class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> memInfo.count &gt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">// Verify minimum compute capability</span></span><br><span class="line">		<span class="keyword">var</span> cc C.nvml_compute_capability_t</span><br><span class="line">		C.nvml_compute_capability(*gpuHandles.nvml, &amp;cc)</span><br><span class="line">		<span class="keyword">if</span> cc.err != <span class="literal">nil</span> &#123;</span><br><span class="line">			slog.Info(fmt.Sprintf(<span class="string">"[nvidia-ml] error looking up NVML GPU compute capability: %s"</span>, C.GoString(cc.err)))</span><br><span class="line">			C.free(unsafe.Pointer(cc.err))</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> cc.major &gt; CudaComputeMin[<span class="number">0</span>] || (cc.major == CudaComputeMin[<span class="number">0</span>] &amp;&amp; cc.minor &gt;= CudaComputeMin[<span class="number">1</span>]) &#123;</span><br><span class="line">			slog.Info(fmt.Sprintf(<span class="string">"[nvidia-ml] NVML CUDA Compute Capability detected: %d.%d"</span>, cc.major, cc.minor))</span><br><span class="line">			resp.Library = <span class="string">"cuda"</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			slog.Info(fmt.Sprintf(<span class="string">"[nvidia-ml] CUDA GPU is too old. Falling back to CPU mode. Compute Capability detected: %d.%d"</span>, cc.major, cc.minor))</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它调用在 <code>gpu/gpu_info_nvml.c</code> 中实现的 C 函数 <code>nvml_check_vram</code>，以获取 VRAM。如果发现一个可用设备，它还会通过 <code>nvml_compute_capability</code> 检查计算能力，以确保该设备可用。</p>
+<p>这样的设计使我无法在 Windows 下使用 ZLUDA 通过 <code>ollama</code> 在 AMD 显卡上运行 LLM。因为当时 ZLUDA 将此功能标记为未实现。然而，我的 AMD 显卡已经支持该功能。现在我不再需要 ZLUDA 了。</p>
+<p>在本篇文章中，我选择跳过 <code>Cudart</code> 支持，因为它并不常见。现在让我们来看看最近令人兴奋的 AMD 支持！</p>
+<p>针对 AMD 的 <code>GetGPUInfo</code> 代码非常简短：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">	AMDGetGPUInfo(&amp;resp)</span><br><span class="line">	<span class="keyword">if</span> resp.Library != <span class="string">""</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> resp</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你可能会注意到，这是一个 <code>else</code>。因此，与 <code>if</code> 子句一起，只有在未检测到 Nvidia 处理器的情况下，才会尝试 AMD。这将导致一个问题：当安装了 Nvidia GPU 库，但未检测到 GPU 或检测到的 GPU 不兼容时，AMD 显卡也永远不会被检测到。我为此开设了一个<a href="https://github.com/ollama/ollama/issues/3172" target="_blank" rel="noopener">问题</a>。</p>
+<p>好了，让我们回到 <code>GetGPUInfo</code>。如果检测到 Nvidia 显卡，“GPU 信息” 中的 <code>Library</code> 将设为 <code>cuda</code>。如果是 AMD 显卡，则会设置为 <code>rocm</code> 。</p>
+<p>因此，如果检测成功，“GPU 信息” 将与 <code>availableDynLibs</code> 配合，为 <code>cuda_*</code> 或 <code>rocm_*</code> 变体优先选择库路径。<br>
+这就揭示了 GPU 是如何被检测到的，以及从一堆动态库中创建 llama 服务器时可能使用的 GPU。</p>
+<h1 id="web-service-and-client"><a class="markdownIt-Anchor" href="#web-service-and-client"></a> Web service and client</h1>
+<h1 id="网络服务和客户端"><a class="markdownIt-Anchor" href="#网络服务和客户端"></a> 网络服务和客户端</h1>
+<p>让我们来看看 “前端”！在 <code>ollama</code> 中确实没有所谓的前端。相反，它和其他大多数 LLM 服务一样，提供了一系列 Web API。</p>
+<p>基本的 Web API 在<code>server</code>中实现，主要在<code>server/routes.go</code>模块中。完整的 API 可在 <a href="https://github.com/ollama/ollama/blob/main/docs/api.md" target="_blank" rel="noopener">GitHub</a> 上找到。在此，我们也仅以 chat 的 completion 端点为例，快速从 API 建立起到我们在上面解析过的部分的概览。这个端点定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r.POST(&quot;/api/chat&quot;, ChatHandler)</span><br></pre></td></tr></table></figure>
+<p>其中 <code>ChatHandler</code> 是处理请求的回调。它以 <code>var req api.ChatRequest</code> 结构创建并解析请求。处理程序会做很多事情，比如加载模型，以确保预测是可能的。</p>
+<p>一切准备就绪后，最重要的事情就来了：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Start prediction</span></span><br><span class="line">predictReq := llm.PredictOpts&#123;</span><br><span class="line">	Prompt:  prompt,</span><br><span class="line">	Format:  req.Format,</span><br><span class="line">	Images:  images,</span><br><span class="line">	Options: opts,</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> err := loaded.runner.Predict(c.Request.Context(), predictReq, fn); err != <span class="literal">nil</span> &#123;</span><br><span class="line">	ch &lt;- gin.H&#123;<span class="string">"error"</span>: err.Error()&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它用提示（用户输入、提示等）、图像和其他选项准备预测请求。然后，它调用 runner 的 <code>Prediction</code> 函数，其中 runner 需要实现 <code>llm</code> 模块下的 <code>LLM</code> 接口：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> loaded <span class="keyword">struct</span> &#123;</span><br><span class="line">	mu sync.Mutex</span><br><span class="line"></span><br><span class="line">	runner llm.LLM</span><br><span class="line"></span><br><span class="line">	expireAt    time.Time</span><br><span class="line">	expireTimer *time.Timer</span><br><span class="line"></span><br><span class="line">	*Model</span><br><span class="line">	*api.Options</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>LLM</code> 接口的定义如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> LLM <span class="keyword">interface</span> &#123;</span><br><span class="line">	Predict(context.Context, PredictOpts, <span class="function"><span class="keyword">func</span><span class="params">(PredictResult)</span>) <span class="title">error</span></span></span><br><span class="line">	Embedding(context.Context, <span class="keyword">string</span>) ([]<span class="keyword">float64</span>, error)</span><br><span class="line">	Encode(context.Context, <span class="keyword">string</span>) ([]<span class="keyword">int</span>, error)</span><br><span class="line">	Decode(context.Context, []<span class="keyword">int</span>) (<span class="keyword">string</span>, error)</span><br><span class="line">	Close()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Predict</code> 的实现来自 <a href="#%E9%A2%84%E6%B5%8B">预测</a>一节中描述的 <code>dynExtServer</code>。然后，它将调用 <code>dyn_llama_server_completion</code> 从动态库中请求启动 llama 服务器。</p>
+<h2 id="ollama-的-go-api"><a class="markdownIt-Anchor" href="#ollama-的-go-api"></a> Ollama 的 Go API</h2>
+<p>在项目内部，<code>ollama</code> 在 Go 的 <code>api</code> 下直接提供了一个封装。用户可以利用它更方便地调用网络 API。事实上，<code>ollama</code> 本身也使用 Go 封装提供实际的前端——终端用户界面。</p>
+<p>此外还有 Python 和 JavaScript/TypeScript 绑定：</p>
+<ul>
+<li><a href="https://github.com/ollama/ollama-python" target="_blank" rel="noopener">https://github.com/ollama/ollama-python</a></li>
+<li><a href="https://github.com/ollama/ollama-js" target="_blank" rel="noopener">https://github.com/ollama/ollama-js</a></li>
+</ul>
+<h2 id="openai-api-封装器"><a class="markdownIt-Anchor" href="#openai-api-封装器"></a> OpenAI API 封装器</h2>
+<p>尽管有本地 API 端点，<code>ollama</code> 还在 <code>server/routes.go</code> 中提供了与 OpenAI API 兼容（部分兼容）的端点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// Compatibility endpoints</span><br><span class="line">r.POST(&quot;/v1/chat/completions&quot;, openai.Middleware(), ChatHandler)</span><br></pre></td></tr></table></figure>
+<p>它实际上是从 OpenAI 请求到 <code>ollama</code> 本机请求的转换器，反之亦然。 如果您感兴趣，可以查看 <code>openai/openai.go</code>。</p>
+<h1 id="其他实用程序"><a class="markdownIt-Anchor" href="#其他实用程序"></a> 其他实用程序</h1>
+<p>终端 UI 利用 Web API 端点的 Go 包装器来提供基于终端的对话。 它需要一些实用程序，例如 <code>readline</code> 来与终端中的用户输入进行交互，以及 <code>progress</code>来显示进度。</p>
+<p>此外，还有用于 API 端点认证的 <code>auth</code>，用于cli命令提供者的 <code>cmd</code>，用于单位转换的 <code>format</code>，用于模型文件解析的 <code>parser</code> 等。可以根据您的意愿详细查看源代码。这篇文章已经足够长了，并且只关注 <code>ollama</code> 的整体架构。我也希望看到有关它的其他帖子 😉</p>
+<h1 id="结论"><a class="markdownIt-Anchor" href="#结论"></a> 结论</h1>
+<p>最后，我会在运行前得到一个关于 <code>ollama</code> 架构的简单图：</p>
+<img src="/2024/04/16/Ollama-cn/ollama.drawio.svg" title="ollama 架构">
+<p>我仍要说：<code>ollama</code> 是 <code>llama.cpp</code> 的一个薄（也许不是那么薄）但足够智能的封装。<br>
+尽管它仍然有一些缺点，但我们确实需要尽可能多的此类封装，以使最终用户的生活更轻松。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2024/04/16/Ollama-cn/" title="Ollama 架构解析" target="_blank" rel="external">https://blog.inoki.cc/2024/04/16/Ollama-cn/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Computer Scientist</small></a></h3>
+        <div>Ph.D in Computer Science, major in Embedded System and AI.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+      <!-- Blog post bottom bar -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="9214609149" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2024/04/15/Ollama/" title="On the architecture of ollama"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2024/04/16/Ollama-cn/';
+        
+        this.page.identifier = 'Ollama-cn';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>

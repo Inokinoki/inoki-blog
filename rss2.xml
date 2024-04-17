@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Tue, 16 Apr 2024 13:42:03 GMT</pubDate>
+    <pubDate>Wed, 17 Apr 2024 00:04:26 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Ollama 架构解析</title>
+      <link>https://blog.inoki.cc/2024/04/16/Ollama-cn/</link>
+      <guid>https://blog.inoki.cc/2024/04/16/Ollama-cn/</guid>
+      <pubDate>Tue, 16 Apr 2024 18:03:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;最近，我偶然探索了一个名为 &lt;code&gt;ollama&lt;/code&gt; 的项目，因为我想让我的 AMD 显卡（拥有不俗的 VRAM - 32G！）在 Windows 上获得支持。Linux 上已经有了基于 AMD ROCm 的支持。由于 ROCm 在 Windows
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2024/04/16/Ollama-cn/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>On the architecture of ollama</title>
@@ -419,27 +440,6 @@
       
       
       <comments>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>Linux 内核的用户态驱动框架</title>
-      <link>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/</link>
-      <guid>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/</guid>
-      <pubDate>Tue, 14 Dec 2021 15:49:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;在 Linux 的驱动模型中，存在各种驱动子系统，如 PCI 子系统、网络子系统。在开发驱动的时候，我们可以使用相应的子系统来完成，比如有人想开发一个 PCI
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/#disqus_thread</comments>
     </item>
     
   </channel>
