@@ -19,8 +19,7 @@ categories:
 
 # 代码组织
 
-高通平台的 ABL 源码可以在 [Code Aurora Forum](https://source.codeaurora.org/quic/la/abl/tianocore/edk2/)
-) 处找到。
+高通平台的 ABL 源码可以在 [Code Aurora Forum](https://source.codeaurora.org/quic/la/abl/tianocore/edk2/) 处找到。
 
 ABL 是基于 EDK II 构建的，整体的项目结构是标准的 EDK II 源码树。本文使用成文时的 `uefi.lnx.3.0.r1` 分支来分析，提交为 c4da6fcb959fa67cb2aa89007beebfab66226268。
 

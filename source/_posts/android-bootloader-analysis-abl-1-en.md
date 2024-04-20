@@ -18,8 +18,7 @@ This article describes the code organization and general boot process of ABL. Du
 
 # Code Organization
 
-The Qualcomm ABL source code can be found at [Code Aurora Forum](https://source.codeaurora.org/quic/la/abl/tianocore/edk2/)
-).
+The Qualcomm ABL source code can be found at [Code Aurora Forum](https://source.codeaurora.org/quic/la/abl/tianocore/edk2/).
 
 The ABL is built on EDK II and the overall project structure is the standard EDK II source tree. This article uses the `uefi.lnx.3.0.r1` branch as written for analysis, committed as c4da6fcb959fa67cb2aa89007beebfab66226268.
 
