@@ -9,8 +9,50 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Wed, 17 Apr 2024 00:15:14 GMT</pubDate>
+    <pubDate>Sat, 20 Apr 2024 09:09:26 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Android bootloader analysis -- ABL(2)</title>
+      <link>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</link>
+      <guid>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</guid>
+      <pubDate>Sat, 20 Apr 2024 13:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;In my previous post &lt;a href=&quot;https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/&quot;&gt;“Android bootloader analysis –
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>Android bootloader analysis -- ABL(3)</title>
+      <link>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</link>
+      <guid>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</guid>
+      <pubDate>Sat, 20 Apr 2024 13:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;In my previous post &lt;a href=&quot;https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/&quot;&gt;“Android Bootloader Analysis –
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Ollama 架构解析</title>
@@ -397,49 +439,6 @@
       
       
       <comments>https://blog.inoki.cc/2022/02/08/My-2021/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>Build and run Hello World on OVMF Qemu</title>
-      <link>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/</link>
-      <guid>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/</guid>
-      <pubDate>Fri, 17 Dec 2021 13:47:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;This post records how I build and run an EDK2 HelloWorld on Qemu, based on OVMF UEFI shell.&lt;/p&gt;
-&lt;h1 id=&quot;prepare-environment&quot;&gt;&lt;a
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】我的 C++ 20 协程的予取予求</title>
-      <link>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/</link>
-      <guid>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/</guid>
-      <pubDate>Thu, 16 Dec 2021 15:34:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://www.scs.stanford.edu/~dm/blog/c++-coroutines.html&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/#disqus_thread</comments>
     </item>
     
   </channel>
