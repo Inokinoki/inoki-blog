@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2024-04-20T09:09:26.078Z</updated>
+  <updated>2024-06-08T23:42:42.127Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,41 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>弹指十年间</title>
+    <link href="https://blog.inoki.cc/2024/06/08/My-10-years/"/>
+    <id>https://blog.inoki.cc/2024/06/08/My-10-years/</id>
+    <published>2024-06-08T17:19:00.000Z</published>
+    <updated>2024-06-08T23:42:42.127Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;又是一年高考季，属于我的那个年代转眼就过去了十年。&lt;/p&gt;
+&lt;p&gt;那年夏天，待一切尘埃落定时，刚好是小时候最喜欢的动漫《数码宝贝》十五周年，我长大了，太一他们也在十五周年的纪念剧场版长大了。和田光司在那一年的周年庆典上又唱起了这首歌，听得出他因鼻咽癌导致的力不从心。&lt;/p&gt;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Dairy" scheme="https://blog.inoki.cc/categories/Dairy/"/>
+    
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="private" scheme="https://blog.inoki.cc/tags/private/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android bootloader analysis -- ABL(2)</title>
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2024-04-20T09:09:26.078Z</updated>
+    <updated>2024-06-08T23:42:42.155Z</updated>
     
     <summary type="html">
     
@@ -58,7 +88,7 @@
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2024-04-20T09:09:26.078Z</updated>
+    <updated>2024-06-08T23:42:42.155Z</updated>
     
     <summary type="html">
     
@@ -95,7 +125,7 @@
     <link href="https://blog.inoki.cc/2024/04/16/Ollama-cn/"/>
     <id>https://blog.inoki.cc/2024/04/16/Ollama-cn/</id>
     <published>2024-04-16T18:03:00.000Z</published>
-    <updated>2024-04-20T09:09:26.058Z</updated>
+    <updated>2024-06-08T23:42:42.135Z</updated>
     
     <summary type="html">
     
@@ -130,7 +160,7 @@
     <link href="https://blog.inoki.cc/2024/04/15/Ollama/"/>
     <id>https://blog.inoki.cc/2024/04/15/Ollama/</id>
     <published>2024-04-15T15:34:00.000Z</published>
-    <updated>2024-04-20T09:09:26.058Z</updated>
+    <updated>2024-06-08T23:42:42.135Z</updated>
     
     <summary type="html">
     
@@ -161,7 +191,7 @@
     <link href="https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/"/>
     <id>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/</id>
     <published>2024-02-18T03:57:50.000Z</published>
-    <updated>2024-04-20T09:09:26.030Z</updated>
+    <updated>2024-06-08T23:42:42.103Z</updated>
     
     <summary type="html">
     
@@ -198,7 +228,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/</id>
     <published>2023-09-14T23:42:00.000Z</published>
-    <updated>2024-04-20T09:09:26.010Z</updated>
+    <updated>2024-06-08T23:42:42.087Z</updated>
     
     <summary type="html">
     
@@ -237,7 +267,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/</id>
     <published>2023-09-14T23:22:00.000Z</published>
-    <updated>2024-04-20T09:09:26.010Z</updated>
+    <updated>2024-06-08T23:42:42.087Z</updated>
     
     <summary type="html">
     
@@ -276,7 +306,7 @@
     <link href="https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/"/>
     <id>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</id>
     <published>2023-09-13T23:22:00.000Z</published>
-    <updated>2024-04-20T09:09:26.010Z</updated>
+    <updated>2024-06-08T23:42:42.087Z</updated>
     
     <summary type="html">
     
@@ -315,7 +345,7 @@
     <link href="https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/"/>
     <id>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/</id>
     <published>2023-09-06T23:22:00.000Z</published>
-    <updated>2024-04-20T09:09:26.010Z</updated>
+    <updated>2024-06-08T23:42:42.087Z</updated>
     
     <summary type="html">
     
@@ -354,7 +384,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-3/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/</id>
     <published>2023-08-22T12:34:00.000Z</published>
-    <updated>2024-04-20T09:09:26.030Z</updated>
+    <updated>2024-06-08T23:42:42.107Z</updated>
     
     <summary type="html">
     
@@ -390,7 +420,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-2/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</id>
     <published>2023-08-22T00:34:00.000Z</published>
-    <updated>2024-04-20T09:09:26.030Z</updated>
+    <updated>2024-06-08T23:42:42.107Z</updated>
     
     <summary type="html">
     
@@ -426,7 +456,7 @@
     <link href="https://blog.inoki.cc/2023/08/20/History-of-ARM-1/"/>
     <id>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</id>
     <published>2023-08-20T20:34:00.000Z</published>
-    <updated>2024-04-20T09:09:26.030Z</updated>
+    <updated>2024-06-08T23:42:42.107Z</updated>
     
     <summary type="html">
     
@@ -462,7 +492,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/"/>
     <id>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</id>
     <published>2023-04-30T13:20:00.000Z</published>
-    <updated>2024-04-20T09:09:26.078Z</updated>
+    <updated>2024-06-08T23:42:42.155Z</updated>
     
     <summary type="html">
     
@@ -499,7 +529,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/"/>
     <id>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</id>
     <published>2023-04-30T11:20:00.000Z</published>
-    <updated>2024-04-20T09:09:26.078Z</updated>
+    <updated>2024-06-08T23:42:42.155Z</updated>
     
     <summary type="html">
     
@@ -536,7 +566,7 @@
     <link href="https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/"/>
     <id>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</id>
     <published>2023-04-29T12:20:00.000Z</published>
-    <updated>2024-04-20T09:09:26.078Z</updated>
+    <updated>2024-06-08T23:42:42.155Z</updated>
     
     <summary type="html">
     
@@ -573,7 +603,7 @@
     <link href="https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/"/>
     <id>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/</id>
     <published>2023-04-29T11:20:00.000Z</published>
-    <updated>2024-04-20T09:09:26.078Z</updated>
+    <updated>2024-06-08T23:42:42.155Z</updated>
     
     <summary type="html">
     
@@ -610,7 +640,7 @@
     <link href="https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/"/>
     <id>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/</id>
     <published>2023-04-25T11:20:00.000Z</published>
-    <updated>2024-04-20T09:09:26.082Z</updated>
+    <updated>2024-06-08T23:42:42.159Z</updated>
     
     <summary type="html">
     
@@ -649,7 +679,7 @@
     <link href="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/"/>
     <id>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</id>
     <published>2022-05-09T20:48:00.000Z</published>
-    <updated>2024-04-20T09:09:26.078Z</updated>
+    <updated>2024-06-08T23:42:42.155Z</updated>
     
     <summary type="html">
     
@@ -686,7 +716,7 @@
     <link href="https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/"/>
     <id>https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/</id>
     <published>2022-02-22T06:57:50.000Z</published>
-    <updated>2024-04-20T09:09:26.050Z</updated>
+    <updated>2024-06-08T23:42:42.131Z</updated>
     
     <summary type="html">
     
@@ -715,35 +745,6 @@
       <category term="Debug" scheme="https://blog.inoki.cc/tags/Debug/"/>
     
       <category term="JTAG" scheme="https://blog.inoki.cc/tags/JTAG/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>孑然一身的 2021</title>
-    <link href="https://blog.inoki.cc/2022/02/08/My-2021/"/>
-    <id>https://blog.inoki.cc/2022/02/08/My-2021/</id>
-    <published>2022-02-08T16:54:40.000Z</published>
-    <updated>2024-04-20T09:09:26.050Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;又过去了一整年，2020
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Dairy" scheme="https://blog.inoki.cc/categories/Dairy/"/>
-    
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
-      <category term="private" scheme="https://blog.inoki.cc/tags/private/"/>
     
   </entry>
   

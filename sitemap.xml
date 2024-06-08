@@ -2,737 +2,744 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/12/08/uio-howto/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://blog.inoki.cc/2019/03/24/man-epoll/</loc>
     
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/12/17/qemu-ovmf-edk2-build/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2021/12/08/vfio/</loc>
     
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/12/08/uio-howto/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/about/index.html</loc>
     
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/all-archives/index.html</loc>
-    
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/all-categories/index.html</loc>
     
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/all-archives/index.html</loc>
+    
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/all-tags/index.html</loc>
     
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/book/Springer-free-books.html</loc>
     
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/book/index.html</loc>
     
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/books/index.html</loc>
     
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/links/index.html</loc>
     
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/links-backup/index.html</loc>
     
-    <lastmod>2024-04-20T09:09:26.082Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.074Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.159Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2021/09/05/Writing-a-wayland-compositor-1/</loc>
     
-    <lastmod>2024-04-20T09:09:26.074Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-2/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2021/09/06/Writing-a-wayland-compositor-3/</loc>
     
-    <lastmod>2024-04-20T09:09:26.074Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/01/27/Xen-on-Raspberry-Pi-4-Adeventures/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/10/24/android-bootloader-analysis-abl-3/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/10/22/android-bootloader-analysis-abl-2/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot-en/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/10/17/android-bootloader-analysis-aboot/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/10/17/android-qcom-chain-of-trust/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/10/20/linux-sysfs-playground/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/12/14/linux-userspace-driver-frameworks/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.155Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2019/10/19/Win10-IoT-Deploy/</loc>
     
-    <lastmod>2024-04-20T09:09:26.070Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.147Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2019/12/09/Write-your-first-ffmpeg-program-on-Windows/</loc>
     
-    <lastmod>2024-04-20T09:09:26.070Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.147Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2021/06/19/Write-your-own-IME-on-macOS-1/</loc>
     
-    <lastmod>2024-04-20T09:09:26.070Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.062Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.062Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2020/01/05/VSCode-c-cpp-configuration/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.062Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2019/05/16/Win10-ARM-RPI-INSTALL/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.062Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.147Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2019/05/07/Win10-IoT-Blink/</loc>
     
-    <lastmod>2024-04-20T09:09:26.062Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.143Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2020/07/04/Rust-Qt-Binding-Generator/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.139Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/09/05/SecIdentity-iOS-storage/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.139Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2020/01/05/VSCode-c-cpp-configuration/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.139Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2021/08/02/Vulkan-Ray-Tracing-Specification/</loc>
     
-    <lastmod>2024-04-20T09:09:26.062Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.139Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</loc>
+    <loc>https://blog.inoki.cc/2019/05/16/Win10-ARM-RPI-INSTALL/</loc>
     
-    <lastmod>2024-04-20T09:09:26.058Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2019/10/18/OpenCL-0/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.058Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.058Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2019/10/17/Python-code-analyse-0/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.058Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2024/04/15/Ollama/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.058Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2024/04/16/Ollama-cn/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.058Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2018/11/26/Quic-HTTP-3/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.058Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2019/10/22/Python-invalidate-hundreds-of-papers/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.058Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2019/10/21/Python-code-analyse-1/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.058Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.139Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2021/12/16/My_tutorial_and_take_on_C++20_coroutines/</loc>
     
-    <lastmod>2024-04-20T09:09:26.054Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.135Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://blog.inoki.cc/2020/05/25/LoRa-Data-rate-and-spreading-factor/</loc>
+    <loc>https://blog.inoki.cc/2021/11/19/On-the-value-of-export-symbol-gpl/</loc>
     
-    <lastmod>2024-04-20T09:09:26.050Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2020/05/25/LoRa-Key_Concept/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.050Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.135Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://blog.inoki.cc/2020/05/26/LoRa-Primer/</loc>
+    <loc>https://blog.inoki.cc/2019/10/18/OpenCL-0/</loc>
     
-    <lastmod>2024-04-20T09:09:26.050Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2020/05/16/LoRaWAN-how-spreading-factor-affects-lorawan-device-battery-life/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.050Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.135Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://blog.inoki.cc/2020/05/16/LoRaWAN-spec-read-gloassary/</loc>
+    <loc>https://blog.inoki.cc/2021/11/12/Physical-significance-iip3-important-receiver-chain/</loc>
     
-    <lastmod>2024-04-20T09:09:26.050Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2020/12/30/My-2020/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.050Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.135Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://blog.inoki.cc/2022/02/08/My-2021/</loc>
+    <loc>https://blog.inoki.cc/2024/04/16/Ollama-cn/</loc>
     
-    <lastmod>2024-04-20T09:09:26.050Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.135Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2024/04/15/Ollama/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.135Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2019/10/17/Python-code-analyse-0/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.135Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2019/10/22/Python-invalidate-hundreds-of-papers/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.135Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2018/11/26/Quic-HTTP-3/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.135Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2019/10/21/Python-code-analyse-1/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.135Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/</loc>
     
-    <lastmod>2024-04-20T09:09:26.050Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2020/04/19/KDEConnect-iOS-dev-dairy-ZHCN-2/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.046Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.131Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2018/11/07/Leetcode-300-Longest-Increasing-Subsequence/</loc>
     
-    <lastmod>2024-04-20T09:09:26.046Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.127Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://blog.inoki.cc/2020/04/19/KDEConnect-iOS-dev-dairy-2/</loc>
+    <loc>https://blog.inoki.cc/2020/05/26/LoRa-Primer/</loc>
     
-    <lastmod>2024-04-20T09:09:26.042Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2020/04/18/KDEConnect-iOS-dev-dairy-ZHCN-0/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.042Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.127Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</loc>
+    <loc>https://blog.inoki.cc/2020/05/25/LoRa-Data-rate-and-spreading-factor/</loc>
     
-    <lastmod>2024-04-20T09:09:26.042Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.127Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2020/05/16/LoRaWAN-how-spreading-factor-affects-lorawan-device-battery-life/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.127Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2020/05/25/LoRa-Key_Concept/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.127Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2020/05/16/LoRaWAN-spec-read-gloassary/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.127Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2020/12/30/My-2020/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.127Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2024/06/08/My-10-years/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.127Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2022/02/08/My-2021/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.127Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/04/18/KDEConnect-iOS-dev-dairy-ZHCN-1/</loc>
     
-    <lastmod>2024-04-20T09:09:26.042Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.123Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2020/04/19/KDEConnect-iOS-dev-dairy-ZHCN-2/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.123Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2020/04/18/KDEConnect-iOS-dev-dairy-ZHCN-0/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.119Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2020/04/19/KDEConnect-iOS-dev-dairy-2/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.119Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2021/02/07/KDEConnect-iOS-dev-dairy-3/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.119Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/09/06/KDE-Frameworks-KDNSSD/</loc>
     
-    <lastmod>2024-04-20T09:09:26.038Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2020/04/18/KDEConnect-iOS-dev-dairy-0/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.038Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.115Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/07/07/KDEConnect-Install-QA/</loc>
     
-    <lastmod>2024-04-20T09:09:26.038Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.115Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2020/04/18/KDEConnect-iOS-dev-dairy-0/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.115Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/07/02/KDE-Frameworks-Introduction/</loc>
     
-    <lastmod>2024-04-20T09:09:26.038Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.115Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/04/18/KDEConnect-iOS-dev-dairy-1/</loc>
     
-    <lastmod>2024-04-20T09:09:26.038Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.115Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2015/10/01/France/</loc>
     
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2019/12/16/FFmpeg-Decoding/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.107Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/09/19/GBDK-Joypad-Tutorial/</loc>
     
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.107Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/09/19/GBDK-Sprite-Tutorial/</loc>
     
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.107Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.107Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</loc>
     
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.107Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/</loc>
     
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.107Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/06/05/IBus-libpinyin-cloud-input-candidate-parser/</loc>
     
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.107Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/</loc>
+    <loc>https://blog.inoki.cc/2020/07/16/IBus-libpinyin-cloud-input-configurations/</loc>
     
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.107Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2021/12/09/Inoki-qefi-entry-manager/</loc>
     
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.107Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/06/15/IBus-libpinyin-cloud-input-state-and-error-handle/</loc>
     
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.107Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2020/05/31/IBus-libpinyin-cloud-input-global-view/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.107Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2019/12/08/Install-linux-QQ-on-chromeos/</loc>
     
-    <lastmod>2024-04-20T09:09:26.030Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2018/10/25/Cross-compile-beginning-without-Makefile/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.026Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2019/10/20/Data-Structure/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.026Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.107Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/05/17/Enable-UART-Raspberry-Pi-Bare-Metal/</loc>
     
-    <lastmod>2024-04-20T09:09:26.026Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.103Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2019/12/16/FFmpeg-Decoding/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.103Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2019/04/02/Debian-build-deb-from-source-code/</loc>
     
-    <lastmod>2024-04-20T09:09:26.026Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.103Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.103Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2018/10/25/Cross-compile-beginning-without-Makefile/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.099Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2019/10/20/Data-Structure/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.099Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2019/04/30/Build-go-for-newifi2-d1-router-chinese/</loc>
     
-    <lastmod>2024-04-20T09:09:26.018Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.095Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2019/04/30/Build-go-for-newifi2-d1-router/</loc>
     
-    <lastmod>2024-04-20T09:09:26.018Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2019/05/10/Craft-bootstrap/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.018Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.095Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/02/29/Build-iBus/</loc>
     
-    <lastmod>2024-04-20T09:09:26.018Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.095Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2019/05/10/Craft-bootstrap/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.095Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2019/05/19/Craft-vlc/</loc>
     
-    <lastmod>2024-04-20T09:09:26.018Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.095Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/</loc>
     
-    <lastmod>2024-04-20T09:09:26.010Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.087Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/</loc>
     
-    <lastmod>2024-04-20T09:09:26.010Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.010Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/</loc>
-    
-    <lastmod>2024-04-20T09:09:26.010Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.087Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/07/02/Basic-of-Software-Defined-Radio-1/</loc>
     
-    <lastmod>2024-04-20T09:09:26.010Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.087Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://blog.inoki.cc/2020/07/03/Basic-of-Software-Defined-Radio-2/</loc>
+    <loc>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</loc>
     
-    <lastmod>2024-04-20T09:09:26.010Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.087Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://blog.inoki.cc/2019/12/12/Bug_AX88179_178a_USB_Ethernet_adapter_Linux_Driver/</loc>
+    <loc>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/</loc>
     
-    <lastmod>2024-04-20T09:09:26.010Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.087Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2020/08/07/Basic-of-Software-Defined-Radio-3/</loc>
     
-    <lastmod>2024-04-20T09:09:26.010Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.087Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2020/07/03/Basic-of-Software-Defined-Radio-2/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.087Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.inoki.cc/2019/12/12/Bug_AX88179_178a_USB_Ethernet_adapter_Linux_Driver/</loc>
+    
+    <lastmod>2024-06-08T23:42:42.087Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2019/12/09/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/</loc>
     
-    <lastmod>2024-04-20T09:09:26.006Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.083Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.inoki.cc/2021/01/25/AX88179_178a_USB_Ethernet_adapter_Linux_Driver/SDDM-tips-1/</loc>
     
-    <lastmod>2024-04-20T09:09:26.006Z</lastmod>
+    <lastmod>2024-06-08T23:42:42.083Z</lastmod>
     
   </url>
   

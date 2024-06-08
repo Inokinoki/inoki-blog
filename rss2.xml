@@ -9,8 +9,30 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sat, 20 Apr 2024 09:09:26 GMT</pubDate>
+    <pubDate>Sat, 08 Jun 2024 23:42:42 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>弹指十年间</title>
+      <link>https://blog.inoki.cc/2024/06/08/My-10-years/</link>
+      <guid>https://blog.inoki.cc/2024/06/08/My-10-years/</guid>
+      <pubDate>Sat, 08 Jun 2024 17:19:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;又是一年高考季，属于我的那个年代转眼就过去了十年。&lt;/p&gt;
+&lt;p&gt;那年夏天，待一切尘埃落定时，刚好是小时候最喜欢的动漫《数码宝贝》十五周年，我长大了，太一他们也在十五周年的纪念剧场版长大了。和田光司在那一年的周年庆典上又唱起了这首歌，听得出他因鼻咽癌导致的力不从心。&lt;/p&gt;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2024/06/08/My-10-years/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Android bootloader analysis -- ABL(2)</title>
@@ -418,27 +440,6 @@
       
       
       <comments>https://blog.inoki.cc/2022/02/22/My-journey-on-raspberrypi-jtag-debugging/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>孑然一身的 2021</title>
-      <link>https://blog.inoki.cc/2022/02/08/My-2021/</link>
-      <guid>https://blog.inoki.cc/2022/02/08/My-2021/</guid>
-      <pubDate>Tue, 08 Feb 2022 16:54:40 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;又过去了一整年，2020
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2022/02/08/My-2021/#disqus_thread</comments>
     </item>
     
   </channel>
