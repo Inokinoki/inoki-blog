@@ -9,8 +9,30 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sat, 08 Mar 2025 09:40:48 GMT</pubDate>
+    <pubDate>Sat, 08 Mar 2025 09:42:39 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>在 Proxy 环境中使用 GitHub SSH 的 git 操作</title>
+      <link>https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/</link>
+      <guid>https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/</guid>
+      <pubDate>Sat, 08 Mar 2025 06:02:23 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;上次回国，发现墙又高了：GitHub 的 SSH 端口（22）现在会完全被阻断，导致无法正常使用 SSH 协议进行 &lt;code&gt;git clone&lt;/code&gt;、&lt;code&gt;git pull&lt;/code&gt; 等操作。&lt;/p&gt;
+&lt;p&gt;事实上，封禁 22
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>弹指十年间</title>
@@ -35,27 +57,6 @@
     </item>
     
     <item>
-      <title>Android bootloader analysis -- ABL(3)</title>
-      <link>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</link>
-      <guid>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</guid>
-      <pubDate>Sat, 20 Apr 2024 13:48:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;In my previous post &lt;a href=&quot;https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/&quot;&gt;“Android Bootloader Analysis –
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/#disqus_thread</comments>
-    </item>
-    
-    <item>
       <title>Android bootloader analysis -- ABL(2)</title>
       <link>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</link>
       <guid>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</guid>
@@ -74,6 +75,27 @@
       
       
       <comments>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>Android bootloader analysis -- ABL(3)</title>
+      <link>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</link>
+      <guid>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</guid>
+      <pubDate>Sat, 20 Apr 2024 13:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;In my previous post &lt;a href=&quot;https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/&quot;&gt;“Android Bootloader Analysis –
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/#disqus_thread</comments>
     </item>
     
     <item>
@@ -116,28 +138,6 @@
       
       
       <comments>https://blog.inoki.cc/2024/04/15/Ollama/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>在 Proxy 环境中使用 GitHub SSH 的 git 操作</title>
-      <link>https://blog.inoki.cc/2024/03/08/GitHub-ssh-connection-behind-proxy/</link>
-      <guid>https://blog.inoki.cc/2024/03/08/GitHub-ssh-connection-behind-proxy/</guid>
-      <pubDate>Fri, 08 Mar 2024 06:02:23 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;上次回国，发现墙又高了：GitHub 的 SSH 端口（22）现在会完全被阻断，导致无法正常使用 SSH 协议进行 &lt;code&gt;git clone&lt;/code&gt;、&lt;code&gt;git pull&lt;/code&gt; 等操作。&lt;/p&gt;
-&lt;p&gt;事实上，封禁 22
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2024/03/08/GitHub-ssh-connection-behind-proxy/#disqus_thread</comments>
     </item>
     
     <item>

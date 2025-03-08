@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2025-03-08T09:40:48.585Z</updated>
+  <updated>2025-03-08T09:42:39.726Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,49 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>在 Proxy 环境中使用 GitHub SSH 的 git 操作</title>
+    <link href="https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/"/>
+    <id>https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/</id>
+    <published>2025-03-08T06:02:23.000Z</published>
+    <updated>2025-03-08T09:42:39.726Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;上次回国，发现墙又高了：GitHub 的 SSH 端口（22）现在会完全被阻断，导致无法正常使用 SSH 协议进行 &lt;code&gt;git clone&lt;/code&gt;、&lt;code&gt;git pull&lt;/code&gt; 等操作。&lt;/p&gt;
+&lt;p&gt;事实上，封禁 22
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Network" scheme="https://blog.inoki.cc/categories/Network/"/>
+    
+      <category term="Protocol" scheme="https://blog.inoki.cc/categories/Protocol/"/>
+    
+      <category term="Proxy" scheme="https://blog.inoki.cc/categories/Network/Proxy/"/>
+    
+    
+      <category term="GitHub" scheme="https://blog.inoki.cc/tags/GitHub/"/>
+    
+      <category term="SSH" scheme="https://blog.inoki.cc/tags/SSH/"/>
+    
+      <category term="git" scheme="https://blog.inoki.cc/tags/git/"/>
+    
+      <category term="Proxy" scheme="https://blog.inoki.cc/tags/Proxy/"/>
+    
+  </entry>
+  
+  <entry>
     <title>弹指十年间</title>
     <link href="https://blog.inoki.cc/2024/06/08/My-10-years/"/>
     <id>https://blog.inoki.cc/2024/06/08/My-10-years/</id>
     <published>2024-06-08T17:19:00.000Z</published>
-    <updated>2025-03-08T09:40:48.585Z</updated>
+    <updated>2025-03-08T09:42:39.745Z</updated>
     
     <summary type="html">
     
@@ -47,48 +85,11 @@
   </entry>
   
   <entry>
-    <title>Android bootloader analysis -- ABL(3)</title>
-    <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/"/>
-    <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</id>
-    <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2025-03-08T09:40:48.607Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;In my previous post &lt;a href=&quot;https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/&quot;&gt;“Android Bootloader Analysis –
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
-    
-      <category term="Android" scheme="https://blog.inoki.cc/categories/Linux/Android/"/>
-    
-      <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
-    
-    
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
-    
-      <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
-    
-      <category term="ABL" scheme="https://blog.inoki.cc/tags/ABL/"/>
-    
-      <category term="Bootloader" scheme="https://blog.inoki.cc/tags/Bootloader/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Android bootloader analysis -- ABL(2)</title>
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2025-03-08T09:40:48.607Z</updated>
+    <updated>2025-03-08T09:42:39.767Z</updated>
     
     <summary type="html">
     
@@ -121,11 +122,48 @@
   </entry>
   
   <entry>
+    <title>Android bootloader analysis -- ABL(3)</title>
+    <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/"/>
+    <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</id>
+    <published>2024-04-20T13:48:00.000Z</published>
+    <updated>2025-03-08T09:42:39.768Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;In my previous post &lt;a href=&quot;https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/&quot;&gt;“Android Bootloader Analysis –
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
+    
+      <category term="Android" scheme="https://blog.inoki.cc/categories/Linux/Android/"/>
+    
+      <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
+    
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+    
+      <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
+    
+      <category term="ABL" scheme="https://blog.inoki.cc/tags/ABL/"/>
+    
+      <category term="Bootloader" scheme="https://blog.inoki.cc/tags/Bootloader/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Ollama 架构解析</title>
     <link href="https://blog.inoki.cc/2024/04/16/Ollama-cn/"/>
     <id>https://blog.inoki.cc/2024/04/16/Ollama-cn/</id>
     <published>2024-04-16T18:03:00.000Z</published>
-    <updated>2025-03-08T09:40:48.589Z</updated>
+    <updated>2025-03-08T09:42:39.749Z</updated>
     
     <summary type="html">
     
@@ -160,7 +198,7 @@
     <link href="https://blog.inoki.cc/2024/04/15/Ollama/"/>
     <id>https://blog.inoki.cc/2024/04/15/Ollama/</id>
     <published>2024-04-15T15:34:00.000Z</published>
-    <updated>2025-03-08T09:40:48.590Z</updated>
+    <updated>2025-03-08T09:42:39.750Z</updated>
     
     <summary type="html">
     
@@ -187,49 +225,11 @@
   </entry>
   
   <entry>
-    <title>在 Proxy 环境中使用 GitHub SSH 的 git 操作</title>
-    <link href="https://blog.inoki.cc/2024/03/08/GitHub-ssh-connection-behind-proxy/"/>
-    <id>https://blog.inoki.cc/2024/03/08/GitHub-ssh-connection-behind-proxy/</id>
-    <published>2024-03-08T06:02:23.000Z</published>
-    <updated>2025-03-08T09:40:48.565Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;上次回国，发现墙又高了：GitHub 的 SSH 端口（22）现在会完全被阻断，导致无法正常使用 SSH 协议进行 &lt;code&gt;git clone&lt;/code&gt;、&lt;code&gt;git pull&lt;/code&gt; 等操作。&lt;/p&gt;
-&lt;p&gt;事实上，封禁 22
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Network" scheme="https://blog.inoki.cc/categories/Network/"/>
-    
-      <category term="Protocol" scheme="https://blog.inoki.cc/categories/Protocol/"/>
-    
-      <category term="Proxy" scheme="https://blog.inoki.cc/categories/Network/Proxy/"/>
-    
-    
-      <category term="GitHub" scheme="https://blog.inoki.cc/tags/GitHub/"/>
-    
-      <category term="SSH" scheme="https://blog.inoki.cc/tags/SSH/"/>
-    
-      <category term="git" scheme="https://blog.inoki.cc/tags/git/"/>
-    
-      <category term="Proxy" scheme="https://blog.inoki.cc/tags/Proxy/"/>
-    
-  </entry>
-  
-  <entry>
     <title>【译】解释 SDXL 的隐空间</title>
     <link href="https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/"/>
     <id>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/</id>
     <published>2024-02-18T03:57:50.000Z</published>
-    <updated>2025-03-08T09:40:48.564Z</updated>
+    <updated>2025-03-08T09:42:39.725Z</updated>
     
     <summary type="html">
     
@@ -266,7 +266,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/</id>
     <published>2023-09-14T23:42:00.000Z</published>
-    <updated>2025-03-08T09:40:48.547Z</updated>
+    <updated>2025-03-08T09:42:39.707Z</updated>
     
     <summary type="html">
     
@@ -305,7 +305,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/</id>
     <published>2023-09-14T23:22:00.000Z</published>
-    <updated>2025-03-08T09:40:48.547Z</updated>
+    <updated>2025-03-08T09:42:39.707Z</updated>
     
     <summary type="html">
     
@@ -344,7 +344,7 @@
     <link href="https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/"/>
     <id>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</id>
     <published>2023-09-13T23:22:00.000Z</published>
-    <updated>2025-03-08T09:40:48.547Z</updated>
+    <updated>2025-03-08T09:42:39.707Z</updated>
     
     <summary type="html">
     
@@ -383,7 +383,7 @@
     <link href="https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/"/>
     <id>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/</id>
     <published>2023-09-06T23:22:00.000Z</published>
-    <updated>2025-03-08T09:40:48.547Z</updated>
+    <updated>2025-03-08T09:42:39.707Z</updated>
     
     <summary type="html">
     
@@ -422,7 +422,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-3/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/</id>
     <published>2023-08-22T12:34:00.000Z</published>
-    <updated>2025-03-08T09:40:48.566Z</updated>
+    <updated>2025-03-08T09:42:39.726Z</updated>
     
     <summary type="html">
     
@@ -458,7 +458,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-2/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</id>
     <published>2023-08-22T00:34:00.000Z</published>
-    <updated>2025-03-08T09:40:48.566Z</updated>
+    <updated>2025-03-08T09:42:39.726Z</updated>
     
     <summary type="html">
     
@@ -494,7 +494,7 @@
     <link href="https://blog.inoki.cc/2023/08/20/History-of-ARM-1/"/>
     <id>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</id>
     <published>2023-08-20T20:34:00.000Z</published>
-    <updated>2025-03-08T09:40:48.566Z</updated>
+    <updated>2025-03-08T09:42:39.726Z</updated>
     
     <summary type="html">
     
@@ -530,7 +530,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/"/>
     <id>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</id>
     <published>2023-04-30T13:20:00.000Z</published>
-    <updated>2025-03-08T09:40:48.609Z</updated>
+    <updated>2025-03-08T09:42:39.769Z</updated>
     
     <summary type="html">
     
@@ -567,7 +567,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/"/>
     <id>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</id>
     <published>2023-04-30T11:20:00.000Z</published>
-    <updated>2025-03-08T09:40:48.609Z</updated>
+    <updated>2025-03-08T09:42:39.770Z</updated>
     
     <summary type="html">
     
@@ -604,7 +604,7 @@
     <link href="https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/"/>
     <id>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</id>
     <published>2023-04-29T12:20:00.000Z</published>
-    <updated>2025-03-08T09:40:48.609Z</updated>
+    <updated>2025-03-08T09:42:39.769Z</updated>
     
     <summary type="html">
     
@@ -641,7 +641,7 @@
     <link href="https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/"/>
     <id>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/</id>
     <published>2023-04-29T11:20:00.000Z</published>
-    <updated>2025-03-08T09:40:48.609Z</updated>
+    <updated>2025-03-08T09:42:39.770Z</updated>
     
     <summary type="html">
     
@@ -678,7 +678,7 @@
     <link href="https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/"/>
     <id>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/</id>
     <published>2023-04-25T11:20:00.000Z</published>
-    <updated>2025-03-08T09:40:48.611Z</updated>
+    <updated>2025-03-08T09:42:39.771Z</updated>
     
     <summary type="html">
     
@@ -717,7 +717,7 @@
     <link href="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/"/>
     <id>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</id>
     <published>2022-05-09T20:48:00.000Z</published>
-    <updated>2025-03-08T09:40:48.608Z</updated>
+    <updated>2025-03-08T09:42:39.768Z</updated>
     
     <summary type="html">
     
