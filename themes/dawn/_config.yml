@@ -39,7 +39,7 @@ site:
     url: ../images/logo.png
   title: Inoki in the world # 页面title
   favicon: /favicon.ico
-  board: Welcome to Inoki's Blog. You can find my work on IME, Embedded System an more on here. # 站点公告
+  board: Welcome to Inoki's Blog. You can find my work on IME, Embedded System and more on here. # 站点公告
   copyright: false # 底部版权信息
 
 # config
