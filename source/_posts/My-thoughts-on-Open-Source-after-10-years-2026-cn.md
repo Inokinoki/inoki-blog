@@ -15,7 +15,7 @@ categories:
 
 在那时，Eric S. Raymond 讲的是同一套代码，落在不同组织方式里会长成完全不同的东西：在大教堂里，它是由少数“高端建筑师”关起门来雕琢的作品；在集市里，它是被一群摊主和路人不断摸索出来的结果。大教堂强调秩序、规划和统一愿景，集市强调碰撞、试错和快速反馈，这两种模式后来几乎成了“精英开源协作”和“分布式开源协作”的隐喻。
 
-在非常广泛的例子里，我们确实看到了这两种模式的存在：Linux 内核、Python 这些项目更像大教堂，GitHub 上的无数个人项目和小工具更像集市。但随着时间的推移，开源世界的格局已经发生了很大的变化。我们仍然可以用大教堂和集市来描述不同的项目，如 GNU 是大教堂，Linux 是集市；BSD 是大教堂，Apache 是集市；Emacs 是大教堂，Perl 是集市…… 这个二分法在当时的开源世界里非常有说服力，也成为了很多人理解开源的基础框架。但它们之间的界限已经变得模糊。
+在非常广泛的例子里，我们确实看到了这两种模式的存在。但随着时间的推移，开源世界的格局已经发生了很大的变化。我们仍然可以用大教堂和集市来描述不同的项目，如 GNU 是大教堂，Linux 是集市；BSD 是大教堂，Apache 是集市；Emacs 是大教堂，Perl 是集市…… 这个二分法在当时的开源世界里非常有说服力，也成为了很多人理解开源的基础框架。但它们之间的界限已经变得模糊。
 
 二十多年过去，软件世界看起来无比“开源化”：GitHub 上仓库指数级增长，Linux、Python、Node.js 这些基础设施几乎统治了一切。但如果把视角从许可证挪到协作方式，就会发现，我们早已不再生活在 Raymond 想象的那个单纯的大教堂 / 集市二分世界里。
 
@@ -139,28 +139,40 @@ http://www.catb.org/esr/writings/cathedral-bazaar/
 
 - Tison Kung，“诱导转向的伪开源战略（Bait‑and‑Switch Fauxpen Source Strategy）”。
 https://www.tisonkun.org/2022/10/04/bait-and-switch-fauxpen-source-strategy/
-​- Jimmy Song，“大模型时代的开源：从开放代码到开放权重的演进”。
+
+- Jimmy Song，“大模型时代的开源：从开放代码到开放权重的演进”。
 https://jimmysong.io/zh/book/ai-handbook/llm/open-model/
 ​- Air Street Press，“The cathedral and the bazaar – how AI rewrites open vs. closed”。
 https://press.airstreet.com/p/the-cathedral-and-the-bazaar
+
 - LWN.net, “Reducing kernel‑maintainer burnout”。
 https://lwn.net/Articles/952666/
-​- LWN.net, “On Linux kernel maintainer scalability”。
+
+- LWN.net, “On Linux kernel maintainer scalability”。
 https://lwn.net/Articles/703005/
-​- LWN.net, “MAINTAINERS truth and fiction”。
+
+- LWN.net, “MAINTAINERS truth and fiction”。
 https://lwn.net/Articles/842415/
-​- Intel，“Maintainer Burnout is a Problem. So, What Are We Going to Do?”
+​
+- Intel，“Maintainer Burnout is a Problem. So, What Are We Going to Do?”
 https://www.intel.com/content/www/us/en/developer/articles/community/maintainer-burnout-a-problem-what-are-we-to-do.html
-​- Hector Martin, “Resigning as Asahi Linux project lead”。
+
+- Hector Martin, “Resigning as Asahi Linux project lead”。
 https://marcan.st/2025/02/resigning-as-asahi-linux-project-lead/
-​- The Register, “Asahi Linux head quits, citing kernel leadership failure”。
+​
+- The Register, “Asahi Linux head quits, citing kernel leadership failure”。
 https://www.theregister.com/2025/02/13/ashai_linux_head_quits/
-​- Inoki 的博客：AX88179/178a USB‑Ethernet adapter Linux Driver。
+​
+- Inoki 的博客：AX88179/178a USB‑Ethernet adapter Linux Driver 
 https://blog.inoki.cc/2019/12/12/Bug_AX88179_178a_USB_Ethernet_adapter_Linux_Driver/
-​- Linux 提交：e869e7a17798d85829fa7d4f9bbe1eebd4b2d3f6。
+​
+- 修复 AX88179/178a tailing 2-byte 的 Linux 提交：e869e7a17798d85829fa7d4f9bbe1eebd4b2d3f6。
 https://github.com/torvalds/linux/commit/e869e7a17798d85829fa7d4f9bbe1eebd4b2d3f6
-​- vLLM Issue #31901
+​
+- vLLM Issue #31901
 https://github.com/vllm-project/vllm/issues/31901
-​- vLLM PR #32384
+
+- vLLM PR #32384
 https://github.com/vllm-project/vllm/pull/32384
+
 - How I got robbed of my first kernel contribution https://www.reddit.com/r/programming/comments/16tf5ne/how_i_got_robbed_of_my_first_kernel_contribution/
