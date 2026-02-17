@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Tue, 17 Feb 2026 11:36:04 GMT</pubDate>
+    <pubDate>Tue, 17 Feb 2026 16:50:26 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>My Thoughts on the Open Source — after a decade</title>
+      <link>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-a-decade-2026/</link>
+      <guid>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-a-decade-2026/</guid>
+      <pubDate>Tue, 17 Feb 2026 18:23:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;pre&gt;&lt;code&gt;You can find the original version in Chinese here:
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-a-decade-2026/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>对开源模式演变的一些想法——写在开始参与开源 10 年后</title>
@@ -420,27 +441,6 @@
       
       
       <comments>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】解锁摩托罗拉的引导程序</title>
-      <link>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/</link>
-      <guid>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/</guid>
-      <pubDate>Tue, 25 Apr 2023 11:20:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;在&lt;a href=&quot;http://bits-please.blogspot.com/2016/02/unlocking-motorola-bootloader.html&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/#disqus_thread</comments>
     </item>
     
   </channel>
