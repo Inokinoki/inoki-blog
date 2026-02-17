@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sun, 09 Mar 2025 09:31:56 GMT</pubDate>
+    <pubDate>Tue, 17 Feb 2026 10:56:02 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>对开源模式演变的一些想法——写在开始参与开源 10 年后</title>
+      <link>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/</link>
+      <guid>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/</guid>
+      <pubDate>Tue, 17 Feb 2026 18:03:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;距离《大教堂与集市》初版已经过去二十多年了。那本书在 1997 年的开源运动初期，提出了一个极具启发性的比喻：软件开发就像建造建筑物，可以是大教堂式的，也可以是集市式的。
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>在 Proxy 环境中使用 GitHub SSH 的 git 操作</title>
@@ -420,27 +441,6 @@
       
       
       <comments>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>Android Bootloader and Linux Internal based on Nokia 8(NB1) —— Device Tree</title>
-      <link>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</link>
-      <guid>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</guid>
-      <pubDate>Mon, 09 May 2022 20:48:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;Context: I am working on porting Plasma Mobile and EDK II to my Nokia 8 (codename: NB1) device. There are many things to do and to
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/#disqus_thread</comments>
     </item>
     
   </channel>

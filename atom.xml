@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2025-03-09T09:31:56.956Z</updated>
+  <updated>2026-02-17T10:56:02.942Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,46 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>对开源模式演变的一些想法——写在开始参与开源 10 年后</title>
+    <link href="https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/"/>
+    <id>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/</id>
+    <published>2026-02-17T18:03:00.000Z</published>
+    <updated>2026-02-17T10:56:02.942Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;距离《大教堂与集市》初版已经过去二十多年了。那本书在 1997 年的开源运动初期，提出了一个极具启发性的比喻：软件开发就像建造建筑物，可以是大教堂式的，也可以是集市式的。
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Open Source" scheme="https://blog.inoki.cc/categories/Open-Source/"/>
+    
+      <category term="Dairy" scheme="https://blog.inoki.cc/categories/Open-Source/Dairy/"/>
+    
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
+    
+      <category term="开源" scheme="https://blog.inoki.cc/tags/%E5%BC%80%E6%BA%90/"/>
+    
+      <category term="Open Source" scheme="https://blog.inoki.cc/tags/Open-Source/"/>
+    
+  </entry>
+  
+  <entry>
     <title>在 Proxy 环境中使用 GitHub SSH 的 git 操作</title>
     <link href="https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/"/>
     <id>https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/</id>
     <published>2025-03-08T06:02:23.000Z</published>
-    <updated>2025-03-09T09:31:56.956Z</updated>
+    <updated>2026-02-17T10:56:02.922Z</updated>
     
     <summary type="html">
     
@@ -59,7 +94,7 @@
     <link href="https://blog.inoki.cc/2024/06/08/My-10-years/"/>
     <id>https://blog.inoki.cc/2024/06/08/My-10-years/</id>
     <published>2024-06-08T17:19:00.000Z</published>
-    <updated>2025-03-09T09:31:56.976Z</updated>
+    <updated>2026-02-17T10:56:02.939Z</updated>
     
     <summary type="html">
     
@@ -89,7 +124,7 @@
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2025-03-09T09:31:56.997Z</updated>
+    <updated>2026-02-17T10:56:02.959Z</updated>
     
     <summary type="html">
     
@@ -126,7 +161,7 @@
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2025-03-09T09:31:56.998Z</updated>
+    <updated>2026-02-17T10:56:02.959Z</updated>
     
     <summary type="html">
     
@@ -163,7 +198,7 @@
     <link href="https://blog.inoki.cc/2024/04/16/Ollama-cn/"/>
     <id>https://blog.inoki.cc/2024/04/16/Ollama-cn/</id>
     <published>2024-04-16T18:03:00.000Z</published>
-    <updated>2025-03-09T09:31:56.979Z</updated>
+    <updated>2026-02-17T10:56:02.942Z</updated>
     
     <summary type="html">
     
@@ -198,7 +233,7 @@
     <link href="https://blog.inoki.cc/2024/04/15/Ollama/"/>
     <id>https://blog.inoki.cc/2024/04/15/Ollama/</id>
     <published>2024-04-15T15:34:00.000Z</published>
-    <updated>2025-03-09T09:31:56.980Z</updated>
+    <updated>2026-02-17T10:56:02.943Z</updated>
     
     <summary type="html">
     
@@ -229,7 +264,7 @@
     <link href="https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/"/>
     <id>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/</id>
     <published>2024-02-18T03:57:50.000Z</published>
-    <updated>2025-03-09T09:31:56.955Z</updated>
+    <updated>2026-02-17T10:56:02.920Z</updated>
     
     <summary type="html">
     
@@ -266,7 +301,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/</id>
     <published>2023-09-14T23:42:00.000Z</published>
-    <updated>2025-03-09T09:31:56.938Z</updated>
+    <updated>2026-02-17T10:56:02.904Z</updated>
     
     <summary type="html">
     
@@ -305,7 +340,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/</id>
     <published>2023-09-14T23:22:00.000Z</published>
-    <updated>2025-03-09T09:31:56.938Z</updated>
+    <updated>2026-02-17T10:56:02.904Z</updated>
     
     <summary type="html">
     
@@ -344,7 +379,7 @@
     <link href="https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/"/>
     <id>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</id>
     <published>2023-09-13T23:22:00.000Z</published>
-    <updated>2025-03-09T09:31:56.938Z</updated>
+    <updated>2026-02-17T10:56:02.904Z</updated>
     
     <summary type="html">
     
@@ -383,7 +418,7 @@
     <link href="https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/"/>
     <id>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/</id>
     <published>2023-09-06T23:22:00.000Z</published>
-    <updated>2025-03-09T09:31:56.938Z</updated>
+    <updated>2026-02-17T10:56:02.904Z</updated>
     
     <summary type="html">
     
@@ -422,7 +457,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-3/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/</id>
     <published>2023-08-22T12:34:00.000Z</published>
-    <updated>2025-03-09T09:31:56.957Z</updated>
+    <updated>2026-02-17T10:56:02.922Z</updated>
     
     <summary type="html">
     
@@ -458,7 +493,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-2/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</id>
     <published>2023-08-22T00:34:00.000Z</published>
-    <updated>2025-03-09T09:31:56.957Z</updated>
+    <updated>2026-02-17T10:56:02.922Z</updated>
     
     <summary type="html">
     
@@ -494,7 +529,7 @@
     <link href="https://blog.inoki.cc/2023/08/20/History-of-ARM-1/"/>
     <id>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</id>
     <published>2023-08-20T20:34:00.000Z</published>
-    <updated>2025-03-09T09:31:56.957Z</updated>
+    <updated>2026-02-17T10:56:02.922Z</updated>
     
     <summary type="html">
     
@@ -530,7 +565,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/"/>
     <id>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</id>
     <published>2023-04-30T13:20:00.000Z</published>
-    <updated>2025-03-09T09:31:56.999Z</updated>
+    <updated>2026-02-17T10:56:02.961Z</updated>
     
     <summary type="html">
     
@@ -567,7 +602,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/"/>
     <id>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</id>
     <published>2023-04-30T11:20:00.000Z</published>
-    <updated>2025-03-09T09:31:57.000Z</updated>
+    <updated>2026-02-17T10:56:02.961Z</updated>
     
     <summary type="html">
     
@@ -604,7 +639,7 @@
     <link href="https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/"/>
     <id>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</id>
     <published>2023-04-29T12:20:00.000Z</published>
-    <updated>2025-03-09T09:31:56.999Z</updated>
+    <updated>2026-02-17T10:56:02.961Z</updated>
     
     <summary type="html">
     
@@ -641,7 +676,7 @@
     <link href="https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/"/>
     <id>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/</id>
     <published>2023-04-29T11:20:00.000Z</published>
-    <updated>2025-03-09T09:31:57.000Z</updated>
+    <updated>2026-02-17T10:56:02.961Z</updated>
     
     <summary type="html">
     
@@ -678,7 +713,7 @@
     <link href="https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/"/>
     <id>https://blog.inoki.cc/2023/04/25/unlocking-motorola-bootloader/</id>
     <published>2023-04-25T11:20:00.000Z</published>
-    <updated>2025-03-09T09:31:57.002Z</updated>
+    <updated>2026-02-17T10:56:02.963Z</updated>
     
     <summary type="html">
     
@@ -701,43 +736,6 @@
     
     
       <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
-    
-      <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
-    
-      <category term="ABL" scheme="https://blog.inoki.cc/tags/ABL/"/>
-    
-      <category term="Bootloader" scheme="https://blog.inoki.cc/tags/Bootloader/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Android Bootloader and Linux Internal based on Nokia 8(NB1) —— Device Tree</title>
-    <link href="https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/"/>
-    <id>https://blog.inoki.cc/2022/05/09/android-bootloader-linux-nokia-nb1-dt/</id>
-    <published>2022-05-09T20:48:00.000Z</published>
-    <updated>2025-03-09T09:31:56.998Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;Context: I am working on porting Plasma Mobile and EDK II to my Nokia 8 (codename: NB1) device. There are many things to do and to
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
-    
-      <category term="Android" scheme="https://blog.inoki.cc/categories/Linux/Android/"/>
-    
-      <category term="Bootloader" scheme="https://blog.inoki.cc/categories/Linux/Android/Bootloader/"/>
-    
     
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <script data-ad-client="ca-pub-2713518338457470" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>对开源模式演变的一些想法——写在开始参与开源 10 年后 | Inoki in the world</title>
+  <meta name="description" content="距离《大教堂与集市》初版已经过去二十多年了。那本书在 1997 年的开源运动初期，提出了一个极具启发性的比喻：软件开发就像建造建筑物，可以是大教堂式的，也可以是集市式的。 大教堂式的开发由少数人精心设计和构建，强调规划和秩序；集市式的开发则是开放的、分散的，强调试错和快速迭代。 在那时，Eric S. Raymond 讲的是同一套代码，落在不同组织方式里会长成完全不同的东西：在大教堂里，它是由少数">
+<meta name="keywords" content="中文,Linux,开源,Open Source">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对开源模式演变的一些想法——写在开始参与开源 10 年后">
+<meta property="og:url" content="https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="距离《大教堂与集市》初版已经过去二十多年了。那本书在 1997 年的开源运动初期，提出了一个极具启发性的比喻：软件开发就像建造建筑物，可以是大教堂式的，也可以是集市式的。 大教堂式的开发由少数人精心设计和构建，强调规划和秩序；集市式的开发则是开放的、分散的，强调试错和快速迭代。 在那时，Eric S. Raymond 讲的是同一套代码，落在不同组织方式里会长成完全不同的东西：在大教堂里，它是由少数">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2026-02-17T10:56:02.942Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="对开源模式演变的一些想法——写在开始参与开源 10 年后">
+<meta name="twitter:description" content="距离《大教堂与集市》初版已经过去二十多年了。那本书在 1997 年的开源运动初期，提出了一个极具启发性的比喻：软件开发就像建造建筑物，可以是大教堂式的，也可以是集市式的。 大教堂式的开发由少数人精心设计和构建，强调规划和秩序；集市式的开发则是开放的、分散的，强调试错和快速迭代。 在那时，Eric S. Raymond 讲的是同一套代码，落在不同组织方式里会长成完全不同的东西：在大教堂里，它是由少数">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="/" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Computer Scientist</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System and more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Open-Source/">Open Source</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Open-Source/Dairy/">Dairy</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/" class="title">对开源模式演变的一些想法——写在开始参与开源 10 年后</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2026-02-17T18:03:00.000Z" itemprop="datePublished">2026-02-17</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Network/">Network</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Network/Proxy/">Proxy</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Protocol/">Protocol</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2025/03/08/GitHub-ssh-connection-behind-proxy/" class="title">在 Proxy 环境中使用 GitHub SSH 的 git 操作</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2025-03-08T06:02:23.000Z" itemprop="datePublished">2025-03-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Dairy/">Dairy</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2024/06/08/My-10-years/" class="title">弹指十年间</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-08T17:19:00.000Z" itemprop="datePublished">2024-06-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2024/04/20/android-bootloader-analysis-abl-2-en/" class="title">Android bootloader analysis -- ABL(2)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-04-20T13:48:00.000Z" itemprop="datePublished">2024-04-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Linux/Android/">Android</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2024/04/20/android-bootloader-analysis-abl-3-en/" class="title">Android bootloader analysis -- ABL(3)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-04-20T13:48:00.000Z" itemprop="datePublished">2024-04-20</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+<!-- Blog sidebar -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="2343090796" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ABL/" style="font-size: 13.6px;">ABL</a> <a href="/tags/AI/" style="font-size: 13px;">AI</a> <a href="/tags/ARM/" style="font-size: 13.2px;">ARM</a> <a href="/tags/ASIX/" style="font-size: 13.1px;">ASIX</a> <a href="/tags/Aboot/" style="font-size: 13.2px;">Aboot</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Android/" style="font-size: 13.7px;">Android</a> <a href="/tags/Bare-Metal/" style="font-size: 13.1px;">Bare Metal</a> <a href="/tags/Bootloader/" style="font-size: 13.7px;">Bootloader</a> <a href="/tags/Bug/" style="font-size: 13.2px;">Bug</a> <a href="/tags/C/" style="font-size: 13px;">C++</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Cloud-Input/" style="font-size: 13.3px;">Cloud Input</a> <a href="/tags/Computer-Graphics/" style="font-size: 13px;">Computer Graphics</a> <a href="/tags/Craft/" style="font-size: 13.1px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.2px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13.1px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/EDK2/" style="font-size: 13px;">EDK2</a> <a href="/tags/EFI/" style="font-size: 13px;">EFI</a> <a href="/tags/Embedded-System/" style="font-size: 13.4px;">Embedded System</a> <a href="/tags/FFmpeg/" style="font-size: 13.1px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.1px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/GitHub/" style="font-size: 13px;">GitHub</a> <a href="/tags/Go/" style="font-size: 13.1px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hardware/" style="font-size: 13.2px;">Hardware</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.4px;">IBus</a> <a href="/tags/IME/" style="font-size: 13px;">IME</a> <a href="/tags/IoT/" style="font-size: 13.4px;">IoT</a> <a href="/tags/JTAG/" style="font-size: 13px;">JTAG</a> <a href="/tags/KDE/" style="font-size: 13.1px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.5px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.1px;">KDE Frameworks</a> <a href="/tags/LLM/" style="font-size: 13.1px;">LLM</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.8px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.2px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.4px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.4px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/Open-Source/" style="font-size: 13px;">Open Source</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Proxy/" style="font-size: 13px;">Proxy</a> <a href="/tags/Python/" style="font-size: 13.1px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qemu/" style="font-size: 13px;">Qemu</a> <a href="/tags/Qt/" style="font-size: 13.1px;">Qt</a> <a href="/tags/Raspberry-Pi/" style="font-size: 13.4px;">Raspberry Pi</a> <a href="/tags/Ray-Tracing/" style="font-size: 13px;">Ray Tracing</a> <a href="/tags/Router/" style="font-size: 13.2px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.3px;">SDR</a> <a href="/tags/SDXL/" style="font-size: 13px;">SDXL</a> <a href="/tags/SSH/" style="font-size: 13px;">SSH</a> <a href="/tags/Source-Code/" style="font-size: 13.1px;">Source Code</a> <a href="/tags/Stable-Diffusion/" style="font-size: 13px;">Stable Diffusion</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/USB/" style="font-size: 13.3px;">USB</a> <a href="/tags/Ubuntu/" style="font-size: 13.1px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/Vulkan/" style="font-size: 13px;">Vulkan</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.1px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.1px;">Windows</a> <a href="/tags/XBL/" style="font-size: 13px;">XBL</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/iOS/" style="font-size: 13px;">iOS</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.3px;">ibus-libpinyin</a> <a href="/tags/macOS/" style="font-size: 13px;">macOS</a> <a href="/tags/ollama/" style="font-size: 13.1px;">ollama</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.3px;">private</a> <a href="/tags/sysfs/" style="font-size: 13px;">sysfs</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/开源/" style="font-size: 13px;">开源</a> <a href="/tags/硬件/" style="font-size: 13.3px;">硬件</a> <a href="/tags/翻译/" style="font-size: 13.9px;">翻译</a> <a href="/tags/驱动/" style="font-size: 13px;">驱动</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABL/">ABL</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/">AI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ARM/">ARM</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Aboot/">Aboot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bootloader/">Bootloader</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-Graphics/">Computer Graphics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EDK2/">EDK2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EFI/">EFI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/">GitHub</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IME/">IME</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JTAG/">JTAG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LLM/">LLM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">24</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Open-Source/">Open Source</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Proxy/">Proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qemu/">Qemu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-Pi/">Raspberry Pi</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray-Tracing/">Ray Tracing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDXL/">SDXL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stable-Diffusion/">Stable Diffusion</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/USB/">USB</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vulkan/">Vulkan</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XBL/">XBL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macOS/">macOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ollama/">ollama</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysfs/">sysfs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">55</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开源/">开源</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬件/">硬件</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/驱动/">驱动</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/AI/">AI</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/AI/LLM/">LLM</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/AI/Stable-Diffusion/">Stable Diffusion</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/">Computer Graphics</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/Vulkan/">Vulkan</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/EDK2/">EDK2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-Pi/">Raspberry Pi</a><span class="category-list-count">6</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hardware/">Hardware</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/IME/">IME</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/">Inoki Home Made</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/">Qt</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/EFI/">EFI</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">24</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/">Android</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/Bootloader/">Bootloader</a><span class="category-list-count">11</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Driver/">Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Wayland/">Wayland</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/sysfs/">sysfs</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Modern-C/">Modern C++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Network/Proxy/">Proxy</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Open-Source/">Open Source</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Open-Source/Dairy/">Dairy</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">19</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">19</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/USB/">USB</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/硬件/">硬件</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-My-thoughts-on-Open-Source-after-10-years-2026-cn" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      对开源模式演变的一些想法——写在开始参与开源 10 年后
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/" class="article-date">
+	  <time datetime="2026-02-17T18:03:00.000Z" itemprop="datePublished">2026-02-17</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Open-Source/">Open Source</a>►<a class="article-category-link" href="/categories/Open-Source/Dairy/">Dairy</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/Linux/">Linux</a>, <a class="article-tag-link" href="/tags/Open-Source/">Open Source</a>, <a class="article-tag-link" href="/tags/中文/">中文</a>, <a class="article-tag-link" href="/tags/开源/">开源</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 6.4k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 22(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>距离《大教堂与集市》初版已经过去二十多年了。那本书在 1997 年的开源运动初期，提出了一个极具启发性的比喻：软件开发就像建造建筑物，可以是大教堂式的，也可以是集市式的。 大教堂式的开发由少数人精心设计和构建，强调规划和秩序；集市式的开发则是开放的、分散的，强调试错和快速迭代。</p>
+<p>在那时，Eric S. Raymond 讲的是同一套代码，落在不同组织方式里会长成完全不同的东西：在大教堂里，它是由少数“高端建筑师”关起门来雕琢的作品；在集市里，它是被一群摊主和路人不断摸索出来的结果。大教堂强调秩序、规划和统一愿景，集市强调碰撞、试错和快速反馈，这两种模式后来几乎成了“精英开源协作”和“分布式开源协作”的隐喻。</p>
+<p>在非常广泛的例子里，我们确实看到了这两种模式的存在：Linux 内核、Python 这些项目更像大教堂，GitHub 上的无数个人项目和小工具更像集市。但随着时间的推移，开源世界的格局已经发生了很大的变化。我们仍然可以用大教堂和集市来描述不同的项目，如 GNU 是大教堂，Linux 是集市；BSD 是大教堂，Apache 是集市；Emacs 是大教堂，Perl 是集市…… 这个二分法在当时的开源世界里非常有说服力，也成为了很多人理解开源的基础框架。但它们之间的界限已经变得模糊。</p>
+<p>二十多年过去，软件世界看起来无比“开源化”：GitHub 上仓库指数级增长，Linux、Python、Node.js 这些基础设施几乎统治了一切。但如果把视角从许可证挪到协作方式，就会发现，我们早已不再生活在 Raymond 想象的那个单纯的大教堂 / 集市二分世界里。</p>
+<h1 id="开源模式的演变"><a class="markdownIt-Anchor" href="#开源模式的演变"></a> 开源模式的演变</h1>
+<p>最早那代开源黑客靠兴趣和声望驱动，代码写给同行看，希望人人都能自由使用软件。</p>
+<p>而到了今天，很多项目一出生就带着产品和商业目标——云厂商、SaaS 公司、AI 实验室都在用开源做品牌、做生态、做渠道，结果是很多情况下的治理却越来越像一家公司对自己产品线的管理，而不是一个社区对公共物品的维护。中文社区知名开源爱好者 tisonkun 在他的文章里也提到了“开源诱饵切换”（bait‑and‑switch）：先用宽松开源许可抢用户，再改成更封闭的商业许可，留下一个“纪念版”旧仓库；MongoDB、Elastic 的路径在不少分析里都被当作教材。</p>
+<p>在 AI 时代，又催生出了“仅开放权重”的 AI 模型：权重开放、数据和训练配方封闭，社区可以运行和微调，却很难参与模型本身的演化；Llama 和中国公司的开源模型就经常被拿来讨论这个问题。</p>
+<p>当然，到了资本发达的今天，用爱发电已经是中性甚至负面的说法了。开发者、公司也需要赚钱，开源也不应该是无偿劳动的代名词，正如 tailwindcss 在 issue 里展现出的困境：他们裁员了 75%（当然实际上是 4 个人里面的 3 位）的维护者，因为没钱了。</p>
+<p>在我参与过的 GitHub Accelerator 项目培训中，也大量传授了开源商业化的路径。我并不反对开源商业化，只是想通过这十年的经历，分享一些对开源模式演变的观察和思考，尤其是从协作方式的角度来看，开源世界已经发生了哪些变化，以及这些变化对参与者意味着什么。</p>
+<h1 id="大教堂-集市与地摊"><a class="markdownIt-Anchor" href="#大教堂-集市与地摊"></a> 大教堂、集市与地摊</h1>
+<p>如果说大教堂代表“精装修的写字楼”，集市代表“规划好的商业街”，在 GitHub 兴起后这些年的开源项目，实际更接近“夜市地摊”：</p>
+<ul>
+<li>任何人都可以摆上一个仓库，贴上开源许可证，就算是“出摊”了；</li>
+<li>你永远不知道维护者明天出摊会端上来什么；</li>
+<li>维护者今天兴致高就更新一版，明天消失也没什么成本；</li>
+<li>用户觉得满足了自己的需求，就付个买一杯咖啡的钱（buy me a coffee），觉得不满足了也可能会当众骂街；</li>
+<li>想参与进地摊经济的门槛也相对较低——只要会点 git、会提 issue 开 PR 就行了。</li>
+</ul>
+<p>当然，有些地摊的摊主后期发家之后，也会把摊位升级成一个更正式的店面（开一个 org），可能就变成了一个集市；但更多的地摊则是一次性的、无门槛的、充满试错和偶然性的存在。</p>
+<p>我愿意将之定义为除开大教堂与集市之外的“开源地摊模式”，我认为这促进了 GitHub 的极大繁荣。</p>
+<p>为什么要给出一个新的、甚至有点“低端”的定义呢？因为“集市”——那些稳定运行、多方协作的大项目——门槛已经越来越。正如现实中的集市一样，它需要摊贩有一定的财力、可以长期保持它的货源和摊位，在开源世界里，就意味着它们需要稳定的维护者、清晰的路线图和严格的代码审查流程，这些都偏向有经验、有时间、懂社区潜规则的老手，而不是路过顺手交一个 patch 的新人。</p>
+<h2 id="集市的流动性枯竭"><a class="markdownIt-Anchor" href="#集市的流动性枯竭"></a> 集市的流动性枯竭</h2>
+<p>Asahi Linux 的故事，是这种结构如何把人推走的一个现实例子。项目负责人 Hector Martin 一边啃 Apple Silicon 这块硬骨头，一边在内核社区里为 Rust 驱动争取空间，最后选择先退出内核维护者角色，再辞去 Asahi 项目负责人，公开表示自己“已经对内核开发流程和社区管理方式完全失去信心”。</p>
+<p>他在长文里提到的导火索很典型：</p>
+<ul>
+<li>一方面是多年维护带来的精疲力竭，用户期待和现实支持之间的失衡；</li>
+<li>另一方面是 Rust for Linux 遭遇的拉扯——有人当面支持、背后翻白眼，技术问题被裹挟进文化和权力结构的冲突。</li>
+</ul>
+<p>当所谓“集市”的内圈变成一个只欢迎老江湖、对新技术高度防御、对新人高度苛刻的圈子时，对外看起来还是集市的招牌，内部运行逻辑却越来越像一座座小教堂——有着自己的规则、等级和门槛，甚至是排他性。对于那些想参与进来、贡献点东西的人来说，这样的环境无疑是令人望而却步的。</p>
+<p>我自身也有一个例子——2019 年，我排查出 AX88179/178a USB 网卡驱动的一个 bug，写了长文记录现象、复现步骤和修复思路，把补丁发上去之后，邮箱却长时间一片寂静。这个问题并不是小众——后来在 openSUSE 等发行版的补丁说明里可以看到，同样的设备、同样的症状都有人报过，最后在 2020 年被网络子系统的维护者以 e869e7a17798d85829fa7d4f9bbe1eebd4b2d3f6 这个提交修掉，用的也是类似的思路。从系统视角看，这确实是一个“成功案例”：有人发现问题，有人给出线索，有人把补丁合进了主线。但从参与者视角看，它更像是一场单向输出：我完成了那一整套排查和验证，却没有兴趣、也没有精力去维持邮件列表上的人际关系，只为了让“谁来提交这个 patch”这件事有一个更漂亮的故事。我更享受的是创造本身——挖 bug、写分析、做 feature‑based 的 PR，而不是反复 ping 人、追进度、在不同维护者之间斡旋。</p>
+<h2 id="维护者精力吃紧"><a class="markdownIt-Anchor" href="#维护者精力吃紧"></a> 维护者精力吃紧</h2>
+<p>不过这都是可以理解的：开源项目的维护者们，尤其是那些核心维护者，往往是志愿者或者兼职的，他们在工作之余还要投入大量的时间和精力来维护项目，这种负担随着项目的规模和复杂度增加而增加。</p>
+<p>Linux 内核就是这个趋势的极端版本。维护者列表很长，治理极其分布式，但 LWN 的讨论和研究都在反复提醒：补丁量年年上涨，真正有决策权、能 push 的人，其实就那么几十上百个。一个补丁从投到合进主线，经常要经历多轮 review、rebase、交叉验证，以月为单位在走。X（Twitter）上的内存管理（mm）子模块的维护者 @silsrc 也曾经吐槽过时长的问题。这的确广泛存在于很多大型开源项目里：维护者们需要处理大量的合并、issue、邮件列表讨论，还要兼顾项目的整体规划和技术方向，这些都需要投入大量的时间和精力。</p>
+<p>对维护者来说，这意味着实打实的体力活和情绪劳动：既要审代码、写代码、发版、处理安全问题，又要在邮件列表里解释决策、调解争执、照顾新人的学习曲线。</p>
+<p>对贡献者来说，这直接表现为门槛越来越高：</p>
+<ul>
+<li>你得会 git、会邮件列表礼仪、会理解子系统的隐性规则；</li>
+<li>你得愿意等几个月审查，期间不断根据 review 重写，甚至接受“这方向不行”从头来过。</li>
+</ul>
+<p>取决于维护者本身，这甚至还会出现 credit 的纷争，Reddit 上就有一个关于 Linux 内核维护者以代码质量不行否决，然后转头就提交了另一个 commit 来修复这个问题的事情。</p>
+<p>换句话说，集市还在那儿，但摊位的准入门槛越来越高，能进入社区的人其实早就被筛选了一轮又一轮。</p>
+<h1 id="与个人-公司的利益挂钩"><a class="markdownIt-Anchor" href="#与个人-公司的利益挂钩"></a> 与个人、公司的利益挂钩</h1>
+<p>如今越来越多的开源贡献和维护工作，已经和个人职业发展、公司商业利益紧密挂钩了。对于个人来说，参与开源已经成为了职业发展的重要组成部分：它可以提升个人的技术能力、增加行业影响力、甚至直接带来工作机会；对于公司来说，开源已经成为了品牌建设、生态构建、市场推广的重要工具：通过开源，公司可以吸引开发者社区的关注和参与，增强产品的竞争力和用户粘性。我理解，这种利益的挂钩在某种程度上是不可避免的：开源已经成为了软件开发的主流方式，参与开源也成为了职业发展的重要途径，所以它们之间的界限自然会变得模糊。</p>
+<p>我个人更加享受的是一群有着共同兴趣的人围在一起，碰撞出一些有趣的想法、代码和 build 的过程，而不是修各种 bug、长期打杂维护，我想要的是能够交出一些功能相关的成果，而不是合并了多少 PR、新增多少行更改（在 GitHub 上，开源维护者在合并 PR 的时候，如果是 squash commit 的话，原 PR 改动的行数也会被计算到维护者的账户）。所以对于各种 SIG、TC、PMC 这些组织结构，我一直保持着距离——工作是工作，开源是开源，虽然它们之间可以有交集，但我不想让它们完全重叠。甚至对于 SIG 的翻译，我也一直觉得应该更注重于兴趣（Interest）小组，而不是大多数的 SIG 实质上在追求的公司或者组织在这方面的利益（Interest），虽然在英文中他们的确长得一样。</p>
+<p>在这个章节中，我想分享一些这十年观察到的现象和思考，尤其是从个人参与者的角度来看。</p>
+<h2 id="贡献可以量化了但问题也出在量化上"><a class="markdownIt-Anchor" href="#贡献可以量化了但问题也出在量化上"></a> 贡献可以量化了，但问题也出在量化上</h2>
+<p>在开源的早期，贡献的衡量标准相对模糊：是修了个 bug？写了个文档？提了个想法？还是在社区里活跃？这些都可能被视为贡献，但没有一个统一的、量化的指标。但随着开源项目的商业化和职业化，贡献开始被量化了：PR 数量、commit 数量、issue 数量、代码行数……这些都成了衡量一个人对项目贡献多少的指标。这在一定程度上是有好处的：它提供了一个客观的标准，激励人们积极参与，也方便了项目维护者识别活跃的贡献者。但它也带来了一些问题：它可能会鼓励人们追求数量而不是质量，可能会导致一些“刷 PR”的行为，甚至可能会让一些真正有价值的贡献被忽视，因为它们不符合量化的标准。</p>
+<p>一个国内的例子是华为，mangweiwei 喷过“为了 KPI 的开源贡献“，引起了不小的舆论——他们的 Linux 资深维护者也会刷一些 typo 的 commit 来保持提交数量，从而完成公司的绩效考核要求。当然，这也是可以理解的：在一个以量化指标为导向的系统里，维护者可能会觉得自己必须要保持一定的提交数量来证明自己的贡献，否则就可能被认为不够活跃或者不够有价值。我们纯兴趣驱动开源的人不屑于修 typo，觉得没有什么意义，并且可能会觉得这种行为很可笑，但对于那些在公司里需要通过开源贡献来证明自己价值的人来说，这可能是一种生存策略。</p>
+<p>国外的例子也不胜枚举，比如为了鼓励参与开源，有很多项目会设立一些“good first issue”，这些 issue 往往是一些比较简单、容易上手的任务，目的是为了吸引新手参与。但是有些人可能会为了完成这些“good first issue”而不顾质量，甚至可能会提交一些无意义的 PR 来完成这些任务，从而获得一些“贡献”的认可。这也是量化指标带来的一个问题：它可能会鼓励人们追求数量而不是质量。并且像 Hacktoberfest 这种活动也被一些人批评为鼓励了这种“刷 PR”的行为，因为它的奖励机制是基于提交数量的，而不是基于贡献的质量。</p>
+<p>相比之下，Google Summer of Code（GSoC）这类项目则更注重质量：它要求参与者提交一个完整的项目提案，并且在整个夏季期间进行持续的工作和交流，最终由导师评估贡献的质量和影响力，而不是仅仅看提交的数量。我自身在 GSoC 做过两次实习学生和一次导师，我觉得这种模式更好一些：它鼓励参与者深入思考和设计一个有意义的项目，而不是追求数量上的成就感；它也提供了一个更有结构化的学习和成长路径，让参与者能够真正理解和融入开源社区。但是可能作为一个老中，过于严厉了，还在末期评估挂过一个学生，觉得项目的完成度不够高，后面工作后对人的宽容度也提高了，觉得其实只要他在过程中学到了东西、并且积极构建就可以了。在这里对被我挂了的学生表示歉意。当然，这种模式也有它的局限性：它过于依赖提案的质量和导师的评估（并且没有一个统一的标准），可能会让一些有潜力但不善于写提案的人被排除在外。</p>
+<p>所以说，贡献可以量化了，但问题也在量化上。我们需要找到一个平衡点，既要激励人们积极参与，也要确保贡献的质量和价值。</p>
+<h2 id="二道贩子"><a class="markdownIt-Anchor" href="#二道贩子"></a> 二道贩子</h2>
+<p>在这样一个“贡献可以量化”的世界里，必然也会长出另一种角色——我将之命名为：二道贩子。典型情节是：有人在 issue 里艰难排查出一个问题，写清楚复现、原因和 workaround，本意是想先搞明白方向，再讨论长期方案；还没等讨论展开，旁边就有人把这个思路原封不动打包成一个干净的 PR，抢先挂上自己的名字。</p>
+<p>PR 区在统计面板里最显眼：它决定了谁是 “top contributor”、谁有勋章、谁能把这一行写进履历。issue 区却更像真正的自由集市：有试错、有争论、有渐进共识，也有那些最终没能写成补丁的探索。系统本身没有恶意，但默认的记账方式会不断奖励“谁开了 PR”，而不是“谁真正把问题想清楚”。于是，我们在协作链条里看到一种分工：有人负责在摊位上摸索出可行的做法，有人负责把摊位上的经验收购回来，包装成可以计入 KPI 的“贡献”。</p>
+<p>我近期就遇到过这样的问题，在 vLLM 项目上。某次我在 issue 里详细分析了一个使用过程中遇到的问题，写清楚了复现方法和 workaround，本意是想和维护者慢慢讨论，看能不能一起设计一个更好的长期方案。很快，一个印度老哥的 PR 出现了，基本沿用了 issue 里的思路，把 workaround 包装成一个可以直接合并的补丁。这是一个典型场景：真正脏手试错的是 issue 里的那一摊人，PR 更像是在边上开了个小批发档，把经验打包成自己的“可量化的贡献”。</p>
+<p>我在 X（Twitter）上分享了这个经历，有比较热心的老哥直接去喷了这位印度老哥，我倒觉得也没必要，表示理解：在一个以 PR 数量为导向的系统里，这位老哥可能觉得自己也需要提交 PR 来证明自己的贡献，可能就可以在简历上说自己参与了 vLLM 项目，方便他在 AI 时代找到工作。但类似这样的事情发生多了，我至少学会了利用规则：既然整个系统用“PR 上的名字”来记账，那就要求维护者在合并时加上我的 signed‑off-by，把 credit 至少部分拉回来。当然，这也很依赖于维护者的态度和习惯，如果维护者不愿意加上我的 signed‑off-by，那我也只能接受这个现实。</p>
+<p>这并没有改变协作模式本身，但让价值链条稍微清晰了一点：从问题排查，到 workaround，再到补丁封装和最终决策，每一步都有人在付出，只是过去只有最后一步会被系统记下来。</p>
+<h1 id="回归大教堂的-ai-时代"><a class="markdownIt-Anchor" href="#回归大教堂的-ai-时代"></a> 回归大教堂的 AI 时代</h1>
+<p>AI 带来的 vibe coding，让开源也变得更微妙。表面上，vibe coding 把门槛拉低了：新人可以和模型对话，让它生成一整段“看起来能跑”的代码，很多教程甚至宣称“不用会编程也能做产品”。 但一旦进入真实团队，尤其是内部大教堂式的 vibe coding 流程，新人会发现门槛其实被抬得更高了：资深工程师和模型在私有仓库里进行高频重构，代码演化极快，却缺乏中间层的教学材料——没有细致的 commit 历史、也没有为新人写的设计文档，只有一堆已经长成现在这样的代码和几段难以复盘的对话记录。GitHub 的前 co-founder 创建了一个公司尝试解决这个问题，提供一个“vibe coding 的 git log”，但这只是一个补丁，真正的挑战在于：在 AI 时代，如何设计一个适合新人学习和成长的开源协作模式？</p>
+<p>传统开源里，新人至少可以从 good first issue、文档修正、小 bug 修起，一步步往核心靠近；在内部 vibe coding 的世界里，很多“中间台阶”被 AI 一脚跨过去了，留下的学习路径反而更陡峭：你既要学会读和改 AI 写出来的复杂代码，又缺乏一个低风险的练习场景。</p>
+<p>这和很多人在 Vibe coding 时代对初级开发者的担忧不谋而合：当 AI 可以轻松完成很多基础的编程任务时，初级开发者可能会觉得自己没有什么可贡献的了，甚至可能会觉得自己被 AI 取代了。这也是一个很现实的问题：如果开源项目的维护者和核心贡献者都在使用 AI 来加速开发，那么对于那些没有 AI 资源或者不熟悉 AI 的人来说，他们可能会觉得自己无法跟上节奏了。</p>
+<p>如果再叠加上商业开源模式的话，另一个问题也逐渐出现在我们面前：当公司内部可以让 AI 很快修复 bug、添加功能时，更多的改变会发生在大教堂内部，而不再接受外部的开源贡献？这一问题在 GitHub 推出“可以关闭 PR 功能”的特性时，便可管中窥豹——可见一斑。</p>
+<p>从这个意义上说，vibe coding 在公司内部强化了大教堂——让那座建筑长得更快、更高、更复杂——而外部的集市和地摊，则更像这座建筑的影子：有人在影子里模仿梁柱的形状，却永远够不到真正决定结构的人，除非加入大教堂的内部，否则就只能在影子里摸索。</p>
+<h1 id="结语"><a class="markdownIt-Anchor" href="#结语"></a> 结语</h1>
+<p>开源的世界已经发生了很大的变化，从最初的兴趣驱动、社区协作，到现在的商业化、职业化，再到未来可能的 AGI 变迁，我们看到了一系列新的模式和挑战。大教堂和集市的比喻仍然有一定的启发性，但它们已经无法完全描述当下开源世界的复杂性。</p>
+<p>无论是大教堂、集市还是地摊，每一种模式都有它的价值和局限，我们需要学会在不同的情境下灵活地运用它们，同时也要警惕那些可能会导致排他性、过度商业化或者技术垄断的趋势。开源的未来，仍然充满了无限的可能性，我们每个人都是这个未来的塑造者。</p>
+<p>当 Vibe coding 让很多事情触手可及，做一些只有作为人类才能完成的事情——build、设计、决策，甚至是社区管理——就变得更重要了。我们需要思考：在 AI 时代，什么样的开源协作模式才能真正促进创新、包容和可持续发展？我们又该如何在这个新的世界里找到自己的位置，继续为开源贡献力量？</p>
+<p>希望大家不因噎废食，不因为开源的问题就放弃开源和自由软件，继续在开源的道路上探索和前行。无论是作为维护者、贡献者还是用户，我们都可以在这个不断演变的开源世界里找到真正属于自己、而不是社会评价体系的价值和乐趣。共勉！</p>
+<h1 id="参考链接"><a class="markdownIt-Anchor" href="#参考链接"></a> 参考链接</h1>
+<p>这里放一些文中提到的链接，由于不是严肃论文，就不按照学术规范书写和标注啦。有些遗漏的会慢慢补上：</p>
+<ul>
+<li>
+<p>Eric S. Raymond, “The Cathedral and the Bazaar”.<br>
+<a href="http://www.catb.org/esr/writings/cathedral-bazaar/" target="_blank" rel="noopener">http://www.catb.org/esr/writings/cathedral-bazaar/</a></p>
+</li>
+<li>
+<p>Tison Kung，“诱导转向的伪开源战略（Bait‑and‑Switch Fauxpen Source Strategy）”。<br>
+<a href="https://www.tisonkun.org/2022/10/04/bait-and-switch-fauxpen-source-strategy/" target="_blank" rel="noopener">https://www.tisonkun.org/2022/10/04/bait-and-switch-fauxpen-source-strategy/</a><br>
+​- Jimmy Song，“大模型时代的开源：从开放代码到开放权重的演进”。<br>
+<a href="https://jimmysong.io/zh/book/ai-handbook/llm/open-model/" target="_blank" rel="noopener">https://jimmysong.io/zh/book/ai-handbook/llm/open-model/</a><br>
+​- Air Street Press，“The cathedral and the bazaar – how AI rewrites open vs. closed”。<br>
+<a href="https://press.airstreet.com/p/the-cathedral-and-the-bazaar" target="_blank" rel="noopener">https://press.airstreet.com/p/the-cathedral-and-the-bazaar</a></p>
+</li>
+<li>
+<p><a href="http://LWN.net" target="_blank" rel="noopener">LWN.net</a>, “Reducing kernel‑maintainer burnout”。<br>
+<a href="https://lwn.net/Articles/952666/" target="_blank" rel="noopener">https://lwn.net/Articles/952666/</a><br>
+​- <a href="http://LWN.net" target="_blank" rel="noopener">LWN.net</a>, “On Linux kernel maintainer scalability”。<br>
+<a href="https://lwn.net/Articles/703005/" target="_blank" rel="noopener">https://lwn.net/Articles/703005/</a><br>
+​- <a href="http://LWN.net" target="_blank" rel="noopener">LWN.net</a>, “MAINTAINERS truth and fiction”。<br>
+<a href="https://lwn.net/Articles/842415/" target="_blank" rel="noopener">https://lwn.net/Articles/842415/</a><br>
+​- Intel，“Maintainer Burnout is a Problem. So, What Are We Going to Do?”<br>
+<a href="https://www.intel.com/content/www/us/en/developer/articles/community/maintainer-burnout-a-problem-what-are-we-to-do.html" target="_blank" rel="noopener">https://www.intel.com/content/www/us/en/developer/articles/community/maintainer-burnout-a-problem-what-are-we-to-do.html</a><br>
+​- Hector Martin, “Resigning as Asahi Linux project lead”。<br>
+<a href="https://marcan.st/2025/02/resigning-as-asahi-linux-project-lead/" target="_blank" rel="noopener">https://marcan.st/2025/02/resigning-as-asahi-linux-project-lead/</a><br>
+​- The Register, “Asahi Linux head quits, citing kernel leadership failure”。<br>
+<a href="https://www.theregister.com/2025/02/13/ashai_linux_head_quits/" target="_blank" rel="noopener">https://www.theregister.com/2025/02/13/ashai_linux_head_quits/</a><br>
+​- Inoki 的博客：AX88179/178a USB‑Ethernet adapter Linux Driver。<br>
+<a href="https://blog.inoki.cc/2019/12/12/Bug_AX88179_178a_USB_Ethernet_adapter_Linux_Driver/">https://blog.inoki.cc/2019/12/12/Bug_AX88179_178a_USB_Ethernet_adapter_Linux_Driver/</a><br>
+​- Linux 提交：e869e7a17798d85829fa7d4f9bbe1eebd4b2d3f6。<br>
+<a href="https://github.com/torvalds/linux/commit/e869e7a17798d85829fa7d4f9bbe1eebd4b2d3f6" target="_blank" rel="noopener">https://github.com/torvalds/linux/commit/e869e7a17798d85829fa7d4f9bbe1eebd4b2d3f6</a><br>
+​- vLLM Issue #31901<br>
+<a href="https://github.com/vllm-project/vllm/issues/31901" target="_blank" rel="noopener">https://github.com/vllm-project/vllm/issues/31901</a><br>
+​- vLLM PR #32384<br>
+<a href="https://github.com/vllm-project/vllm/pull/32384" target="_blank" rel="noopener">https://github.com/vllm-project/vllm/pull/32384</a></p>
+</li>
+<li>
+<p>How I got robbed of my first kernel contribution <a href="https://www.reddit.com/r/programming/comments/16tf5ne/how_i_got_robbed_of_my_first_kernel_contribution/" target="_blank" rel="noopener">https://www.reddit.com/r/programming/comments/16tf5ne/how_i_got_robbed_of_my_first_kernel_contribution/</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/" title="对开源模式演变的一些想法——写在开始参与开源 10 年后" target="_blank" rel="external">https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Computer Scientist</small></a></h3>
+        <div>Ph.D in Computer Science, major in Embedded System and AI.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+      <!-- Blog post bottom bar -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="9214609149" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2025/03/08/GitHub-ssh-connection-behind-proxy/" title="在 Proxy 环境中使用 GitHub SSH 的 git 操作"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/';
+        
+        this.page.identifier = 'My-thoughts-on-Open-Source-after-10-years-2026-cn';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>
