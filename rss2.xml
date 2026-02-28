@@ -9,8 +9,50 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Tue, 17 Feb 2026 16:50:26 GMT</pubDate>
+    <pubDate>Sat, 28 Feb 2026 20:04:22 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Things You Might Want to Know About Apple&#39;s Rosetta 2 for Linux VMs</title>
+      <link>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret-en/</link>
+      <guid>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret-en/</guid>
+      <pubDate>Sat, 28 Feb 2026 20:54:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;Rosetta 2 is a translation layer from x86-64 to ARM64 that Apple launched in 2020 alongside Apple Silicon Macs, designed to facilitate
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret-en/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>关于 Apple 为 Linux 虚拟机提供的 Rosetta 2 你可能想知道的事</title>
+      <link>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret/</link>
+      <guid>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret/</guid>
+      <pubDate>Sat, 28 Feb 2026 20:52:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;Rosetta（罗赛塔）2 是苹果 Apple 在 2020 年推出 Apple Silicon Mac 时，为了方便迁移 Intel Mac 上的软件而推出的 x86-64 到 ARM64 的翻译层。后来， Apple 在
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>My Thoughts on the Open Source — after a decade</title>
@@ -399,48 +441,6 @@
       
       
       <comments>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】探索高通的 TrustZone 实现</title>
-      <link>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</link>
-      <guid>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/</guid>
-      <pubDate>Sat, 29 Apr 2023 12:20:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;在&lt;a href=&quot;http://bits-please.blogspot.com/2015/08/exploring-qualcomms-trustzone.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;本博客&lt;/a&gt;中，我们将探索高通在
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2023/04/29/exploring-qualcomms-trustzone/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】在任何上下文中进行 TrustZone 内核中的任意代码执行</title>
-      <link>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/</link>
-      <guid>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/</guid>
-      <pubDate>Sat, 29 Apr 2023 11:20:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;在&lt;a href=&quot;http://bits-please.blogspot.com/2015/03/getting-arbitrary-code-execution-in.html&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2023/04/29/getting-arbitrary-code-execution-in/#disqus_thread</comments>
     </item>
     
   </channel>
