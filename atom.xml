@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2026-02-28T20:04:22.504Z</updated>
+  <updated>2026-03-09T00:49:51.815Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,60 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>跨语言蝴蝶效应：Protobuf C++ 库的一次 Mutex 重构，让 macOS Python 数据生态死锁</title>
+    <link href="https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown/"/>
+    <id>https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown/</id>
+    <published>2026-03-09T08:52:00.000Z</published>
+    <updated>2026-03-09T00:49:51.815Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;最近，我在 GitHub 上向 Protobuf 项目近一年前提交的一个 &lt;a href=&quot;https://github.com/protocolbuffers/protobuf/issues/21686&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Programming Language" scheme="https://blog.inoki.cc/categories/Programming-Language/"/>
+    
+      <category term="Source Code" scheme="https://blog.inoki.cc/categories/Source-Code/"/>
+    
+      <category term="Python" scheme="https://blog.inoki.cc/categories/Programming-Language/Python/"/>
+    
+      <category term="Python" scheme="https://blog.inoki.cc/categories/Source-Code/Python/"/>
+    
+      <category term="macOS" scheme="https://blog.inoki.cc/categories/macOS/"/>
+    
+      <category term="C++" scheme="https://blog.inoki.cc/categories/Programming-Language/C/"/>
+    
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="macOS" scheme="https://blog.inoki.cc/tags/macOS/"/>
+    
+      <category term="Python" scheme="https://blog.inoki.cc/tags/Python/"/>
+    
+      <category term="Apple" scheme="https://blog.inoki.cc/tags/Apple/"/>
+    
+      <category term="逆向" scheme="https://blog.inoki.cc/tags/%E9%80%86%E5%90%91/"/>
+    
+      <category term="C++" scheme="https://blog.inoki.cc/tags/C/"/>
+    
+      <category term="Protobuf" scheme="https://blog.inoki.cc/tags/Protobuf/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Things You Might Want to Know About Apple&#39;s Rosetta 2 for Linux VMs</title>
     <link href="https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret-en/"/>
     <id>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret-en/</id>
     <published>2026-02-28T20:54:00.000Z</published>
-    <updated>2026-02-28T20:04:22.504Z</updated>
+    <updated>2026-03-09T00:49:51.751Z</updated>
     
     <summary type="html">
     
@@ -60,7 +109,7 @@
     <link href="https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret/"/>
     <id>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret/</id>
     <published>2026-02-28T20:52:00.000Z</published>
-    <updated>2026-02-28T20:04:22.504Z</updated>
+    <updated>2026-03-09T00:49:51.751Z</updated>
     
     <summary type="html">
     
@@ -99,7 +148,7 @@
     <link href="https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-a-decade-2026/"/>
     <id>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-a-decade-2026/</id>
     <published>2026-02-17T18:23:00.000Z</published>
-    <updated>2026-02-28T20:04:22.551Z</updated>
+    <updated>2026-03-09T00:49:51.793Z</updated>
     
     <summary type="html">
     
@@ -130,7 +179,7 @@
     <link href="https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/"/>
     <id>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/</id>
     <published>2026-02-17T18:03:00.000Z</published>
-    <updated>2026-02-28T20:04:22.551Z</updated>
+    <updated>2026-03-09T00:49:51.792Z</updated>
     
     <summary type="html">
     
@@ -154,9 +203,9 @@
     
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
-      <category term="Open Source" scheme="https://blog.inoki.cc/tags/Open-Source/"/>
-    
       <category term="开源" scheme="https://blog.inoki.cc/tags/%E5%BC%80%E6%BA%90/"/>
+    
+      <category term="Open Source" scheme="https://blog.inoki.cc/tags/Open-Source/"/>
     
   </entry>
   
@@ -165,7 +214,7 @@
     <link href="https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/"/>
     <id>https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/</id>
     <published>2025-03-08T06:02:23.000Z</published>
-    <updated>2026-02-28T20:04:22.526Z</updated>
+    <updated>2026-03-09T00:49:51.770Z</updated>
     
     <summary type="html">
     
@@ -203,7 +252,7 @@
     <link href="https://blog.inoki.cc/2024/06/08/My-10-years/"/>
     <id>https://blog.inoki.cc/2024/06/08/My-10-years/</id>
     <published>2024-06-08T17:19:00.000Z</published>
-    <updated>2026-02-28T20:04:22.548Z</updated>
+    <updated>2026-03-09T00:49:51.789Z</updated>
     
     <summary type="html">
     
@@ -233,7 +282,7 @@
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2026-02-28T20:04:22.570Z</updated>
+    <updated>2026-03-09T00:49:51.811Z</updated>
     
     <summary type="html">
     
@@ -270,7 +319,7 @@
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2026-02-28T20:04:22.571Z</updated>
+    <updated>2026-03-09T00:49:51.811Z</updated>
     
     <summary type="html">
     
@@ -307,7 +356,7 @@
     <link href="https://blog.inoki.cc/2024/04/16/Ollama-cn/"/>
     <id>https://blog.inoki.cc/2024/04/16/Ollama-cn/</id>
     <published>2024-04-16T18:03:00.000Z</published>
-    <updated>2026-02-28T20:04:22.552Z</updated>
+    <updated>2026-03-09T00:49:51.793Z</updated>
     
     <summary type="html">
     
@@ -342,7 +391,7 @@
     <link href="https://blog.inoki.cc/2024/04/15/Ollama/"/>
     <id>https://blog.inoki.cc/2024/04/15/Ollama/</id>
     <published>2024-04-15T15:34:00.000Z</published>
-    <updated>2026-02-28T20:04:22.553Z</updated>
+    <updated>2026-03-09T00:49:51.794Z</updated>
     
     <summary type="html">
     
@@ -373,7 +422,7 @@
     <link href="https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/"/>
     <id>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/</id>
     <published>2024-02-18T03:57:50.000Z</published>
-    <updated>2026-02-28T20:04:22.523Z</updated>
+    <updated>2026-03-09T00:49:51.768Z</updated>
     
     <summary type="html">
     
@@ -410,7 +459,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/</id>
     <published>2023-09-14T23:42:00.000Z</published>
-    <updated>2026-02-28T20:04:22.503Z</updated>
+    <updated>2026-03-09T00:49:51.750Z</updated>
     
     <summary type="html">
     
@@ -449,7 +498,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/</id>
     <published>2023-09-14T23:22:00.000Z</published>
-    <updated>2026-02-28T20:04:22.504Z</updated>
+    <updated>2026-03-09T00:49:51.750Z</updated>
     
     <summary type="html">
     
@@ -488,7 +537,7 @@
     <link href="https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/"/>
     <id>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</id>
     <published>2023-09-13T23:22:00.000Z</published>
-    <updated>2026-02-28T20:04:22.504Z</updated>
+    <updated>2026-03-09T00:49:51.751Z</updated>
     
     <summary type="html">
     
@@ -527,7 +576,7 @@
     <link href="https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/"/>
     <id>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/</id>
     <published>2023-09-06T23:22:00.000Z</published>
-    <updated>2026-02-28T20:04:22.503Z</updated>
+    <updated>2026-03-09T00:49:51.750Z</updated>
     
     <summary type="html">
     
@@ -566,7 +615,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-3/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/</id>
     <published>2023-08-22T12:34:00.000Z</published>
-    <updated>2026-02-28T20:04:22.526Z</updated>
+    <updated>2026-03-09T00:49:51.770Z</updated>
     
     <summary type="html">
     
@@ -602,7 +651,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-2/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</id>
     <published>2023-08-22T00:34:00.000Z</published>
-    <updated>2026-02-28T20:04:22.526Z</updated>
+    <updated>2026-03-09T00:49:51.770Z</updated>
     
     <summary type="html">
     
@@ -638,7 +687,7 @@
     <link href="https://blog.inoki.cc/2023/08/20/History-of-ARM-1/"/>
     <id>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</id>
     <published>2023-08-20T20:34:00.000Z</published>
-    <updated>2026-02-28T20:04:22.526Z</updated>
+    <updated>2026-03-09T00:49:51.770Z</updated>
     
     <summary type="html">
     
@@ -674,7 +723,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/"/>
     <id>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</id>
     <published>2023-04-30T13:20:00.000Z</published>
-    <updated>2026-02-28T20:04:22.573Z</updated>
+    <updated>2026-03-09T00:49:51.813Z</updated>
     
     <summary type="html">
     
@@ -683,43 +732,6 @@
         
         
           &lt;p&gt;在&lt;a href=&quot;http://bits-please.blogspot.com/2016/04/exploring-qualcomms-secure-execution.html&quot; target=&quot;_blank&quot;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Linux" scheme="https://blog.inoki.cc/categories/Linux/"/>
-    
-      <category term="Android" scheme="https://blog.inoki.cc/categories/Linux/Android/"/>
-    
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
-      <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
-    
-      <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
-    
-      <category term="ABL" scheme="https://blog.inoki.cc/tags/ABL/"/>
-    
-      <category term="Bootloader" scheme="https://blog.inoki.cc/tags/Bootloader/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【译】完整的 MSM8974 TrustZone 实现利用</title>
-    <link href="https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/"/>
-    <id>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</id>
-    <published>2023-04-30T11:20:00.000Z</published>
-    <updated>2026-02-28T20:04:22.573Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;在&lt;a href=&quot;http://bits-please.blogspot.com/2015/08/full-trustzone-exploit-for-msm8974.html&quot; target=&quot;_blank&quot;
         
       
     

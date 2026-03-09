@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sat, 28 Feb 2026 20:04:22 GMT</pubDate>
+    <pubDate>Mon, 09 Mar 2026 00:49:51 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>跨语言蝴蝶效应：Protobuf C++ 库的一次 Mutex 重构，让 macOS Python 数据生态死锁</title>
+      <link>https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown/</link>
+      <guid>https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown/</guid>
+      <pubDate>Mon, 09 Mar 2026 08:52:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;最近，我在 GitHub 上向 Protobuf 项目近一年前提交的一个 &lt;a href=&quot;https://github.com/protocolbuffers/protobuf/issues/21686&quot; target=&quot;_blank&quot;
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Things You Might Want to Know About Apple&#39;s Rosetta 2 for Linux VMs</title>
@@ -420,27 +441,6 @@
       
       
       <comments>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】完整的 MSM8974 TrustZone 实现利用</title>
-      <link>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</link>
-      <guid>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/</guid>
-      <pubDate>Sun, 30 Apr 2023 11:20:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;在&lt;a href=&quot;http://bits-please.blogspot.com/2015/08/full-trustzone-exploit-for-msm8974.html&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2023/04/30/full-trustzone-exploit-for-msm8974/#disqus_thread</comments>
     </item>
     
   </channel>
