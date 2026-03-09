@@ -1,5 +1,5 @@
 ---
-title: Cross-Language Butterfly Effect: A Protobuf C++ Mutex Refactor Deadlocks the macOS Python Data Ecosystem
+title: Cross-Language Butterfly Effect - A Protobuf C++ Mutex Refactor Deadlocks the macOS Python Data Ecosystem
 date: 2026-03-09 09:52:00
 tags:
 - Apple
