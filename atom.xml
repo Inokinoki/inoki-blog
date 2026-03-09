@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2026-03-09T00:49:51.815Z</updated>
+  <updated>2026-03-09T00:53:05.127Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown/"/>
     <id>https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown/</id>
     <published>2026-03-09T08:52:00.000Z</published>
-    <updated>2026-03-09T00:49:51.815Z</updated>
+    <updated>2026-03-09T00:53:05.127Z</updated>
     
     <summary type="html">
     
@@ -70,7 +70,7 @@
     <link href="https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret-en/"/>
     <id>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret-en/</id>
     <published>2026-02-28T20:54:00.000Z</published>
-    <updated>2026-03-09T00:49:51.751Z</updated>
+    <updated>2026-03-09T00:53:05.063Z</updated>
     
     <summary type="html">
     
@@ -109,7 +109,7 @@
     <link href="https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret/"/>
     <id>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret/</id>
     <published>2026-02-28T20:52:00.000Z</published>
-    <updated>2026-03-09T00:49:51.751Z</updated>
+    <updated>2026-03-09T00:53:05.063Z</updated>
     
     <summary type="html">
     
@@ -148,7 +148,7 @@
     <link href="https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-a-decade-2026/"/>
     <id>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-a-decade-2026/</id>
     <published>2026-02-17T18:23:00.000Z</published>
-    <updated>2026-03-09T00:49:51.793Z</updated>
+    <updated>2026-03-09T00:53:05.105Z</updated>
     
     <summary type="html">
     
@@ -179,7 +179,7 @@
     <link href="https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/"/>
     <id>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/</id>
     <published>2026-02-17T18:03:00.000Z</published>
-    <updated>2026-03-09T00:49:51.792Z</updated>
+    <updated>2026-03-09T00:53:05.104Z</updated>
     
     <summary type="html">
     
@@ -214,7 +214,7 @@
     <link href="https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/"/>
     <id>https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/</id>
     <published>2025-03-08T06:02:23.000Z</published>
-    <updated>2026-03-09T00:49:51.770Z</updated>
+    <updated>2026-03-09T00:53:05.082Z</updated>
     
     <summary type="html">
     
@@ -252,7 +252,7 @@
     <link href="https://blog.inoki.cc/2024/06/08/My-10-years/"/>
     <id>https://blog.inoki.cc/2024/06/08/My-10-years/</id>
     <published>2024-06-08T17:19:00.000Z</published>
-    <updated>2026-03-09T00:49:51.789Z</updated>
+    <updated>2026-03-09T00:53:05.101Z</updated>
     
     <summary type="html">
     
@@ -282,7 +282,7 @@
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2026-03-09T00:49:51.811Z</updated>
+    <updated>2026-03-09T00:53:05.123Z</updated>
     
     <summary type="html">
     
@@ -319,7 +319,7 @@
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2026-03-09T00:49:51.811Z</updated>
+    <updated>2026-03-09T00:53:05.123Z</updated>
     
     <summary type="html">
     
@@ -356,7 +356,7 @@
     <link href="https://blog.inoki.cc/2024/04/16/Ollama-cn/"/>
     <id>https://blog.inoki.cc/2024/04/16/Ollama-cn/</id>
     <published>2024-04-16T18:03:00.000Z</published>
-    <updated>2026-03-09T00:49:51.793Z</updated>
+    <updated>2026-03-09T00:53:05.105Z</updated>
     
     <summary type="html">
     
@@ -391,7 +391,7 @@
     <link href="https://blog.inoki.cc/2024/04/15/Ollama/"/>
     <id>https://blog.inoki.cc/2024/04/15/Ollama/</id>
     <published>2024-04-15T15:34:00.000Z</published>
-    <updated>2026-03-09T00:49:51.794Z</updated>
+    <updated>2026-03-09T00:53:05.106Z</updated>
     
     <summary type="html">
     
@@ -422,7 +422,7 @@
     <link href="https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/"/>
     <id>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/</id>
     <published>2024-02-18T03:57:50.000Z</published>
-    <updated>2026-03-09T00:49:51.768Z</updated>
+    <updated>2026-03-09T00:53:05.080Z</updated>
     
     <summary type="html">
     
@@ -459,7 +459,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/</id>
     <published>2023-09-14T23:42:00.000Z</published>
-    <updated>2026-03-09T00:49:51.750Z</updated>
+    <updated>2026-03-09T00:53:05.062Z</updated>
     
     <summary type="html">
     
@@ -498,7 +498,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/</id>
     <published>2023-09-14T23:22:00.000Z</published>
-    <updated>2026-03-09T00:49:51.750Z</updated>
+    <updated>2026-03-09T00:53:05.062Z</updated>
     
     <summary type="html">
     
@@ -537,7 +537,7 @@
     <link href="https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/"/>
     <id>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</id>
     <published>2023-09-13T23:22:00.000Z</published>
-    <updated>2026-03-09T00:49:51.751Z</updated>
+    <updated>2026-03-09T00:53:05.063Z</updated>
     
     <summary type="html">
     
@@ -576,7 +576,7 @@
     <link href="https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/"/>
     <id>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/</id>
     <published>2023-09-06T23:22:00.000Z</published>
-    <updated>2026-03-09T00:49:51.750Z</updated>
+    <updated>2026-03-09T00:53:05.062Z</updated>
     
     <summary type="html">
     
@@ -615,7 +615,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-3/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/</id>
     <published>2023-08-22T12:34:00.000Z</published>
-    <updated>2026-03-09T00:49:51.770Z</updated>
+    <updated>2026-03-09T00:53:05.082Z</updated>
     
     <summary type="html">
     
@@ -651,7 +651,7 @@
     <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-2/"/>
     <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</id>
     <published>2023-08-22T00:34:00.000Z</published>
-    <updated>2026-03-09T00:49:51.770Z</updated>
+    <updated>2026-03-09T00:53:05.082Z</updated>
     
     <summary type="html">
     
@@ -687,7 +687,7 @@
     <link href="https://blog.inoki.cc/2023/08/20/History-of-ARM-1/"/>
     <id>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</id>
     <published>2023-08-20T20:34:00.000Z</published>
-    <updated>2026-03-09T00:49:51.770Z</updated>
+    <updated>2026-03-09T00:53:05.082Z</updated>
     
     <summary type="html">
     
@@ -723,7 +723,7 @@
     <link href="https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/"/>
     <id>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</id>
     <published>2023-04-30T13:20:00.000Z</published>
-    <updated>2026-03-09T00:49:51.813Z</updated>
+    <updated>2026-03-09T00:53:05.125Z</updated>
     
     <summary type="html">
     
