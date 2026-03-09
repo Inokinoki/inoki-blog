@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Mon, 09 Mar 2026 00:53:05 GMT</pubDate>
+    <pubDate>Mon, 09 Mar 2026 00:54:56 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Cross-Language Butterfly Effect - A Protobuf C++ Mutex Refactor Deadlocks the macOS Python Data Ecosystem</title>
+      <link>https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown-en/</link>
+      <guid>https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown-en/</guid>
+      <pubDate>Mon, 09 Mar 2026 09:52:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;Recently, an &lt;a href=&quot;https://github.com/protocolbuffers/protobuf/issues/21686&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;issue&lt;/a&gt; I submitted to
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown-en/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>跨语言蝴蝶效应：Protobuf C++ 库的一次 Mutex 重构，让 macOS Python 数据生态死锁</title>
@@ -162,27 +183,6 @@
     </item>
     
     <item>
-      <title>Android bootloader analysis -- ABL(2)</title>
-      <link>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</link>
-      <guid>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</guid>
-      <pubDate>Sat, 20 Apr 2024 13:48:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;In my previous post &lt;a href=&quot;https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/&quot;&gt;“Android bootloader analysis –
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/#disqus_thread</comments>
-    </item>
-    
-    <item>
       <title>Android bootloader analysis -- ABL(3)</title>
       <link>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</link>
       <guid>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</guid>
@@ -201,6 +201,27 @@
       
       
       <comments>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>Android bootloader analysis -- ABL(2)</title>
+      <link>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</link>
+      <guid>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</guid>
+      <pubDate>Sat, 20 Apr 2024 13:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;In my previous post &lt;a href=&quot;https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/&quot;&gt;“Android bootloader analysis –
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/#disqus_thread</comments>
     </item>
     
     <item>
@@ -420,27 +441,6 @@
       
       
       <comments>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】探索高通的安全执行环境</title>
-      <link>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</link>
-      <guid>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/</guid>
-      <pubDate>Sun, 30 Apr 2023 13:20:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;在&lt;a href=&quot;http://bits-please.blogspot.com/2016/04/exploring-qualcomms-secure-execution.html&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2023/04/30/exploring-qualcomms-secure-execution-env/#disqus_thread</comments>
     </item>
     
   </channel>
