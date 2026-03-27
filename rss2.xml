@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Mon, 09 Mar 2026 00:54:56 GMT</pubDate>
+    <pubDate>Fri, 27 Mar 2026 23:28:20 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——模型篇</title>
+      <link>https://blog.inoki.cc/2026/03/28/Coding-plan-and-harness-1/</link>
+      <guid>https://blog.inoki.cc/2026/03/28/Coding-plan-and-harness-1/</guid>
+      <pubDate>Sat, 28 Mar 2026 23:30:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;随着 AI
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2026/03/28/Coding-plan-and-harness-1/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Cross-Language Butterfly Effect - A Protobuf C++ Mutex Refactor Deadlocks the macOS Python Data Ecosystem</title>
@@ -183,27 +204,6 @@
     </item>
     
     <item>
-      <title>Android bootloader analysis -- ABL(3)</title>
-      <link>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</link>
-      <guid>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</guid>
-      <pubDate>Sat, 20 Apr 2024 13:48:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;In my previous post &lt;a href=&quot;https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/&quot;&gt;“Android Bootloader Analysis –
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/#disqus_thread</comments>
-    </item>
-    
-    <item>
       <title>Android bootloader analysis -- ABL(2)</title>
       <link>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</link>
       <guid>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</guid>
@@ -222,6 +222,27 @@
       
       
       <comments>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>Android bootloader analysis -- ABL(3)</title>
+      <link>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</link>
+      <guid>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</guid>
+      <pubDate>Sat, 20 Apr 2024 13:48:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;In my previous post &lt;a href=&quot;https://blog.inoki.cc/2021/10/18/android-bootloader-analysis-abl-1-en/&quot;&gt;“Android Bootloader Analysis –
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/#disqus_thread</comments>
     </item>
     
     <item>
@@ -417,30 +438,6 @@
       
       
       <comments>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】ARM 的历史——第一部分：打造第一块芯片</title>
-      <link>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</link>
-      <guid>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/</guid>
-      <pubDate>Sun, 20 Aug 2023 20:34:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原博客共分为三篇，原文链接如下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&quot;https://arstechnica.com/gadgets/2022/09/a-history-of-arm-part-1-building-the-first-chip/&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2023/08/20/History-of-ARM-1/#disqus_thread</comments>
     </item>
     
   </channel>
