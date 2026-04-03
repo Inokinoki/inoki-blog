@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Fri, 27 Mar 2026 23:28:20 GMT</pubDate>
+    <pubDate>Fri, 03 Apr 2026 22:25:45 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——环境篇</title>
+      <link>https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/</link>
+      <guid>https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/</guid>
+      <pubDate>Fri, 03 Apr 2026 23:30:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;笔者在&lt;a href=&quot;https://blog.inoki.cc/2026/03/28/Coding-plan-and-harness-1/&quot;&gt;上一篇文章&lt;/a&gt;中已经介绍了各个编码套餐（Coding
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——模型篇</title>
@@ -414,30 +435,6 @@
       
       
       <comments>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】ARM 的历史——第二部分：一切开始聚在一起</title>
-      <link>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</link>
-      <guid>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/</guid>
-      <pubDate>Tue, 22 Aug 2023 00:34:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原博客共分为三篇，原文链接如下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&quot;https://arstechnica.com/gadgets/2022/09/a-history-of-arm-part-1-building-the-first-chip/&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2023/08/22/History-of-ARM-2/#disqus_thread</comments>
     </item>
     
   </channel>

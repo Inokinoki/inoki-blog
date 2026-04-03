@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<htmlen>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <script data-ad-client="ca-pub-2713518338457470" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  <meta name="google-site-verification" content="uxeL3ivCjEkmCPEWS1owNMkK9VHPxOMCjcaMHaQ38Bo">
+  <meta name="google-site-verification" content="yU7d61qsV4eAvSOazt85VJMYfiEDjZjcaXwyQKGP5Bc">
+  
+  
+  <title>几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——环境篇 | Inoki in the world</title>
+  <meta name="description" content="笔者在上一篇文章中已经介绍了各个编码套餐（Coding Plan）支持的模型、上下文长度、视觉能力等方面的差异，本文主要着重于这些编码套餐在各个运行环境（Harness）中的差异和对应的能力补齐方案。 在公司的支持和各种大语言模型供应商、云厂商的活动的优惠下，从 2025 年 10 月至今，按照时间顺序，笔者主要尝试了以下几款编码套餐：  Claude Code 订阅（Anthropic 官方的">
+<meta name="keywords" content="中文,Coding Agent,LLM,AI,Claude,Cursor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——环境篇">
+<meta property="og:url" content="https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/index.html">
+<meta property="og:site_name" content="Inoki in the world">
+<meta property="og:description" content="笔者在上一篇文章中已经介绍了各个编码套餐（Coding Plan）支持的模型、上下文长度、视觉能力等方面的差异，本文主要着重于这些编码套餐在各个运行环境（Harness）中的差异和对应的能力补齐方案。 在公司的支持和各种大语言模型供应商、云厂商的活动的优惠下，从 2025 年 10 月至今，按照时间顺序，笔者主要尝试了以下几款编码套餐：  Claude Code 订阅（Anthropic 官方的">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2026-04-03T22:25:45.756Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——环境篇">
+<meta name="twitter:description" content="笔者在上一篇文章中已经介绍了各个编码套餐（Coding Plan）支持的模型、上下文长度、视觉能力等方面的差异，本文主要着重于这些编码套餐在各个运行环境（Harness）中的差异和对应的能力补齐方案。 在公司的支持和各种大语言模型供应商、云厂商的活动的优惠下，从 2025 年 10 月至今，按照时间顺序，笔者主要尝试了以下几款编码套餐：  Claude Code 订阅（Anthropic 官方的">
+<meta name="twitter:creator" content="@IIInoki">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Inoki in the world" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="/" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Inoki</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Computer Scientist</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Earth</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/book">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                Welcome to Inoki's Blog. You can find my work on IME, Embedded System and more on here.
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Dairy/">Dairy</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2026/04/03/Coding-plan-and-harness-2/" class="title">几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——环境篇</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2026-04-03T23:30:00.000Z" itemprop="datePublished">2026-04-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Dairy/">Dairy</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2026/03/28/Coding-plan-and-harness-1/" class="title">几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——模型篇</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2026-03-28T23:30:00.000Z" itemprop="datePublished">2026-03-28</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Programming-Language/">Programming Language</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Programming-Language/C/">C++</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Programming-Language/Python/">Python</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Source-Code/">Source Code</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Source-Code/Python/">Python</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/macOS/">macOS</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2026/03/09/protobuf-macos-mutex-lockdown-en/" class="title">Cross-Language Butterfly Effect - A Protobuf C++ Mutex Refactor Deadlocks the macOS Python Data Ecosystem</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2026-03-09T09:52:00.000Z" itemprop="datePublished">2026-03-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Programming-Language/">Programming Language</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Programming-Language/C/">C++</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Programming-Language/Python/">Python</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Source-Code/">Source Code</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/Source-Code/Python/">Python</a><i class="icon icon-angle-right"></i><a class="category-link" href="/categories/macOS/">macOS</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2026/03/09/protobuf-macos-mutex-lockdown/" class="title">跨语言蝴蝶效应：Protobuf C++ 库的一次 Mutex 重构，让 macOS Python 数据生态死锁</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2026-03-09T08:52:00.000Z" itemprop="datePublished">2026-03-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!--
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a>
+              </p>
+              -->
+              <p class="item-title">
+                <a href="/2026/02/28/Apple-Rosetta-Linux-VM-Secret-en/" class="title">Things You Might Want to Know About Apple&#39;s Rosetta 2 for Linux VMs</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2026-02-28T20:54:00.000Z" itemprop="datePublished">2026-02-28</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+<!-- Blog sidebar -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="2343090796" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ABL/" style="font-size: 13.6px;">ABL</a> <a href="/tags/AI/" style="font-size: 13.2px;">AI</a> <a href="/tags/ARM/" style="font-size: 13.4px;">ARM</a> <a href="/tags/ASIX/" style="font-size: 13.1px;">ASIX</a> <a href="/tags/Aboot/" style="font-size: 13.2px;">Aboot</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/Android/" style="font-size: 13.7px;">Android</a> <a href="/tags/Apple/" style="font-size: 13.3px;">Apple</a> <a href="/tags/Bare-Metal/" style="font-size: 13.1px;">Bare Metal</a> <a href="/tags/Bootloader/" style="font-size: 13.7px;">Bootloader</a> <a href="/tags/Bug/" style="font-size: 13.2px;">Bug</a> <a href="/tags/C/" style="font-size: 13.2px;">C++</a> <a href="/tags/Chrome-OS/" style="font-size: 13px;">Chrome OS</a> <a href="/tags/Claude/" style="font-size: 13.1px;">Claude</a> <a href="/tags/Cloud-Input/" style="font-size: 13.3px;">Cloud Input</a> <a href="/tags/Coding-Agent/" style="font-size: 13.1px;">Coding Agent</a> <a href="/tags/Computer-Graphics/" style="font-size: 13px;">Computer Graphics</a> <a href="/tags/Craft/" style="font-size: 13.1px;">Craft</a> <a href="/tags/Cross-Compile/" style="font-size: 13.2px;">Cross Compile</a> <a href="/tags/Cuda/" style="font-size: 13px;">Cuda</a> <a href="/tags/Cursor/" style="font-size: 13.1px;">Cursor</a> <a href="/tags/Debian/" style="font-size: 13px;">Debian</a> <a href="/tags/Debug/" style="font-size: 13.1px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/Dynamic-Programming/" style="font-size: 13px;">Dynamic Programming</a> <a href="/tags/EDK2/" style="font-size: 13px;">EDK2</a> <a href="/tags/EFI/" style="font-size: 13px;">EFI</a> <a href="/tags/Embedded-System/" style="font-size: 13.4px;">Embedded System</a> <a href="/tags/English/" style="font-size: 13px;">English</a> <a href="/tags/FFmpeg/" style="font-size: 13.1px;">FFmpeg</a> <a href="/tags/GBDK/" style="font-size: 13.1px;">GBDK</a> <a href="/tags/GDB/" style="font-size: 13px;">GDB</a> <a href="/tags/GitHub/" style="font-size: 13px;">GitHub</a> <a href="/tags/Go/" style="font-size: 13.1px;">Go</a> <a href="/tags/HTTP/" style="font-size: 13px;">HTTP</a> <a href="/tags/Hardware/" style="font-size: 13.2px;">Hardware</a> <a href="/tags/Hash/" style="font-size: 13px;">Hash</a> <a href="/tags/Heterogeneous-Computing/" style="font-size: 13px;">Heterogeneous Computing</a> <a href="/tags/IBus/" style="font-size: 13.4px;">IBus</a> <a href="/tags/IME/" style="font-size: 13px;">IME</a> <a href="/tags/IoT/" style="font-size: 13.4px;">IoT</a> <a href="/tags/JTAG/" style="font-size: 13px;">JTAG</a> <a href="/tags/KDE/" style="font-size: 13.1px;">KDE</a> <a href="/tags/KDE-Connect/" style="font-size: 13.5px;">KDE Connect</a> <a href="/tags/KDE-Frameworks/" style="font-size: 13.1px;">KDE Frameworks</a> <a href="/tags/LLM/" style="font-size: 13.3px;">LLM</a> <a href="/tags/Leetcode/" style="font-size: 13px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13.8px;">Linux</a> <a href="/tags/Linux-Driver/" style="font-size: 13.2px;">Linux Driver</a> <a href="/tags/LoRa/" style="font-size: 13.4px;">LoRa</a> <a href="/tags/LoRaWAN/" style="font-size: 13.4px;">LoRaWAN</a> <a href="/tags/Man/" style="font-size: 13px;">Man</a> <a href="/tags/Open-Source/" style="font-size: 13.1px;">Open Source</a> <a href="/tags/OpenCL/" style="font-size: 13px;">OpenCL</a> <a href="/tags/Pack/" style="font-size: 13px;">Pack</a> <a href="/tags/Protobuf/" style="font-size: 13.1px;">Protobuf</a> <a href="/tags/Proxy/" style="font-size: 13px;">Proxy</a> <a href="/tags/Python/" style="font-size: 13.3px;">Python</a> <a href="/tags/QUIC/" style="font-size: 13px;">QUIC</a> <a href="/tags/Qemu/" style="font-size: 13px;">Qemu</a> <a href="/tags/Qt/" style="font-size: 13.1px;">Qt</a> <a href="/tags/Raspberry-Pi/" style="font-size: 13.4px;">Raspberry Pi</a> <a href="/tags/Ray-Tracing/" style="font-size: 13px;">Ray Tracing</a> <a href="/tags/Reverse-Engineering/" style="font-size: 13.1px;">Reverse Engineering</a> <a href="/tags/Rosetta/" style="font-size: 13.1px;">Rosetta</a> <a href="/tags/Router/" style="font-size: 13.2px;">Router</a> <a href="/tags/Rust/" style="font-size: 13px;">Rust</a> <a href="/tags/SDDM/" style="font-size: 13px;">SDDM</a> <a href="/tags/SDR/" style="font-size: 13.3px;">SDR</a> <a href="/tags/SDXL/" style="font-size: 13px;">SDXL</a> <a href="/tags/SSH/" style="font-size: 13px;">SSH</a> <a href="/tags/Source-Code/" style="font-size: 13.1px;">Source Code</a> <a href="/tags/Stable-Diffusion/" style="font-size: 13px;">Stable Diffusion</a> <a href="/tags/System/" style="font-size: 13px;">System</a> <a href="/tags/UART/" style="font-size: 13px;">UART</a> <a href="/tags/USB/" style="font-size: 13.3px;">USB</a> <a href="/tags/Ubuntu/" style="font-size: 13.1px;">Ubuntu</a> <a href="/tags/VSCode/" style="font-size: 13px;">VSCode</a> <a href="/tags/Virtualization/" style="font-size: 13px;">Virtualization</a> <a href="/tags/Visual-Studio/" style="font-size: 13px;">Visual Studio</a> <a href="/tags/Vulkan/" style="font-size: 13px;">Vulkan</a> <a href="/tags/WSL/" style="font-size: 13px;">WSL</a> <a href="/tags/Win-10-ARM/" style="font-size: 13px;">Win 10 ARM</a> <a href="/tags/Win-10-IoT/" style="font-size: 13.1px;">Win 10 IoT</a> <a href="/tags/Windows/" style="font-size: 13.1px;">Windows</a> <a href="/tags/XBL/" style="font-size: 13px;">XBL</a> <a href="/tags/epoll/" style="font-size: 13px;">epoll</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/iOS/" style="font-size: 13px;">iOS</a> <a href="/tags/ibus-libpinyin/" style="font-size: 13.3px;">ibus-libpinyin</a> <a href="/tags/macOS/" style="font-size: 13.2px;">macOS</a> <a href="/tags/ollama/" style="font-size: 13.1px;">ollama</a> <a href="/tags/openwrt/" style="font-size: 13px;">openwrt</a> <a href="/tags/private/" style="font-size: 13.3px;">private</a> <a href="/tags/sysfs/" style="font-size: 13px;">sysfs</a> <a href="/tags/x86/" style="font-size: 13.1px;">x86</a> <a href="/tags/中文/" style="font-size: 14px;">中文</a> <a href="/tags/开源/" style="font-size: 13px;">开源</a> <a href="/tags/硬件/" style="font-size: 13.3px;">硬件</a> <a href="/tags/翻译/" style="font-size: 13.9px;">翻译</a> <a href="/tags/虚拟化/" style="font-size: 13px;">虚拟化</a> <a href="/tags/逆向/" style="font-size: 13.1px;">逆向</a> <a href="/tags/驱动/" style="font-size: 13px;">驱动</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ABL/">ABL</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI/">AI</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ARM/">ARM</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASIX/">ASIX</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Aboot/">Aboot</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apple/">Apple</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bare-Metal/">Bare Metal</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bootloader/">Bootloader</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bug/">Bug</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome-OS/">Chrome OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Claude/">Claude</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Input/">Cloud Input</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Coding-Agent/">Coding Agent</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-Graphics/">Computer Graphics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Craft/">Craft</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Compile/">Cross Compile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cuda/">Cuda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cursor/">Cursor</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debian/">Debian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/">Debug</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EDK2/">EDK2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EFI/">EFI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/">Embedded System</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/English/">English</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GBDK/">GBDK</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GDB/">GDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/">GitHub</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hash/">Hash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Heterogeneous-Computing/">Heterogeneous Computing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IBus/">IBus</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IME/">IME</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/">IoT</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JTAG/">JTAG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE/">KDE</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Connect/">KDE Connect</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KDE-Frameworks/">KDE Frameworks</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LLM/">LLM</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/">Leetcode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">25</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux-Driver/">Linux Driver</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRa/">LoRa</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LoRaWAN/">LoRaWAN</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Man/">Man</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Open-Source/">Open Source</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pack/">Pack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Protobuf/">Protobuf</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Proxy/">Proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/QUIC/">QUIC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qemu/">Qemu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/">Qt</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-Pi/">Raspberry Pi</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ray-Tracing/">Ray Tracing</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Reverse-Engineering/">Reverse Engineering</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rosetta/">Rosetta</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Router/">Router</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/">Rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDDM/">SDDM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDR/">SDR</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SDXL/">SDXL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Source-Code/">Source Code</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stable-Diffusion/">Stable Diffusion</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/System/">System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UART/">UART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/USB/">USB</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/">Ubuntu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VSCode/">VSCode</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Virtualization/">Virtualization</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Visual-Studio/">Visual Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vulkan/">Vulkan</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WSL/">WSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-ARM/">Win 10 ARM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win-10-IoT/">Win 10 IoT</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/">Windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XBL/">XBL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/epoll/">epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ibus-libpinyin/">ibus-libpinyin</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macOS/">macOS</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ollama/">ollama</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openwrt/">openwrt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/private/">private</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysfs/">sysfs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86/">x86</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中文/">中文</a><span class="tag-list-count">59</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开源/">开源</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬件/">硬件</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/虚拟化/">虚拟化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/逆向/">逆向</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/驱动/">驱动</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/AI/">AI</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/AI/LLM/">LLM</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/AI/Stable-Diffusion/">Stable Diffusion</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Hash/">Hash</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/">Bug</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Cuda/">Cuda</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Docker/">Docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/Linux-Driver/">Linux Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Bug/WSL/">WSL</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Build/">Build</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chinese/">Chinese</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome-OS/">Chrome OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/">Computer Graphics</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphics/Vulkan/">Vulkan</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dairy/">Dairy</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Algorithm/">Algorithm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/EDK2/">EDK2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/">Embedded System</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/">Cross Compile</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Cross-Compile/Router/">Router</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/">IoT</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/IoT/Win-10-IoT/">Win 10 IoT</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Embedded-System/Raspberry-Pi/">Raspberry Pi</a><span class="category-list-count">6</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/FFmpeg/">FFmpeg</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GBDK/">GBDK</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hardware/">Hardware</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/IME/">IME</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/">Inoki Home Made</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/">Qt</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Inoki-Home-Made/Qt/EFI/">EFI</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/">KDE</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/">Craft</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE/Craft/Blueprints/">Blueprints</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/">KDE Connect</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Connect/中文/">中文</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/KDE-Frameworks/">KDE Frameworks</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/Dynamic-Programming/">Dynamic Programming</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">26</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/">Android</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Android/Bootloader/">Bootloader</a><span class="category-list-count">11</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Driver/">Driver</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Wayland/">Wayland</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/">man</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/man/7-Miscellanea/">7-Miscellanea</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/sysfs/">sysfs</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LoRa/">LoRa</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Modern-C/">Modern C++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Network/Proxy/">Proxy</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Open-Source/">Open Source</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Open-Source/Dairy/">Dairy</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCL/">OpenCL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Package/">Package</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Package/Debian/">Debian</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/">Programming Language</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/C/">C++</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming-Language/Python/">Python</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rust/">Rust</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SDR/">SDR</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/">Source Code</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/">Linux Driver</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Linux-Driver/USB-Net/">USB-Net</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Source-Code/Python/">Python</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/">Utility</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/System/Utility/Build-tool/">Build tool</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/">Translation</a><span class="category-list-count">19</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Translation/Chinese/">Chinese</a><span class="category-list-count">19</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/USB/">USB</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/VSCode/">VSCode</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ibus-libpinyin/">ibus-libpinyin</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/macOS/">macOS</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/硬件/">硬件</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Coding-plan-and-harness-2" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——环境篇
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2026/04/03/Coding-plan-and-harness-2/" class="article-date">
+	  <time datetime="2026-04-03T23:30:00.000Z" itemprop="datePublished">2026-04-03</time>
+	</a>
+</span>
+
+        
+<!--
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Dairy/">Dairy</a>
+  </span>
+-->
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/AI/">AI</a>, <a class="article-tag-link" href="/tags/Claude/">Claude</a>, <a class="article-tag-link" href="/tags/Coding-Agent/">Coding Agent</a>, <a class="article-tag-link" href="/tags/Cursor/">Cursor</a>, <a class="article-tag-link" href="/tags/LLM/">LLM</a>, <a class="article-tag-link" href="/tags/中文/">中文</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2026/04/03/Coding-plan-and-harness-2/#comments" class="article-comment-link">Comments</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 4.2k(words)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 15(minutes)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>笔者在<a href="https://blog.inoki.cc/2026/03/28/Coding-plan-and-harness-1/">上一篇文章</a>中已经介绍了各个编码套餐（Coding Plan）支持的模型、上下文长度、视觉能力等方面的差异，本文主要着重于这些编码套餐在各个运行环境（Harness）中的差异和对应的能力补齐方案。</p>
+<p>在公司的支持和各种大语言模型供应商、云厂商的活动的优惠下，从 2025 年 10 月至今，按照时间顺序，笔者主要尝试了以下几款编码套餐：</p>
+<ul>
+<li>Claude Code 订阅（Anthropic 官方的 20 刀月度订阅，还使用了大约 1000 刀按需付费的额度）</li>
+<li>Cursor Pro 订阅（20 刀月度订阅）</li>
+<li>智谱 <a href="http://Z.ai" target="_blank" rel="noopener">Z.ai</a> GLM 的 Coding Plan（用的是轻量版，做活动时候入的年度套餐，实付 192 元，折合一个月 16 元）</li>
+<li>Google 的 Antigravity 提供的 Gemini 系列（主要是免费额度，偶尔体验一下，没有付费）</li>
+<li>OpenAI 的 Codex（主要是免费额度，偶尔体验一下，没有付费）</li>
+<li>阿里云百炼的 Coding Plan（首月 2 折的 200 元人民币套餐，实付 40 元）</li>
+<li>联通元景 MaaS 平台的 Coding Plan（49 元人民币套餐，首月 30 元）</li>
+<li>联通云的 Coding Plan（首月免费，后续应该是 40 元每月）</li>
+</ul>
+<p>这些编码套餐大部分时间都是在 Claude Code 这个 Harness（此处以及之后翻译成“运行环境”）中使用的，因此本文也会主要以 Claude Code 为主进行对比分析，正巧 2026 年 3 月的最后一天，Claude Code 因为上传 source map 到 npm 仓库而导致源码泄漏，这就为本文中原本的假设提供了更为具体和确切的验证条件。</p>
+<p>除此之外，笔者还尝试了 OpenAI 的 Codex App、Google 的 Antigravity、OpenCode 及其衍生的一系列工具，至于其他运行环境，还没有来得及一一体验。但也算是体验了最具代表性的几个运行环境了（此处可以有 Moonshot Kimi CLI、Qwen Coder 等的广告位，欢迎通过 GitHub sponsorships 或者 Coding Plan 套餐赞助笔者）。</p>
+<p>现在主流的运行环境都拥有一套系统提示词（System Prompt）、工具发现与调用架构（包括 MCP 和插件系统）、上下文管理与压缩、钩子（Hooks）和子 Agent 支持。本文不打算讨论老生常谈的系统提示词工程等内容，而是主要从运行环境的工具支持这方面来进行对比分析，包括原生内建的工具、工具调用架构、工具支持情况等：先说一些比较通用的情况，然后再针对各个运行环境各自的问题进行讨论。</p>
+<h1 id="各式各样的-mcp"><a class="markdownIt-Anchor" href="#各式各样的-mcp"></a> 各式各样的 MCP</h1>
+<p>MCP（Model Context Protocol）是模型上下文协议，是一种用于在模型和应用程序之间传递上下文信息的协议。它允许模型在执行任务时访问外部工具和数据，从而实现更复杂的任务。MCP 协议定义了一套标准化的接口和格式，使得不同的模型和应用程序可以相互兼容和交互。</p>
+<p>有些 MCP 是用户想安装的，有些则是因为模型能力限制、用户不得不安装的——这一点尤其在 Claude Code 中使用一些国产模型的时候体现得比较明显，因为 Claude Code 这一环境本身是为了 Anthropic 的模型设计的，所以有一些假设，比如：</p>
+<ul>
+<li>视觉能力是原生的</li>
+<li>网络内容访问能力（包括 WebFetch 和 WebSearch）是通过 API 端点的服务器工具（Server tool）来支持的</li>
+</ul>
+<p>而在没有原生视觉能力的情况下，就需要额外的 MCP 来补全这一短板，我称之为“能力补全的 MCP”，这里就以 Claude Code 为主，来详细介绍一下各家是如何补全各种能力的。</p>
+<h2 id="视觉能力补全"><a class="markdownIt-Anchor" href="#视觉能力补全"></a> 视觉能力补全</h2>
+<p>视觉能力是除了 Kimi 模型和阿里云百炼的 Qwen 系列之外，其他模型都不支持的，因此需要额外的 MCP 来补全这一短板。但是各家也有各家的策略，比如。</p>
+<p>GLM 4.7 和 GLM-5 这两个主力模型是不支持视觉能力的（当然，近期 GLM-5.1V 也支持了原生视觉能力），在智谱 <a href="http://Z.ai" target="_blank" rel="noopener">Z.ai</a> 的模型列表里提供了类似于 GLM-4.6V 这样的视觉增强模型，并通过 MCP 服务来为 GLM-4.7 和 GLM-5 提供视觉能力，这个 MCP 甚至是<strong>不需要配置、直接可以通过 Anthropic 兼容的 API 端点的 image 参数格式</strong>直接来使用的，<strong>这点非常神奇</strong>，也是 GLM 非常方便、显得智谱非常聪明的一个地方（会放在 WebFetch 工具详细说这一点）。但是 Lite 套餐限制每个月 100 次 MCP 的总调用，超过这个限制就需要付费购买了，还是十分受限的，也许这也是为什么他们设计了不需要配置就可以使用的原因吧，毕竟也是一种收费手段。</p>
+<p>MiniMax 的 M2.5 和 M2.7 也是支持视觉能力的，需要配置这样一个 MCP 服务器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">claude mcp add -s user MiniMax --env MINIMAX_API_KEY=api_key --env MINIMAX_API_HOST=https://api.minimaxi.com -- uvx minimax-coding-plan-mcp -y</span><br></pre></td></tr></table></figure>
+<p>配置之后，就可以直接通过 MiniMax 的 MCP 服务器来使用视觉能力了，虽然需要配置，但是文档没有说明需要额外收费，也还是十分方便的。</p>
+<p>Kimi 的 K2.5 模型是支持视觉能力的，所以不需要配置，无论是 Kimi 自己的 API 端点还是阿里云百炼的 API 端点，都是支持直接通过 Anthropic 兼容的 API 端点的 image 参数格式直接来使用的。但是除了 Qwen3.5 Plus 之外，阿里云百炼的端点还提供了 GLM-4.7 和 GLM-5 等的不支持视觉能力的模型，因此就需要额外的配置，他们给出的解决方案是配置一个 Skill，来用 qwen3.5-plus 模型进行图片描述：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: image-analyzer</span><br><span class="line">description: 帮助没有视觉能力的模型进行图像理解。当需要分析图像内容、提取图片中的信息、文字、界面元素，或理解截图、图表、架构图等任何视觉内容时，使用此技能，传入图片路径即可获得描述信息。</span><br><span class="line">model: qwen3.5-plus</span><br><span class="line">---</span><br><span class="line">qwen3.5-plus具有视觉理解能力，请直接使用qwen3.5-plus模型进行图片理解。</span><br></pre></td></tr></table></figure>
+<p>然后再喂给当前的模型使用，也是十分机智了。</p>
+<h2 id="网络搜索websearch能力补全"><a class="markdownIt-Anchor" href="#网络搜索websearch能力补全"></a> 网络搜索（WebSearch）能力补全</h2>
+<p>在 Claude Code 中，网络搜索能力是原生的、通过 Anthropic 的 API 端点的服务端工具来支持的（看 Claude Code 源码中也证实了这一点，是使用类似于 <code>web_search_&lt;date&gt;</code> 这样的服务端工具来支持的），但是其他模型供应商的端点并不总是支持，因此也需要额外的 MCP 来补全这一短板。</p>
+<p>各家对这一工具的处理和配置方法上面视觉能力补全类似，除了 GLM 这边非常聪明地桥接了 <code>web_search_&lt;date&gt;</code> 这样的服务端工具到他们的 MCP 服务用来按月计量（当然，对于用户本身来说这点就很尴尬了）。</p>
+<h2 id="网络内容访问webfetch能力补全"><a class="markdownIt-Anchor" href="#网络内容访问webfetch能力补全"></a> 网络内容访问（WebFetch）能力补全</h2>
+<p>在最近版本的 Claude Code 中，网络内容访问工具（WebFetch）分为两步：</p>
+<ol>
+<li>首先通过本机浏览器访问目标网站，获取到网页内容；</li>
+<li>然后通过 Claude Code 的 API 端点将网页内容发送到一个小模型（写死的类似于 <code>claude_haiku_&lt;version&gt;_&lt;date&gt;</code> 这样的模型 ID）中，获取到网页内容的摘要，再把总结的内容发回给当前在使用的模型。</li>
+</ol>
+<p>这里就有了处理方式的不同：</p>
+<ul>
+<li>MiniMax 的 API 端点会自动处理模型的映射，就算是写死的小模型，也会自动映射到 MiniMax 的模型中，从而将总结内容发回给当前在使用的模型。</li>
+<li>阿里云百炼的 API 端点由于提供了各家不同的模型，必须设置一个模型参数、并且匹配对应的模型 ID，使用时没什么问题，但是到了 WebFetch 第二部这里，就会提示不支持的模型 ID 参数，导致 WebFetch 无法正常使用。这里我建议阿里云的工程师<strong>映射一个默认模型到任意模型 ID 参数上</strong>，从而让 Claude Code 的 WebFetch 工具的第二步正常工作，从而让用户能够正常使用 WebFetch 工具。</li>
+</ul>
+<p>智谱 <a href="http://Z.ai" target="_blank" rel="noopener">Z.ai</a> 的 Anthropic 的操作在这里可以详细说明一下，这点操作非常神奇：</p>
+<ul>
+<li>他们可能检测了 API 端点的工具参数，如果其中有 WebFetch 的工具，并且模型想要产生想要的调用，就会直接在服务端使用他们的 WebRead 工具来获取网页内容，然后直接将总结的内容发回给当前在使用的模型。这就带来了一个便利——笔者测试出来，他们的 MCP 服务是部署在美国的，所以访问境外的网站、就算没挂代理，也可以获取到对应的内容（虽然是模型总结过的）。</li>
+<li>在问模型有什么可用的工具的时候，API 端点会“拦截” WebFetch 工具，并且告诉用户只有 <code>mcp__web_reader__webReader</code> 这样的工具，这个完全是 Claude Code 内部使用的 MCP 工具的名称格式，也是让笔者十分困惑的地方——明明没有配置任何 MCP 服务器，这样的“MCP 工具”是怎么被发现的呢？结果是他们的 Anthropic API 端点拦截并提供了虚假的、好像是本地配置好的 MCP 服务器，从而让用户只能够使用他们计次的 WebReader 工具。</li>
+</ul>
+<p>详情可以在 <a href="https://x.com/IIInoki/status/2039457730029572336" target="_blank" rel="noopener">https://x.com/IIInoki/status/2039457730029572336</a> 查看，可以看到它也包含了 <code>mcp__4_5v_mcp__analyze_image</code> 这样提供视觉能力的虚假的、好像是本地配置好的 MCP 服务器，这点十分聪明、但也十分狡诈。</p>
+<h1 id="插件系统"><a class="markdownIt-Anchor" href="#插件系统"></a> 插件系统</h1>
+<p>各家的插件系统都挺繁荣了，这里我只提一个笔者用得特别多的 Claude Code 的 Ralph Loop 插件，可以用一个简单的循环来让模型反复执行某个任务，从而实现一些比较复杂的功能（并充分消耗用量，笑），别的运行环境中的插件都没法达到类似的效果，笔者曾经让 Claude Code 在一个任务中最多跑了 160 个小时，那周消耗了 20 亿的 Tokens，对于厂商来说，笔者这样的用户还是很恐怖的。</p>
+<h1 id="各个运行环境的优势和问题"><a class="markdownIt-Anchor" href="#各个运行环境的优势和问题"></a> 各个运行环境的优势和问题</h1>
+<p>下面会提一些各个运行环境的优势和问题，以及一些笔者个人觉得的建议。</p>
+<h2 id="codex-app"><a class="markdownIt-Anchor" href="#codex-app"></a> Codex App</h2>
+<p>OpenAI 模型独一家，但是成熟度不足，就不多赘述了。</p>
+<h2 id="claude-code"><a class="markdownIt-Anchor" href="#claude-code"></a> Claude Code</h2>
+<p>Claude Code 是笔者主力使用的运行环境，也是笔者最推荐的运行环境，没有之一。</p>
+<p>除了上面提到的“能力补全”之外，另外一个需要注意的点是上下文的大小：由于 Claude Code 假定用户使用的都是 Anthropic 的模型，所以默认的上下文大小是 1M，但如果是其他模型，比如 GLM-4.7 和 GLM-5，上下文大小只有 200K，很容易出现上下文不足、但还远远没有达到压缩上下文条件的尴尬局面（毕竟假定是 1M），所以需要<strong>手动切换到 Haiku 模型</strong>，并<strong>指定 Haiku 映射到 GLM-4.7 或者 GLM-5 的模型</strong>来使用（因为 GLM 默认将 Haiku 映射到 GLM-4.5-Air，只有 128K 的上下文）。</p>
+<p>这点对于 Kimi 还有 Minimax 的模型来说也同样适用。唯一的特例是 Qwen3.5 Plus 及其后续 Qwen3.6 Plus，它们本身是支持 1M 上下文的，所以不需要手动配置。如果有用户遇到类似的 400 错误，请检查一下模型的上下文长度和 Claude Code 假定的模型。</p>
+<p>此外，Kimi CLI 的开发者还发现 Anthropic 还会在非第一方模型上避免缓存命中，会导致模型供应商的模型消耗更多的 Tokens，这点对 Coding Plan 的用户来说除了缓存命中带来的加速会消失之外，影响不大；但是对于模型供应商来说，却会导致成本（算力和储存）急剧升高。</p>
+<h2 id="opencode"><a class="markdownIt-Anchor" href="#opencode"></a> OpenCode</h2>
+<p>OpenCode 同样也是笔者主力使用的运行环境，也是笔者最推荐的运行环境，没有之一，因为天生支持第三方模型，并且工具调用基本都是本地实现，不存在不支持的工具的问题，上下文长度也都可以根据模型调整，所以非常方便。</p>
+<p>唯一可能出现的运行环境能力的方面的缺失就是图像能力，最好配合一个 MCP 服务器来使用——这里笔者可以支持一下 MiniMax 的不限量视觉能力 MCP 服务器（广告位招租）。</p>
+<p>除此之外，OpenCode 也支持多种运行环境，比如 CLI、Web UI 和桌面 App 等，但笔者个人还是更喜欢 CLI 的方式，因为更方便、更灵活。</p>
+<h3 id="cli"><a class="markdownIt-Anchor" href="#cli"></a> CLI</h3>
+<p>CLI 模式下类似于 Claude Code，但是在 macOS 默认终端自带透明度的时候，很多主题的内容都看的不是很清楚，别的倒是问题不大。</p>
+<h3 id="web-ui"><a class="markdownIt-Anchor" href="#web-ui"></a> Web UI</h3>
+<p>这一模式可以通过 CLI 的 serve 命令来启动，但是使用过程中经常会有跨域 WebAssembly 加载失败的问题（主要是权限），需要手动配置，并且还已经有了针对 OpenCode 服务端的黑客工具，需要深思熟虑安全策略。</p>
+<h3 id="opencode-的套壳-openchamber"><a class="markdownIt-Anchor" href="#opencode-的套壳-openchamber"></a> OpenCode 的套壳 OpenChamber</h3>
+<p>此外，笔者还试用了 OpenCode 的套壳 OpenChamber，这个套壳的桌面模式用起来还是挺舒服的，除了在长上下文的情况下会陷入 0.1s 死循环、不执行任何任务之外，别的都还好。但是早期开发版本可以理解。</p>
+<h2 id="cursor-ide"><a class="markdownIt-Anchor" href="#cursor-ide"></a> Cursor IDE</h2>
+<p>Cursor 也算是一个比较不错的运行环境，支持多种模型，并且工具调用基本都是本地实现，原生支持的模型都是经过优选的，不存在不支持的工具和视觉能力的问题，所以非常方便。</p>
+<p>但是如果使用第三方模型，配置和切换还是比较迷惑的，并且 Cursor 假定 OpenAI 端点和 Anthropic 端点是官方的，会直接传图像等数据，如果是国产的第三方模型，就会出现不支持的 API 参数的错误。没测试的内容是模型的上下文长度，不知道假设是多少。</p>
+<h2 id="google-antigravity"><a class="markdownIt-Anchor" href="#google-antigravity"></a> Google Antigravity</h2>
+<p>Google Antigravity 是一个比较不错的运行环境，支持多种模型，并且工具调用基本都是本地实现，不存在不支持的工具的问题，所以非常方便。唯一的缺点就是价格比较贵，而且用量限制比较死，还是不太适合个人开发者使用。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>不同的编码套餐工具各有特色，厂商也尝试通过兼容端点来让用户能在不同的运行环境（Harness）中使用他们的模型，但是往往都会有一些或多或少的问题。但是笔者相信，随着时间的推移，这些问题都会被逐渐解决，并且厂商也会越来越重视用户体验，从而提供更好的服务。</p>
+<p>一些笔者个人的建议：</p>
+<ul>
+<li>对于想要兼容 Anthropic 端口的模型供应商，建议在兼容端口上提供一个默认模型，从而让用户能够正常使用 WebFetch 等工具；</li>
+<li>模型供应商也可以像智谱 <a href="http://Z.ai" target="_blank" rel="noopener">Z.ai</a> 一样，考虑将工具调用直接映射到自己对应的 MCP 服务器，从而让用户能无感使用 WebSearch 和视觉能力；</li>
+<li>对于中转站的管理员（包括用户自己），请注意模型的上下文长度，避免出现在 Claude Code 中上下文不足、但还远远没有达到压缩上下文条件的尴尬局面；</li>
+<li>对于运行环境（Harness）的开发者，请尽量提供齐全的本地工具，从而避免使用不同 API 端点时的差异。</li>
+</ul>
+<p>希望笔者这篇对比分析能对有所帮助，也欢迎大家分享自己的使用体验和建议。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permanent Link：</strong>
+      <a href="https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/" title="几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——环境篇" target="_blank" rel="external">https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/</a>
+    </li>
+    
+    <!--
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+    -->
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="/" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="/" target="_blank"><span class="text-dark">Inoki</span><small class="ml-1x">Computer Scientist</small></a></h3>
+        <div>Ph.D in Computer Science, major in Embedded System and AI.</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+      <!-- Blog post bottom bar -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2713518338457470" data-ad-slot="9214609149" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2026/03/28/Coding-plan-and-harness-1/" title="几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——模型篇"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/inokinoki" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/IIInoki" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+
+        
+
+        
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2713518338457470" crossorigin="anonymous"></script>
+
+    </div>
+</footer>
+
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/';
+        
+        this.page.identifier = 'Coding-plan-and-harness-2';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'inokinoki' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+    <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-108089983-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+    <script defer>
+var _hmt = _hmt || [];
+
+</script>
+
+
+
+</body>
+</html>
