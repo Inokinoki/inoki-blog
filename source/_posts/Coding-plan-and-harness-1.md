@@ -1,6 +1,7 @@
 ---
 title: 几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——模型篇
 date: 2026-03-28 23:30:00
+updated: 2026-04-04 23:30:00
 tags:
 - Coding Agent
 - LLM
@@ -140,4 +141,4 @@ OpenAI 官方推出的 Codex 也有不少的每周免费额度，但是总觉得
 
 综合来说，对于性价比之选，笔者最推荐的还是阿里云百炼的编码套餐，其次是智谱 Z.ai GLM 的轻量版套餐，最不推荐的是联通元景 MaaS 平台和联通云的编码套餐，不差钱的请直接购入 Anthropic 的 Claude Code 订阅。
 
-下一篇将着重于它们与运行环境（Harness）的配合，敬请期待。
+[下一篇](https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/)将着重于它们与运行环境（Harness）的配合，敬请期待。
