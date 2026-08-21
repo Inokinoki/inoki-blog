@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2026-04-03T22:25:45.756Z</updated>
+  <updated>2026-08-21T15:40:05.592Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,48 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>密码是对的，但 Windows 说不：一次 RDP 认证失败的全面排查</title>
+    <link href="https://blog.inoki.cc/2026/08/21/msa-rdp-hello-only/"/>
+    <id>https://blog.inoki.cc/2026/08/21/msa-rdp-hello-only/</id>
+    <published>2026-08-21T11:20:00.000Z</published>
+    <updated>2026-08-21T15:40:05.592Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;家里那台 Windows 台式机，前段时间 Win 11 系统更新失败，只好重装。重装之前，用微软账户从 Mac 远程桌面连它一直好好的；重装之后，机器名、账户、网络、客户端一样都没变，连过去却永远是一句冷冰冰的 &lt;strong&gt;“The credentials did
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Windows" scheme="https://blog.inoki.cc/categories/Windows/"/>
+    
+    
+      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
+    
+      <category term="Windows" scheme="https://blog.inoki.cc/tags/Windows/"/>
+    
+      <category term="RDP" scheme="https://blog.inoki.cc/tags/RDP/"/>
+    
+      <category term="Windows Hello" scheme="https://blog.inoki.cc/tags/Windows-Hello/"/>
+    
+      <category term="Microsoft Account" scheme="https://blog.inoki.cc/tags/Microsoft-Account/"/>
+    
+      <category term="排查" scheme="https://blog.inoki.cc/tags/%E6%8E%92%E6%9F%A5/"/>
+    
+  </entry>
+  
+  <entry>
     <title>几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——环境篇</title>
     <link href="https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/"/>
     <id>https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/</id>
     <published>2026-04-03T23:30:00.000Z</published>
-    <updated>2026-04-03T22:25:45.756Z</updated>
+    <updated>2026-08-21T15:40:05.547Z</updated>
     
     <summary type="html">
     
@@ -95,7 +132,7 @@
     <link href="https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown-en/"/>
     <id>https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown-en/</id>
     <published>2026-03-09T09:52:00.000Z</published>
-    <updated>2026-04-03T22:25:45.809Z</updated>
+    <updated>2026-08-21T15:40:05.592Z</updated>
     
     <summary type="html">
     
@@ -142,7 +179,7 @@
     <link href="https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown/"/>
     <id>https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown/</id>
     <published>2026-03-09T08:52:00.000Z</published>
-    <updated>2026-04-03T22:25:45.809Z</updated>
+    <updated>2026-08-21T15:40:05.592Z</updated>
     
     <summary type="html">
     
@@ -191,7 +228,7 @@
     <link href="https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret-en/"/>
     <id>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret-en/</id>
     <published>2026-02-28T20:54:00.000Z</published>
-    <updated>2026-04-03T22:25:45.747Z</updated>
+    <updated>2026-08-21T15:40:05.540Z</updated>
     
     <summary type="html">
     
@@ -230,7 +267,7 @@
     <link href="https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret/"/>
     <id>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret/</id>
     <published>2026-02-28T20:52:00.000Z</published>
-    <updated>2026-04-03T22:25:45.747Z</updated>
+    <updated>2026-08-21T15:40:05.540Z</updated>
     
     <summary type="html">
     
@@ -269,7 +306,7 @@
     <link href="https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-a-decade-2026/"/>
     <id>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-a-decade-2026/</id>
     <published>2026-02-17T18:23:00.000Z</published>
-    <updated>2026-04-03T22:25:45.787Z</updated>
+    <updated>2026-08-21T15:40:05.573Z</updated>
     
     <summary type="html">
     
@@ -300,7 +337,7 @@
     <link href="https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/"/>
     <id>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/</id>
     <published>2026-02-17T18:03:00.000Z</published>
-    <updated>2026-04-03T22:25:45.787Z</updated>
+    <updated>2026-08-21T15:40:05.573Z</updated>
     
     <summary type="html">
     
@@ -335,7 +372,7 @@
     <link href="https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/"/>
     <id>https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/</id>
     <published>2025-03-08T06:02:23.000Z</published>
-    <updated>2026-04-03T22:25:45.766Z</updated>
+    <updated>2026-08-21T15:40:05.557Z</updated>
     
     <summary type="html">
     
@@ -373,7 +410,7 @@
     <link href="https://blog.inoki.cc/2024/06/08/My-10-years/"/>
     <id>https://blog.inoki.cc/2024/06/08/My-10-years/</id>
     <published>2024-06-08T17:19:00.000Z</published>
-    <updated>2026-04-03T22:25:45.784Z</updated>
+    <updated>2026-08-21T15:40:05.571Z</updated>
     
     <summary type="html">
     
@@ -403,7 +440,7 @@
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2026-04-03T22:25:45.805Z</updated>
+    <updated>2026-08-21T15:40:05.588Z</updated>
     
     <summary type="html">
     
@@ -440,7 +477,7 @@
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2026-04-03T22:25:45.805Z</updated>
+    <updated>2026-08-21T15:40:05.588Z</updated>
     
     <summary type="html">
     
@@ -477,7 +514,7 @@
     <link href="https://blog.inoki.cc/2024/04/16/Ollama-cn/"/>
     <id>https://blog.inoki.cc/2024/04/16/Ollama-cn/</id>
     <published>2024-04-16T18:03:00.000Z</published>
-    <updated>2026-04-03T22:25:45.787Z</updated>
+    <updated>2026-08-21T15:40:05.574Z</updated>
     
     <summary type="html">
     
@@ -512,7 +549,7 @@
     <link href="https://blog.inoki.cc/2024/04/15/Ollama/"/>
     <id>https://blog.inoki.cc/2024/04/15/Ollama/</id>
     <published>2024-04-15T15:34:00.000Z</published>
-    <updated>2026-04-03T22:25:45.788Z</updated>
+    <updated>2026-08-21T15:40:05.574Z</updated>
     
     <summary type="html">
     
@@ -543,7 +580,7 @@
     <link href="https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/"/>
     <id>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/</id>
     <published>2024-02-18T03:57:50.000Z</published>
-    <updated>2026-04-03T22:25:45.764Z</updated>
+    <updated>2026-08-21T15:40:05.554Z</updated>
     
     <summary type="html">
     
@@ -580,7 +617,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/</id>
     <published>2023-09-14T23:42:00.000Z</published>
-    <updated>2026-04-03T22:25:45.747Z</updated>
+    <updated>2026-08-21T15:40:05.540Z</updated>
     
     <summary type="html">
     
@@ -619,7 +656,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/</id>
     <published>2023-09-14T23:22:00.000Z</published>
-    <updated>2026-04-03T22:25:45.747Z</updated>
+    <updated>2026-08-21T15:40:05.540Z</updated>
     
     <summary type="html">
     
@@ -658,7 +695,7 @@
     <link href="https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/"/>
     <id>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</id>
     <published>2023-09-13T23:22:00.000Z</published>
-    <updated>2026-04-03T22:25:45.747Z</updated>
+    <updated>2026-08-21T15:40:05.540Z</updated>
     
     <summary type="html">
     
@@ -697,7 +734,7 @@
     <link href="https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/"/>
     <id>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/</id>
     <published>2023-09-06T23:22:00.000Z</published>
-    <updated>2026-04-03T22:25:45.747Z</updated>
+    <updated>2026-08-21T15:40:05.540Z</updated>
     
     <summary type="html">
     
@@ -728,42 +765,6 @@
       <category term="硬件" scheme="https://blog.inoki.cc/tags/%E7%A1%AC%E4%BB%B6/"/>
     
       <category term="USB" scheme="https://blog.inoki.cc/tags/USB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【译】ARM 的历史——第三部分：兜兜转转</title>
-    <link href="https://blog.inoki.cc/2023/08/22/History-of-ARM-3/"/>
-    <id>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/</id>
-    <published>2023-08-22T12:34:00.000Z</published>
-    <updated>2026-04-03T22:25:45.766Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;原博客共分为三篇，原文链接如下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&quot;https://arstechnica.com/gadgets/2022/09/a-history-of-arm-part-1-building-the-first-chip/&quot;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Hardware" scheme="https://blog.inoki.cc/categories/Hardware/"/>
-    
-    
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
-      <category term="ARM" scheme="https://blog.inoki.cc/tags/ARM/"/>
-    
-      <category term="Hardware" scheme="https://blog.inoki.cc/tags/Hardware/"/>
     
   </entry>
   

@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Fri, 03 Apr 2026 22:25:45 GMT</pubDate>
+    <pubDate>Fri, 21 Aug 2026 15:40:05 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>密码是对的，但 Windows 说不：一次 RDP 认证失败的全面排查</title>
+      <link>https://blog.inoki.cc/2026/08/21/msa-rdp-hello-only/</link>
+      <guid>https://blog.inoki.cc/2026/08/21/msa-rdp-hello-only/</guid>
+      <pubDate>Fri, 21 Aug 2026 11:20:00 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;家里那台 Windows 台式机，前段时间 Win 11 系统更新失败，只好重装。重装之前，用微软账户从 Mac 远程桌面连它一直好好的；重装之后，机器名、账户、网络、客户端一样都没变，连过去却永远是一句冷冰冰的 &lt;strong&gt;“The credentials did
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2026/08/21/msa-rdp-hello-only/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>几家编码套餐（Coding Plan）与运行环境（Harness）的使用体验对比——环境篇</title>
@@ -411,30 +432,6 @@
       
       
       <comments>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】ARM 的历史——第三部分：兜兜转转</title>
-      <link>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/</link>
-      <guid>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/</guid>
-      <pubDate>Tue, 22 Aug 2023 12:34:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原博客共分为三篇，原文链接如下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&quot;https://arstechnica.com/gadgets/2022/09/a-history-of-arm-part-1-building-the-first-chip/&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2023/08/22/History-of-ARM-3/#disqus_thread</comments>
     </item>
     
   </channel>
