@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blog.inoki.cc/"/>
-  <updated>2026-08-21T15:40:05.592Z</updated>
+  <updated>2026-09-15T10:11:27.279Z</updated>
   <id>https://blog.inoki.cc/</id>
   
   <author>
@@ -17,11 +17,54 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>When Your Phone Hotspot Is IPv6-Only: Debugging WeChat and Azure Login Failures</title>
+    <link href="https://blog.inoki.cc/2026/09/15/android-hotspot-ipv6-only-dun-clat/"/>
+    <id>https://blog.inoki.cc/2026/09/15/android-hotspot-ipv6-only-dun-clat/</id>
+    <published>2026-09-15T06:40:22.000Z</published>
+    <updated>2026-09-15T10:11:27.279Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;A few days ago, I was tethering my MacBook to my Android phone on Bouygues (a French carrier), and ran into a bizarre issue: most
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Network" scheme="https://blog.inoki.cc/categories/Network/"/>
+    
+      <category term="IPv6" scheme="https://blog.inoki.cc/categories/Network/IPv6/"/>
+    
+    
+      <category term="English" scheme="https://blog.inoki.cc/tags/English/"/>
+    
+      <category term="Android" scheme="https://blog.inoki.cc/tags/Android/"/>
+    
+      <category term="IPv6" scheme="https://blog.inoki.cc/tags/IPv6/"/>
+    
+      <category term="NAT64" scheme="https://blog.inoki.cc/tags/NAT64/"/>
+    
+      <category term="464XLAT" scheme="https://blog.inoki.cc/tags/464XLAT/"/>
+    
+      <category term="Mac" scheme="https://blog.inoki.cc/tags/Mac/"/>
+    
+      <category term="adb" scheme="https://blog.inoki.cc/tags/adb/"/>
+    
+      <category term="Carrier" scheme="https://blog.inoki.cc/tags/Carrier/"/>
+    
+  </entry>
+  
+  <entry>
     <title>密码是对的，但 Windows 说不：一次 RDP 认证失败的全面排查</title>
     <link href="https://blog.inoki.cc/2026/08/21/msa-rdp-hello-only/"/>
     <id>https://blog.inoki.cc/2026/08/21/msa-rdp-hello-only/</id>
     <published>2026-08-21T11:20:00.000Z</published>
-    <updated>2026-08-21T15:40:05.592Z</updated>
+    <updated>2026-09-15T10:11:27.282Z</updated>
     
     <summary type="html">
     
@@ -58,7 +101,7 @@
     <link href="https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/"/>
     <id>https://blog.inoki.cc/2026/04/03/Coding-plan-and-harness-2/</id>
     <published>2026-04-03T23:30:00.000Z</published>
-    <updated>2026-08-21T15:40:05.547Z</updated>
+    <updated>2026-09-15T10:11:27.232Z</updated>
     
     <summary type="html">
     
@@ -132,7 +175,7 @@
     <link href="https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown-en/"/>
     <id>https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown-en/</id>
     <published>2026-03-09T09:52:00.000Z</published>
-    <updated>2026-08-21T15:40:05.592Z</updated>
+    <updated>2026-09-15T10:11:27.283Z</updated>
     
     <summary type="html">
     
@@ -179,7 +222,7 @@
     <link href="https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown/"/>
     <id>https://blog.inoki.cc/2026/03/09/protobuf-macos-mutex-lockdown/</id>
     <published>2026-03-09T08:52:00.000Z</published>
-    <updated>2026-08-21T15:40:05.592Z</updated>
+    <updated>2026-09-15T10:11:27.283Z</updated>
     
     <summary type="html">
     
@@ -228,7 +271,7 @@
     <link href="https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret-en/"/>
     <id>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret-en/</id>
     <published>2026-02-28T20:54:00.000Z</published>
-    <updated>2026-08-21T15:40:05.540Z</updated>
+    <updated>2026-09-15T10:11:27.224Z</updated>
     
     <summary type="html">
     
@@ -267,7 +310,7 @@
     <link href="https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret/"/>
     <id>https://blog.inoki.cc/2026/02/28/Apple-Rosetta-Linux-VM-Secret/</id>
     <published>2026-02-28T20:52:00.000Z</published>
-    <updated>2026-08-21T15:40:05.540Z</updated>
+    <updated>2026-09-15T10:11:27.224Z</updated>
     
     <summary type="html">
     
@@ -306,7 +349,7 @@
     <link href="https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-a-decade-2026/"/>
     <id>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-a-decade-2026/</id>
     <published>2026-02-17T18:23:00.000Z</published>
-    <updated>2026-08-21T15:40:05.573Z</updated>
+    <updated>2026-09-15T10:11:27.261Z</updated>
     
     <summary type="html">
     
@@ -337,7 +380,7 @@
     <link href="https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/"/>
     <id>https://blog.inoki.cc/2026/02/17/My-thoughts-on-Open-Source-after-10-years-2026-cn/</id>
     <published>2026-02-17T18:03:00.000Z</published>
-    <updated>2026-08-21T15:40:05.573Z</updated>
+    <updated>2026-09-15T10:11:27.261Z</updated>
     
     <summary type="html">
     
@@ -361,9 +404,9 @@
     
       <category term="Linux" scheme="https://blog.inoki.cc/tags/Linux/"/>
     
-      <category term="开源" scheme="https://blog.inoki.cc/tags/%E5%BC%80%E6%BA%90/"/>
-    
       <category term="Open Source" scheme="https://blog.inoki.cc/tags/Open-Source/"/>
+    
+      <category term="开源" scheme="https://blog.inoki.cc/tags/%E5%BC%80%E6%BA%90/"/>
     
   </entry>
   
@@ -372,7 +415,7 @@
     <link href="https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/"/>
     <id>https://blog.inoki.cc/2025/03/08/GitHub-ssh-connection-behind-proxy/</id>
     <published>2025-03-08T06:02:23.000Z</published>
-    <updated>2026-08-21T15:40:05.557Z</updated>
+    <updated>2026-09-15T10:11:27.241Z</updated>
     
     <summary type="html">
     
@@ -410,7 +453,7 @@
     <link href="https://blog.inoki.cc/2024/06/08/My-10-years/"/>
     <id>https://blog.inoki.cc/2024/06/08/My-10-years/</id>
     <published>2024-06-08T17:19:00.000Z</published>
-    <updated>2026-08-21T15:40:05.571Z</updated>
+    <updated>2026-09-15T10:11:27.258Z</updated>
     
     <summary type="html">
     
@@ -440,7 +483,7 @@
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-2-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2026-08-21T15:40:05.588Z</updated>
+    <updated>2026-09-15T10:11:27.278Z</updated>
     
     <summary type="html">
     
@@ -477,7 +520,7 @@
     <link href="https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/"/>
     <id>https://blog.inoki.cc/2024/04/20/android-bootloader-analysis-abl-3-en/</id>
     <published>2024-04-20T13:48:00.000Z</published>
-    <updated>2026-08-21T15:40:05.588Z</updated>
+    <updated>2026-09-15T10:11:27.278Z</updated>
     
     <summary type="html">
     
@@ -514,7 +557,7 @@
     <link href="https://blog.inoki.cc/2024/04/16/Ollama-cn/"/>
     <id>https://blog.inoki.cc/2024/04/16/Ollama-cn/</id>
     <published>2024-04-16T18:03:00.000Z</published>
-    <updated>2026-08-21T15:40:05.574Z</updated>
+    <updated>2026-09-15T10:11:27.261Z</updated>
     
     <summary type="html">
     
@@ -549,7 +592,7 @@
     <link href="https://blog.inoki.cc/2024/04/15/Ollama/"/>
     <id>https://blog.inoki.cc/2024/04/15/Ollama/</id>
     <published>2024-04-15T15:34:00.000Z</published>
-    <updated>2026-08-21T15:40:05.574Z</updated>
+    <updated>2026-09-15T10:11:27.262Z</updated>
     
     <summary type="html">
     
@@ -580,7 +623,7 @@
     <link href="https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/"/>
     <id>https://blog.inoki.cc/2024/02/18/Explaining-the-SDXL-latent-space/</id>
     <published>2024-02-18T03:57:50.000Z</published>
-    <updated>2026-08-21T15:40:05.554Z</updated>
+    <updated>2026-09-15T10:11:27.240Z</updated>
     
     <summary type="html">
     
@@ -617,7 +660,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-example-circuits/</id>
     <published>2023-09-14T23:42:00.000Z</published>
-    <updated>2026-08-21T15:40:05.540Z</updated>
+    <updated>2026-09-15T10:11:27.224Z</updated>
     
     <summary type="html">
     
@@ -656,7 +699,7 @@
     <link href="https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/"/>
     <id>https://blog.inoki.cc/2023/09/14/All-about-USB-C-high-speed-interfaces/</id>
     <published>2023-09-14T23:22:00.000Z</published>
-    <updated>2026-08-21T15:40:05.540Z</updated>
+    <updated>2026-09-15T10:11:27.224Z</updated>
     
     <summary type="html">
     
@@ -695,7 +738,7 @@
     <link href="https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/"/>
     <id>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/</id>
     <published>2023-09-13T23:22:00.000Z</published>
-    <updated>2026-08-21T15:40:05.540Z</updated>
+    <updated>2026-09-15T10:11:27.224Z</updated>
     
     <summary type="html">
     
@@ -704,45 +747,6 @@
         
         
           &lt;p&gt;原文链接：&lt;a href=&quot;https://hackaday.com/2023/01/04/all-about-usb-c-resistors-and-emarkers/&quot; target=&quot;_blank&quot;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="Translation" scheme="https://blog.inoki.cc/categories/Translation/"/>
-    
-      <category term="Chinese" scheme="https://blog.inoki.cc/categories/Translation/Chinese/"/>
-    
-      <category term="USB" scheme="https://blog.inoki.cc/categories/USB/"/>
-    
-      <category term="硬件" scheme="https://blog.inoki.cc/categories/%E7%A1%AC%E4%BB%B6/"/>
-    
-    
-      <category term="翻译" scheme="https://blog.inoki.cc/tags/%E7%BF%BB%E8%AF%91/"/>
-    
-      <category term="中文" scheme="https://blog.inoki.cc/tags/%E4%B8%AD%E6%96%87/"/>
-    
-      <category term="硬件" scheme="https://blog.inoki.cc/tags/%E7%A1%AC%E4%BB%B6/"/>
-    
-      <category term="USB" scheme="https://blog.inoki.cc/tags/USB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【译】关于 USB-C 的一切：介绍</title>
-    <link href="https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/"/>
-    <id>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/</id>
-    <published>2023-09-06T23:22:00.000Z</published>
-    <updated>2026-08-21T15:40:05.540Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;原文链接：&lt;a href=&quot;https://hackaday.com/2022/12/06/usb-c-introduction-for-hackers/&quot; target=&quot;_blank&quot;
         
       
     

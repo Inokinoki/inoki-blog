@@ -9,8 +9,29 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Fri, 21 Aug 2026 15:40:05 GMT</pubDate>
+    <pubDate>Tue, 15 Sep 2026 10:11:27 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>When Your Phone Hotspot Is IPv6-Only: Debugging WeChat and Azure Login Failures</title>
+      <link>https://blog.inoki.cc/2026/09/15/android-hotspot-ipv6-only-dun-clat/</link>
+      <guid>https://blog.inoki.cc/2026/09/15/android-hotspot-ipv6-only-dun-clat/</guid>
+      <pubDate>Tue, 15 Sep 2026 06:40:22 GMT</pubDate>
+      <description>
+      
+        
+        
+          
+          
+            &lt;p&gt;A few days ago, I was tethering my MacBook to my Android phone on Bouygues (a French carrier), and ran into a bizarre issue: most
+          
+        
+      
+      </description>
+      
+      
+      <comments>https://blog.inoki.cc/2026/09/15/android-hotspot-ipv6-only-dun-clat/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>密码是对的，但 Windows 说不：一次 RDP 认证失败的全面排查</title>
@@ -411,27 +432,6 @@
       
       
       <comments>https://blog.inoki.cc/2023/09/13/All-about-USB-C-resistors-and-emarkers/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>【译】关于 USB-C 的一切：介绍</title>
-      <link>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/</link>
-      <guid>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/</guid>
-      <pubDate>Wed, 06 Sep 2023 23:22:00 GMT</pubDate>
-      <description>
-      
-        
-        
-          
-          
-            &lt;p&gt;原文链接：&lt;a href=&quot;https://hackaday.com/2022/12/06/usb-c-introduction-for-hackers/&quot; target=&quot;_blank&quot;
-          
-        
-      
-      </description>
-      
-      
-      <comments>https://blog.inoki.cc/2023/09/06/All-about-USB-C-Introduction/#disqus_thread</comments>
     </item>
     
   </channel>
